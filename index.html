@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adiviná la Tapa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: afiche de recital — una columna, la tapa pixelada como protagonista, opciones abajo */
+:root{
+  --papel:#f1c232;      /* amarillo afiche */
+  --tinta:#141210;      /* negro serigrafía */
+  --rojo:#d7262e;       /* acento */
+  --crema:#fff6dc;      /* fondo de botones */
+  --sombra:#8a6d12;     /* tinta desvaída */
+  --ok:#1f7a3a;
+  --display:"Bowlby One", Impact, "Arial Black", sans-serif;
+  --body:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--papel);color:var(--tinta);font-family:var(--body);font-size:16px;line-height:1.45;
+  background-image:radial-gradient(rgba(20,18,16,.07) 1px,transparent 1.2px);background-size:6px 6px}
+.wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,9vw,3.2rem);line-height:.9;margin:0;letter-spacing:-.01em}
+h1 span{color:var(--rojo)}
+.stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
+.stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
+
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
+.tabs button:last-child{border-right:0}
+.tabs button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+.tabs small{display:block;font-family:var(--mono);font-size:.65rem;letter-spacing:.05em;text-transform:uppercase;opacity:.75}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{font:600 .8rem var(--body);text-transform:uppercase;letter-spacing:.05em;padding:6px 11px;border:2px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+
+.juego{display:flex;flex-direction:column;gap:14px}
+.stage{position:relative;width:100%;max-width:420px;aspect-ratio:1;margin:0 auto;background:var(--tinta);border:4px solid var(--tinta);box-shadow:8px 8px 0 var(--rojo);overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .25s}
+.stage .msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;color:var(--papel);font-family:var(--mono);font-size:.85rem}
+.meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.tries{display:flex;gap:5px}
+.tries i{width:14px;height:14px;border:2px solid var(--tinta);border-radius:50%;display:inline-block}
+.tries i.on{background:var(--tinta)}
+.hint{min-height:1.4em;font-weight:600;text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:440px){.opts{grid-template-columns:1fr}}
+.opts button{min-width:0;text-align:left;padding:12px 14px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);font:inherit;cursor:pointer;box-shadow:3px 3px 0 var(--tinta);transition:transform .08s,box-shadow .08s}
+.opts button:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--tinta)}
+.opts button:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
+.opts .a{display:block;font-weight:800;font-size:.95rem}
+.opts .t{display:block;font-size:.85rem}
+.opts button.bad{background:transparent;color:var(--sombra);border-color:var(--sombra);box-shadow:none;text-decoration:line-through}
+.opts button.good{background:var(--ok);color:var(--crema)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--rojo);outline-offset:2px}
+
+.btn{justify-self:center;align-self:center;font-family:var(--display);font-size:1.15rem;padding:10px 24px;background:var(--rojo);color:var(--crema);border:3px solid var(--tinta);box-shadow:4px 4px 0 var(--tinta);cursor:pointer}
+.btn.sec{background:var(--crema);color:var(--tinta)}
+.btn:disabled{opacity:.5;cursor:default}
+
+.card{background:var(--crema);border:3px solid var(--tinta);padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:6px 6px 0 var(--tinta)}
+.card h2{font-family:var(--display);font-weight:400;margin:0;font-size:2.2rem;line-height:1;text-align:center}
+.card .sub{text-align:center;font-weight:800}
+.card ol{margin:0;padding-left:1.4em;font-size:.9rem}
+.cuadros{text-align:center;font-size:1.5rem;letter-spacing:.1em}
+.fila{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+.reloj{text-align:center;font-family:var(--mono);font-size:.85rem;font-variant-numeric:tabular-nums}
+.nombre{display:flex;gap:8px;flex-wrap:wrap}
+.nombre input{flex:1 1 160px;min-width:0;font:inherit;padding:9px 12px;border:2px solid var(--tinta);background:#fff;color:var(--tinta)}
+.nombre .btn{font-size:1rem;padding:8px 16px}
+.aviso{font-size:.85rem;text-align:center;color:var(--sombra)}
+
+.ranking{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.ranking li{display:grid;grid-template-columns:2.2em 1fr auto;gap:8px;align-items:baseline;padding:8px 2px;border-bottom:2px dotted var(--sombra);font-variant-numeric:tabular-nums}
+.ranking li:last-child{border-bottom:0}
+.ranking .pos{font-family:var(--display);color:var(--rojo)}
+.ranking .nom{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.ranking .pts{font-family:var(--mono)}
+.ranking li.yo{background:var(--papel)}
+footer{font-size:.75rem;color:var(--sombra);text-align:center}
+.quien{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;flex-wrap:wrap}
+.quien b{font-weight:800}
+.link{font:inherit;font-weight:600;background:none;border:0;padding:2px 0;color:var(--rojo);text-decoration:underline;cursor:pointer}
+.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:rgba(20,18,16,.72)}
+.modal .card{width:100%;max-width:420px}
+.modal p{margin:0;text-align:center}
+.modal .err{color:var(--rojo);font-weight:600;min-height:1.2em;text-align:center;font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Adiviná<br>la <span>Tapa</span></h1>
+    <div class="stats"><span id="lbl-modo">Normal</span> <b id="ronda">1/10</b></div>
+    <div class="stats">Puntos <b id="pts">0</b></div>
+  </header>
+
+  <nav class="tabs" aria-label="Modo de juego">
+    <button id="t-normal" data-v="normal" aria-pressed="true">Normal<small>libre</small></button>
+    <button id="t-diario" data-v="diario" aria-pressed="false">Diario<small id="t-diario-n">#1</small></button>
+    <button id="t-top" data-v="top" aria-pressed="false">Top<small>ranking</small></button>
+  </nav>
+
+  <div class="quien" id="quien" hidden><span>Jugás como <b id="quien-n"></b></span><button class="link" id="b-cambiar" type="button">Cambiar nombre</button></div>
+
+  <section id="v-juego" class="juego">
+    <div class="chips" id="generos" role="group" aria-label="Qué discos jugar">
+      <button id="g-todos" data-g="todos" aria-pressed="true">Todo el rock</button>
+      <button id="g-nac" data-g="nac" aria-pressed="false">Rock nacional</button>
+      <button id="g-int" data-g="int" aria-pressed="false">Internacional</button>
+    </div>
+    <div class="stage" id="stage"><canvas id="cover" role="img" aria-label="Tapa del disco a adivinar"></canvas><div class="msg" id="msg">Buscando la tapa…</div></div>
+    <div class="meta"><span id="vale">Vale 5 puntos</span><span class="tries" id="tries" aria-label="Errores"></span></div>
+    <div class="hint" id="hint"></div>
+    <div class="opts" id="opts"></div>
+    <button class="btn" id="next" hidden>Siguiente</button>
+  </section>
+
+  <section id="v-fin" class="card" hidden></section>
+
+  <section id="v-top" class="card" hidden>
+    <h2>Top</h2>
+    <div class="chips" id="top-tabs" style="justify-content:center">
+      <button id="tt-diario" data-t="diario" aria-pressed="true">Diario de hoy</button>
+      <button id="tt-todos" data-t="todos" aria-pressed="false">Normal · Todo</button>
+      <button id="tt-nac" data-t="nac" aria-pressed="false">Normal · Nacional</button>
+      <button id="tt-int" data-t="int" aria-pressed="false">Normal · Intern.</button>
+    </div>
+    <div id="top-lista"></div>
+  </section>
+
+  <div class="modal" id="bienvenida" hidden role="dialog" aria-modal="true" aria-labelledby="bv-tit">
+    <form class="card" id="f-bienv">
+      <h2 id="bv-tit">¿Cómo te llamás?</h2>
+      <p>Tu nombre va a aparecer en el top diario. Todos juegan los mismos 10 discos por día.</p>
+      <div class="nombre"><input id="in-bienv" maxlength="20" placeholder="Tu nombre o apodo" autocomplete="nickname"><button class="btn" type="submit">Jugar</button></div>
+      <div class="err" id="bv-err"></div>
+    </form>
+  </div>
+
+  <footer>Tapas vía la API pública de iTunes. Cada error aclara la imagen. El diario es igual para todos y cambia a las 00:00 (hora argentina).</footer>
+</div>
+
+<script>
+// ===== Top compartido (Supabase). Pegá acá la URL del proyecto y la clave pública (anon / publishable) =====
+const SUPA_URL = "";
+const SUPA_KEY = "";
+const TOP_ON = !!(SUPA_URL && SUPA_KEY);
+
+// ---- Catálogo: [artista, disco, año, categoría]. Disco null = el juego elige uno real de iTunes ----
+const DISCOS = [
+ ["The Beatles","Abbey Road",1969,"int"],["The Beatles","Sgt. Pepper's Lonely Hearts Club Band",1967,"int"],
+ ["Pink Floyd","The Dark Side of the Moon",1973,"int"],["Pink Floyd","Wish You Were Here",1975,"int"],["Pink Floyd","The Wall",1979,"int"],
+ ["Led Zeppelin","Led Zeppelin IV",1971,"int"],["Led Zeppelin","Physical Graffiti",1975,"int"],
+ ["The Rolling Stones","Sticky Fingers",1971,"int"],["The Rolling Stones","Exile on Main St.",1972,"int"],
+ ["Queen","A Night at the Opera",1975,"int"],["Queen","News of the World",1977,"int"],
+ ["Nirvana","Nevermind",1991,"int"],["Nirvana","In Utero",1993,"int"],
+ ["AC/DC","Back in Black",1980,"int"],["AC/DC","Highway to Hell",1979,"int"],
+ ["The Clash","London Calling",1979,"int"],["Ramones","Ramones",1976,"int"],
+ ["David Bowie","The Rise and Fall of Ziggy Stardust and the Spiders from Mars",1972,"int"],["David Bowie","Aladdin Sane",1973,"int"],
+ ["The Velvet Underground","The Velvet Underground & Nico",1967,"int"],["The Doors","The Doors",1967,"int"],
+ ["Guns N' Roses","Appetite for Destruction",1987,"int"],["Metallica","Master of Puppets",1986,"int"],["Metallica","Metallica",1991,"int"],
+ ["Radiohead","OK Computer",1997,"int"],["Radiohead","In Rainbows",2007,"int"],
+ ["Oasis","(What's the Story) Morning Glory?",1995,"int"],["Arctic Monkeys","AM",2013,"int"],
+ ["The Strokes","Is This It",2001,"int"],["Red Hot Chili Peppers","Californication",1999,"int"],
+ ["Pearl Jam","Ten",1991,"int"],["Foo Fighters","The Colour and the Shape",1997,"int"],
+ ["Black Sabbath","Paranoid",1970,"int"],["Iron Maiden","The Number of the Beast",1982,"int"],
+ ["U2","The Joshua Tree",1987,"int"],["Fleetwood Mac","Rumours",1977,"int"],
+ ["The Who","Who's Next",1971,"int"],["Bruce Springsteen","Born in the U.S.A.",1984,"int"],
+ ["Green Day","American Idiot",2004,"int"],["The Cure","Disintegration",1989,"int"],
+ ["Joy Division","Unknown Pleasures",1979,"int"],["Muse","Black Holes and Revelations",2006,"int"],
+ ["Soda Stereo","Canción Animal",1990,"nac"],["Soda Stereo","Signos",1986,"nac"],["Soda Stereo","Sueño Stereo",1995,"nac"],
+ ["Charly García","Clics Modernos",1983,"nac"],["Charly García","Piano Bar",1984,"nac"],
+ ["Serú Girán","Bicicleta",1980,"nac"],["Serú Girán","La Grasa de las Capitales",1979,"nac"],
+ ["Patricio Rey y sus Redonditos de Ricota","Oktubre",1986,"nac"],["Patricio Rey y sus Redonditos de Ricota","La Mosca y la Sopa",1991,"nac"],
+ ["Sumo","After Chabón",1987,"nac"],["Divididos","La Era de la Boludez",1993,"nac"],
+ ["Luis Alberto Spinetta","Artaud",1973,"nac"],["Spinetta Jade","Los Niños Que Escriben en el Cielo",1981,"nac"],
+ ["Almendra","Almendra",1969,"nac"],["Virus","Locura",1985,"nac"],
+ ["Los Fabulosos Cadillacs","Vasos Vacíos",1993,"nac"],["Los Fabulosos Cadillacs","Fabulosos Calavera",1997,"nac"],
+ ["Babasónicos","Jessico",2001,"nac"],["Babasónicos","Infame",2003,"nac"],
+ ["Los Piojos","Azul",1998,"nac"],["La Renga","Despedazado por Mil Partes",1996,"nac"],
+ ["Andrés Calamaro","Alta Suciedad",1997,"nac"],["Los Abuelos de la Nada","Vasos y Besos",1983,"nac"],
+ ["Gustavo Cerati","Bocanada",1999,"nac"],["Fito Páez","El Amor Después del Amor",1992,"nac"],
+ ["Attaque 77","Dulce Navidad",1989,"nac"],["Callejeros","Rocanroles sin Destino",2004,"nac"],
+ ["Los Enanitos Verdes","Igual Que Ayer",1992,"nac"],["Catupecu Machu","Cuentos Decapitados",2004,"nac"],
+ ["Bersuit Vergarabat","Libertinaje",1998,"nac"],
+ ["Sui Generis","Pequeñas Anécdotas Sobre las Instituciones",1974,"nac"],["Sui Generis","Vida",1972,"nac"],
+ ["Pescado Rabioso","Desatormentándonos",1972,"nac"],["Invisible","El Jardín de los Presentes",1976,"nac"],
+ ["Los Gatos","Los Gatos",1967,"nac"],["Manal","Manal",1970,"nac"],["Vox Dei","La Biblia",1971,"nac"],
+ ["Pappo's Blues","Pappo's Blues Volumen 3",1973,"nac"],["Riff","Ruedas de Metal",1981,"nac"],
+ ["León Gieco","De Ushuaia a La Quiaca",1985,"nac"],["Los Violadores","Y Ahora Qué Pasa, Eh?",1985,"nac"],
+ ["Rata Blanca","Magos, Espadas y Rosas",1990,"nac"],["Hermética","Ácido Argentino",1991,"nac"],
+ ["Soda Stereo","Nada Personal",1985,"nac"],["Charly García","Yendo de la Cama al Living",1982,"nac"],
+ ["Gustavo Cerati","Ahí Vamos",2006,"nac"],["Divididos","Acariciando lo Áspero",1991,"nac"],
+ ["Patricio Rey y sus Redonditos de Ricota","Gulp!",1985,"nac"],["Patricio Rey y sus Redonditos de Ricota","Bang! Bang!! Estás Liquidado",1989,"nac"],
+ ["La Renga","Detonador de Sueños",2003,"nac"],["Los Piojos","Ritual",1999,"nac"],
+ ["Los Fabulosos Cadillacs","El León",1992,"nac"],["Andrés Calamaro","Honestidad Brutal",1999,"nac"],
+ ["Los Ratones Paranoicos","Furtivos",1988,"nac"],["Los Pericos","Big Yuyo",1994,"nac"],
+ ["Los Auténticos Decadentes","Mi Vida Loca",1995,"nac"],["Fito Páez","Giros",1985,"nac"],
+ ["El Plan de la Mariposa","Brote",2011,"nac"],["El Plan de la Mariposa","Danza de Antalgia",2014,"nac"],
+ ["El Plan de la Mariposa","Devorando Intensidad",2017,"nac"],["El Plan de la Mariposa","Estado de Enlace",2020,"nac"],
+ ["La Vela Puerca","De Bichos y Flores",2001,"nac"],["La Vela Puerca","A Contraluz",2004,"nac"],["La Vela Puerca","Piel y Hueso",2011,"nac"],
+ ["Babasónicos","Miau",2018,"nac"],["Catupecu Machu","El Número Imperfecto",2002,"nac"],
+ // Solo artista: el juego elige al azar uno de sus discos reales en iTunes
+ ["Sueño de Pescado",null,null,"nac"],["Sueño de Pescado",null,null,"nac"],
+ ["El Plan de la Mariposa",null,null,"nac"],["La Vela Puerca",null,null,"nac"],
+ ["No Te Va Gustar",null,null,"nac"],["No Te Va Gustar",null,null,"nac"],["El Cuarteto de Nos",null,null,"nac"],
+ ["Las Pastillas del Abuelo",null,null,"nac"],["Ciro y los Persas",null,null,"nac"],["Guasones",null,null,"nac"],
+ ["El Bordo",null,null,"nac"],["Salta La Banca",null,null,"nac"],["Las Pelotas",null,null,"nac"],
+ ["Árbol",null,null,"nac"],["Airbag",null,null,"nac"],["Eruca Sativa",null,null,"nac"],
+ ["El Mató a un Policía Motorizado",null,null,"nac"],["Usted Señalemelo",null,null,"nac"],
+ ["Conociendo Rusia",null,null,"nac"],["Bandalos Chinos",null,null,"nac"],["Turf",null,null,"nac"],
+ ["La Beriso",null,null,"nac"],["Skay Beilinson",null,null,"nac"],["Indio Solari",null,null,"nac"],
+ ["Intoxicados",null,null,"nac"],["Viejas Locas",null,null,"nac"],["Kapanga",null,null,"nac"],
+ ["Los Gardelitos",null,null,"nac"],["Almafuerte",null,null,"nac"],["Cadena Perpetua",null,null,"nac"],
+ ["Los Tipitos",null,null,"nac"],["2 Minutos",null,null,"nac"],["Estelares",null,null,"nac"],
+ ["Jauría",null,null,"nac"],["Los Brujos",null,null,"nac"],["Peligrosos Gorriones",null,null,"nac"],
+ ["Pedro Aznar",null,null,"nac"],["La Máquina de Hacer Pájaros",null,null,"nac"],["Massacre",null,null,"nac"],
+ ["Los Caligaris",null,null,"nac"],["Silvestre y la Naranja",null,null,"nac"]
+];
+
+const NIVELES=[16,24,36,56,0]; // bloques por lado según los errores; 0 = tapa nítida
+const VALOR=[5,4,3,2];
+const RONDAS=10;
+const INICIO_DIARIO="2026-10-07";
+const CUADRO={5:"🟩",4:"🟨",3:"🟧",2:"🟥",0:"⬛"};
+
+const $=id=>document.getElementById(id);
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+// ---- Azar: normal usa Math.random; el diario usa una semilla del día para que todos vean lo mismo ----
+let rnd=Math.random;
+function semillaRng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+const mezclar=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const hoyAR=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date());
+const numDiario=dia=>Math.round((Date.parse(dia)-Date.parse(INICIO_DIARIO))/864e5)+1;
+
+// ---- iTunes ----
+const cache=new Map();
+let jsonpN=0;
+function jsonp(url,ms=8000){
+  return new Promise((ok,fail)=>{
+    const cb="__it"+(++jsonpN), s=document.createElement("script");
+    const t=setTimeout(()=>{limpiar();fail(new Error("timeout"))},ms);
+    function limpiar(){clearTimeout(t);window[cb]=()=>{};s.remove()}
+    window[cb]=d=>{limpiar();ok(d)};
+    s.onerror=()=>{limpiar();fail(new Error("red"))};
+    s.src=url+"&callback="+cb; document.head.appendChild(s);
+  });
+}
+const FUERA=/vivo|live|grandes|lo mejor|exitos|single|\bep\b|acustico|unplugged|antologia|coleccion|collection|greatest|hits|best of|karaoke|tributo|tribute|remix/;
+const limpiarTitulo=t=>t.replace(/\s*[\(\[][^\)\]]*(remaster|deluxe|edition|edicion|edición|version|versión|bonus|expanded|anniversary|aniversario)[^\)\]]*[\)\]]/gi,"").trim();
+function buscar(term){
+  const k="q|"+term;
+  if(!cache.has(k)){
+    const p=jsonp(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=album&limit=50`).then(r=>(r.results||[]).filter(x=>x.artworkUrl100&&x.collectionName));
+    cache.set(k,p); p.catch(()=>cache.delete(k));
+  }
+  return cache.get(k);
+}
+const mismoArtista=(x,art)=>{const a=norm(x.artistName),b=norm(art);return a===b||a.startsWith(b)||b.startsWith(a)};
+const discosDe=(res,art)=>res.filter(x=>mismoArtista(x,art)&&(x.trackCount||0)>=6&&!FUERA.test(norm(x.collectionName)));
+const precargar=url=>new Promise((ok,fail)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=fail;im.src=url});
+
+// Devuelve un disco real {id,a,t,y,url,cat}. Con azar=false solo acepta el disco exacto del catálogo.
+async function resolver(d,azar,usados){
+  let pick=null, anio=null;
+  if(d[1]){
+    const res=await buscar(d[0]+" "+d[1]), alb=norm(d[1]);
+    pick=res.find(x=>mismoArtista(x,d[0])&&norm(limpiarTitulo(x.collectionName)).startsWith(alb)&&!usados.has(x.collectionId));
+    if(pick) anio=d[2];
+  }
+  if(!pick){
+    if(!azar) throw new Error("no está");
+    const res=discosDe(await buscar(d[0]),d[0]).filter(x=>!usados.has(x.collectionId));
+    if(!res.length) throw new Error("sin discos");
+    pick=res[Math.random()*res.length|0];
+  }
+  anio=anio||(pick.releaseDate?+pick.releaseDate.slice(0,4):null);
+  return {id:pick.collectionId,a:pick.artistName,t:limpiarTitulo(pick.collectionName),y:anio,url:pick.artworkUrl100.replace("100x100bb","600x600bb"),cat:d[3]};
+}
+
+// ---- Estado de la partida ----
+let G=null, vista="normal", genero="todos", topTab="diario", relojTimer=null;
+
+function nuevaPartida(modo){
+  const dia=hoyAR();
+  G={modo,genero,dia,token:{},ronda:0,puntos:0,intento:0,actual:null,log:[],malos:[],usados:new Set(),proximo:null,terminado:false,saltar:0,restaurar:null,subido:false};
+  if(modo==="diario"){
+    G.seed=hashStr("tapa-"+dia); rnd=semillaRng(G.seed);
+    G.cola=mezclar(DISCOS.filter(d=>d[1]));
+    const guardado=ls.get("tapa-d-"+dia);
+    if(guardado){G.log=guardado.log||[];G.puntos=guardado.puntos||0;G.ronda=G.log.length;G.saltar=G.log.length;G.restaurar=guardado.cur||null;G.subido=!!guardado.subido}
+  }else{
+    rnd=Math.random;
+    G.cola=mezclar(DISCOS.filter(d=>genero==="todos"||d[3]===genero));
+  }
+  $("v-fin").hidden=true; $("v-juego").hidden=false;
+  siguiente();
+}
+
+async function sacarDisco(g){
+  while(g.cola.length){
+    const d=g.cola.shift();
+    try{
+      const r=await resolver(d,g.modo!=="diario",g.usados);
+      if(g!==G) return null;
+      if(g.usados.has(r.id)) continue;
+      if(g.saltar>0){g.saltar--;g.usados.add(r.id);continue} // rondas del diario ya jugadas
+      r.img=await precargar(r.url); return r;
+    }catch(e){ if(g!==G) return null }
+  }
+  return null;
+}
+
+async function siguiente(){
+  const g=G;
+  if(g.ronda>=RONDAS) return terminar();
+  g.intento=0; g.malos=[]; g.revelada=false;
+  $("next").hidden=true; $("hint").textContent=""; $("opts").innerHTML="";
+  $("cover").style.opacity=0; $("msg").hidden=false; $("msg").textContent="Buscando la tapa…";
+  actualizar();
+  const r=await (g.proximo||sacarDisco(g)); g.proximo=null;
+  if(g!==G) return;
+  if(!r){$("msg").textContent="No pude cargar las tapas. Revisá la conexión y recargá la página.";return}
+  g.usados.add(r.id); g.actual=r;
+  if(g.modo==="diario") rnd=semillaRng(g.seed+(g.ronda+1)*7919);
+  const dist=await distractores(r,g);
+  if(g!==G) return;
+  const ops=mezclar([r,...dist]);
+  g.ronda++;
+  if(g.restaurar){g.intento=g.restaurar.intento||0;g.malos=g.restaurar.malos||[];g.restaurar=null}
+  g.proximo=sacarDisco(g);
+  const c=$("opts"); c.innerHTML="";
+  ops.forEach((o,i)=>{
+    const b=document.createElement("button"); b.id="op"+i;
+    b.innerHTML=`<span class="a"></span><span class="t"></span>`;
+    b.querySelector(".a").textContent=o.a; b.querySelector(".t").textContent=o.t;
+    if(o===r) b.dataset.ok="1";
+    if(g.malos.includes(o.a+"|"+o.t)){b.classList.add("bad");b.disabled=true}
+    b.onclick=()=>elegir(b,o);
+    c.appendChild(b);
+  });
+  $("msg").hidden=true; pintar(); $("cover").style.opacity=1;
+  if(g.intento>0) mostrarPista();
+  actualizar(); guardarDiario();
+}
+
+// Opciones difíciles: otros discos de la MISMA banda y bandas de la misma época
+async function distractores(r,g){
+  const out=[], titulos=new Set([norm(r.t)]);
+  try{
+    const propios=mezclar(discosDe(await buscar(r.a),r.a).filter(x=>x.collectionId!==r.id).sort((x,y)=>x.collectionId-y.collectionId));
+    for(const x of propios){
+      const t=limpiarTitulo(x.collectionName), k=norm(t);
+      if(titulos.has(k)||k.includes(norm(r.t))||norm(r.t).includes(k)) continue;
+      titulos.add(k); out.push({a:x.artistName,t});
+      if(out.length===2) break;
+    }
+  }catch(e){}
+  const vistos=new Set([norm(r.a)]);
+  const base=g.modo==="diario"?DISCOS.filter(d=>d[1]):DISCOS;
+  const cerca=x=>!r.y||!x[2]||Math.abs(x[2]-r.y)<=12;
+  const misma=base.filter(x=>x[3]===r.cat&&!vistos.has(norm(x[0])));
+  const cands=mezclar(misma.filter(cerca)).concat(mezclar(misma.filter(x=>!cerca(x))),mezclar(base.filter(x=>x[3]!==r.cat)));
+  for(const x of cands){
+    if(out.length>=3) break;
+    const k=norm(x[0]); if(vistos.has(k)) continue;
+    if(x[1]){vistos.add(k);out.push({a:x[0],t:x[1]});continue}
+    try{const v=await resolver(x,true,new Set());vistos.add(k);out.push({a:v.a,t:v.t})}catch(e){}
+  }
+  return out;
+}
+
+// Pixelado con canvas: dibuja la tapa en n×n bloques y la amplía sin suavizar
+const chico=document.createElement("canvas");
+function pintar(){
+  if(!G||!G.actual||!G.actual.img) return;
+  const cv=$("cover"), dpr=window.devicePixelRatio||1, W=Math.max(1,Math.round(($("stage").clientWidth||400)*dpr));
+  if(cv.width!==W){cv.width=W;cv.height=W}
+  const ctx=cv.getContext("2d"), n=G.revelada?0:NIVELES[Math.min(G.intento,NIVELES.length-1)];
+  ctx.clearRect(0,0,W,W);
+  if(!n){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(G.actual.img,0,0,W,W);return}
+  chico.width=n;chico.height=n;
+  const c2=chico.getContext("2d"); c2.imageSmoothingEnabled=true; c2.imageSmoothingQuality="high";
+  c2.drawImage(G.actual.img,0,0,n,n);
+  ctx.imageSmoothingEnabled=false; ctx.drawImage(chico,0,0,n,n,0,0,W,W);
+}
+addEventListener("resize",pintar);
+
+function mostrarPista(){
+  const r=G.actual, gen=r.cat==="nac"?"rock nacional":"rock internacional";
+  $("hint").textContent=!r.y?`Pista: ${gen}`:G.intento===1?`Pista: salió en ${r.y}`:`Pista: ${gen}, década del ${String(r.y).slice(2,3)}0`;
+}
+
+function elegir(b,o){
+  const g=G, r=g.actual, y=r.y?` (${r.y})`:"";
+  if(o===r){
+    const gan=VALOR[g.intento]||1; g.puntos+=gan;
+    b.classList.add("good"); cerrarRonda(`¡Bien! +${gan}. ${r.t}${y}`,gan);
+  }else{
+    b.classList.add("bad"); b.disabled=true; g.intento++; g.malos.push(o.a+"|"+o.t);
+    if(g.intento>=3){
+      $("opts").querySelector('[data-ok="1"]').classList.add("good");
+      cerrarRonda(`Era ${r.a} — ${r.t}${y}`,0);
+    }else{ pintar(); mostrarPista(); guardarDiario() }
+  }
+  actualizar();
+}
+
+function cerrarRonda(txt,gan){
+  const g=G;
+  g.revelada=true; pintar();
+  [...$("opts").children].forEach(x=>x.disabled=true);
+  $("hint").textContent=txt;
+  g.log.push({a:g.actual.a,t:g.actual.t,y:g.actual.y,gan}); g.malos=[];
+  guardarDiario();
+  $("next").textContent=g.ronda>=RONDAS?"Ver resultado":"Siguiente";
+  $("next").hidden=false; $("next").focus();
+}
+
+function guardarDiario(){
+  const g=G; if(!g||g.modo!=="diario") return;
+  const enCurso=!g.terminado&&g.actual&&g.log.length<g.ronda;
+  ls.set("tapa-d-"+g.dia,{log:g.log,puntos:g.puntos,cur:enCurso?{intento:g.intento,malos:g.malos}:null,fin:g.terminado,subido:g.subido});
+}
+
+function actualizar(){
+  if(!G) return;
+  $("lbl-modo").textContent=G.modo==="diario"?`Diario #${numDiario(G.dia)}`:"Ronda";
+  $("ronda").textContent=`${Math.max(G.ronda,1)}/${RONDAS}`;
+  $("pts").textContent=G.puntos;
+  const v=VALOR[Math.min(G.intento,3)]||0, cerrada=G.log.length===G.ronda&&G.ronda>0;
+  $("vale").textContent=cerrada?"Ronda terminada":`Vale ${v} punto${v===1?"":"s"}`;
+  $("tries").innerHTML=[0,1,2].map(i=>`<i class="${i<Math.min(G.intento,3)?"on":""}"></i>`).join("");
+}
+
+function terminar(){
+  const g=G; g.terminado=true;
+  if(g.modo==="diario") guardarDiario();
+  else{const k="tapa-mejor-"+g.genero, m=ls.get(k)||0; g.recordPrevio=m; if(g.puntos>m) ls.set(k,g.puntos)}
+  mostrarFin();
+}
+
+function textoCompartir(g){
+  const cab=g.modo==="diario"?`Adiviná la Tapa #${numDiario(g.dia)}`:"Adiviná la Tapa";
+  return `${cab} — ${g.puntos}/${RONDAS*5}\n${g.log.map(l=>CUADRO[l.gan]||"⬛").join("")}\n${location.href.split("#")[0]}`;
+}
+
+function mostrarFin(){
+  const g=G, max=RONDAS*5, pct=g.puntos/max;
+  const titulo=pct>=.8?"Disquero de ley":pct>=.5?"Tenés oreja":pct>=.25?"Escuchás de oído":"A la batea a estudiar";
+  $("v-juego").hidden=true;
+  const f=$("v-fin"); f.hidden=false;
+  const yaSubido=g.subido;
+  f.innerHTML=`
+    <h2>${g.puntos}/${max}</h2>
+    <div class="sub">${titulo}${g.modo==="normal"&&g.recordPrevio?` · récord anterior: ${g.recordPrevio}`:""}</div>
+    <div class="cuadros" aria-label="Resultado por ronda">${g.log.map(l=>CUADRO[l.gan]||"⬛").join("")}</div>
+    <ol>${g.log.map(l=>`<li>${l.gan?"✔":"✘"} ${esc(l.a)} — <i>${esc(l.t)}</i></li>`).join("")}</ol>
+    ${!TOP_ON?`<div class="aviso">El top se activa cuando configures Supabase en el código.</div>`
+      :yaSubido?`<div class="fila"><span class="aviso">Tu puntaje ya está en el top.</span><button class="link" id="b-vertop" type="button">Ver el top</button></div>`
+      :g.modo==="diario"?`<div class="aviso" id="top-estado">Subiendo tu puntaje al top del día…</div>`
+      :`<div class="fila"><button class="btn sec" id="b-subir" type="button">Subir al top como ${esc(ls.get("tapa-nombre")||"…")}</button></div><div class="aviso" id="top-estado"></div>`}
+    <div class="fila">
+      <button class="btn sec" id="b-compartir" type="button">Compartir</button>
+      ${g.modo==="normal"?`<button class="btn" id="b-otra" type="button">Jugar de nuevo</button>`:""}
+    </div>
+    ${g.modo==="diario"?`<div class="reloj" id="reloj"></div>`:""}`;
+  const bs=$("b-subir"); if(bs) bs.onclick=subirPuntaje;
+  const bv=$("b-vertop"); if(bv) bv.onclick=verTopPropio;
+  if(TOP_ON&&!yaSubido&&g.modo==="diario") subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
+  $("b-compartir").onclick=compartir;
+  const bo=$("b-otra"); if(bo) bo.onclick=()=>nuevaPartida("normal");
+  if(g.modo==="diario") arrancarReloj();
+}
+
+function arrancarReloj(){
+  clearInterval(relojTimer);
+  const tick=()=>{
+    const el=$("reloj"); if(!el){clearInterval(relojTimer);return}
+    if(hoyAR()!==G.dia){el.textContent="¡Ya hay disco nuevo! Recargá la página.";return}
+    const ar=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Argentina/Buenos_Aires"}));
+    const fin=new Date(ar); fin.setHours(24,0,0,0);
+    const s=Math.max(0,Math.floor((fin-ar)/1000)), p=n=>String(n).padStart(2,"0");
+    el.textContent=`Próximo diario en ${p(s/3600|0)}:${p(s%3600/60|0)}:${p(s%60)}`;
+  };
+  tick(); relojTimer=setInterval(tick,1000);
+}
+
+async function compartir(){
+  const txt=textoCompartir(G), b=$("b-compartir");
+  try{
+    if(navigator.share&&matchMedia("(pointer:coarse)").matches){await navigator.share({text:txt});return}
+    await navigator.clipboard.writeText(txt); b.textContent="¡Copiado!";
+  }catch(e){ if(e&&e.name==="AbortError") return; b.textContent="No se pudo copiar" }
+  setTimeout(()=>{if($("b-compartir"))$("b-compartir").textContent="Compartir"},2000);
+}
+
+// ---- Top (Supabase REST) ----
+const supaHeaders={apikey:SUPA_KEY,"Content-Type":"application/json"};
+function verTopPropio(){ topTab=G.modo==="diario"?"diario":G.genero; irA("top") }
+async function subirPuntaje(){
+  const g=G, nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20), est=$("top-estado"), b=$("b-subir");
+  if(!nombre){ pedirNombre(subirPuntaje); return }
+  if(g.subido||g.subiendo) return;
+  g.subiendo=true; if(b) b.disabled=true; if(est) est.textContent="Subiendo tu puntaje…";
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.puntos,modo:g.modo,genero:g.modo==="diario"?"todos":g.genero})});
+    if(!r.ok) throw new Error(r.status);
+    g.subido=true; guardarDiario();
+    if(G===g&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
+  }catch(e){
+    if(b) b.disabled=false;
+    if(est) est.innerHTML=`No se pudo subir. <button class="link" id="b-reint" type="button">Reintentar</button>`;
+    const br=$("b-reint"); if(br) br.onclick=subirPuntaje;
+  }finally{ g.subiendo=false }
+}
+
+// ---- Nombre del jugador (se pide al entrar por primera vez) ----
+let trasNombre=null;
+function pedirNombre(despues){
+  trasNombre=despues||null;
+  $("in-bienv").value=ls.get("tapa-nombre")||""; $("bv-err").textContent="";
+  $("bienvenida").hidden=false; setTimeout(()=>$("in-bienv").focus(),50);
+}
+$("f-bienv").onsubmit=e=>{
+  e.preventDefault();
+  const n=$("in-bienv").value.trim().replace(/\s+/g," ").slice(0,20);
+  if(n.length<2){$("bv-err").textContent="Poné al menos 2 letras.";return}
+  ls.set("tapa-nombre",n); $("bienvenida").hidden=true; mostrarQuien();
+  if(G&&G.terminado&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
+  const f=trasNombre; trasNombre=null; if(f) f();
+};
+function mostrarQuien(){
+  const n=ls.get("tapa-nombre");
+  $("quien").hidden=!n; $("quien-n").textContent=n||"";
+}
+$("b-cambiar").onclick=()=>pedirNombre();
+
+async function cargarTop(){
+  document.querySelectorAll("#top-tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.t===topTab));
+  const cont=$("top-lista");
+  if(!TOP_ON){cont.innerHTML=`<p class="aviso">El top todavía no está configurado. Hay que pegar la URL y la clave de Supabase al principio del código.</p>`;return}
+  cont.innerHTML=`<p class="aviso">Cargando…</p>`;
+  const filtro=topTab==="diario"?`modo=eq.diario&dia=eq.${hoyAR()}`:`modo=eq.normal&genero=eq.${topTab}`;
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos&${filtro}&order=puntos.desc,created_at.asc&limit=20`,{headers:supaHeaders});
+    if(!r.ok) throw new Error(r.status);
+    const filas=await r.json(), yo=ls.get("tapa-nombre");
+    cont.innerHTML=filas.length?`<ol class="ranking">${filas.map((f,i)=>`<li class="${f.nombre===yo?"yo":""}"><span class="pos">${i+1}</span><span class="nom">${esc(f.nombre)}</span><span class="pts">${f.puntos}</span></li>`).join("")}</ol>`
+      :`<p class="aviso">${topTab==="diario"?"Nadie jugó el diario de hoy todavía. ¡Sé el primero!":"Todavía no hay puntajes acá."}</p>`;
+  }catch(e){ cont.innerHTML=`<p class="aviso">No pude cargar el top. Probá recargar.</p>` }
+}
+
+// ---- Navegación ----
+function irA(v){
+  vista=v;
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));
+  $("v-top").hidden=v!=="top";
+  if(v==="top"){$("v-juego").hidden=true;$("v-fin").hidden=true;cargarTop();return}
+  $("generos").hidden=v!=="normal";
+  if(v==="diario"){
+    const dia=hoyAR(), guardado=ls.get("tapa-d-"+dia);
+    if(G&&G.modo==="diario"&&G.dia===dia){ G.terminado?mostrarFin():($("v-fin").hidden=true,$("v-juego").hidden=false); return }
+    if(guardado&&guardado.fin){
+      G={modo:"diario",dia,log:guardado.log,puntos:guardado.puntos,ronda:RONDAS,terminado:true,subido:!!guardado.subido};
+      actualizar(); mostrarFin(); return;
+    }
+    nuevaPartida("diario"); return;
+  }
+  if(G&&G.modo==="normal"){ G.terminado?mostrarFin():($("v-fin").hidden=true,$("v-juego").hidden=false); actualizar(); return }
+  nuevaPartida("normal");
+}
+
+$("next").onclick=()=>siguiente();
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>irA(b.dataset.v));
+document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
+  genero=b.dataset.g;
+  document.querySelectorAll("#generos button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  nuevaPartida("normal");
+});
+document.querySelectorAll("#top-tabs button").forEach(b=>b.onclick=()=>{topTab=b.dataset.t;cargarTop()});
+$("t-diario-n").textContent="#"+numDiario(hoyAR());
+irA("normal");
+mostrarQuien();
+if(!ls.get("tapa-nombre")) pedirNombre();
+</script>
+</body>
+</html>
