@@ -32,7 +32,7 @@ h1 span{color:var(--rojo)}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
 
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
 .tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
 .tabs button:last-child{border-right:0}
 .tabs button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
@@ -86,7 +86,51 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--rojo);outline-o
 .ranking .pts{font-family:var(--mono)}
 .ranking li.yo{background:var(--papel)}
 footer{font-size:.75rem;color:var(--sombra);text-align:center}
-@media (max-width:420px){.tabs button{font-size:.85rem;padding:9px 2px}}
+@media (max-width:520px){.tabs button{font-size:.78rem;padding:9px 1px}.tabs small{font-size:.55rem;letter-spacing:0}}
+
+/* ---- Conexiones: 16 tapas, 4 grupos de 4 ---- */
+:root{--g1:#f6a04d;--g2:#86c06c;--g3:#6fb3d9;--g4:#b48ad8}
+.con{display:flex;flex-direction:column;gap:14px}
+.con-intro{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+@media (max-width:640px){.con-intro{grid-template-columns:1fr}}
+.con-intro p{margin:0 0 10px}
+.con-ej{display:flex;flex-direction:column;gap:6px}
+.con-ej div{padding:10px 12px;border:2px solid var(--tinta);font-weight:800;text-align:center;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.con-ej small{display:block;font-weight:500;text-transform:none;letter-spacing:0}
+.dif{display:flex;gap:8px;flex-wrap:wrap}
+.dif button{font:700 .95rem var(--body);padding:8px 16px;border:2px solid var(--tinta);background:var(--crema);color:var(--tinta);cursor:pointer}
+.dif button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+.con-hechos{display:flex;flex-direction:column;gap:8px}
+.grupo{border:3px solid var(--tinta);padding:10px 12px;text-align:center;box-shadow:3px 3px 0 var(--tinta);animation:entra .3s ease-out}
+.grupo b{display:block;font-family:var(--display);font-weight:400;font-size:1.05rem;text-transform:uppercase;letter-spacing:.02em}
+.grupo span{font-size:.82rem}
+@keyframes entra{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+.grilla{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.disco-t{min-width:0;display:flex;flex-direction:column;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);padding:0;cursor:pointer;font:inherit;text-align:center;transition:transform .08s}
+.disco-t .cv{aspect-ratio:1;width:100%;background:var(--tinta);display:block;object-fit:cover}
+.disco-t .nm{padding:5px 4px;font-weight:700;font-size:.78rem;line-height:1.15;min-height:2.6em;display:flex;align-items:center;justify-content:center;overflow-wrap:anywhere}
+.disco-t[aria-pressed="true"]{background:var(--tinta);color:var(--papel);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
+.disco-t[aria-pressed="true"] .cv{opacity:.75}
+.disco-t.mal{animation:sacude .35s}
+@keyframes sacude{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@media (max-width:440px){.grilla{gap:5px}.disco-t .nm{font-size:.66rem;padding:4px 2px}}
+.con-barra{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.vidas{display:flex;gap:5px}
+.vidas i{width:13px;height:13px;border-radius:50%;background:var(--tinta);display:inline-block}
+.vidas i.off{background:transparent;border:2px solid var(--sombra)}
+.con-acc{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.con-acc .btn{font-size:1rem;padding:8px 16px}
+.con-msg{text-align:center;font-weight:800;min-height:1.3em}
+#con-juego{max-width:680px;width:100%;margin:0 auto}
+.tema-t{min-width:0;min-height:74px;display:flex;align-items:center;justify-content:center;padding:8px 6px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);font:700 .86rem/1.15 var(--body);text-align:center;overflow-wrap:anywhere;cursor:pointer;transition:transform .08s}
+.tema-t[aria-pressed="true"]{background:var(--tinta);color:var(--papel);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
+.tema-t.mal{animation:sacude .35s}
+@media (max-width:440px){.tema-t{font-size:.7rem;min-height:64px;padding:6px 3px}}
+.grupo{display:flex;align-items:center;gap:12px;text-align:left}
+.grupo img{width:62px;height:62px;flex:none;border:2px solid var(--tinta);object-fit:cover;background:var(--tinta)}
+.grupo div{min-width:0}
+.grupo small{display:block;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em}
+#con-juego{max-width:640px;width:100%;margin:0 auto}
 .wrap.ancho{max-width:880px}
 
 /* ---- Impostor: la tapa al centro y los temas en ronda ---- */
@@ -131,13 +175,14 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <header>
     <h1>Adiviná<br>la <span>Tapa</span></h1>
     <div class="stats"><span id="lbl-modo">Normal</span> <b id="ronda">1/10</b></div>
-    <div class="stats">Puntos <b id="pts">0</b></div>
+    <div class="stats"><span id="lbl-pts">Puntos</span> <b id="pts">0</b></div>
   </header>
 
   <nav class="tabs" aria-label="Modo de juego">
     <button id="t-normal" data-v="normal" aria-pressed="true">Normal<small>libre</small></button>
     <button id="t-diario" data-v="diario" aria-pressed="false">Diario<small id="t-diario-n">#1</small></button>
     <button id="t-imp" data-v="impostor" aria-pressed="false">Impostor<small>La Vela</small></button>
+    <button id="t-con" data-v="conexiones" aria-pressed="false">Conexiones<small>temas</small></button>
     <button id="t-top" data-v="top" aria-pressed="false">Top<small>ranking</small></button>
   </nav>
 
@@ -174,6 +219,44 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
   </section>
 
+  <section id="v-con" class="con" hidden>
+    <div id="con-inicio" class="card">
+      <h2>Conexiones</h2>
+      <div class="con-intro">
+        <div class="con-ej" aria-hidden="true">
+          <div style="background:var(--g2)">Canción Animal · Soda Stereo<small>De Música Ligera · Té para Tres · En el Séptimo Día · Canción Animal</small></div>
+          <div style="background:var(--g3)">Oktubre · Redonditos de Ricota<small>Fuegos de Octubre · Preso en mi Ciudad · Motor Psico · Ji Ji Ji</small></div>
+        </div>
+        <div>
+          <p>Vas a ver 16 temas. Juntá 4 que sean del <b>mismo disco</b> y tocá <b>Enviar</b>. Cuando acertás, aparece la tapa.</p>
+          <p><b>Fácil:</b> 4 discos de 4 bandas distintas. <b>Normal:</b> dos discos son de la misma banda. <b>Difícil:</b> los 4 discos son de la misma banda y perdés con 5 errores.</p>
+          <div class="dif" id="con-dif" role="group" aria-label="Dificultad">
+            <button id="dif-facil" data-d="facil" aria-pressed="false">Fácil</button>
+            <button id="dif-normal" data-d="normal" aria-pressed="true">Normal</button>
+            <button id="dif-dificil" data-d="dificil" aria-pressed="false">Difícil</button>
+          </div>
+          <p></p>
+          <button class="btn" id="con-empezar" type="button">Empezar</button>
+        </div>
+      </div>
+    </div>
+    <div id="con-juego" class="con" hidden>
+      <div class="con-hechos" id="con-hechos"></div>
+      <div class="grilla" id="con-grilla"></div>
+      <div class="con-barra"><span id="con-err">Errores: 0</span><span class="vidas" id="con-vidas"></span></div>
+      <div class="con-msg" id="con-msg" aria-live="polite"></div>
+      <div class="con-acc" id="con-acc">
+        <button class="btn sec" id="con-mezclar" type="button">Mezclar</button>
+        <button class="btn sec" id="con-limpiar" type="button">Deseleccionar</button>
+        <button class="btn" id="con-enviar" type="button" disabled>Enviar</button>
+      </div>
+      <div class="con-acc" id="con-fin" hidden>
+        <button class="btn" id="con-otra" type="button">Otra partida</button>
+        <button class="btn sec" id="con-nivel" type="button">Cambiar nivel</button>
+      </div>
+    </div>
+  </section>
+
   <section id="v-top" class="card" hidden>
     <h2>Top</h2>
     <div class="chips" id="top-tabs" style="justify-content:center">
@@ -199,8 +282,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 
 <script>
 // ===== Top compartido (Supabase). Pegá acá la URL del proyecto y la clave pública (anon / publishable) =====
-const SUPA_URL = "";
-const SUPA_KEY = "";
+const SUPA_URL = "https://netmljluwfdwfrxdcrtt.supabase.co";
+const SUPA_KEY = "sb_publishable_cm0lxaPa_8PlqP2qhWcRpw_OymcUAq7";
 const TOP_ON = !!(SUPA_URL && SUPA_KEY);
 
 // ---- Catálogo: [artista, disco, año, categoría]. Disco null = el juego elige uno real de iTunes ----
@@ -629,6 +712,7 @@ function guardarDiario(){
 
 function actualizar(){
   if(!G) return;
+  $("lbl-pts").textContent="Puntos";
   $("lbl-modo").textContent=G.modo==="diario"?`Diario #${numDiario(G.dia)}`:"Ronda";
   $("ronda").textContent=`${Math.max(G.ronda,1)}/${RONDAS}`;
   $("pts").textContent=G.puntos;
@@ -882,12 +966,182 @@ function impConfirmar(){
 }
 
 function impStats(){
-  $("lbl-modo").textContent="Racha"; $("ronda").textContent=IMP.racha;
+  $("lbl-modo").textContent="Racha"; $("lbl-pts").textContent="Puntos"; $("ronda").textContent=IMP.racha;
   $("pts").textContent=`${IMP.aciertos}`;
 }
 
 $("imp-ok").onclick=impConfirmar;
 $("imp-otro").onclick=impNueva;
+
+// ===== Minijuego: Conexiones (16 temas, 4 discos) =====
+const CON_LIMITE={facil:Infinity,normal:Infinity,dificil:5};
+const CON={dif:"normal",p:null,cargando:false};
+const temasCache=new Map();
+async function temasDe(id){
+  if(temasCache.has(id)) return temasCache.get(id);
+  const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
+  const vistos=new Set(), temas=[];
+  for(const x of r.results||[]){
+    if(x.wrapperType!=="track"||!x.trackName) continue;
+    const t=limpiarTema(x.trackName), k=norm(t);
+    if(!k||vistos.has(k)) continue;
+    vistos.add(k); temas.push(t);
+  }
+  temasCache.set(id,temas); return temas;
+}
+
+// Elige qué discos pedir según el nivel (en orden de preferencia, con repuestos)
+function conCandidatos(){
+  const base=DISCOS.filter(d=>d[1]);
+  const porArt={}; base.forEach(d=>(porArt[d[0]]=porArt[d[0]]||[]).push(d));
+  const artistas=Object.keys(porArt);
+  if(CON.dif==="dificil"){
+    const a=mez(artistas.filter(x=>porArt[x].length>=5))[0];
+    return [mez(porArt[a])];                       // una sola banda
+  }
+  if(CON.dif==="normal"){
+    const a=mez(artistas.filter(x=>porArt[x].length>=3))[0];
+    const otros=mez(artistas.filter(x=>x!==a)).map(x=>mez(porArt[x])[0]);
+    return [mez(porArt[a]),otros];                 // 2 de una banda + 2 de otras
+  }
+  return [mez(artistas).map(x=>mez(porArt[x])[0])]; // 4 bandas distintas
+}
+
+async function conArmar(){
+  const fuentes=conCandidatos(), cupo=CON.dif==="normal"?[2,2]:[4];
+  const elegidos=[];
+  for(let f=0;f<fuentes.length;f++){
+    let tomados=0;
+    for(const d of fuentes[f]){
+      if(tomados>=cupo[f]) break;
+      if(elegidos.some(e=>e.d[0]===d[0]&&f>0)) continue;             // en normal, las otras dos bandas distintas
+      if(f>0&&elegidos.filter(e=>e.d[0]===d[0]).length) continue;
+      if(f>0&&elegidos.some((e,i)=>i>=cupo[0]&&e.d[0]===d[0])) continue;
+      try{
+        const r=await resolver(d,false,new Set());
+        const temas=await temasDe(r.id);
+        if(temas.length<5) continue;
+        elegidos.push({d,r,temas}); tomados++;
+      }catch(e){}
+    }
+    if(tomados<cupo[f]) return null;
+  }
+  // 4 temas por disco que no se parezcan a ningún tema de los otros discos
+  const grupos=[];
+  for(const e of elegidos){
+    const otros=elegidos.filter(o=>o!==e).flatMap(o=>o.temas);
+    const libres=mez(e.temas.filter(t=>!otros.some(o=>parecidos(o,t))&&!parecidos(t,e.d[1])));
+    if(libres.length<4) return null;
+    grupos.push({d:e.d,url:e.r.url.replace("600x600bb","200x200bb"),temas:libres.slice(0,4)});
+  }
+  const colores=mez([1,2,3,4]); grupos.forEach((g,i)=>g.color=`var(--g${colores[i]})`);
+  return grupos;
+}
+
+async function conEmpezar(){
+  if(CON.cargando) return; CON.cargando=true;
+  $("con-inicio").hidden=true; $("con-juego").hidden=false;
+  $("con-hechos").innerHTML=""; $("con-grilla").innerHTML="";
+  $("con-acc").hidden=true; $("con-fin").hidden=true; $("con-err").textContent=""; $("con-vidas").innerHTML="";
+  $("con-msg").textContent="Armando la partida…";
+  let grupos=null;
+  for(let i=0;i<4&&!grupos;i++){ try{ grupos=await conArmar() }catch(e){} }
+  CON.cargando=false;
+  if(!grupos){ $("con-msg").textContent="No pude armar la partida. Revisá la conexión y probá de nuevo."; $("con-fin").hidden=false; return }
+  const fichas=mez(grupos.flatMap((g,gi)=>g.temas.map(t=>({t,gi}))));
+  CON.p={grupos,fichas,sel:new Set(),hechos:[],errores:0,intentos:new Set(),fin:false};
+  $("con-msg").textContent=""; $("con-acc").hidden=false;
+  conPintar(); conMostrar();
+}
+
+function conPintar(){
+  const P=CON.p, g=$("con-grilla"); g.innerHTML="";
+  P.fichas.forEach((f,i)=>{
+    if(P.hechos.includes(f.gi)) return;
+    const b=document.createElement("button");
+    b.type="button"; b.className="tema-t"; b.id="ficha"+i; b.setAttribute("aria-pressed",P.sel.has(i));
+    b.textContent=f.t; b.onclick=()=>conTocar(i);
+    g.appendChild(b);
+  });
+  conBarra();
+}
+
+function conBarra(){
+  const P=CON.p, lim=CON_LIMITE[CON.dif];
+  $("con-err").textContent=lim===Infinity?`Errores: ${P.errores}`:`Te quedan ${lim-P.errores} error${lim-P.errores===1?"":"es"}`;
+  $("con-vidas").innerHTML=lim===Infinity?"":Array.from({length:lim},(_,i)=>`<i class="${i<lim-P.errores?"":"off"}"></i>`).join("");
+  $("con-enviar").disabled=P.sel.size!==4||P.fin;
+  $("con-limpiar").disabled=!P.sel.size;
+}
+
+function conTocar(i){
+  const P=CON.p; if(P.fin) return;
+  if(P.sel.has(i)) P.sel.delete(i); else if(P.sel.size<4) P.sel.add(i);
+  const b=$("ficha"+i); if(b) b.setAttribute("aria-pressed",P.sel.has(i));
+  $("con-msg").textContent=""; conBarra();
+}
+
+function conGrupoHecho(gi){
+  const g=CON.p.grupos[gi], div=document.createElement("div");
+  div.className="grupo"; div.style.background=g.color;
+  div.innerHTML=`<img alt=""><div><b></b><small></small><span></span></div>`;
+  div.querySelector("img").src=g.url; div.querySelector("img").alt="Tapa de "+g.d[1];
+  div.querySelector("b").textContent=g.d[1];
+  div.querySelector("small").textContent=`${g.d[0]} · ${g.d[2]}`;
+  div.querySelector("span").textContent=g.temas.join(" · ");
+  $("con-hechos").appendChild(div);
+}
+
+function conEnviar(){
+  const P=CON.p; if(!P||P.sel.size!==4||P.fin) return;
+  const sel=[...P.sel], clave=sel.slice().sort((a,b)=>a-b).join(",");
+  if(P.intentos.has(clave)){$("con-msg").textContent="Ya probaste esa combinación.";return}
+  P.intentos.add(clave);
+  const cuenta={}; sel.forEach(i=>{const gi=P.fichas[i].gi;cuenta[gi]=(cuenta[gi]||0)+1});
+  const max=Math.max(...Object.values(cuenta));
+  if(max===4){
+    const gi=P.fichas[sel[0]].gi; P.hechos.push(gi); P.sel.clear(); conGrupoHecho(gi);
+    $("con-msg").textContent=["¡Bien!","¡Esa era!","¡Exacto!","¡Grande!"][P.hechos.length-1]||"¡Bien!";
+    conPintar();
+    if(P.hechos.length===4) conTerminar(true);
+    return;
+  }
+  P.errores++;
+  sel.forEach(i=>{const b=$("ficha"+i); if(b){b.classList.remove("mal");void b.offsetWidth;b.classList.add("mal")}});
+  $("con-msg").textContent=max===3?"¡Te falta uno! Tres de esos son del mismo disco.":"No, esos cuatro no son del mismo disco.";
+  conBarra();
+  if(P.errores>=CON_LIMITE[CON.dif]) conTerminar(false);
+}
+
+function conTerminar(gano){
+  const P=CON.p; P.fin=true; P.sel.clear();
+  P.grupos.forEach((g,gi)=>{ if(!P.hechos.includes(gi)){P.hechos.push(gi);conGrupoHecho(gi)} });
+  conPintar();
+  $("con-msg").textContent=gano?(P.errores===0?"¡Perfecto, sin errores!":`¡Completado con ${P.errores} error${P.errores===1?"":"es"}!`):"Te quedaste sin errores. Estos eran los discos.";
+  if(gano){const k="tapa-con-"+CON.dif;ls.set(k,(ls.get(k)||0)+1)}
+  conMostrar();
+  $("con-acc").hidden=true; $("con-fin").hidden=false; $("con-otra").focus();
+}
+
+function conMostrar(){
+  $("lbl-modo").textContent="Ganadas"; $("lbl-pts").textContent="Nivel"; $("ronda").textContent=ls.get("tapa-con-"+CON.dif)||0;
+  $("pts").textContent=CON.dif==="dificil"?"Difícil":CON.dif==="facil"?"Fácil":"Normal";
+}
+
+document.querySelectorAll("#con-dif button").forEach(b=>b.onclick=()=>{
+  CON.dif=b.dataset.d; document.querySelectorAll("#con-dif button").forEach(x=>x.setAttribute("aria-pressed",x===b)); conMostrar();
+});
+$("con-empezar").onclick=conEmpezar;
+$("con-enviar").onclick=conEnviar;
+$("con-limpiar").onclick=()=>{CON.p.sel.clear();conPintar()};
+$("con-mezclar").onclick=()=>{
+  const P=CON.p, quedan=P.fichas.map((f,i)=>i).filter(i=>!P.hechos.includes(P.fichas[i].gi));
+  const orden=mez(quedan), nuevas=P.fichas.slice(), sel=new Set();
+  quedan.forEach((pos,k)=>{nuevas[pos]=P.fichas[orden[k]]; if(P.sel.has(orden[k])) sel.add(pos)});
+  P.fichas=nuevas; P.sel=sel; conPintar();
+};
+$("con-otra").onclick=conEmpezar;
+$("con-nivel").onclick=()=>{$("con-juego").hidden=true;$("con-inicio").hidden=false;$("con-msg").textContent=""};
 
 // ---- Navegación ----
 function irA(v){
@@ -895,7 +1149,9 @@ function irA(v){
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));
   $("v-top").hidden=v!=="top";
   $("v-imp").hidden=v!=="impostor";
-  $("wrap").classList.toggle("ancho",v==="impostor");
+  $("v-con").hidden=v!=="conexiones";
+  $("wrap").classList.toggle("ancho",v==="impostor"||v==="conexiones");
+  if(v==="conexiones"){$("v-juego").hidden=true;$("v-fin").hidden=true;conMostrar();return}
   if(v==="impostor"){$("v-juego").hidden=true;$("v-fin").hidden=true; IMP.ronda?impStats():impNueva(); return}
   if(G) actualizar();
   if(v==="top"){$("v-juego").hidden=true;$("v-fin").hidden=true;cargarTop();return}
