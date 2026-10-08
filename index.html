@@ -324,7 +324,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="tema"><small>Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock nacional. Cada error te da más.</span></button>
       <button type="button" data-ir="antes"><small>Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
       <button type="button" data-ir="orden"><small>Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
-      <button type="button" data-ir="abre"><small>Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre (o lo cierra).</span></button>
+      <button type="button" data-ir="abre"><small>Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre.</span></button>
       <button type="button" data-ir="conexiones"><small>4 × 4</small><b>Conexiones</b><span>16 temas de rock nacional. Armá los 4 discos.</span></button>
       <button type="button" data-ir="impostor"><small>La Vela Puerca</small><b>¿Qué tema no está?</b><span>Un disco y 10 temas. Encontrá los que son de otro.</span></button>
     </div>
@@ -1605,9 +1605,7 @@ async function abrNuevo(){
     try{
       const ps=await pistasDe(x.r.id);
       if(ps.length<6) continue;
-      // "cierra" solo en ediciones simples (un disco, sin temas extra) para no confundir con bonus tracks
-      const simple=ps.every(p=>p.disc===1)&&ps.length<=14;
-      const cierra=simple&&Math.random()<.3, target=cierra?ps[ps.length-1]:ps[0];
+      const cierra=false, target=ps[0]; // siempre: ¿qué tema abre el disco?
       const otros=mez(ps.filter(p=>p!==target)).slice(0,3);
       j={...x,ps,cierra,target,ops:mez([target,...otros]),listo:false};
     }catch(e){}
