@@ -321,7 +321,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 
   <section id="v-hub" hidden>
     <div class="hub">
-      <button type="button" data-ir="tema"><small>Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock nacional. Cada error te da más.</span></button>
+      <button type="button" data-ir="tema"><small>Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes"><small>Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
       <button type="button" data-ir="orden"><small>Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
       <button type="button" data-ir="abre"><small>Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre.</span></button>
@@ -333,7 +333,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <section id="v-tema" class="sub" hidden>
     <button class="link volver" type="button">← Juegos</button>
     <h2>Adiviná el tema</h2>
-    <p class="bajada">Rock nacional. Tocá Escuchar y escribí el nombre del tema. Si errás o saltás, escuchás más.</p>
+    <p class="bajada">Solo rock: Redondos, La Renga, Divididos, Piojos, La Vela y compañía. Tocá Escuchar y escribí el nombre del tema. Si errás o saltás, escuchás más.</p>
     <div class="chips" id="tema-modo" role="group" aria-label="Modo">
       <button id="tm-diario" data-m="diario" aria-pressed="true">Tema del día</button>
       <button id="tm-libre" data-m="libre" aria-pressed="false">Libre</button>
@@ -1347,7 +1347,12 @@ function cabecera(a,b,c,d){ $("lbl-modo").textContent=a; $("ronda").textContent=
 // ===== 1. Adiviná el tema =====
 const PASOS=[1,2,4,7,11,16];
 const TEMA={modo:"diario",j:null,audio:null,timer:null};
-const temaPool=()=>DISCOS.filter(d=>d[1]&&d[3]==="nac"&&CON_BANDAS.includes(d[0]));
+// Solo rock (barrial, pesado y afines). Sin pop, ska ni folk.
+const TEMA_BANDAS=["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
+  "La Renga","Los Piojos","Callejeros","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
+  "No Te Va Gustar","El Plan de la Mariposa","Sueño de Pescado","Farolitos","Bersuit Vergarabat","Catupecu Machu",
+  "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"];
+const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0]));
 const numTema=dia=>numDiario(dia);
 
 async function temaNuevo(){
