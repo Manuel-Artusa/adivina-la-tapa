@@ -229,7 +229,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
         </div>
         <div>
           <p>Vas a ver 16 temas. Juntá 4 que sean del <b>mismo disco</b> y tocá <b>Enviar</b>. Cuando acertás, aparece la tapa.</p>
-          <p><b>Fácil:</b> 4 discos de 4 bandas distintas. <b>Normal:</b> dos discos son de la misma banda. <b>Difícil:</b> los 4 discos son de la misma banda y perdés con 5 errores.</p>
+          <p>Solo rock nacional, de las bandas más conocidas. <b>Fácil:</b> 4 discos de 4 bandas distintas. <b>Normal:</b> dos discos son de la misma banda. <b>Difícil:</b> los 4 discos son de la misma banda y perdés con 5 errores.</p>
           <div class="dif" id="con-dif" role="group" aria-label="Dificultad">
             <button id="dif-facil" data-d="facil" aria-pressed="false">Fácil</button>
             <button id="dif-normal" data-d="normal" aria-pressed="true">Normal</button>
@@ -991,8 +991,14 @@ async function temasDe(id){
 }
 
 // Elige qué discos pedir según el nivel (en orden de preferencia, con repuestos)
+// Solo rock nacional y bandas bien conocidas
+const CON_BANDAS=["Soda Stereo","Gustavo Cerati","Charly García","Serú Girán","Sui Generis","Luis Alberto Spinetta","Pescado Rabioso","Almendra",
+  "Patricio Rey y sus Redonditos de Ricota","Indio Solari","Sumo","Divididos","Virus","Los Abuelos de la Nada","Fito Páez","Andrés Calamaro",
+  "Los Rodríguez","Los Fabulosos Cadillacs","Los Piojos","La Renga","Babasónicos","Bersuit Vergarabat","Callejeros","Catupecu Machu",
+  "Attaque 77","Rata Blanca","Los Enanitos Verdes","Los Auténticos Decadentes","Los Pericos","Viejas Locas","Las Pastillas del Abuelo",
+  "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"];
 function conCandidatos(){
-  const base=DISCOS.filter(d=>d[1]);
+  const base=DISCOS.filter(d=>d[1]&&d[3]==="nac"&&CON_BANDAS.includes(d[0]));
   const porArt={}; base.forEach(d=>(porArt[d[0]]=porArt[d[0]]||[]).push(d));
   const artistas=Object.keys(porArt);
   if(CON.dif==="dificil"){
