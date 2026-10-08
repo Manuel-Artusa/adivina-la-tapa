@@ -32,7 +32,7 @@ h1 span{color:var(--rojo)}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
 
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
 .tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
 .tabs button:last-child{border-right:0}
 .tabs button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
@@ -84,9 +84,13 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--rojo);outline-o
 .ranking .pos{font-family:var(--display);color:var(--rojo)}
 .ranking .nom{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .ranking .pts{font-family:var(--mono)}
+.ranking .pts small{font-size:.68rem;color:var(--sombra)}
+.nota-top{font-weight:600;color:var(--sombra)}
+#top-juegos button{font-size:.75rem}
+#top-vars{padding-top:10px;border-top:2px dotted var(--sombra)}
 .ranking li.yo{background:var(--papel)}
 footer{font-size:.75rem;color:var(--sombra);text-align:center}
-@media (max-width:520px){.tabs button{font-size:.78rem;padding:9px 1px}.tabs small{font-size:.55rem;letter-spacing:0}}
+@media (max-width:420px){.tabs button{font-size:.88rem;padding:9px 2px}}
 
 /* ---- Conexiones: 16 tapas, 4 grupos de 4 ---- */
 :root{--g1:#f6a04d;--g2:#86c06c;--g3:#6fb3d9;--g4:#b48ad8}
@@ -122,6 +126,63 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .con-acc .btn{font-size:1rem;padding:8px 16px}
 .con-msg{text-align:center;font-weight:800;min-height:1.3em}
 #con-juego{max-width:680px;width:100%;margin:0 auto}
+
+/* ---- Juegos: menú y piezas comunes ---- */
+.volver{align-self:flex-start;text-decoration:none;font-size:.95rem}
+.hub{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.hub button{min-width:0;text-align:left;display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--crema);color:var(--tinta);border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--tinta);cursor:pointer;font:inherit;transition:transform .08s,box-shadow .08s}
+.hub button:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--tinta)}
+.hub b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1}
+.hub span{font-size:.88rem}
+.hub small{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--rojo)}
+.sub{display:flex;flex-direction:column;gap:14px;max-width:640px;width:100%;margin:0 auto}
+.sub h2{font-family:var(--display);font-weight:400;font-size:1.8rem;margin:0;line-height:1}
+.sub .bajada{margin:0;font-size:.92rem}
+.mini-tapa{background:var(--tinta);border:3px solid var(--tinta);aspect-ratio:1;width:100%;object-fit:cover;display:block}
+.ok-t{color:var(--ok)}.mal-t{color:var(--rojo)}
+
+/* Adiviná el tema */
+.reproductor{display:flex;flex-direction:column;gap:10px;align-items:center}
+.barra{position:relative;width:100%;height:18px;background:var(--crema);border:2px solid var(--tinta);overflow:hidden}
+.barra .lleno{position:absolute;inset:0 auto 0 0;width:0;background:var(--tinta)}
+.barra .tope{position:absolute;top:0;bottom:0;left:0;background:rgba(215,38,46,.25)}
+.barra .marca{position:absolute;top:0;bottom:0;width:2px;background:var(--sombra)}
+.intentos{display:flex;flex-direction:column;gap:6px}
+.intentos div{min-height:36px;padding:7px 10px;border:2px solid var(--tinta);background:var(--crema);font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:8px}
+.intentos div.vacio{background:transparent;border-style:dashed;border-color:var(--sombra)}
+.intentos div.salto{color:var(--sombra)}
+.intentos div.mal{color:var(--rojo)}
+.intentos div.bien{background:var(--ok);color:var(--crema)}
+.revelado{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center}
+.revelado b{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.05;display:block}
+
+/* Antes o después */
+.duelo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.duelo .lado{min-width:0;display:flex;flex-direction:column;gap:6px;text-align:center}
+.duelo .lado b{font-weight:800;line-height:1.15}
+.duelo .anio{font-family:var(--display);font-size:2rem;line-height:1}
+.duelo .botones{display:flex;flex-direction:column;gap:8px}
+.duelo .botones .btn{font-size:1rem;padding:8px 10px}
+
+/* Ordená la discografía */
+.orden{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.orden li{display:grid;grid-template-columns:28px 56px 1fr auto;gap:10px;align-items:center;padding:6px 8px;background:var(--crema);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta)}
+.orden li.fijo{background:var(--ok);color:var(--crema)}
+.orden li.mal{border-color:var(--rojo);box-shadow:3px 3px 0 var(--rojo)}
+.orden .pos{font-family:var(--display);font-size:1.2rem;text-align:center}
+.orden img{width:56px;height:56px;object-fit:cover;background:var(--tinta);display:block}
+.orden .tx{min-width:0;font-weight:700;line-height:1.15}
+.orden .tx small{display:block;font-family:var(--mono);font-weight:500;font-size:.75rem}
+.orden .mov{display:flex;flex-direction:column;gap:4px}
+.orden .mov button{width:34px;height:28px;border:2px solid currentColor;background:transparent;color:inherit;font-weight:800;cursor:pointer}
+.orden .mov button:disabled{opacity:.25;cursor:default}
+
+/* Tema número 1 */
+.abre-cab{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
+.abre-cab b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.05;display:block}
+.abre-preg{font-weight:800;font-size:1.05rem}
+.abre-preg em{font-style:normal;color:var(--rojo)}
+@media (max-width:440px){.abre-cab,.revelado{grid-template-columns:96px 1fr}}
 .tema-t{min-width:0;min-height:74px;display:flex;align-items:center;justify-content:center;padding:8px 6px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);font:700 .86rem/1.15 var(--body);text-align:center;overflow-wrap:anywhere;cursor:pointer;transition:transform .08s}
 .tema-t[aria-pressed="true"]{background:var(--tinta);color:var(--papel);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
 .tema-t.mal{animation:sacude .35s}
@@ -181,8 +242,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <nav class="tabs" aria-label="Modo de juego">
     <button id="t-normal" data-v="normal" aria-pressed="true">Normal<small>libre</small></button>
     <button id="t-diario" data-v="diario" aria-pressed="false">Diario<small id="t-diario-n">#1</small></button>
-    <button id="t-imp" data-v="impostor" aria-pressed="false">Impostor<small>La Vela</small></button>
-    <button id="t-con" data-v="conexiones" aria-pressed="false">Conexiones<small>temas</small></button>
+    <button id="t-jue" data-v="juegos" aria-pressed="false">Juegos<small>6 más</small></button>
     <button id="t-top" data-v="top" aria-pressed="false">Top<small>ranking</small></button>
   </nav>
 
@@ -204,6 +264,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <section id="v-fin" class="card" hidden></section>
 
   <section id="v-imp" class="imp" hidden>
+    <button class="link volver" type="button">← Juegos</button>
     <div class="imp-cab"><h2>¿Qué tema no está?</h2><span>Solo La Vela Puerca</span></div>
     <div class="ring" id="ring">
       <div class="centro">
@@ -220,6 +281,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   </section>
 
   <section id="v-con" class="con" hidden>
+    <button class="link volver" type="button">← Juegos</button>
     <div id="con-inicio" class="card">
       <h2>Conexiones</h2>
       <div class="con-intro">
@@ -257,14 +319,79 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
   </section>
 
+  <section id="v-hub" hidden>
+    <div class="hub">
+      <button type="button" data-ir="tema"><small>Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock nacional. Cada error te da más.</span></button>
+      <button type="button" data-ir="antes"><small>Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
+      <button type="button" data-ir="orden"><small>Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
+      <button type="button" data-ir="abre"><small>Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre (o lo cierra).</span></button>
+      <button type="button" data-ir="conexiones"><small>4 × 4</small><b>Conexiones</b><span>16 temas de rock nacional. Armá los 4 discos.</span></button>
+      <button type="button" data-ir="impostor"><small>La Vela Puerca</small><b>¿Qué tema no está?</b><span>Un disco y 10 temas. Encontrá los que son de otro.</span></button>
+    </div>
+  </section>
+
+  <section id="v-tema" class="sub" hidden>
+    <button class="link volver" type="button">← Juegos</button>
+    <h2>Adiviná el tema</h2>
+    <p class="bajada">Rock nacional. Tocá Escuchar y escribí el nombre del tema. Si errás o saltás, escuchás más.</p>
+    <div class="chips" id="tema-modo" role="group" aria-label="Modo">
+      <button id="tm-diario" data-m="diario" aria-pressed="true">Tema del día</button>
+      <button id="tm-libre" data-m="libre" aria-pressed="false">Libre</button>
+    </div>
+    <div class="reproductor">
+      <div class="barra" id="tema-barra"><div class="tope" id="tema-tope"></div><div class="lleno" id="tema-lleno"></div></div>
+      <button class="btn" id="tema-play" type="button" disabled>▶ Escuchar</button>
+      <div class="aviso" id="tema-estado">Cargando tema…</div>
+    </div>
+    <div class="intentos" id="tema-intentos"></div>
+    <form class="nombre" id="tema-form" autocomplete="off">
+      <input id="tema-in" list="tema-lista" placeholder="Escribí el tema (te sugiere mientras escribís)">
+      <button class="btn" id="tema-env" type="submit">Adivinar</button>
+    </form>
+    <datalist id="tema-lista"></datalist>
+    <div class="fila" id="tema-acc"><button class="btn sec" id="tema-saltar" type="button">Saltar</button></div>
+    <div id="tema-fin" class="card" hidden></div>
+  </section>
+
+  <section id="v-antes" class="sub" hidden>
+    <button class="link volver" type="button">← Juegos</button>
+    <h2>¿Antes o después?</h2>
+    <p class="bajada">¿El disco de la derecha salió antes o después que el de la izquierda?</p>
+    <div class="duelo" id="antes-duelo">
+      <div class="lado" id="antes-izq"></div>
+      <div class="lado" id="antes-der"></div>
+    </div>
+    <div class="con-msg" id="antes-msg" aria-live="polite"></div>
+    <div class="fila"><button class="btn" id="antes-otra" type="button" hidden>Jugar de nuevo</button></div>
+  </section>
+
+  <section id="v-orden" class="sub" hidden>
+    <button class="link volver" type="button">← Juegos</button>
+    <h2>Ordená la discografía</h2>
+    <p class="bajada" id="orden-bajada">Cargando…</p>
+    <ol class="orden" id="orden-lista"></ol>
+    <div class="con-msg" id="orden-msg" aria-live="polite"></div>
+    <div class="fila">
+      <button class="btn" id="orden-ok" type="button">Comprobar</button>
+      <button class="btn" id="orden-otra" type="button" hidden>Otra banda</button>
+    </div>
+  </section>
+
+  <section id="v-abre" class="sub" hidden>
+    <button class="link volver" type="button">← Juegos</button>
+    <h2>Tema número 1</h2>
+    <div class="abre-cab"><img class="mini-tapa" id="abre-tapa" alt=""><div><b id="abre-disco">Cargando…</b><span id="abre-banda"></span></div></div>
+    <div class="abre-preg" id="abre-preg"></div>
+    <div class="opts" id="abre-opts"></div>
+    <div class="con-msg" id="abre-msg" aria-live="polite"></div>
+    <div class="fila"><button class="btn" id="abre-sig" type="button" hidden>Siguiente</button></div>
+  </section>
+
   <section id="v-top" class="card" hidden>
     <h2>Top</h2>
-    <div class="chips" id="top-tabs" style="justify-content:center">
-      <button id="tt-diario" data-t="diario" aria-pressed="true">Diario de hoy</button>
-      <button id="tt-todos" data-t="todos" aria-pressed="false">Normal · Todo</button>
-      <button id="tt-nac" data-t="nac" aria-pressed="false">Normal · Nacional</button>
-      <button id="tt-int" data-t="int" aria-pressed="false">Normal · Intern.</button>
-    </div>
+    <div class="chips" id="top-juegos" role="group" aria-label="Juego" style="justify-content:center"></div>
+    <div class="chips" id="top-vars" role="group" aria-label="Variante" style="justify-content:center"></div>
+    <p class="aviso" id="top-desc"></p>
     <div id="top-lista"></div>
   </section>
 
@@ -542,7 +669,7 @@ async function resolver(d,azar,usados){
 }
 
 // ---- Estado de la partida ----
-let G=null, vista="normal", genero="todos", topTab="diario", relojTimer=null;
+let G=null, vista="normal", genero="todos", topTab={t:"diario",v:"todos"}, relojTimer=null;
 
 function nuevaPartida(modo){
   const dia=hoyAR();
@@ -785,7 +912,7 @@ async function compartir(){
 
 // ---- Top (Supabase REST) ----
 const supaHeaders={apikey:SUPA_KEY,"Content-Type":"application/json"};
-function verTopPropio(){ topTab=G.modo==="diario"?"diario":G.genero; irA("top") }
+function verTopPropio(){ topTab=G.modo==="diario"?{t:"diario",v:"todos"}:{t:"normal",v:G.genero}; irA("top") }
 async function subirPuntaje(){
   const g=G, nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20), est=$("top-estado"), b=$("b-subir");
   if(!nombre){ pedirNombre(subirPuntaje); return }
@@ -824,19 +951,59 @@ function mostrarQuien(){
 }
 $("b-cambiar").onclick=()=>pedirNombre();
 
+// Cada top: qué filas de la tabla mira, cómo se explica y en qué unidad
+const TOPS=[
+  {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,u:"pts",d:"Puntaje del diario de hoy (máximo 50)."},
+  {id:"normal",n:"Tapa libre",modo:"normal",u:"pts",d:"Mejor partida de 10 tapas (máximo 50).",vars:[["todos","Todo"],["nac","Nacional"],["int","Internacional"]]},
+  {id:"tema",n:"Tema del día",modo:"tema",hoy:true,u:"pts",d:"6 puntos si lo sacás con 1 segundo, 1 punto en el último intento."},
+  {id:"antes",n:"¿Antes o después?",modo:"antes",u:"seguidas",d:"Racha más larga de aciertos seguidos."},
+  {id:"orden",n:"Ordená la discografía",modo:"orden",u:"seguidas",d:"Discografías ordenadas seguidas sin fallar."},
+  {id:"abre",n:"Tema número 1",modo:"abre",u:"seguidas",d:"Racha más larga de aciertos seguidos."},
+  {id:"conexiones",n:"Conexiones",modo:"conexiones",u:"pts",d:"100 puntos por ganar sin errores, 10 menos por cada error.",vars:[["facil","Fácil"],["normal","Normal"],["dificil","Difícil"]]},
+  {id:"impostor",n:"¿Qué tema no está?",modo:"impostor",u:"seguidas",d:"Rondas perfectas seguidas."},
+];
+function topChips(){
+  const cfg=TOPS.find(t=>t.id===topTab.t)||TOPS[0];
+  $("top-juegos").innerHTML=""; $("top-vars").innerHTML="";
+  TOPS.forEach(t=>{const b=document.createElement("button");b.type="button";b.id="tj-"+t.id;b.textContent=t.n;b.setAttribute("aria-pressed",t===cfg);
+    b.onclick=()=>{topTab={t:t.id,v:t.vars?t.vars[0][0]:"todos"};cargarTop()};$("top-juegos").appendChild(b)});
+  if(cfg.vars){ if(!cfg.vars.some(v=>v[0]===topTab.v)) topTab.v=cfg.vars[0][0];
+    cfg.vars.forEach(([k,n])=>{const b=document.createElement("button");b.type="button";b.id="tv-"+k;b.textContent=n;b.setAttribute("aria-pressed",k===topTab.v);
+      b.onclick=()=>{topTab.v=k;cargarTop()};$("top-vars").appendChild(b)}) }
+  $("top-vars").hidden=!cfg.vars; $("top-desc").textContent=cfg.d;
+  return cfg;
+}
 async function cargarTop(){
-  document.querySelectorAll("#top-tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.t===topTab));
-  const cont=$("top-lista");
+  const cfg=topChips(), cont=$("top-lista");
   if(!TOP_ON){cont.innerHTML=`<p class="aviso">El top todavía no está configurado. Hay que pegar la URL y la clave de Supabase al principio del código.</p>`;return}
   cont.innerHTML=`<p class="aviso">Cargando…</p>`;
-  const filtro=topTab==="diario"?`modo=eq.diario&dia=eq.${hoyAR()}`:`modo=eq.normal&genero=eq.${topTab}`;
+  let filtro=`modo=eq.${cfg.modo}`;
+  if(cfg.hoy) filtro+=`&dia=eq.${hoyAR()}`;
+  if(cfg.vars) filtro+=`&genero=eq.${topTab.v}`;
+  const pedido=JSON.stringify(topTab);
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos&${filtro}&order=puntos.desc,created_at.asc&limit=20`,{headers:supaHeaders});
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos&${filtro}&order=puntos.desc,created_at.asc&limit=300`,{headers:supaHeaders});
     if(!r.ok) throw new Error(r.status);
-    const filas=await r.json(), yo=ls.get("tapa-nombre");
-    cont.innerHTML=filas.length?`<ol class="ranking">${filas.map((f,i)=>`<li class="${f.nombre===yo?"yo":""}"><span class="pos">${i+1}</span><span class="nom">${esc(f.nombre)}</span><span class="pts">${f.puntos}</span></li>`).join("")}</ol>`
-      :`<p class="aviso">${topTab==="diario"?"Nadie jugó el diario de hoy todavía. ¡Sé el primero!":"Todavía no hay puntajes acá."}</p>`;
+    if(JSON.stringify(topTab)!==pedido) return;
+    const vistos=new Set(), filas=[];
+    for(const f of await r.json()){ const k=norm(f.nombre); if(vistos.has(k)) continue; vistos.add(k); filas.push(f); if(filas.length>=20) break }
+    const yo=ls.get("tapa-nombre");
+    cont.innerHTML=filas.length?`<ol class="ranking">${filas.map((f,i)=>`<li class="${f.nombre===yo?"yo":""}"><span class="pos">${i+1}</span><span class="nom">${esc(f.nombre)}</span><span class="pts">${f.puntos} <small>${cfg.u}</small></span></li>`).join("")}</ol>`
+      :`<p class="aviso">${cfg.hoy?"Nadie jugó hoy todavía. ¡Sé el primero!":"Todavía no hay puntajes acá. ¡Sé el primero!"}</p>`;
   }catch(e){ cont.innerHTML=`<p class="aviso">No pude cargar el top. Probá recargar.</p>` }
+}
+
+// Sube un puntaje de los minijuegos con el nombre guardado y avisa en "el"
+async function topAuto(modo,genero,puntos,el){
+  if(!TOP_ON) return;
+  const nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20);
+  if(!nombre){ pedirNombre(()=>topAuto(modo,genero,puntos,el)); return }
+  const nota=t=>{ if(!el) return; let sp=el.querySelector(".nota-top"); if(!sp){sp=document.createElement("span");sp.className="nota-top";el.appendChild(sp)} sp.textContent=" · "+t };
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:Math.max(0,Math.min(500,Math.round(puntos))),modo,genero})});
+    if(!r.ok) throw new Error(r.status);
+    nota("subido al top ✔");
+  }catch(e){ nota("no se pudo subir al top") }
 }
 
 // ===== Minijuego: El Impostor (solo La Vela Puerca) =====
@@ -957,11 +1124,12 @@ function impConfirmar(){
       if(marcado) b.classList.add("inocente"); else {ok++;b.classList.add("bien")}
     }
   });
-  const perfecto=ok===R.temas.length;
+  const perfecto=ok===R.temas.length, previa=IMP.racha;
   IMP.jugadas++; IMP.aciertos+=ok; IMP.racha=perfecto?IMP.racha+1:0;
   const mejor=ls.get("tapa-imp-racha")||0; if(IMP.racha>mejor) ls.set("tapa-imp-racha",IMP.racha);
   $("imp-res").textContent=perfecto?`¡Perfecto! Cazaste a los ${total} impostores.`:`Cazaste ${cazados} de ${total} impostores · ${ok}/${R.temas.length} bien`;
   $("imp-ok").hidden=true; $("imp-otro").hidden=false; $("imp-otro").focus();
+  if(!perfecto&&previa>0) topAuto("impostor","todos",previa,$("imp-res"));
   impStats();
 }
 
@@ -1121,6 +1289,8 @@ function conEnviar(){
 
 function conTerminar(gano){
   const P=CON.p; P.fin=true; P.sel.clear();
+  const encontrados=P.hechos.length;
+  topAuto("conexiones",CON.dif,gano?Math.max(10,100-10*P.errores):encontrados*5,$("con-msg"));
   P.grupos.forEach((g,gi)=>{ if(!P.hechos.includes(gi)){P.hechos.push(gi);conGrupoHecho(gi)} });
   conPintar();
   $("con-msg").textContent=gano?(P.errores===0?"¡Perfecto, sin errores!":`¡Completado con ${P.errores} error${P.errores===1?"":"es"}!`):"Te quedaste sin errores. Estos eran los discos.";
@@ -1149,18 +1319,353 @@ $("con-mezclar").onclick=()=>{
 $("con-otra").onclick=conEmpezar;
 $("con-nivel").onclick=()=>{$("con-juego").hidden=true;$("con-inicio").hidden=false;$("con-msg").textContent=""};
 
+// ===== Piezas comunes de los juegos =====
+const pistasCache=new Map();
+async function pistasDe(id){
+  if(pistasCache.has(id)) return pistasCache.get(id);
+  const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
+  const vistos=new Set(), ps=[];
+  for(const x of (r.results||[]).filter(x=>x.wrapperType==="track"&&x.trackName).sort((a,b)=>(a.discNumber||1)-(b.discNumber||1)||(a.trackNumber||0)-(b.trackNumber||0))){
+    const t=limpiarTema(x.trackName), k=norm(t);
+    if(!k||vistos.has(k)) continue;
+    vistos.add(k); ps.push({t,n:x.trackNumber||0,disc:x.discNumber||1,prev:x.previewUrl||null});
+  }
+  pistasCache.set(id,ps); return ps;
+}
+// Un disco del catálogo que exista en iTunes: {d, r}
+async function discoDe(pool,rng=Math.random,evitar=()=>false){
+  for(let i=0;i<12;i++){
+    const d=pool[rng()*pool.length|0];
+    if(evitar(d)) continue;
+    try{ return {d,r:await resolver(d,false,new Set())} }catch(e){}
+  }
+  return null;
+}
+const chico200=u=>u.replace("600x600bb","200x200bb");
+function cabecera(a,b,c,d){ $("lbl-modo").textContent=a; $("ronda").textContent=b; $("lbl-pts").textContent=c; $("pts").textContent=d }
+
+// ===== 1. Adiviná el tema =====
+const PASOS=[1,2,4,7,11,16];
+const TEMA={modo:"diario",j:null,audio:null,timer:null};
+const temaPool=()=>DISCOS.filter(d=>d[1]&&d[3]==="nac"&&CON_BANDAS.includes(d[0]));
+const numTema=dia=>numDiario(dia);
+
+async function temaNuevo(){
+  temaParar();
+  const modo=TEMA.modo, dia=hoyAR();
+  $("tema-fin").hidden=true; $("tema-form").hidden=false; $("tema-acc").hidden=false;
+  $("tema-play").disabled=true; $("tema-estado").textContent="Cargando tema…";
+  $("tema-in").value=""; $("tema-lista").innerHTML="";
+  const guardado=modo==="diario"?ls.get("tapa-tema-"+dia):null;
+  const rng=modo==="diario"?semillaRng(hashStr("tema-"+dia)):Math.random;
+  let j=null;
+  for(let k=0;k<10&&!j;k++){
+    const x=await discoDe(temaPool(),rng); if(!x) break;
+    try{
+      const buenos=(await pistasDe(x.r.id)).filter(p=>p.prev);
+      if(!buenos.length) continue;
+      j={d:x.d,r:x.r,p:buenos[rng()*buenos.length|0],paso:0,log:[],fin:false,gano:false,modo,dia};
+    }catch(e){}
+  }
+  if(TEMA.modo!==modo) return;
+  if(!j){$("tema-estado").textContent="No pude cargar el tema. Revisá la conexión y recargá.";return}
+  if(guardado){j.paso=guardado.paso;j.log=guardado.log;j.fin=guardado.fin;j.gano=guardado.gano}
+  TEMA.j=j; TEMA.audio=new Audio(j.p.prev); TEMA.audio.preload="auto";
+  temaPintar(); temaSugerencias(j);
+  if(j.fin) temaFin();
+}
+
+// Sugerencias: temas del disco + de otros discos de las bandas del juego
+async function temaSugerencias(j){
+  const nombres=new Set();
+  const agregar=(ps,banda)=>ps.forEach(p=>nombres.add(`${p.t} — ${banda}`));
+  try{agregar(await pistasDe(j.r.id),j.d[0])}catch(e){}
+  const otros=mez(temaPool()).slice(0,10);
+  await Promise.allSettled(otros.map(async d=>{const r=await resolver(d,false,new Set());agregar(await pistasDe(r.id),d[0])}));
+  if(TEMA.j!==j) return;
+  const dl=$("tema-lista"); dl.innerHTML="";
+  [...nombres].sort().forEach(n=>{const o=document.createElement("option");o.value=n;dl.appendChild(o)});
+}
+
+function temaPintar(){
+  const j=TEMA.j, seg=PASOS[Math.min(j.paso,PASOS.length-1)];
+  $("tema-tope").style.width=(j.fin?100:seg/16*100)+"%";
+  $("tema-barra").querySelectorAll(".marca").forEach(x=>x.remove());
+  PASOS.slice(0,-1).forEach(p=>{const m=document.createElement("i");m.className="marca";m.style.left=(p/16*100)+"%";$("tema-barra").appendChild(m)});
+  $("tema-play").disabled=false;
+  $("tema-play").textContent=j.fin?"▶ Escuchar 30 segundos":`▶ Escuchar ${seg} segundo${seg===1?"":"s"}`;
+  $("tema-estado").textContent=j.fin?"":`Intento ${j.paso+1} de ${PASOS.length}`;
+  const int=$("tema-intentos"); int.innerHTML="";
+  for(let i=0;i<PASOS.length;i++){
+    const div=document.createElement("div"), l=j.log[i];
+    if(!l){div.className="vacio";div.textContent=""}
+    else if(l.tipo==="salto"){div.className="salto";div.textContent="Saltado"}
+    else{div.className=l.tipo;div.textContent=(l.tipo==="bien"?"✔ ":"✘ ")+l.txt}
+    int.appendChild(div);
+  }
+  const prox=PASOS[j.paso+1];
+  $("tema-saltar").textContent=prox?`Saltar (+${prox-seg} s)`:"Rendirse";
+  cabecera(TEMA.modo==="diario"?"Tema del día":"Libre",TEMA.modo==="diario"?"#"+numTema(j.dia):"∞","Racha",ls.get("tapa-tema-racha")||0);
+}
+
+function temaParar(){ clearInterval(TEMA.timer); if(TEMA.audio){TEMA.audio.pause()} $("tema-lleno").style.width="0" }
+function temaPlay(){
+  const j=TEMA.j, a=TEMA.audio; if(!j||!a) return;
+  temaParar();
+  const lim=j.fin?30:PASOS[Math.min(j.paso,PASOS.length-1)];
+  a.currentTime=0;
+  a.play().then(()=>{
+    TEMA.timer=setInterval(()=>{
+      const t=a.currentTime;
+      $("tema-lleno").style.width=Math.min(100,t/(j.fin?30:16)*100)+"%";
+      if(t>=lim||a.ended){a.pause();clearInterval(TEMA.timer)}
+    },50);
+  }).catch(()=>{$("tema-estado").textContent="No se pudo reproducir. Probá de nuevo."});
+}
+
+function temaGuardar(){ const j=TEMA.j; if(j.modo==="diario") ls.set("tapa-tema-"+j.dia,{paso:j.paso,log:j.log,fin:j.fin,gano:j.gano}) }
+
+function temaIntento(txt,salto){
+  const j=TEMA.j; if(!j||j.fin) return;
+  if(salto){ j.log.push({tipo:"salto"}) }
+  else{
+    const nombre=txt.split(" — ")[0].trim(); if(!nombre) return;
+    if(norm(nombre)===norm(j.p.t)){ j.log.push({tipo:"bien",txt:nombre}); j.gano=true; j.fin=true }
+    else j.log.push({tipo:"mal",txt:nombre});
+  }
+  $("tema-in").value="";
+  if(!j.fin){ j.paso++; if(j.paso>=PASOS.length){j.fin=true;j.paso=PASOS.length-1} }
+  temaGuardar(); temaParar(); temaPintar();
+  if(j.fin) temaFin();
+}
+
+function temaFin(){
+  const j=TEMA.j;
+  if(!j.contado){ j.contado=true; if(!ls.get("tapa-tema-c-"+j.modo+j.dia+j.p.t)){ ls.set("tapa-tema-c-"+j.modo+j.dia+j.p.t,1); ls.set("tapa-tema-racha",j.gano?(ls.get("tapa-tema-racha")||0)+1:0) } }
+  $("tema-form").hidden=true; $("tema-acc").hidden=true;
+  const f=$("tema-fin"); f.hidden=false;
+  const cuad=j.log.map(l=>l.tipo==="bien"?"🟩":l.tipo==="salto"?"⬛":"🟥").join("")+"⬜".repeat(Math.max(0,PASOS.length-j.log.length));
+  f.innerHTML=`<div class="revelado"><img class="mini-tapa" alt=""><div><small class="aviso"></small><b></b><span></span></div></div>
+    <div class="sub-res" style="text-align:center;font-weight:800"></div>
+    <div class="cuadros">${cuad}</div>
+    <div class="fila"><button class="btn sec" type="button" id="tema-comp">Compartir</button>${j.modo==="libre"?`<button class="btn" type="button" id="tema-otro">Otro tema</button>`:""}</div>
+    ${j.modo==="diario"?`<div class="aviso">Mañana hay otro. Mientras tanto probá el modo Libre.</div>`:""}`;
+  f.querySelector("img").src=chico200(j.r.url);
+  f.querySelector("small").textContent=j.gano?"¡Bien!":"Era…";
+  f.querySelector("b").textContent=j.p.t;
+  f.querySelector("span").textContent=`${j.d[0]} · ${j.d[1]} (${j.d[2]})`;
+  f.querySelector(".sub-res").textContent=j.gano?`Lo sacaste en ${j.log.length} intento${j.log.length===1?"":"s"}.`:"Esta vez no salió.";
+  if(j.modo==="diario"&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
+  $("tema-comp").onclick=async()=>{
+    const txt=`Adiviná el tema${j.modo==="diario"?" #"+numTema(j.dia):""} 🔊\n${cuad}\n${location.href.split("#")[0]}`;
+    try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches) await navigator.share({text:txt}); else {await navigator.clipboard.writeText(txt);$("tema-comp").textContent="¡Copiado!"} }catch(e){}
+  };
+  const o=$("tema-otro"); if(o) o.onclick=temaNuevo;
+  temaPintar();
+}
+
+$("tema-play").onclick=temaPlay;
+$("tema-form").onsubmit=e=>{e.preventDefault();temaIntento($("tema-in").value,false)};
+$("tema-saltar").onclick=()=>temaIntento("",true);
+document.querySelectorAll("#tema-modo button").forEach(b=>b.onclick=()=>{
+  TEMA.modo=b.dataset.m; document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x===b)); temaNuevo();
+});
+
+// ===== 2. ¿Antes o después? =====
+const ANT={izq:null,der:null,prox:null,racha:0,bloq:false};
+const antPool=()=>DISCOS.filter(d=>d[1]&&d[2]);
+async function antCargar(ref){
+  for(let i=0;i<6;i++){
+    const x=await discoDe(antPool(),Math.random,d=>ref&&(d[2]===ref.d[2]||d[0]===ref.d[0]));
+    if(!x) return null;
+    try{ x.img=await precargar(chico200(x.r.url)) }catch(e){}
+    return x;
+  }
+  return null;
+}
+function antLado(el,x,oculto){
+  el.innerHTML=`<img class="mini-tapa" alt=""><b></b><span></span><div class="anio"></div>`;
+  el.querySelector("img").src=chico200(x.r.url); el.querySelector("img").alt="Tapa de "+x.d[1];
+  el.querySelector("b").textContent=x.d[1]; el.querySelector("span").textContent=x.d[0];
+  el.querySelector(".anio").textContent=oculto?"?":x.d[2];
+}
+async function antNuevo(){
+  ANT.racha=0; ANT.bloq=true; $("antes-otra").hidden=true; $("antes-msg").textContent="Cargando…";
+  ANT.izq=await antCargar(null); ANT.der=ANT.izq&&await antCargar(ANT.izq);
+  if(!ANT.izq||!ANT.der){$("antes-msg").textContent="No pude cargar los discos. Revisá la conexión.";$("antes-otra").hidden=false;return}
+  $("antes-msg").textContent=""; antPintar();
+}
+function antPintar(){
+  antLado($("antes-izq"),ANT.izq,false); antLado($("antes-der"),ANT.der,true);
+  const bt=document.createElement("div"); bt.className="botones";
+  bt.innerHTML=`<button class="btn" id="ant-antes" type="button">◀ Antes</button><button class="btn" id="ant-despues" type="button">Después ▶</button>`;
+  $("antes-der").appendChild(bt);
+  $("ant-antes").onclick=()=>antResp(-1); $("ant-despues").onclick=()=>antResp(1);
+  ANT.bloq=false; ANT.prox=antCargar(ANT.der);
+  cabecera("Racha",ANT.racha,"Récord",ls.get("tapa-antes-rec")||0);
+}
+async function antResp(dir){
+  if(ANT.bloq) return; ANT.bloq=true;
+  const ok=Math.sign(ANT.der.d[2]-ANT.izq.d[2])===dir;
+  $("antes-der").querySelector(".anio").textContent=ANT.der.d[2];
+  $("antes-der").querySelector(".anio").className="anio "+(ok?"ok-t":"mal-t");
+  $("antes-der").querySelector(".botones").remove();
+  if(ok){
+    ANT.racha++; if(ANT.racha>(ls.get("tapa-antes-rec")||0)) ls.set("tapa-antes-rec",ANT.racha);
+    $("antes-msg").textContent=`¡Bien! ${ANT.der.d[1]} es de ${ANT.der.d[2]}.`;
+    cabecera("Racha",ANT.racha,"Récord",ls.get("tapa-antes-rec")||0);
+    const sig=await ANT.prox;
+    setTimeout(()=>{ if(!sig){$("antes-msg").textContent="No pude cargar el siguiente.";$("antes-otra").hidden=false;return}
+      ANT.izq=ANT.der; ANT.der=sig; $("antes-msg").textContent=""; antPintar() },900);
+  }else{
+    $("antes-msg").textContent=`No: ${ANT.der.d[1]} salió en ${ANT.der.d[2]}. Racha final: ${ANT.racha}.`;
+    $("antes-otra").hidden=false; $("antes-otra").focus();
+    if(ANT.racha>0) topAuto("antes","todos",ANT.racha,$("antes-msg"));
+  }
+}
+$("antes-otra").onclick=antNuevo;
+
+// ===== 3. Ordená la discografía =====
+const ORD={banda:null,items:[],fijo:[],intentos:0,fin:false,racha:0};
+const ORD_MAX=3;
+function ordBandas(){
+  const por={}; DISCOS.filter(d=>d[1]&&d[2]).forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
+  return Object.entries(por).filter(([a,ds])=>new Set(ds.map(d=>d[2])).size>=5);
+}
+async function ordNuevo(){
+  ORD.fin=false; ORD.intentos=0; ORD.marcados=null; $("orden-otra").hidden=true; $("orden-ok").hidden=false; $("orden-msg").textContent="";
+  $("orden-lista").innerHTML=""; $("orden-bajada").textContent="Cargando…";
+  const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas();
+  const [banda,ds]=mez(Math.random()<.75&&nac.length?nac:todas)[0];
+  const porAnio=[]; mez(ds).forEach(d=>{ if(!porAnio.some(x=>x[2]===d[2])) porAnio.push(d) });
+  const cinco=porAnio.slice(0,5);
+  let items=cinco.map(d=>({d,url:null}));
+  do{ items=mez(items) }while(items.every((x,i)=>i===0||items[i-1].d[2]<x.d[2]));
+  ORD.banda=banda; ORD.items=items; ORD.fijo=items.map(()=>false);
+  $("orden-bajada").textContent=`5 discos de ${banda}. Ordenalos del más viejo (arriba) al más nuevo (abajo). Tenés ${ORD_MAX} intentos.`;
+  ordPintar();
+  items.forEach(it=>resolver(it.d,false,new Set()).then(r=>{it.url=chico200(r.url);ordPintar()}).catch(()=>{}));
+}
+function ordPintar(){
+  const ul=$("orden-lista"); ul.innerHTML="";
+  ORD.items.forEach((it,i)=>{
+    const li=document.createElement("li");
+    if(ORD.fijo[i]) li.className="fijo"; else if(ORD.marcados&&ORD.marcados[i]===false) li.className="mal";
+    li.innerHTML=`<span class="pos">${i+1}</span><img alt=""><span class="tx"><span></span><small></small></span><span class="mov"><button type="button" aria-label="Subir">▲</button><button type="button" aria-label="Bajar">▼</button></span>`;
+    if(it.url) li.querySelector("img").src=it.url;
+    li.querySelector(".tx span").textContent=it.d[1];
+    li.querySelector("small").textContent=(ORD.fijo[i]||ORD.fin)?it.d[2]:"";
+    const [up,down]=li.querySelectorAll(".mov button");
+    up.disabled=ORD.fin||ORD.fijo[i]||ordVecino(i,-1)<0; down.disabled=ORD.fin||ORD.fijo[i]||ordVecino(i,1)<0;
+    up.onclick=()=>ordMover(i,-1); down.onclick=()=>ordMover(i,1);
+    ul.appendChild(li);
+  });
+  cabecera("Intento",`${Math.min(ORD.intentos+1,ORD_MAX)}/${ORD_MAX}`,"Racha",ORD.racha);
+}
+function ordVecino(i,dir){ for(let j=i+dir;j>=0&&j<ORD.items.length;j+=dir) if(!ORD.fijo[j]) return j; return -1 }
+function ordMover(i,dir){
+  const j=ordVecino(i,dir); if(j<0) return;
+  [ORD.items[i],ORD.items[j]]=[ORD.items[j],ORD.items[i]]; ORD.marcados=null; ordPintar();
+  const b=$("orden-lista").children[j].querySelectorAll(".mov button")[dir<0?0:1]; if(b&&!b.disabled) b.focus();
+}
+function ordComprobar(){
+  if(ORD.fin) return;
+  const bien=ORD.items.map(x=>x.d).slice().sort((a,b)=>a[2]-b[2]);
+  ORD.intentos++;
+  ORD.marcados=ORD.items.map((x,i)=>x.d===bien[i]);
+  ORD.marcados.forEach((ok,i)=>{ if(ok) ORD.fijo[i]=true });
+  const n=ORD.marcados.filter(Boolean).length;
+  if(n===ORD.items.length){
+    ORD.fin=true; $("orden-msg").textContent=ORD.intentos===1?"¡Perfecto de una!":`¡Lo ordenaste en ${ORD.intentos} intentos!`;
+    if(ORD.intentos===1) ls.set("tapa-orden-ok",(ls.get("tapa-orden-ok")||0)+1);
+    ORD.racha++; $("orden-msg").textContent+=` Racha: ${ORD.racha}.`;
+  }else if(ORD.intentos>=ORD_MAX){
+    ORD.fin=true; ORD.items.sort((a,b)=>a.d[2]-b.d[2]); ORD.fijo=ORD.items.map(()=>true); ORD.marcados=null;
+    $("orden-msg").textContent=`Se terminaron los intentos. Este es el orden real.${ORD.racha?" Racha final: "+ORD.racha+".":""}`;
+    if(ORD.racha>0) topAuto("orden","todos",ORD.racha,$("orden-msg"));
+    ORD.racha=0;
+  }else{
+    $("orden-msg").textContent=`${n} de 5 en su lugar (quedan fijos en verde). Te quedan ${ORD_MAX-ORD.intentos} intento${ORD_MAX-ORD.intentos===1?"":"s"}.`;
+  }
+  if(ORD.fin){$("orden-ok").hidden=true;$("orden-otra").hidden=false}
+  ordPintar();
+}
+$("orden-ok").onclick=ordComprobar;
+$("orden-otra").onclick=ordNuevo;
+
+// ===== 4. Tema número 1 =====
+const ABR={j:null,racha:0};
+async function abrNuevo(){
+  $("abre-sig").hidden=true; $("abre-msg").textContent=""; $("abre-opts").innerHTML="";
+  $("abre-disco").textContent="Cargando…"; $("abre-banda").textContent=""; $("abre-preg").textContent=""; $("abre-tapa").removeAttribute("src");
+  let j=null;
+  for(let k=0;k<8&&!j;k++){
+    const x=await discoDe(DISCOS.filter(d=>d[1]&&(d[3]==="nac"?CON_BANDAS.includes(d[0]):true)));
+    if(!x) break;
+    try{
+      const ps=await pistasDe(x.r.id);
+      if(ps.length<6) continue;
+      // "cierra" solo en ediciones simples (un disco, sin temas extra) para no confundir con bonus tracks
+      const simple=ps.every(p=>p.disc===1)&&ps.length<=14;
+      const cierra=simple&&Math.random()<.3, target=cierra?ps[ps.length-1]:ps[0];
+      const otros=mez(ps.filter(p=>p!==target)).slice(0,3);
+      j={...x,ps,cierra,target,ops:mez([target,...otros]),listo:false};
+    }catch(e){}
+  }
+  if(!j){$("abre-disco").textContent="No pude cargar el disco. Revisá la conexión.";$("abre-sig").hidden=false;return}
+  ABR.j=j;
+  $("abre-tapa").src=chico200(j.r.url); $("abre-tapa").alt="Tapa de "+j.d[1];
+  $("abre-disco").textContent=j.d[1]; $("abre-banda").textContent=`${j.d[0]} · ${j.d[2]}`;
+  $("abre-preg").innerHTML=j.cierra?"¿Qué tema <em>cierra</em> el disco?":"¿Qué tema <em>abre</em> el disco?";
+  j.ops.forEach((p,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.id="abre-op"+i;
+    b.innerHTML=`<span class="a"></span><span class="t"></span>`; b.querySelector(".a").textContent=p.t;
+    b.onclick=()=>abrResp(p,b); $("abre-opts").appendChild(b);
+  });
+  cabecera("Racha",ABR.racha,"Récord",ls.get("tapa-abre-rec")||0);
+}
+function abrResp(p,b){
+  const j=ABR.j; if(j.listo) return; j.listo=true;
+  const ok=p===j.target, previa=ABR.racha;
+  [...$("abre-opts").children].forEach((x,i)=>{
+    const q=j.ops[i]; x.disabled=true;
+    x.querySelector(".t").textContent=`Tema ${j.ps.indexOf(q)+1} de ${j.ps.length}`;
+    if(q===j.target) x.classList.add("good"); else if(x===b) x.classList.add("bad");
+  });
+  ABR.racha=ok?ABR.racha+1:0;
+  if(ABR.racha>(ls.get("tapa-abre-rec")||0)) ls.set("tapa-abre-rec",ABR.racha);
+  $("abre-msg").textContent=ok?"¡Bien!":`Era "${j.target.t}".`;
+  cabecera("Racha",ABR.racha,"Récord",ls.get("tapa-abre-rec")||0);
+  $("abre-sig").hidden=false; $("abre-sig").focus();
+  if(!ok&&previa>0) topAuto("abre","todos",previa,$("abre-msg"));
+}
+$("abre-sig").onclick=abrNuevo;
+
 // ---- Navegación ----
+
+const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
+const VISTAS=["v-juego","v-fin","v-top","v-hub",...Object.values(SUBJUEGOS)];
 function irA(v){
   vista=v;
-  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));
-  $("v-top").hidden=v!=="top";
-  $("v-imp").hidden=v!=="impostor";
-  $("v-con").hidden=v!=="conexiones";
-  $("wrap").classList.toggle("ancho",v==="impostor"||v==="conexiones");
-  if(v==="conexiones"){$("v-juego").hidden=true;$("v-fin").hidden=true;conMostrar();return}
-  if(v==="impostor"){$("v-juego").hidden=true;$("v-fin").hidden=true; IMP.ronda?impStats():impNueva(); return}
+  const tab=(v in SUBJUEGOS)?"juegos":v;
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===tab));
+  VISTAS.forEach(id=>$(id).hidden=true);
+  if(v!=="tema"&&typeof temaParar==="function") temaParar();
+  $("wrap").classList.toggle("ancho",v==="impostor"||v==="conexiones"||v==="juegos");
+  if(v in SUBJUEGOS){
+    $(SUBJUEGOS[v]).hidden=false; window.scrollTo(0,0);
+    if(v==="impostor") IMP.ronda?impStats():impNueva();
+    if(v==="conexiones") conMostrar();
+    if(v==="tema") TEMA.j?temaPintar():temaNuevo();
+    if(v==="antes") ANT.izq?cabecera("Racha",ANT.racha,"Récord",ls.get("tapa-antes-rec")||0):antNuevo();
+    if(v==="orden") ORD.items.length?ordPintar():ordNuevo();
+    if(v==="abre") ABR.j?cabecera("Racha",ABR.racha,"Récord",ls.get("tapa-abre-rec")||0):abrNuevo();
+    return;
+  }
+  if(v==="juegos"){ $("v-hub").hidden=false; cabecera("Juegos","6","",""); return }
+  if(v==="top"){ $("v-top").hidden=false; if(G) actualizar(); cargarTop(); return }
+  $("v-juego").hidden=false;
   if(G) actualizar();
-  if(v==="top"){$("v-juego").hidden=true;$("v-fin").hidden=true;cargarTop();return}
   $("generos").hidden=v!=="normal";
   if(v==="diario"){
     const dia=hoyAR(), guardado=ls.get("tapa-d-"+dia);
@@ -1174,6 +1679,8 @@ function irA(v){
   if(G&&G.modo==="normal"){ G.terminado?mostrarFin():($("v-fin").hidden=true,$("v-juego").hidden=false); actualizar(); return }
   nuevaPartida("normal");
 }
+document.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>irA(b.dataset.ir));
+document.querySelectorAll(".volver").forEach(b=>b.onclick=()=>irA("juegos"));
 
 $("next").onclick=()=>siguiente();
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>irA(b.dataset.v));
@@ -1182,7 +1689,6 @@ document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("#generos button").forEach(x=>x.setAttribute("aria-pressed",x===b));
   nuevaPartida("normal");
 });
-document.querySelectorAll("#top-tabs button").forEach(b=>b.onclick=()=>{topTab=b.dataset.t;cargarTop()});
 $("t-diario-n").textContent="#"+numDiario(hoyAR());
 irA("normal");
 mostrarQuien();
