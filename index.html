@@ -32,7 +32,7 @@ h1 span{color:var(--rojo)}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
 
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
 .tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
 .tabs button:last-child{border-right:0}
 .tabs button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
@@ -86,6 +86,36 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--rojo);outline-o
 .ranking .pts{font-family:var(--mono)}
 .ranking li.yo{background:var(--papel)}
 footer{font-size:.75rem;color:var(--sombra);text-align:center}
+@media (max-width:420px){.tabs button{font-size:.85rem;padding:9px 2px}}
+.wrap.ancho{max-width:880px}
+
+/* ---- Impostor: la tapa al centro y los temas en ronda ---- */
+.imp{display:flex;flex-direction:column;gap:16px}
+.imp-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.imp-cab h2{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;line-height:1}
+.imp-cab span{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.ring{position:relative;height:640px}
+.ring .centro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.ring .tapa{width:190px;max-width:100%;aspect-ratio:1;background:var(--tinta);border:4px solid var(--tinta);box-shadow:6px 6px 0 var(--rojo);display:grid;place-items:center;color:var(--papel);font-family:var(--mono);font-size:.8rem;overflow:hidden}
+.ring .tapa img{width:100%;height:100%;object-fit:cover;display:block}
+.ring .disco{font-family:var(--display);font-size:1.15rem;line-height:1.05;text-wrap:balance}
+.ring .consigna{font-size:.85rem;font-weight:600}
+.ring .consigna b{color:var(--rojo)}
+.tema{position:absolute;transform:translate(-50%,-50%);width:158px;min-height:58px;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:8px 10px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);font:600 .88rem/1.2 var(--body);text-align:center;cursor:pointer;transition:background .12s,color .12s}
+.tema small{font-family:var(--mono);font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.tema[aria-pressed="true"]{background:var(--rojo);color:var(--crema)}
+.tema:disabled{cursor:default}
+.tema.cazado{background:var(--rojo);color:var(--crema)}
+.tema.escapado{background:var(--crema);border-color:var(--rojo);border-style:dashed;box-shadow:3px 3px 0 var(--rojo);color:var(--rojo)}
+.tema.inocente{background:transparent;color:var(--sombra);border-color:var(--sombra);box-shadow:none;text-decoration:line-through}
+.tema.bien{background:var(--ok);color:var(--crema)}
+.imp-pie{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.imp-res{font-weight:800;min-height:1.3em}
+@media (max-width:760px){
+  .ring{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ring .centro{position:static;transform:none;grid-column:1/-1;width:auto;margin:0 auto 6px}
+  .tema{position:static;transform:none;width:auto}
+}
 .quien{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;flex-wrap:wrap}
 .quien b{font-weight:800}
 .link{font:inherit;font-weight:600;background:none;border:0;padding:2px 0;color:var(--rojo);text-decoration:underline;cursor:pointer}
@@ -97,7 +127,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="wrap">
   <header>
     <h1>Adiviná<br>la <span>Tapa</span></h1>
     <div class="stats"><span id="lbl-modo">Normal</span> <b id="ronda">1/10</b></div>
@@ -107,6 +137,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <nav class="tabs" aria-label="Modo de juego">
     <button id="t-normal" data-v="normal" aria-pressed="true">Normal<small>libre</small></button>
     <button id="t-diario" data-v="diario" aria-pressed="false">Diario<small id="t-diario-n">#1</small></button>
+    <button id="t-imp" data-v="impostor" aria-pressed="false">Impostor<small>La Vela</small></button>
     <button id="t-top" data-v="top" aria-pressed="false">Top<small>ranking</small></button>
   </nav>
 
@@ -126,6 +157,22 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   </section>
 
   <section id="v-fin" class="card" hidden></section>
+
+  <section id="v-imp" class="imp" hidden>
+    <div class="imp-cab"><h2>¿Qué tema no está?</h2><span>Solo La Vela Puerca</span></div>
+    <div class="ring" id="ring">
+      <div class="centro">
+        <div class="tapa" id="imp-tapa">Cargando…</div>
+        <div class="disco" id="imp-disco"></div>
+        <div class="consigna" id="imp-consigna">Marcá los <b>impostores</b>: los temas que no son de este disco.</div>
+      </div>
+    </div>
+    <div class="imp-pie">
+      <div class="imp-res" id="imp-res" aria-live="polite"></div>
+      <button class="btn" id="imp-ok" type="button" disabled>Confirmar</button>
+      <button class="btn" id="imp-otro" type="button" hidden>Otro disco</button>
+    </div>
+  </section>
 
   <section id="v-top" class="card" hidden>
     <h2>Top</h2>
@@ -152,8 +199,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 
 <script>
 // ===== Top compartido (Supabase). Pegá acá la URL del proyecto y la clave pública (anon / publishable) =====
-const SUPA_URL = "https://netmljluwfdwfrxdcrtt.supabase.co";
-const SUPA_KEY = "sb_publishable_cm0lxaPa_8PlqP2qhWcRpw_OymcUAq7";
+const SUPA_URL = "";
+const SUPA_KEY = "";
 const TOP_ON = !!(SUPA_URL && SUPA_KEY);
 
 // ---- Catálogo: [artista, disco, año, categoría]. Disco null = el juego elige uno real de iTunes ----
@@ -708,11 +755,149 @@ async function cargarTop(){
   }catch(e){ cont.innerHTML=`<p class="aviso">No pude cargar el top. Probá recargar.</p>` }
 }
 
+// ===== Minijuego: El Impostor (solo La Vela Puerca) =====
+// Al centro un disco; alrededor 10 temas. Entre 2 y 4 son de OTROS discos de la banda: hay que marcarlos.
+const IMP_BANDA="La Vela Puerca", IMP_TOTAL=10;
+const IMP={discos:null,cargando:null,ronda:null,ultimo:null,racha:0,jugadas:0,aciertos:0};
+const mez=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const limpiarTema=t=>String(t)
+  .replace(/\s*[\(\[][^\)\]]*(vivo|live|remaster|versi[oó]n|version|demo|bonus|ac[uú]stic|edit|mix)[^\)\]]*[\)\]]/gi,"")
+  .replace(/\s+-\s+(en vivo|live|remaster|demo|versi[oó]n).*$/i,"").trim();
+
+// Discos de estudio de la banda (los del catálogo) con su id de iTunes
+function impDiscos(){
+  if(IMP.discos) return Promise.resolve(IMP.discos);
+  if(IMP.cargando) return IMP.cargando;
+  IMP.cargando=(async()=>{
+    const res=await buscar(IMP_BANDA);
+    const banda=discosDe(res,IMP_BANDA)[0]||res.find(x=>mismoArtista(x,IMP_BANDA));
+    if(!banda) throw new Error("sin banda");
+    const r=await jsonp(`https://itunes.apple.com/lookup?id=${banda.artistId}&entity=album&limit=200`);
+    const albums=(r.results||[]).filter(x=>x.wrapperType==="collection"&&x.artworkUrl100).sort(porId);
+    const out=[];
+    for(const d of DISCOS.filter(d=>d[0]===IMP_BANDA&&d[1])){
+      const k=norm(d[1]);
+      const x=albums.find(x=>norm(limpiarTitulo(x.collectionName)).startsWith(k)&&!FUERA.test(norm(x.collectionName))&&(x.trackCount||0)>=6);
+      if(x&&!out.some(o=>o.id===x.collectionId)) out.push({id:x.collectionId,t:d[1],y:d[2],url:x.artworkUrl100.replace("100x100bb","600x600bb"),temas:null});
+    }
+    if(out.length<3) throw new Error("pocos discos");
+    IMP.discos=out; return out;
+  })();
+  IMP.cargando.catch(()=>{IMP.cargando=null});
+  return IMP.cargando;
+}
+
+async function impTemas(d){
+  if(d.temas) return d.temas;
+  const r=await jsonp(`https://itunes.apple.com/lookup?id=${d.id}&entity=song&limit=200`);
+  const vistos=new Set(), temas=[];
+  for(const x of r.results||[]){
+    if(x.wrapperType!=="track"||!x.trackName) continue;
+    const t=limpiarTema(x.trackName), k=norm(t);
+    if(!k||vistos.has(k)) continue;
+    vistos.add(k); temas.push(t);
+  }
+  d.temas=temas; return temas;
+}
+
+const parecidos=(a,b)=>{a=norm(a);b=norm(b);return a===b||(a.length>3&&b.length>3&&(a.includes(b)||b.includes(a)))};
+
+async function impNueva(){
+  const ring=$("ring");
+  ring.querySelectorAll(".tema").forEach(x=>x.remove());
+  $("imp-tapa").textContent="Cargando…"; $("imp-disco").textContent="";
+  $("imp-res").textContent=""; $("imp-ok").hidden=false; $("imp-ok").disabled=true; $("imp-otro").hidden=true;
+  IMP.ronda=null;
+  let discos;
+  try{ discos=await impDiscos() }catch(e){ $("imp-tapa").textContent="No pude cargar los discos. Recargá la página."; return }
+  const candidatos=mez(discos.filter(d=>d!==IMP.ultimo));
+  for(const obj of candidatos){
+    let propios;
+    try{ propios=await impTemas(obj) }catch(e){ continue }
+    if(propios.length<7) continue;
+    // temas de los otros discos que NO estén en este
+    const otros=mez(discos.filter(d=>d!==obj));
+    await Promise.allSettled(otros.map(impTemas));
+    const porDisco=otros.map(d=>({d,ts:mez((d.temas||[]).filter(t=>!propios.some(p=>parecidos(p,t))))})).filter(x=>x.ts.length);
+    if(!porDisco.length) continue;
+    const nImp=2+(Math.random()*3|0);
+    const imps=[];
+    for(let i=0;imps.length<nImp&&i<40;i++){ // de discos distintos en lo posible
+      const x=porDisco[i%porDisco.length], t=x.ts.shift();
+      if(t&&!imps.some(m=>parecidos(m.t,t))) imps.push({t,imp:true,de:x.d});
+    }
+    const reales=mez(propios).slice(0,IMP_TOTAL-imps.length).map(t=>({t,imp:false}));
+    IMP.ronda={disco:obj,temas:mez([...reales,...imps]),listo:false};
+    IMP.ultimo=obj;
+    impPintar(); return;
+  }
+  $("imp-tapa").textContent="No encontré temas para armar la ronda. Probá de nuevo.";
+  $("imp-otro").hidden=false; $("imp-ok").hidden=true;
+}
+
+function impPintar(){
+  const R=IMP.ronda, ring=$("ring");
+  const im=new Image(); im.alt="Tapa de "+R.disco.t; im.src=R.disco.url;
+  $("imp-tapa").innerHTML=""; $("imp-tapa").appendChild(im);
+  $("imp-disco").textContent=`${R.disco.t} (${R.disco.y})`;
+  const n=R.temas.length;
+  R.temas.forEach((x,i)=>{
+    const ang=(-90+180/n+i*360/n)*Math.PI/180;
+    const b=document.createElement("button");
+    b.type="button"; b.className="tema"; b.id="tema"+i; b.setAttribute("aria-pressed","false");
+    b.style.left=(50+40*Math.cos(ang))+"%"; b.style.top=(50+42*Math.sin(ang))+"%";
+    b.innerHTML="<span></span>"; b.firstChild.textContent=x.t;
+    b.onclick=()=>{ if(R.listo) return; b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true"); impContar() };
+    ring.appendChild(b);
+  });
+  impContar(); impStats();
+}
+
+function impContar(){
+  const m=$("ring").querySelectorAll('.tema[aria-pressed="true"]').length;
+  $("imp-ok").disabled=!m;
+  $("imp-res").textContent=m?`Marcaste ${m} impostor${m===1?"":"es"}`:"Hay entre 2 y 4 impostores";
+}
+
+function impConfirmar(){
+  const R=IMP.ronda; if(!R||R.listo) return; R.listo=true;
+  let ok=0, cazados=0, total=0;
+  $("ring").querySelectorAll(".tema").forEach((b,i)=>{
+    const x=R.temas[i], marcado=b.getAttribute("aria-pressed")==="true";
+    b.disabled=true; b.removeAttribute("aria-pressed");
+    if(x.imp){
+      total++;
+      const de=document.createElement("small"); de.textContent="de "+x.de.t; b.appendChild(de);
+      if(marcado){ok++;cazados++;b.classList.add("cazado")} else b.classList.add("escapado");
+    }else{
+      if(marcado) b.classList.add("inocente"); else {ok++;b.classList.add("bien")}
+    }
+  });
+  const perfecto=ok===R.temas.length;
+  IMP.jugadas++; IMP.aciertos+=ok; IMP.racha=perfecto?IMP.racha+1:0;
+  const mejor=ls.get("tapa-imp-racha")||0; if(IMP.racha>mejor) ls.set("tapa-imp-racha",IMP.racha);
+  $("imp-res").textContent=perfecto?`¡Perfecto! Cazaste a los ${total} impostores.`:`Cazaste ${cazados} de ${total} impostores · ${ok}/${R.temas.length} bien`;
+  $("imp-ok").hidden=true; $("imp-otro").hidden=false; $("imp-otro").focus();
+  impStats();
+}
+
+function impStats(){
+  $("lbl-modo").textContent="Racha"; $("ronda").textContent=IMP.racha;
+  $("pts").textContent=`${IMP.aciertos}`;
+}
+
+$("imp-ok").onclick=impConfirmar;
+$("imp-otro").onclick=impNueva;
+
 // ---- Navegación ----
 function irA(v){
   vista=v;
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));
   $("v-top").hidden=v!=="top";
+  $("v-imp").hidden=v!=="impostor";
+  $("wrap").classList.toggle("ancho",v==="impostor");
+  if(v==="impostor"){$("v-juego").hidden=true;$("v-fin").hidden=true; IMP.ronda?impStats():impNueva(); return}
+  if(G) actualizar();
   if(v==="top"){$("v-juego").hidden=true;$("v-fin").hidden=true;cargarTop();return}
   $("generos").hidden=v!=="normal";
   if(v==="diario"){
