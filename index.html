@@ -8,6 +8,19 @@
 <meta property="og:title" content="Juegos Rock">
 <meta property="og:description" content="Juegos de rock nacional: adiviná la tapa, el tema en 1 segundo, conexiones y más. Desafío diario y ranking.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="__SITE_URL__/">
+<meta property="og:image" content="__SITE_URL__/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_AR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Juegos Rock">
+<meta name="twitter:description" content="Adiviná la tapa, el tema en 1 segundo, conexiones y más. Desafíos del día y ranking.">
+<meta name="twitter:image" content="__SITE_URL__/og.png">
+<meta name="theme-color" content="#f1c232">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141210'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23403a33' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23d7262e'/%3E%3Ccircle cx='32' cy='32' r='2.5' fill='%23f1c232'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!--ANALYTICS-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap">
 <style>
@@ -675,9 +688,30 @@ function discosDe(res,art){
 }
 const precargar=url=>new Promise((ok,fail)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=fail;im.src=url});
 
+// ---- discos.json: datos de iTunes ya guardados (lo arma GitHub Actions). Si no está, se busca en vivo ----
+let CACHE=null;
+const cacheListo=(async()=>{
+  try{
+    const r=await fetch("discos.json",{cache:"no-cache"}); if(!r.ok) throw new Error(r.status);
+    const j=await r.json(), porId=new Map();
+    for(const v of Object.values(j.discos||{})) porId.set(v.id,v);
+    CACHE={disc:j.discos||{},faltan:new Set(j.faltan||[]),porId};
+  }catch(e){ CACHE=null }
+})();
+const esperarCache=()=>Promise.race([cacheListo,new Promise(r=>setTimeout(r,4000))]);
+const temasCacheados=id=>{const v=CACHE&&CACHE.porId.get(id);return v&&v.temas&&v.temas.length?v.temas:null};
+
 // Devuelve un disco real {id,a,t,y,url,cat}. Con azar=false solo acepta el disco exacto del catálogo.
 async function resolver(d,azar,usados){
   let pick=null, anio=null;
+  if(d[1]){
+    await esperarCache();
+    if(CACHE){
+      const v=CACHE.disc[d[0]+"|"+d[1]];
+      if(v&&!usados.has(v.id)) return {id:v.id,a:v.a,t:d[1],y:d[2],url:v.url,cat:d[3]};
+      if(!azar&&(v||CACHE.faltan.has(d[0]+"|"+d[1]))) throw new Error("no está");
+    }
+  }
   if(d[1]){
     const alb=norm(d[1]);
     pick=(await buscar(d[0]+" "+d[1])).filter(x=>mismoArtista(x,d[0])&&!NO_ROCK.test(norm(x.primaryGenreName||""))).sort(porId)
@@ -764,7 +798,14 @@ async function siguiente(){
 async function otrosDe(art,excluir,n){
   const usados=new Set(excluir.map(norm)), out=[];
   let lista=[];
-  try{ lista=mezclar(discosDe(await buscar(art),art)) }catch(e){}
+  // Primero, los discos de esa banda que ya están en discos.json (sin consultar a iTunes)
+  await esperarCache();
+  if(CACHE){
+    const propios=DISCOS.filter(d=>d[1]&&CACHE.disc[d[0]+"|"+d[1]]&&(norm(d[0])===norm(art)||mismoArtista({artistName:art},d[0])))
+      .map(d=>({artistName:d[0],collectionName:d[1]}));
+    if(propios.length) lista=mezclar(propios);
+  }
+  if(!lista.length){ try{ lista=mezclar(discosDe(await buscar(art),art)) }catch(e){} }
   for(const x of lista){
     const t=limpiarTitulo(x.collectionName), k=norm(t);
     if([...usados].some(u=>u===k||u.includes(k)||k.includes(u))) continue;
@@ -876,7 +917,7 @@ function actualizar(){
 
 function terminar(){
   const g=G; g.terminado=true;
-  if(g.modo==="diario") guardarDiario();
+  if(g.modo==="diario"){ guardarDiario(); contar("termino-diario") }
   else{const k="tapa-mejor-"+g.genero, m=ls.get(k)||0; g.recordPrevio=m; if(g.puntos>m) ls.set(k,g.puntos)}
   mostrarFin();
 }
@@ -938,6 +979,15 @@ async function compartir(){
 
 // ---- Top (Supabase REST) ----
 const supaHeaders={apikey:SUPA_KEY,"Content-Type":"application/json"};
+// Id anónimo de este dispositivo: la base acepta un solo puntaje por juego y por día para cada uno
+function jugadorId(){
+  let id=ls.get("tapa-jugador");
+  if(!id){
+    id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});
+    ls.set("tapa-jugador",id);
+  }
+  return id;
+}
 function verTopPropio(){ topTab={t:"diario",v:"todos"}; irA("top") }
 async function subirPuntaje(){
   const g=G, nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20), est=$("top-estado"), b=$("b-subir");
@@ -945,8 +995,8 @@ async function subirPuntaje(){
   if(g.subido||g.subiendo) return;
   g.subiendo=true; if(b) b.disabled=true; if(est) est.textContent="Subiendo tu puntaje…";
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.puntos,modo:g.modo,genero:g.modo==="diario"?"todos":g.genero})});
-    if(!r.ok) throw new Error(r.status);
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.puntos,modo:g.modo,genero:g.modo==="diario"?"todos":g.genero,jugador:jugadorId()})});
+    if(!r.ok&&r.status!==409) throw new Error(r.status);
     g.subido=true; guardarDiario();
     if(G===g&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
   }catch(e){
@@ -1057,7 +1107,8 @@ async function topAuto(modo,genero,puntos,el){
   if(!nombre){ pedirNombre(()=>topAuto(modo,genero,puntos,el)); return }
   const nota=t=>{ if(!el) return; let sp=el.querySelector(".nota-top"); if(!sp){sp=document.createElement("span");sp.className="nota-top";el.appendChild(sp)} sp.textContent=" · "+t };
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:Math.max(0,Math.min(500,Math.round(puntos))),modo,genero})});
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:Math.max(0,Math.min(500,Math.round(puntos))),modo,genero,jugador:jugadorId()})});
+    if(r.status===409){ nota("ya estaba en el top de hoy"); return }
     if(!r.ok) throw new Error(r.status);
     nota("subido al top ✔");
   }catch(e){ nota("no se pudo subir al top") }
@@ -1077,6 +1128,15 @@ function impDiscos(){
   if(IMP.discos) return Promise.resolve(IMP.discos);
   if(IMP.cargando) return IMP.cargando;
   IMP.cargando=(async()=>{
+    await esperarCache();
+    if(CACHE){
+      const out=[];
+      for(const d of DISCOS.filter(d=>d[0]===IMP_BANDA&&d[1])){
+        const v=CACHE.disc[d[0]+"|"+d[1]];
+        if(v&&v.temas.length>=6) out.push({id:v.id,t:d[1],y:d[2],url:v.url,temas:null});
+      }
+      if(out.length>=3){ IMP.discos=out; return out }
+    }
     const res=await buscar(IMP_BANDA);
     const banda=discosDe(res,IMP_BANDA)[0]||res.find(x=>mismoArtista(x,IMP_BANDA));
     if(!banda) throw new Error("sin banda");
@@ -1097,6 +1157,9 @@ function impDiscos(){
 
 async function impTemas(d){
   if(d.temas) return d.temas;
+  await esperarCache();
+  const c=temasCacheados(d.id);
+  if(c){ d.temas=c.map(x=>x[0]); return d.temas }
   const r=await jsonp(`https://itunes.apple.com/lookup?id=${d.id}&entity=song&limit=200`);
   const vistos=new Set(), temas=[];
   for(const x of r.results||[]){
@@ -1226,6 +1289,9 @@ const CON={dif:"normal",p:null,cargando:false};
 const temasCache=new Map();
 async function temasDe(id){
   if(temasCache.has(id)) return temasCache.get(id);
+  await esperarCache();
+  const c=temasCacheados(id);
+  if(c){ const ts=c.map(x=>x[0]); temasCache.set(id,ts); return ts }
   const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
   const vistos=new Set(), temas=[];
   for(const x of r.results||[]){
@@ -1422,6 +1488,9 @@ $("con-nivel").onclick=()=>{$("con-juego").hidden=true;$("con-inicio").hidden=fa
 const pistasCache=new Map();
 async function pistasDe(id){
   if(pistasCache.has(id)) return pistasCache.get(id);
+  await esperarCache();
+  const c=temasCacheados(id);
+  if(c){ const ps=c.map(([t,n,disc,prev])=>({t,n,disc,prev})); pistasCache.set(id,ps); return ps }
   const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
   const vistos=new Set(), ps=[];
   for(const x of (r.results||[]).filter(x=>x.wrapperType==="track"&&x.trackName).sort((a,b)=>(a.discNumber||1)-(b.discNumber||1)||(a.trackNumber||0)-(b.trackNumber||0))){
@@ -1448,7 +1517,9 @@ const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impo
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>`tapa-${j}-dia-${hoyAR()}`;
 const diaHecho=j=>ls.get(claveDia(j));
-const diaCerrar=(j,puntos,detalle)=>ls.set(claveDia(j),{puntos,detalle});
+const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); contar("termino-"+j) };
+// Contador de visitas (GoatCounter): solo funciona si está configurado en Render
+function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
 const nDia=()=>numDiario(hoyAR());
 function jugadoHoy(j){
   const dia=hoyAR();
@@ -1596,7 +1667,7 @@ function temaFin(){
   f.querySelector("b").textContent=j.p.t;
   f.querySelector("span").textContent=`${j.d[0]} · ${j.d[1]} (${j.d[2]})`;
   f.querySelector(".sub-res").textContent=j.gano?`Lo sacaste en ${j.log.length} intento${j.log.length===1?"":"s"}.`:"Esta vez no salió.";
-  if(j.modo==="diario"&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
+  if(j.modo==="diario"&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
   $("tema-comp").onclick=async()=>{
     const txt=`Juegos Rock · Adiviná el tema${j.modo==="diario"?" #"+numTema(j.dia):""} 🔊\n${cuad}\n${location.href.split("#")[0]}`;
     try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches) await navigator.share({text:txt}); else {await navigator.clipboard.writeText(txt);$("tema-comp").textContent="¡Copiado!"} }catch(e){}
@@ -1883,7 +1954,7 @@ $("abre-sig").onclick=abrNuevo;
 const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub",...Object.values(SUBJUEGOS)];
 function irA(v){
-  vista=v;
+  vista=v; if(v!=="inicio") contar("juego-"+v);
   const tab=v==="top"?"top":"inicio";
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===tab));
   VISTAS.forEach(id=>$(id).hidden=true);

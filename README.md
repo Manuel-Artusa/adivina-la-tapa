@@ -8,13 +8,30 @@ Juegos web de rock, con foco en rock nacional: adiviná la tapa, el tema en 1 se
 - **Todos los juegos tienen desafío del día** (igual para todos, una vez por día) y modo libre.
 - **Juegos:** Adiviná el tema (fragmentos de audio), ¿Antes o después?, Ordená la discografía, Tema número 1, Conexiones y ¿Qué tema no está? (La Vela Puerca).
 
-Es un solo archivo, `index.html`. Las tapas se piden en vivo a la API pública de iTunes.
+La página es `index.html`. Las tapas, temas y audios salen de iTunes y se guardan en `discos.json`
+(lo arma `armar_discos.py` con GitHub Actions), así el juego no depende de buscar en vivo.
 
-## Activar el top
+## Variables en Render (Environment)
 
-1. En Supabase, correr `supabase.sql` en el SQL Editor.
-2. En Render → tu sitio → **Environment**, cargar `SUPA_URL` (la URL del proyecto) y `SUPA_KEY` (la clave pública **anon** o **publishable**, nunca la secret/service_role).
-3. Render corre `node build.js` al publicar y completa esas variables en la página. Las claves no se guardan en GitHub.
+| Variable | Para qué |
+|---|---|
+| `SUPA_URL` | URL del proyecto de Supabase |
+| `SUPA_KEY` | clave pública **anon** o **publishable** (nunca la secret/service_role) |
+| `SITE_URL` | dirección del sitio, para la imagen al compartir |
+| `GOATCOUNTER` | código de GoatCounter, para contar visitas (opcional) |
+
+Render corre `node build.js`, que arma `public/` con esas variables. Nada de eso queda en GitHub.
+
+## Supabase
+
+Correr `supabase.sql` en el SQL Editor (se puede repetir). Deja el top protegido: solo puntajes del día,
+uno por dispositivo y por juego, con máximos por juego; nadie puede editar ni borrar.
+
+## discos.json
+
+En GitHub → **Actions** → **Armar discos.json** → **Run workflow**. Busca los discos nuevos del catálogo
+(o todos, tildando la opción) y guarda el archivo en el repo. Se refresca solo el día 1 de cada mes.
+Como el robot agrega commits, antes de subir cambios hacé `git pull`.
 
 ## Deploy en Render
 

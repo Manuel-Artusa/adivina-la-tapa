@@ -1,0 +1,32 @@
+name: Armar discos.json
+
+on:
+  workflow_dispatch:
+    inputs:
+      todo:
+        description: "Volver a buscar TODOS los discos (tarda ~40 min). Si no, solo los nuevos."
+        type: boolean
+        default: false
+  schedule:
+    - cron: "0 7 1 * *"   # el día 1 de cada mes, para refrescar tapas y audios
+
+permissions:
+  contents: write
+
+jobs:
+  armar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Buscar discos en iTunes
+        run: python armar_discos.py ${{ (github.event_name == 'schedule' || inputs.todo) && '--todo' || '' }}
+      - name: Guardar discos.json en el repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add discos.json
+          git diff --cached --quiet && echo "Sin cambios" || (git commit -m "Actualizar discos.json" && git push)
