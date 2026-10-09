@@ -2,8 +2,13 @@ services:
   - type: web
     name: adivina-la-tapa
     runtime: static
-    buildCommand: ""
-    staticPublishPath: .
+    buildCommand: node build.js
+    staticPublishPath: public
+    envVars:
+      - key: SUPA_URL
+        sync: false
+      - key: SUPA_KEY
+        sync: false
     headers:
       - path: /*
         name: Cache-Control
