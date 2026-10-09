@@ -20,6 +20,9 @@
 <meta name="theme-color" content="#f1c232">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141210'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23403a33' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23d7262e'/%3E%3Ccircle cx='32' cy='32' r='2.5' fill='%23f1c232'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Juegos Rock">
 <!--ANALYTICS-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap">
@@ -55,6 +58,36 @@ h1 span{color:var(--rojo)}
 .hub button.jugado small{color:var(--ok)}
 .hub button.jugado .prev{filter:grayscale(.85);opacity:.55;border-color:var(--ok)}
 .hub button.jugado b::after{content:" ✓";color:var(--ok)}
+.hub-barra{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.dias{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.dias button{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 10px;min-width:64px;border:2px solid var(--tinta);background:var(--crema);color:var(--tinta);font:700 .85rem var(--body);cursor:pointer}
+.dias button small{font:500 .66rem var(--mono);color:var(--sombra)}
+.dias button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+.dias button[aria-pressed="true"] small{color:var(--papel)}
+.dias button.completo{border-color:var(--ok);box-shadow:inset 0 -4px 0 var(--ok)}
+.aviso-pasado{padding:10px 12px;border:2px dashed var(--tinta);background:var(--crema);font-weight:600;font-size:.9rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.hub-acc{display:flex;gap:8px;flex-wrap:wrap}
+.hub-acc .btn{font-size:1rem;padding:8px 16px}
+.yo-grandes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.yo-grandes div{background:var(--crema);border:3px solid var(--tinta);box-shadow:4px 4px 0 var(--tinta);padding:12px 8px;text-align:center;display:flex;flex-direction:column;gap:2px;min-width:0}
+.yo-grandes b{font-family:var(--display);font-weight:400;font-size:2.2rem;line-height:1}
+.yo-grandes div:first-child b{color:var(--rojo)}
+.yo-grandes span{font-size:.78rem}
+.yo-tit{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;margin:6px 0 0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal i{aspect-ratio:1;border:2px solid var(--tinta);background:var(--crema);position:relative;display:block}
+.cal i b{position:absolute;inset:0;background:var(--ok)}
+.cal i.hoy{outline:2px solid var(--rojo);outline-offset:2px}
+.cal i span{position:absolute;left:3px;top:1px;font:500 .6rem var(--mono);color:var(--tinta);z-index:1}
+.cal-ref{display:flex;gap:4px;align-items:center;justify-content:flex-end;font-size:.72rem}
+.cal-ref i{width:14px;height:14px;background:var(--ok);display:inline-block}
+.tabla-env{overflow-x:auto}
+.yo-tabla{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.9rem;background:var(--crema);border:2px solid var(--tinta)}
+.yo-tabla th,.yo-tabla td{padding:8px 10px;text-align:right;border-bottom:1px solid rgba(20,18,16,.15)}
+.yo-tabla th:first-child,.yo-tabla td:first-child{text-align:left}
+.yo-tabla th{font:500 .7rem var(--mono);text-transform:uppercase;letter-spacing:.05em;background:var(--tinta);color:var(--papel)}
+.ranking .tag{font:500 .7rem var(--mono);color:var(--sombra);margin-left:4px}
+.quien .tag{font:500 .75rem var(--mono);color:var(--sombra)}
 .hub .check{align-self:flex-start;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;background:var(--ok);color:var(--crema)}
 .modo-dia button{font-size:.78rem}
 .hub .prev{display:block;width:100%;height:auto;aspect-ratio:240/110;border:2px solid var(--tinta);margin-bottom:4px}
@@ -62,7 +95,7 @@ h1 span{color:var(--rojo)}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
 
-.tabs{display:grid;grid-template-columns:repeat(2,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
 .tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
 .tabs button:last-child{border-right:0}
 .tabs button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
@@ -281,6 +314,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <nav class="tabs" aria-label="Modo de juego">
     <button id="t-inicio" data-v="inicio" aria-pressed="true">Inicio<small>8 juegos</small></button>
     <button id="t-top" data-v="top" aria-pressed="false">Top<small>ranking</small></button>
+    <button id="t-yo" data-v="yo" aria-pressed="false">Yo<small id="t-yo-racha">racha</small></button>
   </nav>
 
   <div class="quien" id="quien" hidden><span>Jugás como <b id="quien-n"></b></span><button class="link" id="b-cambiar" type="button">Cambiar nombre</button></div>
@@ -362,6 +396,15 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   </section>
 
   <section id="v-hub" hidden>
+    <div class="hub-barra">
+      <div class="dias" id="dias" role="group" aria-label="Elegí el día"></div>
+      <div class="aviso-pasado" id="aviso-pasado" hidden></div>
+      <div class="hub-acc">
+        <button class="btn" id="b-resumen" type="button">Compartir mi día</button>
+        <button class="btn sec" id="b-instalar" type="button" hidden>Instalar app</button>
+      </div>
+      <p class="aviso" id="ios-ayuda" hidden>Para tenerla como app en el iPhone: tocá <b>Compartir</b> y después <b>Agregar a inicio</b>.</p>
+    </div>
     <div class="hub">
       <button type="button" data-ir="diario" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada y resultado del día en cuadritos"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="14.6" height="14.6" fill="#c9a227"/><rect x="32.3" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="61.0" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="18.0" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="32.3" y="26.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="26.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="18.0" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="32.3" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="40.7" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="40.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="75.3" y="40.7" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="89.7" y="40.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="18.0" y="55.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="32.3" y="55.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="46.7" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="75.3" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="55.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="32.3" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="69.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="75.3" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="69.3" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="32.3" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="46.7" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="61.0" y="83.7" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="75.3" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="89.7" y="83.7" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="122" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="30" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="30" width="16" height="16" fill="#e07b2a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="122" y="50" width="16" height="16" fill="#1d1b18" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="50" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><text x="122" y="22" font-family="var(--display)" font-size="13" fill="var(--tinta)" text-anchor="start">#3</text></svg><small id="t-diario-n">Diario #1</small><b>Tapa del día</b><span>10 tapas pixeladas, las mismas para todos. Una vez por día.</span></button>
       <button type="button" data-ir="normal"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada con cuatro opciones"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="37.1" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="56.2" y="12.0" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="75.3" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="12.0" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="18.0" y="21.6" width="9.9" height="9.9" fill="#c9a227"/><rect x="27.6" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="37.1" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="46.7" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="21.6" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="75.3" y="21.6" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="21.6" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="37.1" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="31.1" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="84.9" y="31.1" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="31.1" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="40.7" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="37.1" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="46.7" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="40.7" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="65.8" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="40.7" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="84.9" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="94.4" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="50.2" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="50.2" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="50.2" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="50.2" width="9.9" height="9.9" fill="#1d1b18"/><rect x="94.4" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="18.0" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="27.6" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="37.1" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="59.8" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="59.8" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="59.8" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="59.8" width="9.9" height="9.9" fill="#2f5d50"/><rect x="18.0" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="27.6" y="69.3" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="37.1" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="75.3" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="18.0" y="78.9" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="37.1" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="78.9" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="78.9" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="78.9" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="27.6" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="46.7" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="88.4" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="88.4" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="88.4" width="9.9" height="9.9" fill="#b5532a"/><rect x="120" y="10" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="17.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="34" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="41.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="58" width="104" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="65.0" width="62.4" height="5" fill="var(--crema)" opacity=".8"/><rect x="120" y="82" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="89.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Libre</small><b>Adiviná la tapa</b><span>La tapa arranca pixelada y se aclara con cada error. Rock nacional e internacional.</span></button>
@@ -432,6 +475,21 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     <div class="opts" id="abre-opts"></div>
     <div class="con-msg" id="abre-msg" aria-live="polite"></div>
     <div class="fila"><button class="btn" id="abre-sig" type="button" hidden>Siguiente</button></div>
+  </section>
+
+  <section id="v-yo" class="sub" hidden>
+    <h2>Tus números</h2>
+    <div class="yo-grandes">
+      <div><b id="yo-racha">0</b><span>días de racha</span></div>
+      <div><b id="yo-mejor">0</b><span>mejor racha</span></div>
+      <div><b id="yo-dias">0</b><span>días jugados</span></div>
+    </div>
+    <h3 class="yo-tit">Últimas 4 semanas</h3>
+    <div class="cal" id="yo-cal" aria-label="Desafíos jugados por día"></div>
+    <div class="cal-ref"><span>Menos</span><i style="opacity:.15"></i><i style="opacity:.4"></i><i style="opacity:.7"></i><i></i><span>7 de 7</span></div>
+    <h3 class="yo-tit">Por desafío</h3>
+    <div class="tabla-env"><table class="yo-tabla" id="yo-tabla"></table></div>
+    <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). Se guarda en este navegador.</p>
   </section>
 
   <section id="v-top" class="card" hidden>
@@ -741,12 +799,12 @@ async function resolver(d,azar,usados){
 let G=null, vista="normal", genero="todos", topTab={t:"general",v:"hoy"}, relojTimer=null;
 
 function nuevaPartida(modo){
-  const dia=hoyAR();
-  G={modo,genero,dia,token:{},ronda:0,puntos:0,intento:0,actual:null,log:[],malos:[],usados:new Set(),proximo:null,terminado:false,saltar:0,restaurar:null,subido:false};
+  const dia=modo==="diario"?diaSel():hoyAR();
+  G={modo,genero,dia,pasado:modo==="diario"&&dia!==hoyAR(),token:{},ronda:0,puntos:0,intento:0,actual:null,log:[],malos:[],usados:new Set(),proximo:null,terminado:false,saltar:0,restaurar:null,subido:false};
   if(modo==="diario"){
     G.seed=hashStr("tapa-"+dia); rnd=semillaRng(G.seed);
     G.cola=mezclar(DISCOS.filter(d=>d[1]));
-    const guardado=ls.get("tapa-d-"+dia);
+    const guardado=leerDia("tapa-d",dia);
     if(guardado){G.log=guardado.log||[];G.puntos=guardado.puntos||0;G.ronda=G.log.length;G.saltar=G.log.length;G.restaurar=guardado.cur||null;G.subido=!!guardado.subido}
   }else{
     rnd=Math.random;
@@ -910,7 +968,7 @@ function cerrarRonda(txt,gan){
 function guardarDiario(){
   const g=G; if(!g||g.modo!=="diario") return;
   const enCurso=!g.terminado&&g.actual&&g.log.length<g.ronda;
-  ls.set("tapa-d-"+g.dia,{log:g.log,puntos:g.puntos,cur:enCurso?{intento:g.intento,malos:g.malos}:null,fin:g.terminado,subido:g.subido});
+  ls.set(kDia("tapa-d",g.dia),{log:g.log,puntos:g.puntos,cur:enCurso?{intento:g.intento,malos:g.malos}:null,fin:g.terminado,subido:g.subido});
 }
 
 function actualizar(){
@@ -926,7 +984,7 @@ function actualizar(){
 
 function terminar(){
   const g=G; g.terminado=true;
-  if(g.modo==="diario"){ guardarDiario(); contar("termino-diario") }
+  if(g.modo==="diario"){ guardarDiario(); contar(g.pasado?"termino-pasado-diario":"termino-diario") }
   else{const k="tapa-mejor-"+g.genero, m=ls.get(k)||0; g.recordPrevio=m; if(g.puntos>m) ls.set(k,g.puntos)}
   mostrarFin();
 }
@@ -949,6 +1007,7 @@ function mostrarFin(){
     <ol>${g.log.map(l=>`<li>${l.gan?"✔":"✘"} ${esc(l.a)} — <i>${esc(l.t)}</i></li>`).join("")}</ol>
     ${!TOP_ON?`<div class="aviso">El top se activa cuando cargues SUPA_URL y SUPA_KEY en Render.</div>`
       :yaSubido?`<div class="fila"><span class="aviso">Tu puntaje ya está en el top.</span><button class="link" id="b-vertop" type="button">Ver el top</button></div>`
+      :g.modo==="diario"&&g.pasado?`<div class="aviso">Día anterior: no suma al ranking.</div>`
       :g.modo==="diario"?`<div class="aviso" id="top-estado">Subiendo tu puntaje al top del día…</div>`
       :`<div class="aviso">El modo libre no suma al ranking. Jugá la Tapa del día para entrar al top.</div>`}
     <div class="fila">
@@ -958,7 +1017,7 @@ function mostrarFin(){
     ${g.modo==="diario"?`<div class="reloj" id="reloj"></div>`:""}`;
   const bs=$("b-subir"); if(bs) bs.onclick=subirPuntaje;
   const bv=$("b-vertop"); if(bv) bv.onclick=verTopPropio;
-  if(TOP_ON&&!yaSubido&&g.modo==="diario") subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
+  if(TOP_ON&&!yaSubido&&g.modo==="diario"&&!g.pasado) subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
   $("b-compartir").onclick=compartir;
   const bo=$("b-otra"); if(bo) bo.onclick=()=>nuevaPartida("normal");
   if(g.modo==="diario") arrancarReloj();
@@ -968,6 +1027,7 @@ function arrancarReloj(){
   clearInterval(relojTimer);
   const tick=()=>{
     const el=$("reloj"); if(!el){clearInterval(relojTimer);return}
+    if(G.pasado){el.textContent="Desafío de un día anterior: no suma al ranking.";return}
     if(hoyAR()!==G.dia){el.textContent="¡Ya hay disco nuevo! Recargá la página.";return}
     const ar=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Argentina/Buenos_Aires"}));
     const fin=new Date(ar); fin.setHours(24,0,0,0);
@@ -1030,9 +1090,11 @@ $("f-bienv").onsubmit=e=>{
   if(G&&G.terminado&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
   const f=trasNombre; trasNombre=null; if(f) f();
 };
+// Número de 4 cifras propio de cada dispositivo, para distinguir nombres iguales
+const tagDe=id=>id?String(parseInt(String(id).replace(/-/g,"").slice(0,8),16)%10000).padStart(4,"0"):"";
 function mostrarQuien(){
   const n=ls.get("tapa-nombre");
-  $("quien").hidden=!n; $("quien-n").textContent=n||"";
+  $("quien").hidden=!n; $("quien-n").innerHTML=n?`${esc(n)} <span class="tag">#${tagDe(jugadorId())}</span>`:"";
 }
 $("b-cambiar").onclick=()=>pedirNombre();
 
@@ -1063,8 +1125,10 @@ function topChips(){
   return {cfg,v};
 }
 function filasTop(rows,yo,u){
-  return rows.length?`<ol class="ranking">${rows.map((f,i)=>`<li class="${f.nombre===yo?"yo":""}"><span class="pos">${i+1}</span><span class="nom">${esc(f.nombre)}</span><span class="pts">${f.puntos} <small>${u}</small></span></li>`).join("")}</ol>`:"";
+  const mio=jugadorId();
+  return rows.length?`<ol class="ranking">${rows.map((f,i)=>`<li class="${(f.jugador?f.jugador===mio:f.nombre===yo)?"yo":""}"><span class="pos">${i+1}</span><span class="nom">${esc(f.nombre)}${f.jugador?`<span class="tag">#${tagDe(f.jugador)}</span>`:""}</span><span class="pts">${f.puntos} <small>${u}</small></span></li>`).join("")}</ol>`:"";
 }
+const quienEs=f=>f.jugador||("n:"+norm(f.nombre));
 async function cargarTop(){
   const {cfg,v}=topChips(), cont=$("top-lista");
   if(!TOP_ON){cont.innerHTML=`<p class="aviso">El top todavía no está configurado. Faltan las variables SUPA_URL y SUPA_KEY en Render.</p>`;return}
@@ -1082,11 +1146,11 @@ async function cargarTop(){
     if(hoy) filtro+=`&dia=eq.${hoyAR()}`;
     if(cfg.vars) filtro+=`&genero=eq.${topTab.v}`;
     if(cfg.genero) filtro+=`&genero=eq.${cfg.genero}`;
-    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos&${filtro}&order=puntos.desc,created_at.asc&limit=300`,{headers:supaHeaders});
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos,jugador&${filtro}&order=puntos.desc,created_at.asc&limit=300`,{headers:supaHeaders});
     if(!r.ok) throw new Error(r.status);
     if(JSON.stringify(topTab)!==pedido) return;
     const vistos=new Set(), filas=[];
-    for(const f of await r.json()){ const k=norm(f.nombre); if(vistos.has(k)) continue; vistos.add(k); filas.push(f); if(filas.length>=20) break }
+    for(const f of await r.json()){ const k=quienEs(f); if(vistos.has(k)) continue; vistos.add(k); filas.push(f); if(filas.length>=20) break }
     cont.innerHTML=filasTop(filas,yo,u)||`<p class="aviso">${hoy?"Nadie jugó hoy todavía. ¡Sé el primero!":"Todavía no hay puntajes acá. ¡Sé el primero!"}</p>`;
   }catch(e){ cont.innerHTML=`<p class="aviso">No pude cargar el top. Probá recargar.</p>` }
 }
@@ -1094,23 +1158,24 @@ async function cargarTop(){
 const GEN_ESCALA={diario:100/50,tema:100/6};
 async function topGeneral(rango){
   const hoy=hoyAR(), desde=rango==="semana"?new Date(Date.parse(hoy)-6*864e5).toISOString().slice(0,10):hoy;
-  const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos,modo,genero,dia&dia=gte.${desde}&modo=in.(${DIARIOS.join(",")})&limit=5000`,{headers:supaHeaders});
+  const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos,modo,genero,dia,jugador&dia=gte.${desde}&modo=in.(${DIARIOS.join(",")})&limit=5000`,{headers:supaHeaders});
   if(!r.ok) throw new Error(r.status);
   const mejor=new Map(), nombres=new Map();
   for(const f of await r.json()){
     const esDiario=f.modo==="diario"||f.modo==="tema"||f.genero==="diario";
     if(!esDiario) continue;
-    const quien=norm(f.nombre); if(!nombres.has(quien)) nombres.set(quien,f.nombre);
+    const quien=quienEs(f); if(!nombres.has(quien)) nombres.set(quien,{nombre:f.nombre,jugador:f.jugador});
     const k=quien+"|"+f.dia+"|"+f.modo, p=Math.round(Math.min(100,f.puntos*(GEN_ESCALA[f.modo]||1)));
     if(!mejor.has(k)||mejor.get(k)<p) mejor.set(k,p);
   }
   const suma=new Map();
   for(const [k,p] of mejor){ const q=k.split("|")[0]; suma.set(q,(suma.get(q)||0)+p) }
-  return [...suma].sort((a,b)=>b[1]-a[1]).slice(0,20).map(([q,p])=>({nombre:nombres.get(q),puntos:p}));
+  return [...suma].sort((a,b)=>b[1]-a[1]).slice(0,20).map(([q,p])=>({...nombres.get(q),puntos:p}));
 }
 
 // Sube un puntaje de los minijuegos con el nombre guardado y avisa en "el"
 async function topAuto(modo,genero,puntos,el){
+  if(esPasado()){ if(el){const sp=document.createElement("span");sp.className="nota-top";sp.textContent=" · día anterior, no suma al ranking";el.appendChild(sp)} return }
   if(!TOP_ON) return;
   const nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20);
   if(!nombre){ pedirNombre(()=>topAuto(modo,genero,puntos,el)); return }
@@ -1521,29 +1586,33 @@ async function discoDe(pool,rng=Math.random,evitar=()=>false){
 const chico200=u=>u.replace("600x600bb","200x200bb");
 // ---- Modo del día para todos los juegos ----
 const mezR=(a,r)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=r()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-const rngDia=n=>semillaRng(hashStr(n+"-"+hoyAR()));
+// Día que se está jugando: hoy, o uno anterior elegido en el inicio (no suma al ranking ni a la racha)
+let DIA_SEL=null;
+const diaSel=()=>DIA_SEL||hoyAR();
+const esPasado=()=>!!DIA_SEL&&DIA_SEL!==hoyAR();
+const kDia=(base,dia=diaSel(),pasado=dia!==hoyAR())=>`${base}${pasado?"p":""}-${dia}`;
+const baseDe=j=>j==="diario"?"tapa-d":j==="tema"?"tapa-tema":`tapa-${j}-dia`;
+// Estado guardado de un día: lo jugado en su fecha o, si no, lo jugado después como día anterior
+const leerDia=(base,dia=diaSel())=>ls.get(`${base}-${dia}`)||(dia!==hoyAR()?ls.get(`${base}p-${dia}`):null);
+// Puntos de un desafío en escala 0-100 (null si no se jugó). soloEnFecha: solo lo jugado ese mismo día
+function puntos100(j,dia=diaSel(),soloEnFecha=false){
+  const base=baseDe(j), x=soloEnFecha?ls.get(`${base}-${dia}`):leerDia(base,dia);
+  if(!x) return null;
+  if(j==="diario") return x.fin?Math.round((x.puntos||0)*2):null;
+  if(j==="tema") return x.fin?(x.gano?Math.round((PASOS.length+1-x.log.length)*100/PASOS.length):0):null;
+  return x.puntos;
+}
+const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
 const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario"};
 const MODO_ELEGIDO=new Set();
-const claveDia=j=>`tapa-${j}-dia-${hoyAR()}`;
-const diaHecho=j=>ls.get(claveDia(j));
-const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); contar("termino-"+j) };
+const claveDia=j=>kDia(`tapa-${j}-dia`);
+const diaHecho=j=>leerDia(`tapa-${j}-dia`);
+const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); contar((esPasado()?"termino-pasado-":"termino-")+j) };
 // Contador de visitas (GoatCounter): solo funciona si está configurado en Render
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
-const nDia=()=>numDiario(hoyAR());
-function jugadoHoy(j){
-  const dia=hoyAR();
-  if(j==="diario"){const x=ls.get("tapa-d-"+dia);return !!(x&&x.fin)}
-  if(j==="tema"){const x=ls.get("tapa-tema-"+dia);return !!(x&&x.fin)}
-  return !!diaHecho(j);
-}
+const nDia=()=>numDiario(diaSel());
+function jugadoHoy(j){ return puntos100(j)!=null }
 const DIARIOS=["diario","tema","antes","orden","abre","conexiones","impostor"];
-// Puntos de hoy en cada desafío (en la misma escala que el top)
-function jugadoPuntos(j){
-  const dia=hoyAR();
-  if(j==="diario"){const x=ls.get("tapa-d-"+dia);return x&&x.fin?x.puntos:null}
-  if(j==="tema"){const x=ls.get("tapa-tema-"+dia);return x&&x.fin?(x.gano?PASOS.length+1-x.log.length:0):null}
-  const h=diaHecho(j); return h?h.puntos:null;
-}
 function modoInicial(j){ if(!MODO_ELEGIDO.has(j)) MODO[j]=diaHecho(j)?"libre":"diario"; pintarChipsModo(j) }
 function pintarChipsModo(j){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>{
@@ -1573,11 +1642,11 @@ const numTema=dia=>numDiario(dia);
 
 async function temaNuevo(){
   temaParar();
-  const modo=TEMA.modo, dia=hoyAR();
+  const modo=TEMA.modo, dia=modo==="diario"?diaSel():hoyAR();
   $("tema-fin").hidden=true; $("tema-form").hidden=false; $("tema-acc").hidden=false;
   $("tema-play").disabled=true; $("tema-estado").textContent="Cargando tema…";
   $("tema-in").value=""; TEMA.sug=[]; temaSugCerrar();
-  const guardado=modo==="diario"?ls.get("tapa-tema-"+dia):null;
+  const guardado=modo==="diario"?leerDia("tapa-tema",dia):null;
   const rng=modo==="diario"?semillaRng(hashStr("tema-"+dia)):Math.random;
   let j=null;
   for(let k=0;k<10&&!j;k++){
@@ -1676,7 +1745,7 @@ function temaPlay(){
   }).catch(()=>{$("tema-estado").textContent="No se pudo reproducir. Probá de nuevo."});
 }
 
-function temaGuardar(){ const j=TEMA.j; if(j.modo==="diario") ls.set("tapa-tema-"+j.dia,{paso:j.paso,log:j.log,fin:j.fin,gano:j.gano}) }
+function temaGuardar(){ const j=TEMA.j; if(j.modo==="diario") ls.set(kDia("tapa-tema",j.dia),{paso:j.paso,log:j.log,fin:j.fin,gano:j.gano}) }
 
 function temaIntento(txt,salto){
   const j=TEMA.j; if(!j||j.fin) return;
@@ -1708,7 +1777,7 @@ function temaFin(){
   f.querySelector("b").textContent=j.p.t;
   f.querySelector("span").textContent=`${j.d[0]} · ${j.d[1]} (${j.d[2]})`;
   f.querySelector(".sub-res").textContent=j.gano?`Lo sacaste en ${j.log.length} intento${j.log.length===1?"":"s"}.`:"Esta vez no salió.";
-  if(j.modo==="diario"&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
+  if(j.modo==="diario"&&j.dia===hoyAR()&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
   $("tema-comp").onclick=async()=>{
     const txt=`Juegos Rock · Adiviná el tema${j.modo==="diario"?" #"+numTema(j.dia):""} 🔊\n${cuad}\n${location.href.split("#")[0]}`;
     try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches) await navigator.share({text:txt}); else {await navigator.clipboard.writeText(txt);$("tema-comp").textContent="¡Copiado!"} }catch(e){}
@@ -1993,10 +2062,10 @@ $("abre-sig").onclick=abrNuevo;
 // ---- Navegación ----
 
 const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
-const VISTAS=["v-juego","v-fin","v-top","v-hub",...Object.values(SUBJUEGOS)];
+const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo",...Object.values(SUBJUEGOS)];
 function irA(v){
   vista=v; if(v!=="inicio") contar("juego-"+v);
-  const tab=v==="top"?"top":"inicio";
+  const tab=v==="top"?"top":v==="yo"?"yo":"inicio";
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===tab));
   VISTAS.forEach(id=>$(id).hidden=true);
   $("volver-tapa").hidden=!(v==="normal"||v==="diario");
@@ -2014,15 +2083,16 @@ function irA(v){
   }
   if(v==="inicio"){ $("v-hub").hidden=false; window.scrollTo(0,0); hubMarcar(); return }
   if(v==="top"){ $("v-top").hidden=false; if(G) actualizar(); cargarTop(); return }
+  if(v==="yo"){ $("v-yo").hidden=false; window.scrollTo(0,0); yoPintar(); return }
   $("v-juego").hidden=false; window.scrollTo(0,0);
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";
   if(G) actualizar();
   $("generos").hidden=v!=="normal";
   if(v==="diario"){
-    const dia=hoyAR(), guardado=ls.get("tapa-d-"+dia);
+    const dia=diaSel(), guardado=leerDia("tapa-d",dia);
     if(G&&G.modo==="diario"&&G.dia===dia){ G.terminado?mostrarFin():($("v-fin").hidden=true,$("v-juego").hidden=false); return }
     if(guardado&&guardado.fin){
-      G={modo:"diario",dia,log:guardado.log,puntos:guardado.puntos,ronda:RONDAS,terminado:true,subido:!!guardado.subido};
+      G={modo:"diario",dia,pasado:dia!==hoyAR(),log:guardado.log,puntos:guardado.puntos,ronda:RONDAS,terminado:true,subido:!!guardado.subido};
       actualizar(); mostrarFin(); return;
     }
     nuevaPartida("diario"); return;
@@ -2033,16 +2103,120 @@ function irA(v){
 document.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>irA(b.dataset.ir));
 // Inicio: marca los desafíos de hoy ya jugados
 function hubMarcar(){
-  let n=0;
+  let n=0; const pasado=esPasado();
   document.querySelectorAll(".hub [data-ir]").forEach(b=>{
-    const j=b.dataset.ir, hecho=DIARIOS.includes(j)&&jugadoHoy(j); if(hecho) n++;
+    const j=b.dataset.ir, p=DIARIOS.includes(j)?puntos100(j):null, hecho=p!=null; if(hecho) n++;
     let c=b.querySelector(".check");
     b.classList.toggle("jugado",hecho);
     if(hecho&&!c){c=document.createElement("span");c.className="check";b.appendChild(c)}
-    if(hecho){ const p=jugadoPuntos(j); c.textContent=p==null?"Jugado hoy":`Jugado hoy · ${p} pts` }
+    if(hecho) c.textContent=`${pasado?"Jugado":"Jugado hoy"} · ${p} pts`;
     if(!hecho&&c) c.remove();
   });
-  cabecera("Hoy",`${n}/${DIARIOS.length}`,"Diario","#"+nDia());
+  const r=rachas();
+  if(pasado) cabecera(`#${nDia()}`,`${n}/${DIARIOS.length}`,"Racha",r.actual);
+  else cabecera("Hoy",`${n}/${DIARIOS.length}`,"Racha",r.actual);
+  $("t-yo-racha").textContent=r.actual?`🔥 ${r.actual} día${r.actual===1?"":"s"}`:"racha";
+  $("b-resumen").disabled=!n;
+  $("b-resumen").textContent=pasado?`Compartir el #${nDia()}`:"Compartir mi día";
+  hubDias();
+}
+
+// ---- Selector de día (jugar desafíos anteriores) ----
+const DIAS_ATRAS=14;
+const fechaCorta=dia=>{const [y,m,d]=dia.split("-");return `${+d}/${+m}`};
+const sumarDias=(dia,n)=>new Date(Date.parse(dia+"T12:00:00Z")+n*864e5).toISOString().slice(0,10);
+function hubDias(){
+  const cont=$("dias"), hoy=hoyAR(), sel=diaSel(); cont.innerHTML="";
+  for(let k=0;k<DIAS_ATRAS;k++){
+    const dia=sumarDias(hoy,-k); if(numDiario(dia)<1) break;
+    const b=document.createElement("button"); b.type="button"; b.id="dia-"+dia;
+    const hechos=DIARIOS.filter(j=>puntos100(j,dia)!=null).length;
+    b.innerHTML=`${k===0?"Hoy":k===1?"Ayer":"#"+numDiario(dia)}<small>${k<2?"#"+numDiario(dia):fechaCorta(dia)} · ${hechos}/7</small>`;
+    b.setAttribute("aria-pressed",dia===sel);
+    if(hechos===DIARIOS.length) b.classList.add("completo");
+    b.onclick=()=>elegirDia(dia);
+    cont.appendChild(b);
+  }
+  const av=$("aviso-pasado");
+  av.hidden=!esPasado();
+  if(esPasado()){ av.innerHTML=`<span>Estás jugando el desafío #${nDia()} (${fechaCorta(sel)}). No suma al ranking ni a la racha.</span><button class="link" type="button" id="volver-hoy">Volver a hoy</button>`; $("volver-hoy").onclick=()=>elegirDia(hoy) }
+}
+function elegirDia(dia){
+  DIA_SEL=dia===hoyAR()?null:dia;
+  // cada juego vuelve a arrancar con el día elegido
+  if(typeof temaParar==="function") temaParar();
+  G=null; TEMA.j=null; TEMA.modo="diario"; ANT.izq=null; ANT.cad=null; ORD.items=[]; ABR.j=null; CON.p=null; CON.modoP=null; IMP.ronda=null;
+  MODO_ELEGIDO.clear(); Object.keys(MODO).forEach(j=>MODO[j]="diario");
+  document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==="diario"));
+  $("t-diario-n").textContent="Diario #"+nDia();
+  hubMarcar();
+}
+
+// ---- Resumen del día para compartir ----
+const EMOJI={diario:"🖼️",tema:"🎧",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
+function resumenTexto(){
+  const dia=diaSel(); let total=0;
+  const filas=DIARIOS.map(j=>{
+    const p=puntos100(j,dia);
+    if(p==null) return `${EMOJI[j]} ▫️▫️▫️▫️▫️`;
+    total+=p; const v=Math.round(p/20);
+    return `${EMOJI[j]} ${"🟩".repeat(v)}${"⬛".repeat(5-v)} ${p}`;
+  });
+  const r=rachas(), extra=!esPasado()&&r.actual>=2?`\n🔥 ${r.actual} días seguidos`:"";
+  return `Juegos Rock #${numDiario(dia)} — ${total}/${DIARIOS.length*100}${extra}\n${filas.join("\n")}\n${location.origin}`;
+}
+$("b-resumen").onclick=async()=>{
+  const txt=resumenTexto(), b=$("b-resumen"), orig=b.textContent;
+  try{
+    if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:txt}); return }
+    await navigator.clipboard.writeText(txt); b.textContent="¡Copiado! Pegalo donde quieras";
+  }catch(e){ if(e&&e.name==="AbortError") return; b.textContent="No se pudo copiar" }
+  contar("compartir-dia");
+  setTimeout(()=>b.textContent=orig,2500);
+};
+
+// ---- Racha y estadísticas (solo desafíos jugados el mismo día) ----
+function historial(){
+  const h={};
+  const poner=(dia,j)=>{ const p=puntos100(j,dia,true); if(p!=null) (h[dia]=h[dia]||{})[j]=p };
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i); let m;
+      if((m=k.match(/^tapa-d-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"diario");
+      else if((m=k.match(/^tapa-tema-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"tema");
+      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
+    }
+  }catch(e){}
+  return h;
+}
+function rachas(){
+  const h=historial(), dias=Object.keys(h).sort(), hoy=hoyAR();
+  let mejor=0, run=0, prev=null;
+  for(const d of dias){ run=(prev&&sumarDias(prev,1)===d)?run+1:1; mejor=Math.max(mejor,run); prev=d }
+  let actual=0, d=h[hoy]?hoy:sumarDias(hoy,-1);
+  while(h[d]){ actual++; d=sumarDias(d,-1) }
+  return {actual,mejor,dias:dias.length,h};
+}
+const NOMBRES={diario:"Tapa del día",tema:"Tema del día",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
+function yoPintar(){
+  const r=rachas(), hoy=hoyAR();
+  $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;
+  const cal=$("yo-cal"); cal.innerHTML="";
+  // 4 semanas, terminando hoy
+  for(let k=27;k>=0;k--){
+    const dia=sumarDias(hoy,-k), n=r.h[dia]?Object.keys(r.h[dia]).length:0;
+    const i=document.createElement("i"); if(k===0) i.className="hoy";
+    i.title=`${fechaCorta(dia)}: ${n} de ${DIARIOS.length}`;
+    i.innerHTML=`<span>${fechaCorta(dia).split("/")[0]}</span>`+(n?`<b style="opacity:${(.15+.85*n/DIARIOS.length).toFixed(2)}"></b>`:"");
+    cal.appendChild(i);
+  }
+  const filas=DIARIOS.map(j=>{
+    const ps=Object.values(r.h).map(x=>x[j]).filter(x=>x!=null);
+    const prom=ps.length?Math.round(ps.reduce((a,b)=>a+b,0)/ps.length):"—", mej=ps.length?Math.max(...ps):"—";
+    return `<tr><td>${EMOJI[j]} ${NOMBRES[j]}</td><td>${ps.length}</td><td>${prom}</td><td>${mej}</td></tr>`;
+  });
+  $("yo-tabla").innerHTML=`<thead><tr><th>Desafío</th><th>Jugados</th><th>Promedio</th><th>Mejor</th></tr></thead><tbody>${filas.join("")}</tbody>`;
+  cabecera("Racha",r.actual,"Mejor",r.mejor);
 }
 document.querySelectorAll(".volver").forEach(b=>b.onclick=()=>irA("inicio"));
 
@@ -2055,6 +2229,14 @@ document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
 });
 $("t-diario-n").textContent="Diario #"+numDiario(hoyAR());
 $("logo").onclick=()=>irA("inicio");
+// ---- Instalar como app ----
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+let pedidoInstalar=null;
+const yaInstalada=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); pedidoInstalar=e; if(!yaInstalada()) $("b-instalar").hidden=false });
+addEventListener("appinstalled",()=>{ $("b-instalar").hidden=true; contar("app-instalada") });
+$("b-instalar").onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.prompt(); try{ await pedidoInstalar.userChoice }catch(e){} pedidoInstalar=null; $("b-instalar").hidden=true };
+if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!yaInstalada()) $("ios-ayuda").hidden=false;
 irA("inicio");
 mostrarQuien();
 if(!ls.get("tapa-nombre")) pedirNombre();

@@ -39,7 +39,7 @@ if (goat) {
 }
 fs.writeFileSync("public/index.html", html);
 
-for (const f of ["og.png", "apple-touch-icon.png", "discos.json"]) {
+for (const f of ["og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json"]) {
   if (fs.existsSync(f)) fs.copyFileSync(f, "public/" + f);
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }

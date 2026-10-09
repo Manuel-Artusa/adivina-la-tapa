@@ -6,6 +6,10 @@ Juegos web de rock, con foco en rock nacional: adiviná la tapa, el tema en 1 se
 - **Diario:** los mismos 10 discos para todos, cambia a las 00:00 hora argentina.
 - **Top:** ranking compartido con Supabase, uno por juego y un top general que suma los 7 desafíos del día.
 - **Todos los juegos tienen desafío del día** (igual para todos, una vez por día) y modo libre.
+- **Días anteriores:** desde el inicio se pueden jugar los desafíos de días pasados (no suman al ranking ni a la racha).
+- **Yo:** racha de días, calendario y estadísticas por desafío (se guardan en el navegador).
+- **Compartir mi día:** arma un mensaje con los puntos de los 7 desafíos.
+- **Se instala como app** en el celular (manifest + service worker).
 - **Juegos:** Adiviná el tema (fragmentos de audio), ¿Antes o después?, Ordená la discografía, Tema número 1, Conexiones y ¿Qué tema no está? (La Vela Puerca).
 
 La página es `index.html`. Las tapas, temas y audios salen de iTunes y se guardan en `discos.json`
