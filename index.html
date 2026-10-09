@@ -105,6 +105,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--rojo);outline-o
 .reloj{text-align:center;font-family:var(--mono);font-size:.85rem;font-variant-numeric:tabular-nums}
 .nombre{display:flex;gap:8px;flex-wrap:wrap}
 .nombre input{flex:1 1 160px;min-width:0;font:inherit;padding:9px 12px;border:2px solid var(--tinta);background:#fff;color:var(--tinta)}
+.buscador input{font-size:16px;padding:12px}
+.sugerencias{display:flex;flex-direction:column;border:2px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta);max-height:min(55vh,340px);overflow-y:auto;margin-top:-6px}
+.sugerencias button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:11px 14px;min-height:48px;border:0;border-bottom:1px solid rgba(20,18,16,.15);background:transparent;color:var(--tinta);font:600 1rem/1.2 var(--body);cursor:pointer}
+.sugerencias button:last-child{border-bottom:0}
+.sugerencias button small{font:500 .78rem var(--body);color:var(--sombra)}
+.sugerencias button.activa,.sugerencias button:hover{background:var(--tinta);color:var(--papel)}
+.sugerencias button.activa small,.sugerencias button:hover small{color:var(--papel)}
+.sugerencias mark{background:transparent;color:inherit;text-decoration:underline;text-decoration-thickness:2px}
+.sugerencias .vacio{padding:12px 14px;font-size:.9rem;color:var(--sombra)}
 .nombre .btn{font-size:1rem;padding:8px 16px}
 .aviso{font-size:.85rem;text-align:center;color:var(--sombra)}
 
@@ -379,11 +388,11 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <div class="aviso" id="tema-estado">Cargando tema…</div>
     </div>
     <div class="intentos" id="tema-intentos"></div>
-    <form class="nombre" id="tema-form" autocomplete="off">
-      <input id="tema-in" list="tema-lista" placeholder="Escribí el tema (te sugiere mientras escribís)">
+    <form class="nombre buscador" id="tema-form" autocomplete="off">
+      <input id="tema-in" placeholder="Escribí el nombre del tema" autocomplete="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="tema-sug">
       <button class="btn" id="tema-env" type="submit">Adivinar</button>
     </form>
-    <datalist id="tema-lista"></datalist>
+    <div class="sugerencias" id="tema-sug" role="listbox" hidden></div>
     <div class="fila" id="tema-acc"><button class="btn sec" id="tema-saltar" type="button">Saltar</button></div>
     <div id="tema-fin" class="card" hidden></div>
   </section>
@@ -1567,7 +1576,7 @@ async function temaNuevo(){
   const modo=TEMA.modo, dia=hoyAR();
   $("tema-fin").hidden=true; $("tema-form").hidden=false; $("tema-acc").hidden=false;
   $("tema-play").disabled=true; $("tema-estado").textContent="Cargando tema…";
-  $("tema-in").value=""; $("tema-lista").innerHTML="";
+  $("tema-in").value=""; TEMA.sug=[]; temaSugCerrar();
   const guardado=modo==="diario"?ls.get("tapa-tema-"+dia):null;
   const rng=modo==="diario"?semillaRng(hashStr("tema-"+dia)):Math.random;
   let j=null;
@@ -1588,16 +1597,48 @@ async function temaNuevo(){
 }
 
 // Sugerencias: temas del disco + de otros discos de las bandas del juego
+// Sugerencias propias (la lista del navegador se ve mal en el celular)
 async function temaSugerencias(j){
-  const nombres=new Set();
-  const agregar=(ps,banda)=>ps.forEach(p=>nombres.add(`${p.t} — ${banda}`));
+  const lista=new Map();
+  const agregar=(ps,banda)=>ps.forEach(p=>{const k=norm(p.t)+"|"+norm(banda); if(!lista.has(k)) lista.set(k,{t:p.t,b:banda,k:norm(p.t),kb:norm(banda)})});
   try{agregar(await pistasDe(j.r.id),j.d[0])}catch(e){}
-  const otros=mez(temaPool()).slice(0,10);
+  await esperarCache();
+  // con discos.json se pueden sugerir todos los temas del juego sin consultar a iTunes
+  const otros=CACHE?temaPool():mez(temaPool()).slice(0,10);
   await Promise.allSettled(otros.map(async d=>{const r=await resolver(d,false,new Set());agregar(await pistasDe(r.id),d[0])}));
   if(TEMA.j!==j) return;
-  const dl=$("tema-lista"); dl.innerHTML="";
-  [...nombres].sort().forEach(n=>{const o=document.createElement("option");o.value=n;dl.appendChild(o)});
+  TEMA.sug=[...lista.values()].sort((a,b)=>a.t.localeCompare(b.t,"es"));
 }
+function temaSugCerrar(){ $("tema-sug").hidden=true; $("tema-sug").innerHTML=""; $("tema-in").setAttribute("aria-expanded","false"); TEMA.sugAct=-1 }
+function temaSugFiltrar(){
+  const q=norm($("tema-in").value), cont=$("tema-sug");
+  if(q.length<2||!TEMA.j||TEMA.j.fin){ temaSugCerrar(); return }
+  const palabras=q.split(" ");
+  const res=(TEMA.sug||[]).filter(x=>palabras.every(p=>x.k.includes(p)||x.kb.includes(p)))
+    .sort((a,b)=>(b.k.startsWith(q)-a.k.startsWith(q))||(b.k.includes(q)-a.k.includes(q))||a.t.localeCompare(b.t,"es")).slice(0,8);
+  cont.innerHTML=""; TEMA.sugAct=-1;
+  if(!res.length){ cont.innerHTML=`<div class="vacio">No hay temas con "${esc($("tema-in").value)}". Probá con otra parte del nombre.</div>` }
+  res.forEach((x,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.id="sug"+i; b.setAttribute("role","option");
+    const t=document.createElement("span"); t.textContent=x.t; const sm=document.createElement("small"); sm.textContent=x.b;
+    b.append(t,sm);
+    b.onmousedown=e=>e.preventDefault(); // que no se cierre el teclado antes de tocar
+    b.onclick=()=>{ $("tema-in").value=`${x.t} — ${x.b}`; temaSugCerrar(); $("tema-env").focus() };
+    cont.appendChild(b);
+  });
+  cont.hidden=false; $("tema-in").setAttribute("aria-expanded","true");
+}
+$("tema-in").addEventListener("input",temaSugFiltrar);
+$("tema-in").addEventListener("focus",()=>{ temaSugFiltrar(); setTimeout(()=>$("tema-in").scrollIntoView({block:"start",behavior:"smooth"}),250) });
+$("tema-in").addEventListener("blur",()=>setTimeout(temaSugCerrar,150));
+$("tema-in").addEventListener("keydown",e=>{
+  const bs=[...$("tema-sug").querySelectorAll("button")]; if(!bs.length) return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+    e.preventDefault(); TEMA.sugAct=(TEMA.sugAct+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length;
+    bs.forEach((b,i)=>b.classList.toggle("activa",i===TEMA.sugAct)); bs[TEMA.sugAct].scrollIntoView({block:"nearest"});
+  }else if(e.key==="Enter"&&TEMA.sugAct>=0){ e.preventDefault(); bs[TEMA.sugAct].click() }
+  else if(e.key==="Escape") temaSugCerrar();
+});
 
 function temaPintar(){
   const j=TEMA.j, seg=PASOS[Math.min(j.paso,PASOS.length-1)];
@@ -1677,7 +1718,7 @@ function temaFin(){
 }
 
 $("tema-play").onclick=temaPlay;
-$("tema-form").onsubmit=e=>{e.preventDefault();temaIntento($("tema-in").value,false)};
+$("tema-form").onsubmit=e=>{e.preventDefault();temaSugCerrar();temaIntento($("tema-in").value,false)};
 $("tema-saltar").onclick=()=>temaIntento("",true);
 document.querySelectorAll("#tema-modo button").forEach(b=>b.onclick=()=>{
   TEMA.modo=b.dataset.m; document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x===b)); temaNuevo();
