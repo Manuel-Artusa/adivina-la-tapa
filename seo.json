@@ -1,0 +1,116 @@
+{
+  "inicio": {
+    "ruta": "/",
+    "titulo": "Juegos Rock · Juegos de rock nacional y desafíos diarios",
+    "descripcion": "Juegos de rock nacional gratis: adiviná la tapa del disco, el tema en 1 segundo, ordená discografías y armá conexiones. 7 desafíos nuevos cada día y ranking.",
+    "h": "Juegos de rock nacional, todos los días",
+    "texto": [
+      "Juegos Rock es una colección de juegos gratis para fans del rock nacional y el rock en general. Cada día hay 7 desafíos nuevos, iguales para todos: adivinar un disco por su tapa pixelada, reconocer una canción con apenas un segundo de audio, ordenar la discografía de una banda, armar grupos de temas que pertenecen al mismo disco y más.",
+      "Aparecen bandas como Soda Stereo, Patricio Rey y sus Redonditos de Ricota, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Gustavo Cerati, Sumo, Virus, Los Fabulosos Cadillacs, La Vela Puerca, No Te Va Gustar, El Plan de la Mariposa, Sueño de Pescado y muchas más, además de clásicos internacionales."
+    ],
+    "faq": [
+      ["¿Juegos Rock es gratis?", "Sí. Todos los juegos son gratis y no hace falta registrarse: solo elegís un nombre para aparecer en el ranking."],
+      ["¿Cada cuánto cambian los desafíos?", "Todos los días a las 00:00, hora argentina. Los desafíos del día son iguales para todos, así podés comparar tu resultado con amigos."],
+      ["¿Qué bandas aparecen?", "Más de 100 bandas, con foco en rock nacional: Soda Stereo, los Redondos, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Cerati, La Vela Puerca, El Plan de la Mariposa y muchas más."],
+      ["¿Puedo jugar desafíos de días anteriores?", "Sí. Desde el inicio elegís un día anterior y jugás sus desafíos. Esos no suman al ranking ni a la racha."],
+      ["¿Se puede instalar como app?", "Sí. En Android aparece el botón Instalar app, y en iPhone se agrega desde Compartir y Agregar a inicio."]
+    ]
+  },
+  "diario": {
+    "ruta": "/tapa-del-dia/",
+    "titulo": "Tapa del día · Adiviná el disco por su tapa | Juegos Rock",
+    "descripcion": "Desafío diario de rock: 10 tapas de discos pixeladas, las mismas para todos. Adiviná cada disco con la menor cantidad de errores y compartí tu resultado.",
+    "h": "Tapa del día: adiviná el disco por su tapa",
+    "texto": [
+      "Cada día hay 10 tapas de discos de rock, iguales para todos los jugadores. La tapa arranca pixelada y se aclara con cada error: cuanto antes la reconozcas, más puntos sumás (hasta 50 por día).",
+      "Al terminar podés compartir tu resultado con cuadritos de colores, como en Wordle, y ver tu posición en el ranking del día."
+    ]
+  },
+  "normal": {
+    "ruta": "/adivina-la-tapa/",
+    "titulo": "Adiviná la tapa del disco · Trivia de rock | Juegos Rock",
+    "descripcion": "¿Reconocés el disco por su tapa? Juego libre e ilimitado con tapas de rock nacional e internacional que arrancan pixeladas y se aclaran con cada error.",
+    "h": "Adiviná la tapa del disco",
+    "texto": [
+      "Modo libre del juego de tapas: partidas ilimitadas de 10 discos. Elegí jugar con todo el rock, solo rock nacional o solo internacional.",
+      "Las opciones son difíciles a propósito: muchas veces aparecen varios discos de la misma banda, así que no alcanza con leer el nombre en la tapa."
+    ]
+  },
+  "tema": {
+    "ruta": "/adivina-el-tema/",
+    "titulo": "Adiviná el tema en 1 segundo · Rock nacional | Juegos Rock",
+    "descripcion": "Escuchá 1 segundo de un tema de rock nacional y adiviná cuál es. Cada error desbloquea más audio. Un tema nuevo cada día, estilo Heardle.",
+    "h": "Adiviná el tema con 1 segundo de audio",
+    "texto": [
+      "Suena un segundo de un tema de rock: Redondos, La Renga, Divididos, Los Piojos, La Vela Puerca, Callejeros, El Plan de la Mariposa, Sueño de Pescado y más. Si no lo sacás, cada intento desbloquea más audio: 2, 4, 7, 11 y 16 segundos.",
+      "Hay un tema del día, igual para todos, y un modo libre para seguir jugando todo lo que quieras."
+    ]
+  },
+  "antes": {
+    "ruta": "/antes-o-despues/",
+    "titulo": "¿Antes o después? · Años de discos de rock | Juegos Rock",
+    "descripcion": "¿Este disco salió antes o después que el otro? Juego de rachas con discos de rock nacional e internacional. Desafío diario de 10 comparaciones.",
+    "h": "¿Antes o después?: ¿qué disco salió primero?",
+    "texto": [
+      "Te mostramos dos discos: uno con su año y otro sin. Elegí si el segundo salió antes o después. Si acertás, seguís; al primer error se corta la racha.",
+      "El desafío del día son 10 comparaciones iguales para todos, y en el modo libre podés buscar tu mejor racha."
+    ]
+  },
+  "orden": {
+    "ruta": "/ordena-la-discografia/",
+    "titulo": "Ordená la discografía · Trivia de bandas de rock | Juegos Rock",
+    "descripcion": "5 discos de una banda de rock: ordenalos del más viejo al más nuevo. ¿Te sabés la discografía de Soda Stereo, La Renga o los Redondos?",
+    "h": "Ordená la discografía",
+    "texto": [
+      "Aparecen 5 discos de una misma banda y tenés que ordenarlos por año de salida. Tenés 3 intentos: los discos que quedan en su lugar se fijan en verde.",
+      "Ideal para fans: Soda Stereo, Charly García, Spinetta, los Redondos, Divididos, La Renga, Los Piojos, Babasónicos, Fito Páez y más."
+    ]
+  },
+  "abre": {
+    "ruta": "/tema-numero-1/",
+    "titulo": "Tema número 1 · ¿Qué canción abre el disco? | Juegos Rock",
+    "descripcion": "Mirá la tapa de un disco de rock y elegí qué canción lo abre. Desafío diario de 5 discos y modo libre por rachas.",
+    "h": "Tema número 1: ¿qué canción abre el disco?",
+    "texto": [
+      "Te mostramos un disco y cuatro de sus canciones. Elegí cuál es el primer tema. Al responder ves en qué número de tema está cada una.",
+      "El desafío del día son 5 discos, y en el modo libre jugás por rachas."
+    ]
+  },
+  "conexiones": {
+    "ruta": "/conexiones/",
+    "titulo": "Conexiones de rock nacional · Armá los discos | Juegos Rock",
+    "descripcion": "16 temas de rock nacional, 4 discos. Agrupá las canciones que pertenecen al mismo disco. Niveles fácil, normal y difícil, y desafío diario.",
+    "h": "Conexiones: agrupá los temas por disco",
+    "texto": [
+      "Aparecen 16 canciones de rock nacional y tenés que armar 4 grupos de 4 temas que estén en el mismo disco. Cuando acertás, se revela la tapa.",
+      "En difícil, los 4 discos son de la misma banda. El desafío del día es igual para todos."
+    ]
+  },
+  "impostor": {
+    "ruta": "/que-tema-no-esta/",
+    "titulo": "¿Qué tema no está? · Trivia de La Vela Puerca | Juegos Rock",
+    "descripcion": "Un disco de La Vela Puerca y 10 canciones: encontrá las que son de otro disco. Trivia para fans de La Vela, con desafío diario.",
+    "h": "¿Qué tema no está? (La Vela Puerca)",
+    "texto": [
+      "Al centro aparece un disco de La Vela Puerca y alrededor 10 canciones. Entre 2 y 4 son impostoras: pertenecen a otro disco de la banda. Encontralas.",
+      "Incluye discos como De Bichos y Flores, A Contraluz, El Impulso, Piel y Hueso, Destilar y Discopático."
+    ]
+  },
+  "top": {
+    "ruta": "/ranking/",
+    "titulo": "Ranking de los desafíos del día | Juegos Rock",
+    "descripcion": "Ranking general y por juego de los desafíos diarios de Juegos Rock. Mirá quién sacó más puntos hoy y en los últimos 7 días.",
+    "h": "Ranking",
+    "texto": [
+      "El ranking general suma los 7 desafíos del día (hasta 700 puntos). También hay un ranking de cada desafío y uno de los últimos 7 días."
+    ]
+  },
+  "yo": {
+    "ruta": "/mis-estadisticas/",
+    "titulo": "Mis estadísticas | Juegos Rock",
+    "descripcion": "Tu racha de días jugados, calendario y estadísticas de cada desafío de Juegos Rock.",
+    "h": "Tus números",
+    "noindex": true,
+    "texto": []
+  }
+}

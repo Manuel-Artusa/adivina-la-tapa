@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,8 +41,9 @@
 <meta name="twitter:image" content="__SITE_URL__/og.png">
 <meta name="theme-color" content="#f1c232">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141210'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23403a33' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23d7262e'/%3E%3Ccircle cx='32' cy='32' r='2.5' fill='%23f1c232'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<!--JSONLD-->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Juegos Rock">
 <!--ANALYTICS-->
@@ -110,6 +111,15 @@ h1 span{color:var(--rojo)}
 .yo-tabla th{font:500 .7rem var(--mono);text-transform:uppercase;letter-spacing:.05em;background:var(--tinta);color:var(--papel)}
 .ranking .tag{font:500 .7rem var(--mono);color:var(--sombra);margin-left:4px}
 .quien .tag{font:500 .75rem var(--mono);color:var(--sombra)}
+.seo-texto{margin-top:28px;padding-top:18px;border-top:2px dotted var(--sombra);font-size:.92rem;line-height:1.55;max-width:70ch}
+.seo-texto h2{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:0 0 8px}
+.seo-texto h3{font-size:1rem;margin:16px 0 6px}
+.seo-texto p{margin:0 0 10px}
+.seo-texto details{border-bottom:1px solid rgba(20,18,16,.15);padding:8px 0}
+.seo-texto summary{cursor:pointer;font-weight:700}
+.seo-texto details p{margin:6px 0 0}
+.seo-texto nav{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.88rem}
+.seo-texto nav a{color:var(--tinta);font-weight:600}
 .hub .check{align-self:flex-start;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;background:var(--ok);color:var(--crema)}
 .modo-dia button{font-size:.78rem}
 .hub .prev{display:block;width:100%;height:auto;aspect-ratio:240/110;border:2px solid var(--tinta);margin-bottom:4px}
@@ -531,6 +541,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </form>
   </div>
 
+  <section class="seo-texto" id="seo-texto"><!--SEO_TEXTO--></section>
+
   <footer>Juegos Rock · Tapas y audios vía la API pública de iTunes. Los desafíos del día son iguales para todos y cambian a las 00:00 (hora argentina).</footer>
 </div>
 
@@ -781,7 +793,7 @@ const precargar=url=>new Promise((ok,fail)=>{const im=new Image();im.onload=()=>
 let CACHE=null;
 const cacheListo=(async()=>{
   try{
-    const r=await fetch("discos.json",{cache:"no-cache"}); if(!r.ok) throw new Error(r.status);
+    const r=await fetch("/discos.json",{cache:"no-cache"}); if(!r.ok) throw new Error(r.status);
     const j=await r.json(), porId=new Map();
     for(const v of Object.values(j.discos||{})) porId.set(v.id,v);
     CACHE={disc:j.discos||{},faltan:new Set(j.faltan||[]),porId};
@@ -2083,9 +2095,36 @@ $("abre-sig").onclick=abrNuevo;
 
 // ---- Navegación ----
 
+// ---- Una dirección por juego (para Google y para compartir links directos) ----
+const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/"};
+const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
+const SEO=window.SEO_PAGINAS||{};
+function seoBloque(v){
+  const P=SEO[v]; if(!P) return "";
+  let h=`<h2>${esc(P.h)}</h2>`+(P.texto||[]).map(t=>`<p>${esc(t)}</p>`).join("");
+  if(P.faq) h+=`<h3>Preguntas frecuentes</h3>`+P.faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
+  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>k!=="yo"&&SEO[k]).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
+  return h;
+}
+function seoAplicar(v){
+  const P=SEO[v]; if(!P) return;
+  document.title=P.titulo;
+  const d=document.querySelector('meta[name="description"]'); if(d) d.setAttribute("content",P.descripcion);
+  const c=document.querySelector('link[rel="canonical"]'); if(c&&/^https?:/.test(c.href)) c.href=new URL(RUTAS[v],c.href).href;
+  const b=$("seo-texto"); if(b){ b.innerHTML=seoBloque(v); b.querySelectorAll("a[data-ir]").forEach(a=>a.onclick=e=>{ if(e.ctrlKey||e.metaKey) return; e.preventDefault(); irA(a.dataset.ir) }) }
+}
+addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
+
 const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo",...Object.values(SUBJUEGOS)];
-function irA(v){
+function irA(v,como){
+  // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
+  if(location.protocol!=="file:"&&RUTAS[v]){
+    const url=RUTAS[v]+location.search;
+    try{ if(como==="inicial") history.replaceState({v},"",url); else if(como!=="pop"&&location.pathname!==RUTAS[v]) history.pushState({v},"",url) }catch(e){}
+  }
+  seoAplicar(v);
   vista=v; if(v!=="inicio") contar("juego-"+v);
   const tab=v==="top"?"top":v==="yo"?"yo":"inicio";
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===tab));
@@ -2252,14 +2291,14 @@ document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
 $("t-diario-n").textContent="Diario #"+numDiario(hoyAR());
 $("logo").onclick=()=>irA("inicio");
 // ---- Instalar como app ----
-if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("/sw.js",{scope:"/"}).catch(()=>{});
 let pedidoInstalar=null;
 const yaInstalada=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
 addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); pedidoInstalar=e; if(!yaInstalada()) $("b-instalar").hidden=false });
 addEventListener("appinstalled",()=>{ $("b-instalar").hidden=true; contar("app-instalada") });
 $("b-instalar").onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.prompt(); try{ await pedidoInstalar.userChoice }catch(e){} pedidoInstalar=null; $("b-instalar").hidden=true };
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!yaInstalada()) $("ios-ayuda").hidden=false;
-irA("inicio");
+irA(vistaDeRuta(location.pathname),"inicial");
 mostrarQuien();
 if(!ls.get("tapa-nombre")) pedirNombre();
 </script>
