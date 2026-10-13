@@ -2342,7 +2342,7 @@ function aniversarios(dia){
     const v=d[1]&&CACHE.disc[d[0]+"|"+d[1]];
     if(!v||!v.fecha||v.fecha.length!==10||v.fecha.slice(5)!==md) continue;
     const n=anio-+v.fecha.slice(0,4); if(n<1) continue;
-    out.push({r:{id:v.id,a:v.a,t:d[1],y:+v.fecha.slice(0,4),url:v.url,cat:d[3]},anios:n,fecha:v.fecha});
+    out.push({r:{id:v.id,a:v.a,t:d[1],y:+v.fecha.slice(0,4),url:v.url,cat:d[3]},art:d[0],anios:n,fecha:v.fecha});
   }
   return out.sort((a,b)=>(b.anios%5===0)-(a.anios%5===0)||(b.r.cat==="nac")-(a.r.cat==="nac")||b.anios-a.anios);
 }
@@ -2403,7 +2403,10 @@ function wikiDatos(art,alb){
         const vistos=new Set();
         for(const f of frases){ if(f.p<2||out.cands.length>=8+out.mano) break; const kk=norm(f.t).slice(0,40); if(vistos.has(kk)) continue; vistos.add(kk); out.cands.push({t:f.t,wiki:true}) }
         // si no hubo nada jugoso, al menos la segunda frase de la introducción
-        if(out.cands.length===out.mano){ const s=(intro.match(/[^.!?]+[.!?]+/g)||[]).slice(1,3).join(" ").trim(); if(s.length>40) out.cands.push({t:s,wiki:true}) }
+        if(out.cands.length===out.mano){
+          let s=""; for(const f of (intro.replace(/\s*\([^)]*\)/g,"").match(/[^.!?]+[.!?]+/g)||[])){ if((s+f).length>300&&s) break; s+=f }
+          s=s.replace(/\s+/g," ").trim(); if(s.length>40) out.cands.push({t:s,wiki:true,tipo:"resumen"});
+        }
         break;
       }
     }catch(e){}
@@ -2447,17 +2450,19 @@ async function placasPost(p){
   texto(x,p.r.a,430,200,{f:FB,peso:"800",s:34,w:570});
   const yb=texto(x,p.r.t,430,275,{s:58,c:CC.rojo,w:570,max:3,lh:1.08,min:30});
   texto(x,String(p.r.y||""),430,yb+62,{f:FM,peso:"500",s:34});
-  const filas=[];
-  if(fecha) filas.push(["SALIÓ",fechaLarga(fecha)]);
-  if(temas.length) filas.push(["TEMAS",String(temas.length)]);
-  if(temas[0]) filas.push(["ABRE CON",temas[0][0]]);
+  const filas=[], propio=p.dato&&p.tipoDato==="resumen"&&!p.fuente; // el resumen propio ya trae fecha y temas
+  if(!propio){
+    if(fecha) filas.push(["SALIÓ",fechaLarga(fecha)]);
+    if(temas.length) filas.push(["TEMAS",String(temas.length)]);
+    if(temas[0]) filas.push(["ABRE CON",temas[0][0]]);
+  }
   filas.forEach(([k,v],i)=>{ const Y=540+i*62; texto(x,k,80,Y,{f:FM,peso:"500",s:24,c:CC.sombra}); texto(x,v,260,Y,{f:FB,peso:"800",s:32,w:740}) });
-  const top=560+Math.max(filas.length,1)*62;
+  const top=filas.length?560+filas.length*62:500;
   if(p.dato){
     const H=1205-top;
     x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
     x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
-    etiqueta(x,"¿SABÍAS QUE…?",100,top+22,26,CC.rojo,CC.crema);
+    etiqueta(x,p.tipoDato==="resumen"?"EN POCAS PALABRAS":"¿SABÍAS QUE…?",100,top+22,26,CC.rojo,CC.crema);
     const max=Math.max(2,Math.floor((H-110)/(34*1.3)));
     texto(x,p.dato,110,top+128,{f:FB,peso:"800",s:50,w:860,max,lh:1.25,min:22});
     if(p.fuente) texto(x,"Fuente: Wikipedia",990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
@@ -2473,29 +2478,97 @@ async function placasPost(p){
   }
   marca(x,540,1238,40);
   out.push(c);
+  // 3) más datos (los que no se usaron en la foto anterior)
+  const extras=(p.extras||[]).slice(0,3);
+  if(extras.length){
+    [c,x]=lienzo(1080,1350);
+    etiqueta(x,"MÁS DATOS",80,60,30);
+    texto(x,p.r.t,80,200,{s:64,c:CC.rojo,w:920,min:34});
+    const H=Math.min(320,(1080-260)/extras.length-30);
+    extras.forEach((t,i)=>{
+      const Y=260+i*(H+30);
+      x.fillStyle=CC.tinta; x.fillRect(88,Y+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,Y,920,H);
+      x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,Y,920,H);
+      texto(x,String(i+1),130,Y+86,{s:72,c:CC.rojo,al:"center",w:80});
+      texto(x,t,190,Y+68,{f:FB,peso:"600",s:46,w:780,max:Math.max(2,Math.floor((H-40)/(34*1.25))),lh:1.25,min:22});
+    });
+    if(p.fuente) texto(x,"Fuente: Wikipedia",1000,1200,{f:FM,peso:"500",s:20,c:CC.sombra,al:"right"});
+    marca(x,540,1238,40);
+    out.push(c);
+  }
+  // 4) la lista de temas
+  if(temas.length>2){
+    [c,x]=lienzo(1080,1350);
+    etiqueta(x,"LISTA DE TEMAS",80,60,30);
+    texto(x,p.r.t,80,200,{s:64,c:CC.rojo,w:920,min:34});
+    const lista=temas.slice(0,20), dos=lista.length>10, col=dos?Math.ceil(lista.length/2):lista.length;
+    const paso=Math.min(84,(1150-280)/col), W=dos?440:900;
+    lista.forEach((t,i)=>{
+      const X=80+(dos&&i>=col?480:0), Y=290+(i%col)*paso, esta=i===0||i===temas.length-1;
+      if(esta){ x.fillStyle=CC.tinta; x.fillRect(X-10,Y-paso*.62,W+20,paso*.86) }
+      texto(x,String(i+1).padStart(2,"0"),X,Y,{f:FM,peso:"500",s:26,c:esta?CC.papel:CC.sombra});
+      texto(x,t[0],X+60,Y,{f:FB,peso:"800",s:dos?30:38,w:W-(esta?150:70),min:16,c:esta?CC.papel:CC.tinta});
+      if(esta) texto(x,i===0?"ABRE":"CIERRA",X+W,Y,{f:FM,peso:"500",s:22,c:CC.papel,al:"right"});
+    });
+    if(temas.length>lista.length) texto(x,`y ${temas.length-lista.length} temas más`,1000,1190,{f:FM,peso:"500",s:22,c:CC.sombra,al:"right"});
+    marca(x,540,1238,40);
+    out.push(c);
+  }
+  // 5) dónde está en la discografía (los discos de la banda que hay en el juego)
+  const art=p.art||((DISCOS.find(d=>d[1]===p.r.t&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]&&CACHE.disc[d[0]+"|"+d[1]].id===p.r.id)||DISCOS.find(d=>d[1]===p.r.t)||[])[0]);
+  let disco=art?DISCOS.filter(d=>d[0]===art&&d[1]&&d[2]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]).sort((a,b)=>a[2]-b[2]):[];
+  if(disco.length>=3){
+    let k=disco.findIndex(d=>d[1]===p.r.t);
+    if(disco.length>7){ const desde=Math.max(0,Math.min(disco.length-7,k-3)); disco=disco.slice(desde,desde+7); k=disco.findIndex(d=>d[1]===p.r.t) }
+    const imgs=await Promise.all(disco.map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url)));
+    [c,x]=lienzo(1080,1350);
+    etiqueta(x,"EN SU DISCOGRAFÍA",80,60,30);
+    texto(x,art,80,200,{s:64,w:920,min:34});
+    const paso=Math.min(170,(1130-260)/disco.length), y0=250+Math.max(0,((1130-250)-disco.length*paso)/2);
+    disco.forEach((d,i)=>{
+      const Y=y0+i*paso, yo=i===k, S=paso-22;
+      if(yo){ x.fillStyle=CC.rojo; x.fillRect(60,Y-8,960,S+16) }
+      texto(x,String(d[2]),80,Y+S*.68,{s:44,c:yo?CC.crema:CC.rojo,w:170});
+      tapa(x,imgs[i],270,Y,S,0,4);
+      texto(x,d[1],270+S+36,Y+S*.64,{f:FB,peso:"800",s:36,w:960-(270+S+36)+40,min:18,c:yo?CC.crema:CC.tinta});
+    });
+    texto(x,"¿Te sabés el orden? Jugá Ordená la discografía en",540,1190,{f:FB,peso:"600",s:28,al:"center",w:960});
+    marca(x,540,1218,40);
+    out.push(c);
+  }
   return out;
 }
 function textoPost(p){
-  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver los datos. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
-  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta y un dato del disco.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
+  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver datos, la lista de temas y dónde está en su discografía. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
+  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta, datos del disco, la lista de temas y su lugar en la discografía.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
+}
+// Resumen armado con lo que sabemos del disco (fecha, temas), para cuando no hay ningún dato
+function resumenPropio(p){
+  const info=infoDisco(p.r.id), temas=info.temas||[], f=info.fecha&&info.fecha.length===10?info.fecha:"";
+  let t=`${p.r.t} es un disco de ${p.r.a}`+(f?` que salió el ${fechaLarga(f)}.`:p.r.y?` de ${p.r.y}.`:".");
+  if(temas.length>1) t+=` Tiene ${temas.length} temas: arranca con «${temas[0][0]}» y cierra con «${temas[temas.length-1][0]}».`;
+  const anio=+(p.dia||hoyAR()).slice(0,4); if(p.r.y&&anio-p.r.y>0) t+=` Ya tiene ${anio-p.r.y} años.`;
+  return t;
 }
 // Arma la pieza con el dato: "Otro dato" pasa al siguiente, y se puede escribir uno propio
 async function piezaPost(p,titulo,cuando){
-  const w=await wikiDatos(p.r.a,p.r.t);
+  const w0=await wikiDatos(p.r.a,p.r.t), w={...w0,cands:w0.cands.slice()};
+  if(!w.cands.length) w.cands.push({t:resumenPropio(p),wiki:false,tipo:"resumen"});
   let i=0;
-  const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=!!(c&&c.wiki) };
+  const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=!!(c&&c.wiki); p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
+    p.extras=w.cands.filter((x,k)=>k!==j&&x.tipo!=="resumen").map(x=>x.t).slice(0,3) };
   usar(0);
   const armar=async()=>{
     const n=w.cands.length;
     const el=contPieza(titulo,cuando,await placasPost(p),p.tipo==="aniv"?"aniversario":"post",p.dia,textoPost(p),
-      `<b>¿Sabías que…?</b> ${n?`Dato ${i+1} de ${n}${w.mano&&i<w.mano?" (escrito a mano)":" (de Wikipedia: revisalo antes de publicar)"}. Tocá <b>Otro dato</b> para ver el siguiente, o escribí uno propio.`:"No encontré datos de este disco: escribí uno propio o dejalo vacío (se muestra la lista de temas)."}${w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">leer en Wikipedia</a>`:""}`);
+      `<b>${p.tipoDato==="resumen"?"En pocas palabras":"¿Sabías que…?"}</b> ${p.tipoDato==="resumen"&&n===1?`No encontré datos curiosos de este disco, así que armé un resumen${w.cands[0].wiki?" con Wikipedia":" con la info del disco"}. Si sabés algo mejor, escribilo acá.`:`Dato ${i+1} de ${n}${w.mano&&i<w.mano?" (escrito a mano)":w.cands[i]&&w.cands[i].wiki?" (de Wikipedia: revisalo antes de publicar)":""}. Tocá <b>Otro dato</b> para ver el siguiente, o escribí uno propio.`}${w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">leer en Wikipedia</a>`:""}`);
     const ta=document.createElement("textarea"); ta.value=p.dato; ta.placeholder="Ej: lo grabaron en una semana en una sala de Palermo…"; ta.style.minHeight="80px";
     const fila=document.createElement("div"); fila.className="fila-acc";
     const otro=document.createElement("button"); otro.type="button"; otro.textContent="Otro dato"; otro.disabled=n<2;
     const act=document.createElement("button"); act.type="button"; act.textContent="Actualizar imagen con mi texto";
     const rehacer=async()=>{ otro.disabled=act.disabled=true; const nuevo=await armar(); el.replaceWith(nuevo) };
     otro.onclick=()=>{ i=(i+1)%n; usar(i); rehacer() };
-    act.onclick=()=>{ const t=ta.value.trim(); if(!w.cands[i]||t!==w.cands[i].t) p.fuente=false; p.dato=t; rehacer() };
+    act.onclick=()=>{ const t=ta.value.trim(); if(!w.cands[i]||t!==w.cands[i].t){ p.fuente=false; p.tipoDato="dato" } p.dato=t; rehacer() };
     fila.append(otro,act);
     const aviso=el.querySelector("p.aviso"); aviso.after(ta); ta.after(fila);
     return el;
@@ -2523,7 +2596,7 @@ async function contArmar(){
     const an=aniversarios(dia);
     if(an.length){
       const a=an[0], otros=an.slice(1,4).map(x=>`${x.r.t} de ${x.r.a} (${x.anios} años)`).join(", ");
-      const el=await piezaPost({tipo:"aniv",dia,r:a.r,anios:a.anios,fecha:a.fecha},`Un día como hoy: ${a.r.t} (post)`,`Post del ${fechaCorta(dia)} · ¡día especial!${otros?" · también cumplen: "+otros:""}`);
+      const el=await piezaPost({tipo:"aniv",dia,r:a.r,art:a.art,anios:a.anios,fecha:a.fecha},`Un día como hoy: ${a.r.t} (post)`,`Post del ${fechaCorta(dia)} · ¡día especial!${otros?" · también cumplen: "+otros:""}`);
       if(n!==CONT_N) return; poner(el);
     }
     if(tHoy){
