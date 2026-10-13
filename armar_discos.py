@@ -30,9 +30,10 @@ EXTRA_TEMA_2 = re.compile(r"\s+-\s+(en vivo|live|remaster|demo|versi[oó]n).*$",
 
 
 def norm(s):
-    s = unicodedata.normalize("NFD", str(s).lower())
+    s = unicodedata.normalize("NFD", str(s).lower().replace("&", " y "))
     s = "".join(c for c in s if unicodedata.category(c) != "Mn")
     s = re.sub(r"[^a-z0-9 ]", " ", s)
+    s = re.sub(r"\b(volumen|volume|vol)\b", "vol", s)
     return re.sub(r"\s+", " ", s).strip()
 
 
@@ -44,9 +45,22 @@ def limpiar_tema(t):
     return EXTRA_TEMA_2.sub("", EXTRA_TEMA_1.sub("", str(t))).strip()
 
 
+# Otros nombres con los que iTunes puede tener a una banda
+ALIAS = {
+    "Luis Alberto Spinetta": ["Pescado Rabioso", "Spinetta"],
+    "Fito & Fitipaldis": ["Fito y Fitipaldis"],
+    "Pappo's Blues": ["Pappo"],
+    "Los Ratones Paranoicos": ["Ratones Paranoicos"],
+}
+
+
 def mismo_artista(nombre, art):
-    a, b = norm(nombre), norm(art)
-    return a == b or a.startswith(b + " ") or b.startswith(a + " ")
+    a = norm(nombre)
+    for alt in [art] + ALIAS.get(art, []):
+        b = norm(alt)
+        if a == b or a.startswith(b + " ") or b.startswith(a + " "):
+            return True
+    return False
 
 
 def leer_catalogo():
@@ -140,9 +154,10 @@ def buscar_disco(art, alb):
             return con_pais(x, pais)
     # 2) toda la discografía de la banda en cada tienda
     for pais in PAISES:
-        x = elegir(discos_del_artista(art, pais), art, alb)
-        if x:
-            return con_pais(x, pais)
+        for nombre in [art] + ALIAS.get(art, []):
+            x = elegir(discos_del_artista(nombre, pais), art, alb)
+            if x:
+                return con_pais(x, pais)
     # 3) búsqueda directa en las otras tiendas
     for pais in PAISES[2:]:
         x = elegir(itunes(f"search?term={q}&entity=album&limit=50&country={pais}").get("results", []), art, alb)

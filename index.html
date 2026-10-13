@@ -627,7 +627,7 @@ const DISCOS = [
  ["El Plan de la Mariposa","Brote",2011,"nac"],["El Plan de la Mariposa","Danza de Antalgia",2014,"nac"],
  ["El Plan de la Mariposa","Devorando Intensidad",2017,"nac"],["El Plan de la Mariposa","Estado de Enlace",2020,"nac"],
  ["La Vela Puerca","De Bichos y Flores",2001,"nac"],["La Vela Puerca","A Contraluz",2004,"nac"],["La Vela Puerca","Piel y Hueso",2011,"nac"],
- ["Babasónicos","Miau",2018,"nac"],["Catupecu Machu","El Número Imperfecto",2002,"nac"],
+ ["Babasónicos","Discutible",2018,"nac"],["Catupecu Machu","El Número Imperfecto",2002,"nac"],
  // Solo artista: el juego elige al azar uno de sus discos reales en iTunes
  
  ["El Plan de la Mariposa",null,null,"nac"],["La Vela Puerca",null,null,"nac"],
@@ -2346,26 +2346,68 @@ function aniversarios(dia){
   }
   return out.sort((a,b)=>(b.anios%5===0)-(a.anios%5===0)||(b.r.cat==="nac")-(a.r.cat==="nac")||b.anios-a.anios);
 }
-// Dato del disco desde Wikipedia en español (se puede editar antes de armar la imagen)
+// Datos del disco: primero los escritos a mano (datos.json), después los más jugosos de Wikipedia en español
+let DATOS_MANO=null;
+const datosMano=()=>DATOS_MANO||(DATOS_MANO=fetch("/datos.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({})));
+const SECC_FUERA=/lista de (canciones|temas)|personal|cr[eé]ditos|m[uú]sicos|referencias|enlaces|v[eé]ase|notas|bibliograf|posicion|certifica|ficha|formaci[oó]n|listas|ventas y|tabla/i;
+const SECC_BUENA=/grabaci|producci|portada|tapa|arte|historia|antecedente|curios|anécdota|anecdota|concepto|t[ií]tulo|composici|legado|recepci|lanzamiento|presentaci/i;
+const PALABRAS_JUGOSAS=[
+  [/tapa|portada|arte de|dise[ñn]o gr[aá]fico|fotograf|dibuj|ilustr|pint/i,3],
+  [/grab(ó|aron|ado|aci[oó]n)|estudio|sala|sesiones/i,2],
+  [/nombre|t[ií]tulo|se llam|bautiz|apodo/i,3],
+  [/inspir|basad[oa] en|dedic|homenaje|escrit[oa] (para|sobre)/i,3],
+  [/censur|prohib|pol[eé]mic|esc[aá]ndalo|juicio|denunci|dictadura|polic/i,4],
+  [/an[eé]cdota|curios|ins[oó]lit|accident|casualidad|origen|originalmente|en un principio|al principio|idea/i,3],
+  [/r[eé]cord|vendi|copias|disco de (oro|platino)|primer|[uú]nic|[uú]ltim|m[aá]s vendid|n[uú]mero uno/i,2],
+  [/d[ií]as|horas|semanas|meses|a[ñn]os despu[eé]s|tard(ó|aron)|demor/i,1],
+  [/invitad|particip|colabor|toc[oó]|cant[oó]|pele|separ|renunci|ingres/i,1],
+];
+function puntajeFrase(f,secc){
+  let p=0; for(const [re,v] of PALABRAS_JUGOSAS) if(re.test(f)) p+=v;
+  if(/\d/.test(f)) p+=1;
+  if(SECC_BUENA.test(secc)) p+=2;
+  if(/^(es|fue) (el|un|una|la) .*(álbum|disco|LP)/i.test(f.replace(/^[^ ]+ /,""))) p-=4; // frase de presentación
+  if(/pista|track|duraci[oó]n|minutos y|lista de/i.test(f)) p-=2;
+  return p;
+}
 const wikiCache=new Map();
-function wikiDato(art,alb){
+function wikiDatos(art,alb){
   const k=art+"|"+alb;
   if(!wikiCache.has(k)) wikiCache.set(k,(async()=>{
+    const out={cands:[],url:null,mano:0};
+    try{ const m=(await datosMano())[k]; if(m){ const l=Array.isArray(m)?m:[m]; out.cands.push(...l.map(t=>({t,wiki:false}))); out.mano=l.length } }catch(e){}
     try{
-      const q=encodeURIComponent(`${alb} ${art} álbum`);
-      const r=await (await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&srlimit=6&format=json&origin=*`)).json();
+      const api="https://es.wikipedia.org/w/api.php?format=json&origin=*&";
+      const r=await (await fetch(api+`action=query&list=search&srsearch=${encodeURIComponent(`${alb} ${art} álbum`)}&srlimit=6`)).json();
       const clave=norm(alb).split(" ").slice(0,3).join(" "), banda=norm(art).split(" ").filter(p=>p.length>2&&!["los","las","the","del"].includes(p))[0]||norm(art);
       for(const h of (r.query&&r.query.search)||[]){
         if(!norm(h.title).includes(clave)) continue;
-        const s=await (await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(h.title.replace(/ /g,"_"))}`)).json();
-        const ex=(s.extract||"").replace(/\s*\([^)]*\)/g,"").replace(/\s+/g," ").trim();
-        if(!/álbum|disco|LP|EP/i.test(ex)||!norm(ex).includes(banda)) continue;
-        const frases=ex.match(/[^.!?]+[.!?]+/g)||[ex];
-        let t=""; for(const f of frases){ if((t+f).length>330&&t) break; t+=f }
-        return {texto:t.trim(),url:s.content_urls&&s.content_urls.desktop&&s.content_urls.desktop.page};
+        const q=await (await fetch(api+`action=query&prop=extracts|info&inprop=url&explaintext=1&exsectionformat=wikitext&redirects=1&titles=${encodeURIComponent(h.title)}`)).json();
+        const pg=Object.values((q.query&&q.query.pages)||{})[0]||{}, txt=pg.extract||"";
+        const intro=txt.split(/\n==/)[0];
+        if(!/álbum|disco|LP|EP/i.test(intro)||!norm(intro).includes(banda)) continue;
+        out.url=pg.fullurl||null;
+        // separa por secciones y oraciones, y se queda con las más jugosas
+        const frases=[]; let secc="intro", nIntro=0;
+        for(const linea of txt.split("\n")){
+          const t=linea.match(/^=+\s*(.+?)\s*=+$/); if(t){ secc=t[1]; continue }
+          if(SECC_FUERA.test(secc)||linea.trim().length<40) continue;
+          for(let f of linea.match(/[^.!?]+(?:[.!?]+["»”]?|$)/g)||[]){
+            f=f.replace(/\s*\[[^\]]*\]/g,"").replace(/\s+/g," ").trim();
+            if(secc==="intro"&&nIntro++===0) continue;           // la primera frase es la presentación
+            if(f.length<50||f.length>300) continue;
+            frases.push({t:f,p:puntajeFrase(f,secc)});
+          }
+        }
+        frases.sort((a,b)=>b.p-a.p);
+        const vistos=new Set();
+        for(const f of frases){ if(f.p<2||out.cands.length>=8+out.mano) break; const kk=norm(f.t).slice(0,40); if(vistos.has(kk)) continue; vistos.add(kk); out.cands.push({t:f.t,wiki:true}) }
+        // si no hubo nada jugoso, al menos la segunda frase de la introducción
+        if(out.cands.length===out.mano){ const s=(intro.match(/[^.!?]+[.!?]+/g)||[]).slice(1,3).join(" ").trim(); if(s.length>40) out.cands.push({t:s,wiki:true}) }
+        break;
       }
     }catch(e){}
-    return null;
+    return out;
   })());
   return wikiCache.get(k);
 }
@@ -2415,9 +2457,9 @@ async function placasPost(p){
     const H=1205-top;
     x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
     x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
-    etiqueta(x,"DATO",100,top+22,26,CC.rojo,CC.crema);
+    etiqueta(x,"¿SABÍAS QUE…?",100,top+22,26,CC.rojo,CC.crema);
     const max=Math.max(2,Math.floor((H-110)/(34*1.3)));
-    texto(x,p.dato,110,top+120,{f:FB,peso:"600",s:34,w:860,max,lh:1.3,min:22});
+    texto(x,p.dato,110,top+128,{f:FB,peso:"800",s:50,w:860,max,lh:1.25,min:22});
     if(p.fuente) texto(x,"Fuente: Wikipedia",990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
   }else if(temas.length>1){
     // sin dato: la lista de temas
@@ -2437,17 +2479,25 @@ function textoPost(p){
   if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver los datos. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
   return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta y un dato del disco.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
 }
-// Arma la pieza con el dato editable; al tocar "Actualizar" rehace las imágenes
+// Arma la pieza con el dato: "Otro dato" pasa al siguiente, y se puede escribir uno propio
 async function piezaPost(p,titulo,cuando){
-  const w=await wikiDato(p.r.a,p.r.t);
-  p.dato=w?w.texto:""; p.fuente=!!w;
+  const w=await wikiDatos(p.r.a,p.r.t);
+  let i=0;
+  const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=!!(c&&c.wiki) };
+  usar(0);
   const armar=async()=>{
+    const n=w.cands.length;
     const el=contPieza(titulo,cuando,await placasPost(p),p.tipo==="aniv"?"aniversario":"post",p.dia,textoPost(p),
-      `<b>Dato del disco</b> (lo podés cambiar: escribí uno propio o dejalo vacío para que no aparezca)${w&&w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">ver en Wikipedia</a>`:""}:`);
+      `<b>¿Sabías que…?</b> ${n?`Dato ${i+1} de ${n}${w.mano&&i<w.mano?" (escrito a mano)":" (de Wikipedia: revisalo antes de publicar)"}. Tocá <b>Otro dato</b> para ver el siguiente, o escribí uno propio.`:"No encontré datos de este disco: escribí uno propio o dejalo vacío (se muestra la lista de temas)."}${w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">leer en Wikipedia</a>`:""}`);
     const ta=document.createElement("textarea"); ta.value=p.dato; ta.placeholder="Ej: lo grabaron en una semana en una sala de Palermo…"; ta.style.minHeight="80px";
-    const b=document.createElement("button"); b.type="button"; b.className="btn"; b.textContent="Actualizar imagen"; b.style.alignSelf="flex-start";
-    b.onclick=async()=>{ b.disabled=true; p.dato=ta.value.trim(); if(p.dato!==(w&&w.texto)) p.fuente=false; const nuevo=await armar(); el.replaceWith(nuevo) };
-    const aviso=el.querySelector("p.aviso"); aviso.after(ta); ta.after(b);
+    const fila=document.createElement("div"); fila.className="fila-acc";
+    const otro=document.createElement("button"); otro.type="button"; otro.textContent="Otro dato"; otro.disabled=n<2;
+    const act=document.createElement("button"); act.type="button"; act.textContent="Actualizar imagen con mi texto";
+    const rehacer=async()=>{ otro.disabled=act.disabled=true; const nuevo=await armar(); el.replaceWith(nuevo) };
+    otro.onclick=()=>{ i=(i+1)%n; usar(i); rehacer() };
+    act.onclick=()=>{ const t=ta.value.trim(); if(!w.cands[i]||t!==w.cands[i].t) p.fuente=false; p.dato=t; rehacer() };
+    fila.append(otro,act);
+    const aviso=el.querySelector("p.aviso"); aviso.after(ta); ta.after(fila);
     return el;
   };
   return armar();
