@@ -2330,6 +2330,128 @@ function contPieza(titulo,cuando,cs,slug,dia,textoPie,extra){
   el.appendChild(ta); el.appendChild(fila);
   return el;
 }
+// ---- Post del día: la primera tapa del día (o un aniversario) + info del disco y un dato ----
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const fechaLarga=f=>{ const [y,m,d]=f.split("-").map(Number); return `${d} de ${MESES[m-1]} de ${y}` };
+const infoDisco=id=>(CACHE&&CACHE.porId.get(id))||{};
+// Discos que cumplen años ese día (con fecha exacta en discos.json). Primero los aniversarios redondos y el rock nacional.
+function aniversarios(dia){
+  if(!CACHE) return [];
+  const md=dia.slice(5), anio=+dia.slice(0,4), out=[];
+  for(const d of DISCOS){
+    const v=d[1]&&CACHE.disc[d[0]+"|"+d[1]];
+    if(!v||!v.fecha||v.fecha.length!==10||v.fecha.slice(5)!==md) continue;
+    const n=anio-+v.fecha.slice(0,4); if(n<1) continue;
+    out.push({r:{id:v.id,a:v.a,t:d[1],y:+v.fecha.slice(0,4),url:v.url,cat:d[3]},anios:n,fecha:v.fecha});
+  }
+  return out.sort((a,b)=>(b.anios%5===0)-(a.anios%5===0)||(b.r.cat==="nac")-(a.r.cat==="nac")||b.anios-a.anios);
+}
+// Dato del disco desde Wikipedia en español (se puede editar antes de armar la imagen)
+const wikiCache=new Map();
+function wikiDato(art,alb){
+  const k=art+"|"+alb;
+  if(!wikiCache.has(k)) wikiCache.set(k,(async()=>{
+    try{
+      const q=encodeURIComponent(`${alb} ${art} álbum`);
+      const r=await (await fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&srlimit=6&format=json&origin=*`)).json();
+      const clave=norm(alb).split(" ").slice(0,3).join(" "), banda=norm(art).split(" ").filter(p=>p.length>2&&!["los","las","the","del"].includes(p))[0]||norm(art);
+      for(const h of (r.query&&r.query.search)||[]){
+        if(!norm(h.title).includes(clave)) continue;
+        const s=await (await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(h.title.replace(/ /g,"_"))}`)).json();
+        const ex=(s.extract||"").replace(/\s*\([^)]*\)/g,"").replace(/\s+/g," ").trim();
+        if(!/álbum|disco|LP|EP/i.test(ex)||!norm(ex).includes(banda)) continue;
+        const frases=ex.match(/[^.!?]+[.!?]+/g)||[ex];
+        let t=""; for(const f of frases){ if((t+f).length>330&&t) break; t+=f }
+        return {texto:t.trim(),url:s.content_urls&&s.content_urls.desktop&&s.content_urls.desktop.page};
+      }
+    }catch(e){}
+    return null;
+  })());
+  return wikiCache.get(k);
+}
+async function placasPost(p){
+  // p: {tipo:"dia"|"aniv", dia, r, ops?, anios?, fecha?, dato, fuente}
+  const img=await contImg(p.r.url), info=infoDisco(p.r.id), temas=info.temas||[], fecha=p.fecha||(info.fecha&&info.fecha.length===10?info.fecha:"");
+  const out=[];
+  // 1) portada
+  let [c,x]=lienzo(1080,1350);
+  if(p.tipo==="aniv"){
+    const [,m,d]=p.fecha.split("-").map(Number);
+    etiqueta(x,`UN DÍA COMO HOY · ${d} DE ${MESES[m-1].toUpperCase()}`,80,70,30);
+    texto(x,`Hace ${p.anios} años`,80,240,{s:96,c:CC.rojo,w:920});
+    tapa(x,img,240,300,600,0);
+    const yt=texto(x,p.r.t,540,1010,{s:64,al:"center",w:940,max:2,lh:1.1,min:34});
+    texto(x,`${p.r.a} · ${p.r.y}`,540,yt+80,{f:FB,peso:"800",s:38,al:"center",w:940});
+    texto(x,"Deslizá para saber más →",540,1290,{f:FM,peso:"500",s:28,al:"center"});
+  }else{
+    etiqueta(x,`TAPA DEL DÍA #${numDiario(p.dia)}`,80,60,30);
+    texto(x,"¿QUÉ DISCO ES?",80,215,{s:92,w:920});
+    tapa(x,img,220,265,640,NIVELES[0]);
+    (p.ops||[]).forEach((o,i)=>{
+      const X=80+(i%2)*470, Y=950+(i>>1)*128, W=450, H=112;
+      x.fillStyle=CC.tinta; x.fillRect(X+5,Y+5,W,H); x.fillStyle=CC.crema; x.fillRect(X,Y,W,H);
+      x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(X,Y,W,H);
+      texto(x,"ABCD"[i],X+20,Y+48,{s:34,c:CC.rojo});
+      texto(x,o.a,X+68,Y+40,{f:FB,peso:"600",s:22,c:CC.sombra,w:W-84});
+      texto(x,o.t,X+68,Y+76,{f:FB,peso:"800",s:28,w:W-84,max:1,min:18});
+    });
+    texto(x,"Comentá tu respuesta · deslizá para verla →",540,1300,{f:FM,peso:"500",s:27,al:"center",w:960});
+  }
+  out.push(c);
+  // 2) el disco: datos + dato curioso
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,p.tipo==="aniv"?"EL DISCO":"LA RESPUESTA",80,60,30);
+  tapa(x,img,80,160,300,0,8);
+  texto(x,p.r.a,430,200,{f:FB,peso:"800",s:34,w:570});
+  const yb=texto(x,p.r.t,430,275,{s:58,c:CC.rojo,w:570,max:3,lh:1.08,min:30});
+  texto(x,String(p.r.y||""),430,yb+62,{f:FM,peso:"500",s:34});
+  const filas=[];
+  if(fecha) filas.push(["SALIÓ",fechaLarga(fecha)]);
+  if(temas.length) filas.push(["TEMAS",String(temas.length)]);
+  if(temas[0]) filas.push(["ABRE CON",temas[0][0]]);
+  filas.forEach(([k,v],i)=>{ const Y=540+i*62; texto(x,k,80,Y,{f:FM,peso:"500",s:24,c:CC.sombra}); texto(x,v,260,Y,{f:FB,peso:"800",s:32,w:740}) });
+  const top=560+Math.max(filas.length,1)*62;
+  if(p.dato){
+    const H=1205-top;
+    x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
+    x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
+    etiqueta(x,"DATO",100,top+22,26,CC.rojo,CC.crema);
+    const max=Math.max(2,Math.floor((H-110)/(34*1.3)));
+    texto(x,p.dato,110,top+120,{f:FB,peso:"600",s:34,w:860,max,lh:1.3,min:22});
+    if(p.fuente) texto(x,"Fuente: Wikipedia",990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
+  }else if(temas.length>1){
+    // sin dato: la lista de temas
+    const H=1205-top, lista=temas.slice(0,14), col=Math.ceil(lista.length/2), paso=Math.min(52,(H-100)/col);
+    x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
+    x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
+    etiqueta(x,"LISTA DE TEMAS",100,top+22,26,CC.rojo,CC.crema);
+    lista.forEach((t,i)=>{ const X=110+(i>=col?450:0), Y=top+118+(i%col)*paso;
+      texto(x,String(i+1),X,Y,{f:FM,peso:"500",s:22,c:CC.sombra}); texto(x,t[0],X+44,Y,{f:FB,peso:"600",s:28,w:390,min:16}) });
+    if(temas.length>lista.length) texto(x,`y ${temas.length-lista.length} más`,990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
+  }
+  marca(x,540,1238,40);
+  out.push(c);
+  return out;
+}
+function textoPost(p){
+  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver los datos. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
+  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta y un dato del disco.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
+}
+// Arma la pieza con el dato editable; al tocar "Actualizar" rehace las imágenes
+async function piezaPost(p,titulo,cuando){
+  const w=await wikiDato(p.r.a,p.r.t);
+  p.dato=w?w.texto:""; p.fuente=!!w;
+  const armar=async()=>{
+    const el=contPieza(titulo,cuando,await placasPost(p),p.tipo==="aniv"?"aniversario":"post",p.dia,textoPost(p),
+      `<b>Dato del disco</b> (lo podés cambiar: escribí uno propio o dejalo vacío para que no aparezca)${w&&w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">ver en Wikipedia</a>`:""}:`);
+    const ta=document.createElement("textarea"); ta.value=p.dato; ta.placeholder="Ej: lo grabaron en una semana en una sala de Palermo…"; ta.style.minHeight="80px";
+    const b=document.createElement("button"); b.type="button"; b.className="btn"; b.textContent="Actualizar imagen"; b.style.alignSelf="flex-start";
+    b.onclick=async()=>{ b.disabled=true; p.dato=ta.value.trim(); if(p.dato!==(w&&w.texto)) p.fuente=false; const nuevo=await armar(); el.replaceWith(nuevo) };
+    const aviso=el.querySelector("p.aviso"); aviso.after(ta); ta.after(b);
+    return el;
+  };
+  return armar();
+}
 function contIniciar(){
   if(!$("cont-dia").value) $("cont-dia").value=hoyAR();
   cabecera("Redes","📸","Día",`#${numDiario($("cont-dia").value)}`);
@@ -2343,9 +2465,25 @@ async function contArmar(){
   const poner=el=>{ if(n===CONT_N) L.insertBefore(el,estado) };
   try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
   await esperarCache();
+  // 0) Post del feed: aniversario si hay, y la primera tapa del día
+  let tHoy=null;
+  try{ tHoy=await contTapa(dia) }catch(e){ console.error(e) }
+  if(n!==CONT_N) return;
+  try{
+    const an=aniversarios(dia);
+    if(an.length){
+      const a=an[0], otros=an.slice(1,4).map(x=>`${x.r.t} de ${x.r.a} (${x.anios} años)`).join(", ");
+      const el=await piezaPost({tipo:"aniv",dia,r:a.r,anios:a.anios,fecha:a.fecha},`Un día como hoy: ${a.r.t} (post)`,`Post del ${fechaCorta(dia)} · ¡día especial!${otros?" · también cumplen: "+otros:""}`);
+      if(n!==CONT_N) return; poner(el);
+    }
+    if(tHoy){
+      const el=await piezaPost({tipo:"dia",dia,r:tHoy.r,ops:tHoy.ops},`Post del día: la primera tapa (post)`,`Post del ${fechaCorta(dia)}${an.length?" · si no subís el del aniversario":""}`);
+      if(n!==CONT_N) return; poner(el);
+    }
+  }catch(e){ console.error(e) }
   // 1) Historia: la tapa del día para adivinar
   try{
-    const t=await contTapa(dia); if(n!==CONT_N) return;
+    const t=tHoy;
     if(t){
       const c=await placaPregunta(dia,t);
       const opciones=t.ops.map((o,i)=>`${"ABCD"[i]}) ${o.t}`).join("\n");

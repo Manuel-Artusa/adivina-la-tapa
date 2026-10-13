@@ -183,6 +183,45 @@ def temas_de(ids, pais="us"):
         out[i] = temas
     return out
 
+mb_ultima = 0.0
+def musicbrainz(art, alb):
+    """Fecha de salida original del disco (AAAA-MM-DD, o AAAA si no se sabe el día). Usa MusicBrainz (1 consulta por segundo)."""
+    global mb_ultima
+    esc_ = lambda t: str(t).replace('\\', ' ').replace('"', ' ')
+    q = urllib.parse.quote(f'releasegroup:"{esc_(alb)}" AND artist:"{esc_(art)}"')
+    url = f"https://musicbrainz.org/ws/2/release-group?query={q}&fmt=json&limit=10"
+    for intento in range(4):
+        espera = 1.2 - (time.time() - mb_ultima)
+        if espera > 0:
+            time.sleep(espera)
+        mb_ultima = time.time()
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "JuegosRock/1.0 ( https://juegosrock.com.ar )", "Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                res = json.loads(r.read().decode("utf-8")).get("release-groups", [])
+            break
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
+            print(f"   MusicBrainz respondió {e}. Reintento…", flush=True)
+            time.sleep(10 * (intento + 1))
+    else:
+        return None
+    cands = []
+    for g in res:
+        nombres = [c.get("name", "") for c in g.get("artist-credit", []) if isinstance(c, dict)]
+        nombres += [c.get("artist", {}).get("name", "") for c in g.get("artist-credit", []) if isinstance(c, dict)]
+        if not any(n and mismo_artista(n, art) for n in nombres):
+            continue
+        if not titulo_coincide(alb, g.get("title", "")):
+            continue
+        f = g.get("first-release-date") or ""
+        if not re.match(r"^\d{4}", f):
+            continue
+        cands.append((0 if g.get("primary-type") == "Album" else 1, -int(g.get("score", 0)), f))
+    if not cands:
+        return None
+    cands.sort()
+    return cands[0][2]
+
 
 def main():
     todo = "--todo" in sys.argv
@@ -232,6 +271,19 @@ def main():
 
     discos.update(nuevos)
     discos = {k: discos[k] for k in claves if k in discos}   # saca lo que ya no está en el catálogo
+
+    # Fecha de salida de cada disco (para los posts de "un día como hoy"). Se busca una sola vez por disco.
+    viejos = previo.get("discos", {})
+    for k, v in discos.items():
+        if "fecha" not in v and "fecha" in viejos.get(k, {}):
+            v["fecha"] = viejos[k]["fecha"]
+    sin_fecha = [k for k, v in discos.items() if "fecha" not in v]
+    print(f"Fechas a buscar en MusicBrainz: {len(sin_fecha)}", flush=True)
+    for n, k in enumerate(sin_fecha, 1):
+        art, alb = k.split("|", 1)
+        f = musicbrainz(art, alb)
+        discos[k]["fecha"] = f or ""
+        print(f"[{n}/{len(sin_fecha)}] {art} — {alb}: {f or 'sin fecha'}", flush=True)
     faltan = [k for k in claves if k not in discos]
     salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "faltan": faltan}
     with open(SALIDA, "w", encoding="utf-8") as f:
