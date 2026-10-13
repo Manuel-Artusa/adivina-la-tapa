@@ -239,6 +239,20 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .hub b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1}
 .hub span{font-size:.88rem}
 .hub small{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--rojo)}
+.cont-fecha{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.cont-fecha input{font:inherit;padding:6px 8px;border:3px solid var(--tinta);background:var(--crema)}
+.cont-fecha .btn{font-size:1rem;padding:8px 16px}
+.cont-pieza{border:3px solid var(--tinta);background:var(--crema);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:4px 4px 0 var(--tinta)}
+.cont-pieza h3{font-family:var(--display);font-weight:400;margin:0;font-size:1.25rem}
+.cont-pieza .cuando{font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--sombra);margin:0}
+.cont-imgs{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.cont-imgs figure{margin:0;flex:0 0 auto;display:flex;flex-direction:column;gap:6px;align-items:center}
+.cont-imgs img{height:340px;width:auto;border:2px solid var(--tinta);display:block}
+.cont-imgs .acc{display:flex;gap:6px}
+.cont-imgs .acc button,.cont-pieza .fila-acc button{font:600 .85rem var(--body);padding:6px 12px;border:2px solid var(--tinta);background:var(--papel);color:var(--tinta);cursor:pointer}
+.cont-pieza textarea{font:.85rem/1.4 var(--body);width:100%;min-height:110px;border:2px solid var(--tinta);padding:8px;background:#fff;resize:vertical}
+.cont-pieza .fila-acc{display:flex;gap:8px;flex-wrap:wrap}
+#cont-lista{display:flex;flex-direction:column;gap:18px}
 .sub{display:flex;flex-direction:column;gap:14px;max-width:640px;width:100%;margin:0 auto}
 .sub h2{font-family:var(--display);font-weight:400;font-size:1.8rem;margin:0;line-height:1}
 .sub .bajada{margin:0;font-size:.92rem}
@@ -522,6 +536,13 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     <h3 class="yo-tit">Por desafío</h3>
     <div class="tabla-env"><table class="yo-tabla" id="yo-tabla"></table></div>
     <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). Se guarda en este navegador.</p>
+  </section>
+
+  <section id="v-cont" class="sub" hidden>
+    <h2>Contenido para redes</h2>
+    <p class="bajada">Imágenes listas para Instagram y TikTok, armadas con los mismos datos de los desafíos. Tocá <b>Compartir</b> para mandarlas directo a Instagram, o <b>Descargar</b>.</p>
+    <div class="cont-fecha"><label>Día <input type="date" id="cont-dia"></label><button class="btn" type="button" id="cont-armar">Armar</button></div>
+    <div id="cont-lista"></div>
   </section>
 
   <section id="v-top" class="card" hidden>
@@ -2096,15 +2117,290 @@ $("abre-sig").onclick=abrNuevo;
 // ---- Navegación ----
 
 // ---- Una dirección por juego (para Google y para compartir links directos) ----
+// ===== Contenido para redes (/contenido/): placas para Instagram y TikTok con los datos de los desafíos =====
+const CC={papel:"#f1c232",tinta:"#141210",rojo:"#d7262e",crema:"#fff6dc",sombra:"#8a6d12",ok:"#1f7a3a"};
+const FD='"Bowlby One", Impact, "Arial Black", sans-serif', FB='Archivo, "Helvetica Neue", Arial, sans-serif', FM='"JetBrains Mono", Menlo, monospace';
+const CONT_TAGS="#rocknacional #rockargentino #juegosrock #trivia #musica";
+let CONT_N=0, CONT_SUCIO=false;
+const contImgs=new Map();
+function contImg(url){
+  if(!url) return Promise.resolve(null);
+  if(!contImgs.has(url)) contImgs.set(url,new Promise(ok=>{
+    const im=new Image(); im.crossOrigin="anonymous";
+    im.onload=()=>ok(im);
+    im.onerror=()=>{ const b=new Image(); b.onload=()=>{CONT_SUCIO=true;ok(b)}; b.onerror=()=>ok(null); b.src=url };
+    im.src=url;
+  }));
+  return contImgs.get(url);
+}
+function lienzo(w,h,fondo=CC.papel){
+  const c=document.createElement("canvas"); c.width=w; c.height=h;
+  const x=c.getContext("2d"); x.fillStyle=fondo; x.fillRect(0,0,w,h);
+  x.fillStyle=fondo===CC.papel?"rgba(0,0,0,.035)":"rgba(255,255,255,.03)"; for(let y=0;y<h;y+=8) x.fillRect(0,y,w,3);
+  return [c,x];
+}
+function partir(x,t,w){
+  const out=[]; let l="";
+  for(const p of String(t).split(/\s+/)){ const k=l?l+" "+p:p; if(!l||x.measureText(k).width<=w) l=k; else { out.push(l); l=p } }
+  if(l) out.push(l); return out;
+}
+// Escribe texto en hasta "max" renglones de ancho "w"; si no entra, achica la letra. Devuelve la base del último renglón.
+function texto(x,t,X,Y,o={}){
+  const {f=FD,s=60,c=CC.tinta,al="left",w=900,lh=1.18,max=1,peso="",min=18}=o;
+  let size=s, ls;
+  for(;;){ x.font=`${peso} ${size}px ${f}`.trim(); ls=partir(x,t,w); if((ls.length<=max&&ls.every(l=>x.measureText(l).width<=w))||size<=min) break; size-=2 }
+  x.fillStyle=c; x.textAlign=al; x.textBaseline="alphabetic";
+  ls.slice(0,max).forEach((l,i)=>x.fillText(l,X,Y+i*size*lh));
+  return Y+(Math.min(ls.length,max)-1)*size*lh;
+}
+function etiqueta(x,t,X,Y,s=30,fondo=CC.tinta,color=CC.papel){
+  x.font=`500 ${s}px ${FM}`; if("letterSpacing" in x) x.letterSpacing="2px";
+  const w=x.measureText(t).width;
+  x.fillStyle=fondo; x.fillRect(X,Y,w+s*1.2,s*1.9);
+  x.fillStyle=color; x.textAlign="left"; x.textBaseline="alphabetic"; x.fillText(t,X+s*.6,Y+s*1.33);
+  if("letterSpacing" in x) x.letterSpacing="0px";
+}
+// Tapa con borde y sombra de afiche. n = bloques por lado (0 = nítida)
+function tapa(x,img,X,Y,S,n=0,borde=10){
+  x.fillStyle=CC.tinta; x.fillRect(X+borde+8,Y+borde+8,S,S); x.fillRect(X-borde,Y-borde,S+borde*2,S+borde*2);
+  if(!img){ x.fillStyle="#3a352c"; x.fillRect(X,Y,S,S); texto(x,"?",X+S/2,Y+S*.62,{s:S*.4,c:CC.papel,al:"center",w:S}); return }
+  if(n){ const sm=document.createElement("canvas"); sm.width=n; sm.height=n; const c2=sm.getContext("2d"); c2.imageSmoothingQuality="high"; c2.drawImage(img,0,0,n,n);
+    x.imageSmoothingEnabled=false; x.drawImage(sm,0,0,n,n,X,Y,S,S); x.imageSmoothingEnabled=true }
+  else { x.imageSmoothingQuality="high"; x.drawImage(img,X,Y,S,S) }
+}
+function marca(x,X,Y,s=46,al="center"){
+  x.font=`${s}px ${FD}`; const t="juegosrock.com.ar", w=x.measureText(t).width, pad=s*.45;
+  const L=al==="center"?X-w/2-pad:X;
+  x.fillStyle=CC.tinta; x.fillRect(L+8,Y+8,w+pad*2,s*1.55);
+  x.fillStyle=CC.rojo; x.fillRect(L,Y,w+pad*2,s*1.55);
+  x.fillStyle=CC.crema; x.textAlign="left"; x.fillText(t,L+pad,Y+s*1.13);
+}
+function letra(x,l,X,Y,s=64){ x.fillStyle=CC.tinta; x.fillRect(X,Y,s,s); texto(x,l,X+s/2,Y+s*.78,{s:s*.62,c:CC.papel,al:"center",w:s}) }
+const hashtag=t=>"#"+norm(t).replace(/\s+/g,"");
+
+// Ronda 1 de la Tapa del día: mismo disco y mismas opciones que ve el jugador
+async function contTapa(dia){
+  const viejoG=G, viejoR=rnd;
+  try{
+    const seed=hashStr("tapa-"+dia); rnd=semillaRng(seed);
+    const g={modo:"diario",dia,usados:new Set(),cola:mezclar(DISCOS.filter(d=>d[1])),ronda:0,seed};
+    G=g;
+    let r=null;
+    while(g.cola.length&&!r){ const d=g.cola.shift(); try{ r=await resolver(d,false,g.usados) }catch(e){} }
+    if(!r) return null;
+    g.usados.add(r.id);
+    rnd=semillaRng(seed+7919);
+    const dist=await distractores(r,g);
+    return {r,ops:mezclar([r,...dist])};
+  }finally{ G=viejoG; rnd=viejoR }
+}
+// Ordená la discografía de un día (la misma banda y el mismo orden que en el juego)
+async function contOrden(rng){
+  const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas();
+  const [banda,ds]=mezR(rng()<.75&&nac.length?nac:todas,rng)[0];
+  const porAnio=[]; mezR(ds,rng).forEach(d=>{ if(!porAnio.some(x=>x[2]===d[2])) porAnio.push(d) });
+  let items=porAnio.slice(0,5).map(d=>({d,url:null}));
+  do{ items=mezR(items,rng) }while(items.every((x,i)=>i===0||items[i-1].d[2]<x.d[2]));
+  await Promise.all(items.map(it=>resolver(it.d,false,new Set()).then(r=>{it.url=r.url;it.a=r.a}).catch(()=>{})));
+  await Promise.all(items.map(async it=>{ it.img=await contImg(it.url) }));
+  return {banda,items};
+}
+
+// ---- Placas ----
+async function placaPregunta(dia,t){
+  const [c,x]=lienzo(1080,1920), img=await contImg(t.r.url);
+  etiqueta(x,`TAPA DEL DÍA #${numDiario(dia)}`,90,200,32);
+  texto(x,"¿QUÉ DISCO ES?",90,380,{s:104,w:900});
+  tapa(x,img,200,430,680,NIVELES[0]);
+  t.ops.forEach((o,i)=>{
+    const X=90+(i%2)*465, Y=1150+(i>>1)*160, W=435, H=140;
+    x.fillStyle=CC.tinta; x.fillRect(X+6,Y+6,W,H); x.fillStyle=CC.crema; x.fillRect(X,Y,W,H);
+    x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(X,Y,W,H);
+    texto(x,"ABCD"[i],X+22,Y+56,{s:38,c:CC.rojo});
+    texto(x,o.a,X+76,Y+46,{f:FB,peso:"600",s:24,c:CC.sombra,w:W-96});
+    texto(x,o.t,X+76,Y+86,{f:FB,peso:"800",s:32,w:W-96,max:2,lh:1.1,min:20});
+  });
+  texto(x,"Las otras 9 de hoy, en",540,1520,{f:FB,peso:"600",s:34,al:"center"});
+  marca(x,540,1548,46);
+  return c;
+}
+async function placaRespuesta(dia,t){
+  const [c,x]=lienzo(1080,1920), img=await contImg(t.r.url);
+  etiqueta(x,`RESPUESTA · TAPA DEL DÍA #${numDiario(dia)}`,90,200,32);
+  texto(x,"ERA…",90,380,{s:104,w:900});
+  tapa(x,img,200,430,680,0);
+  texto(x,t.r.a,540,1205,{f:FB,peso:"800",s:44,al:"center",w:900});
+  const yb=texto(x,t.r.t,540,1295,{s:72,c:CC.rojo,al:"center",w:920,max:2,lh:1.12,min:36});
+  if(t.r.y) texto(x,String(t.r.y),540,yb+70,{f:FM,peso:"500",s:38,al:"center"});
+  texto(x,"¿La sacaste? Hoy hay otra en",540,1520,{f:FB,peso:"600",s:34,al:"center"});
+  marca(x,540,1548,46);
+  return c;
+}
+function placasOrden(o){
+  const letras="ABCDE", out=[];
+  // 1) la pregunta
+  let [c,x]=lienzo(1080,1350);
+  etiqueta(x,"ORDENÁ LA DISCOGRAFÍA",80,70,30);
+  texto(x,"Del más viejo al más nuevo",80,215,{f:FB,peso:"800",s:46,w:920});
+  texto(x,o.banda,80,320,{s:84,c:CC.rojo,w:920,max:2,lh:1.05,min:44});
+  const pos=[[80,470],[400,470],[720,470],[240,820],[560,820]], S=280;
+  o.items.forEach((it,i)=>{ const [X,Y]=pos[i]; tapa(x,it.img,X,Y,S,0,7); letra(x,letras[i],X-7,Y-7,62) });
+  texto(x,"¿Cómo los ordenás? Respuesta en la última foto →",540,1240,{f:FM,peso:"500",s:28,al:"center",w:960});
+  out.push(c);
+  // 2) la respuesta
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"RESPUESTA",80,70,30);
+  texto(x,o.banda,80,210,{s:64,w:920,min:34});
+  const orden=o.items.map((it,i)=>({...it,l:letras[i]})).sort((a,b)=>a.d[2]-b.d[2]);
+  orden.forEach((it,i)=>{
+    const Y=280+i*205;
+    texto(x,String(it.d[2]),80,Y+108,{s:60,c:CC.rojo,w:200});
+    tapa(x,it.img,300,Y+10,160,0,6);
+    letra(x,it.l,294,Y+4,48);
+    texto(x,it.d[1],500,Y+82,{f:FB,peso:"800",s:40,w:500,max:2,lh:1.12,min:24});
+  });
+  texto(x,`Orden: ${orden.map(it=>it.l).join(" · ")}`,540,1318,{f:FM,peso:"500",s:28,al:"center"});
+  out.push(c);
+  // 3) cierre
+  [c,x]=lienzo(1080,1350,CC.tinta);
+  etiqueta(x,"TODOS LOS DÍAS A LAS 00:00",80,250,30,CC.papel,CC.tinta);
+  texto(x,"7 desafíos",80,500,{s:110,c:CC.papel,w:920});
+  texto(x,"nuevos",80,630,{s:110,c:CC.rojo,w:920});
+  texto(x,"cada día",80,760,{s:110,c:CC.papel,w:920});
+  ["Gratis","Sin registrarte","Ranking con amigos"].forEach((t,i)=>{ x.fillStyle=CC.rojo; x.fillRect(80,858+i*58,20,20); texto(x,t.toUpperCase(),120,878+i*58,{f:FM,peso:"500",s:32,c:CC.papel}) });
+  marca(x,80,1080,58,"left");
+  out.push(c);
+  return out;
+}
+function placaRanking(filas){
+  const [c,x]=lienzo(1080,1920);
+  etiqueta(x,"RANKING · ÚLTIMOS 7 DÍAS",90,200,32);
+  texto(x,"LOS QUE MÁS SABEN",90,380,{s:96,w:900});
+  filas.slice(0,10).forEach((f,i)=>{
+    const Y=440+i*100;
+    if(i%2===0){ x.fillStyle="rgba(20,18,16,.07)"; x.fillRect(70,Y,940,92) }
+    texto(x,String(i+1),110,Y+66,{s:52,c:i<3?CC.rojo:CC.tinta,al:"center",w:90});
+    texto(x,f.nombre,180,Y+62,{f:FB,peso:"800",s:42,w:560,min:26});
+    texto(x,f.jugador?`#${tagDe(f.jugador)}`:"",180,Y+86,{f:FM,peso:"500",s:20,c:CC.sombra});
+    texto(x,`${f.puntos} pts`,990,Y+62,{s:40,al:"right",w:240});
+  });
+  texto(x,"¿Te animás a entrar?",540,1500,{f:FB,peso:"600",s:36,al:"center"});
+  marca(x,540,1530,46);
+  return c;
+}
+
+// ---- Pantalla ----
+function contCopiar(t,b){
+  const listo=()=>{ const o=b.textContent; b.textContent="¡Copiado!"; setTimeout(()=>b.textContent=o,1500) };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(listo,()=>{});
+  else { const a=document.createElement("textarea"); a.value=t; document.body.appendChild(a); a.select(); try{document.execCommand("copy");listo()}catch(e){} a.remove() }
+}
+function contDescargar(c,nombre){
+  try{ c.toBlob(b=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download=nombre; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000) },"image/png") }
+  catch(e){ alert("Esta imagen no se puede descargar desde acá. Mantené apretada la imagen para guardarla, o sacale captura.") }
+}
+async function contCompartir(cs,nombres){
+  try{
+    const files=await Promise.all(cs.map((c,i)=>new Promise((ok,mal)=>{ try{ c.toBlob(b=>b?ok(new File([b],nombres[i],{type:"image/png"})):mal(),"image/png") }catch(e){mal(e)} })));
+    if(navigator.canShare&&navigator.canShare({files})){ await navigator.share({files}); contar("contenido-compartir"); return }
+  }catch(e){ if(e&&e.name==="AbortError") return }
+  cs.forEach((c,i)=>contDescargar(c,nombres[i]));
+}
+function contPieza(titulo,cuando,cs,slug,dia,textoPie,extra){
+  const el=document.createElement("article"); el.className="cont-pieza";
+  el.innerHTML=`<p class="cuando">${esc(cuando)}</p><h3>${esc(titulo)}</h3><div class="cont-imgs"></div>`;
+  const nombres=cs.map((c,i)=>`juegosrock-${dia}-${slug}${cs.length>1?"-"+(i+1):""}.png`);
+  const box=el.querySelector(".cont-imgs");
+  cs.forEach((c,i)=>{
+    const fig=document.createElement("figure");
+    let vis; try{ vis=new Image(); vis.src=c.toDataURL("image/png"); vis.alt=titulo }catch(e){ vis=c; c.style.height="340px"; c.style.border="2px solid #141210" }
+    fig.appendChild(vis);
+    const acc=document.createElement("div"); acc.className="acc";
+    acc.innerHTML=`<button type="button">Compartir</button><button type="button">Descargar</button>`;
+    acc.children[0].onclick=()=>contCompartir([c],[nombres[i]]);
+    acc.children[1].onclick=()=>contDescargar(c,nombres[i]);
+    fig.appendChild(acc); box.appendChild(fig);
+  });
+  const fila=document.createElement("div"); fila.className="fila-acc";
+  if(cs.length>1){ const b=document.createElement("button"); b.type="button"; b.textContent=`Compartir las ${cs.length}`; b.onclick=()=>contCompartir(cs,nombres); fila.appendChild(b) }
+  const ta=document.createElement("textarea"); ta.value=textoPie;
+  const bc=document.createElement("button"); bc.type="button"; bc.textContent="Copiar texto"; bc.onclick=()=>contCopiar(ta.value,bc);
+  fila.appendChild(bc);
+  if(extra){ const p=document.createElement("p"); p.className="aviso"; p.style.textAlign="left"; p.style.margin="0"; p.innerHTML=extra; el.appendChild(p) }
+  el.appendChild(ta); el.appendChild(fila);
+  return el;
+}
+function contIniciar(){
+  if(!$("cont-dia").value) $("cont-dia").value=hoyAR();
+  cabecera("Redes","📸","Día",`#${numDiario($("cont-dia").value)}`);
+  $("cont-armar").onclick=contArmar;
+  if(!$("cont-lista").children.length) contArmar();
+}
+async function contArmar(){
+  const n=++CONT_N, dia=$("cont-dia").value||hoyAR(), ayer=sumarDias(dia,-1), L=$("cont-lista");
+  CONT_SUCIO=false; L.innerHTML="";
+  const estado=document.createElement("p"); estado.className="aviso"; estado.textContent="Armando las imágenes…"; L.appendChild(estado);
+  const poner=el=>{ if(n===CONT_N) L.insertBefore(el,estado) };
+  try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
+  await esperarCache();
+  // 1) Historia: la tapa del día para adivinar
+  try{
+    const t=await contTapa(dia); if(n!==CONT_N) return;
+    if(t){
+      const c=await placaPregunta(dia,t);
+      const opciones=t.ops.map((o,i)=>`${"ABCD"[i]}) ${o.t}`).join("\n");
+      poner(contPieza("¿Qué disco es? (historia)",`Subir el ${fechaCorta(dia)} · es la primera tapa de ese día`,[c],"pregunta",dia,
+        `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(dia)}. Votá en la encuesta y jugá las otras 9 en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`,
+        `<b>Encuesta:</b> en la historia agregá el sticker de Encuesta o Quiz con estas opciones (la correcta es la <b>${"ABCD"[t.ops.indexOf(t.r)]}</b>):<br>${esc(opciones).replace(/\n/g,"<br>")}`));
+    }
+  }catch(e){ console.error(e) }
+  // 2) Historia: la respuesta de ayer
+  try{
+    const t=await contTapa(ayer); if(n!==CONT_N) return;
+    if(t){
+      const c=await placaRespuesta(ayer,t);
+      poner(contPieza("Respuesta de ayer (historia)",`Subir el ${fechaCorta(dia)} · antes de la pregunta nueva`,[c],"respuesta",ayer,
+        `Era ${t.r.t} de ${t.r.a}${t.r.y?` (${t.r.y})`:""}. ¿La sacaste? 👀 Hoy hay una tapa nueva en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(t.r.a)}`));
+    }
+  }catch(e){ console.error(e) }
+  // 3) Carrusel: Ordená la discografía (la de ayer, así no se adelanta la del día)
+  try{
+    const o=await contOrden(semillaRng(hashStr("orden-"+ayer))); if(n!==CONT_N) return;
+    const cs=placasOrden(o);
+    const pieza=contPieza(`Ordená la discografía: ${o.banda} (carrusel)`,`Post · es el desafío del ${fechaCorta(ayer)}`,cs,"ordena",ayer,
+      `¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo y comentá tu orden (ej: C B A E D). La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`);
+    const otra=document.createElement("button"); otra.type="button"; otra.textContent="Otra banda";
+    otra.onclick=async()=>{ otra.disabled=true; otra.textContent="Armando…"; try{ const o2=await contOrden(Math.random); const nueva=contPieza(`Ordená la discografía: ${o2.banda} (carrusel)`,"Post · banda al azar",placasOrden(o2),"ordena-"+norm(o2.banda).replace(/\s+/g,"-"),dia,
+      `¿Te sabés la discografía de ${o2.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo y comentá tu orden (ej: C B A E D). La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o2.banda)}`);
+      nueva.querySelector(".fila-acc").appendChild(otra); pieza.replaceWith(nueva) }catch(e){} otra.disabled=false; otra.textContent="Otra banda" };
+    pieza.querySelector(".fila-acc").appendChild(otra);
+    poner(pieza);
+  }catch(e){ console.error(e) }
+  // 4) Historia: ranking de la semana
+  if(TOP_ON){
+    try{
+      const filas=await topGeneral("semana"); if(n!==CONT_N) return;
+      if(filas.length){
+        const c=placaRanking(filas);
+        poner(contPieza("Ranking de la semana (historia)","Ideal los domingos · ranking de los últimos 7 días hasta hoy",[c],"ranking",hoyAR(),
+          `🏆 Los que más sumaron esta semana en Juegos Rock. ¡Felicitaciones ${filas[0].nombre}! ¿Te animás a entrar al top? juegosrock.com.ar\n\n${CONT_TAGS}`));
+      }
+    }catch(e){ console.error(e) }
+  }
+  if(n!==CONT_N) return;
+  estado.textContent=CONT_SUCIO?"Listo. Algunas tapas no dejaron armar el archivo: si “Descargar” no anda, mantené apretada la imagen o sacale captura.":"Listo.";
+  contar("contenido-armar");
+}
+
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
   const P=SEO[v]; if(!P) return "";
   let h=`<h2>${esc(P.h)}</h2>`+(P.texto||[]).map(t=>`<p>${esc(t)}</p>`).join("");
   if(P.faq) h+=`<h3>Preguntas frecuentes</h3>`+P.faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
-  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>k!=="yo"&&SEO[k]).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
+  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>k!=="yo"&&k!=="contenido"&&SEO[k]).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
   return h;
 }
 function seoAplicar(v){
@@ -2117,7 +2413,7 @@ function seoAplicar(v){
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
 const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
-const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo",...Object.values(SUBJUEGOS)];
+const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
   if(location.protocol!=="file:"&&RUTAS[v]){
@@ -2145,6 +2441,7 @@ function irA(v,como){
   if(v==="inicio"){ $("v-hub").hidden=false; window.scrollTo(0,0); hubMarcar(); return }
   if(v==="top"){ $("v-top").hidden=false; if(G) actualizar(); cargarTop(); return }
   if(v==="yo"){ $("v-yo").hidden=false; window.scrollTo(0,0); yoPintar(); return }
+  if(v==="contenido"){ $("v-cont").hidden=false; window.scrollTo(0,0); contIniciar(); return }
   $("v-juego").hidden=false; window.scrollTo(0,0);
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";
   if(G) actualizar();
@@ -2300,7 +2597,7 @@ $("b-instalar").onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.pr
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!yaInstalada()) $("ios-ayuda").hidden=false;
 irA(vistaDeRuta(location.pathname),"inicial");
 mostrarQuien();
-if(!ls.get("tapa-nombre")) pedirNombre();
+if(!ls.get("tapa-nombre")&&vista!=="contenido") pedirNombre();
 </script>
 </body>
 </html>

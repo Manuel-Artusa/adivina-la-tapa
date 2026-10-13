@@ -51,7 +51,7 @@ function bloque(id) {
   let h = `<h2>${esc(P.h)}</h2>` + (P.texto || []).map(t => `<p>${esc(t)}</p>`).join("");
   if (P.faq) h += `<h3>Preguntas frecuentes</h3>` + P.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
   h += `<h3>Todos los juegos</h3><nav aria-label="Juegos">` +
-    Object.entries(seo).filter(([k]) => k !== "yo").map(([k, p]) => `<a href="${p.ruta}" data-ir="${k}">${k === "inicio" ? "Inicio" : esc(p.h.split(":")[0])}</a>`).join("") + `</nav>`;
+    Object.entries(seo).filter(([k]) => !seo[k].noindex).map(([k, p]) => `<a href="${p.ruta}" data-ir="${k}">${k === "inicio" ? "Inicio" : esc(p.h.split(":")[0])}</a>`).join("") + `</nav>`;
   return h;
 }
 
@@ -63,7 +63,7 @@ function jsonld(id) {
     datos.push({ "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: P.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) });
     datos.push({ "@context": "https://schema.org", "@type": "ItemList", name: "Juegos de Juegos Rock",
-      itemListElement: Object.entries(seo).filter(([k]) => !["inicio", "top", "yo"].includes(k))
+      itemListElement: Object.entries(seo).filter(([k, p]) => !["inicio", "top"].includes(k) && !p.noindex)
         .map(([k, p], i) => ({ "@type": "ListItem", position: i + 1, name: p.h, url: sitio + p.ruta })) });
   } else {
     datos.push({ "@context": "https://schema.org", "@type": "WebApplication", name: P.h, url: urlPag, description: P.descripcion,

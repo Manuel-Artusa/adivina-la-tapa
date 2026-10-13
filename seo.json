@@ -9,11 +9,26 @@
       "Aparecen bandas como Soda Stereo, Patricio Rey y sus Redonditos de Ricota, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Gustavo Cerati, Sumo, Virus, Los Fabulosos Cadillacs, La Vela Puerca, No Te Va Gustar, El Plan de la Mariposa, Sueño de Pescado y muchas más, además de clásicos internacionales."
     ],
     "faq": [
-      ["¿Juegos Rock es gratis?", "Sí. Todos los juegos son gratis y no hace falta registrarse: solo elegís un nombre para aparecer en el ranking."],
-      ["¿Cada cuánto cambian los desafíos?", "Todos los días a las 00:00, hora argentina. Los desafíos del día son iguales para todos, así podés comparar tu resultado con amigos."],
-      ["¿Qué bandas aparecen?", "Más de 100 bandas, con foco en rock nacional: Soda Stereo, los Redondos, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Cerati, La Vela Puerca, El Plan de la Mariposa y muchas más."],
-      ["¿Puedo jugar desafíos de días anteriores?", "Sí. Desde el inicio elegís un día anterior y jugás sus desafíos. Esos no suman al ranking ni a la racha."],
-      ["¿Se puede instalar como app?", "Sí. En Android aparece el botón Instalar app, y en iPhone se agrega desde Compartir y Agregar a inicio."]
+      [
+        "¿Juegos Rock es gratis?",
+        "Sí. Todos los juegos son gratis y no hace falta registrarse: solo elegís un nombre para aparecer en el ranking."
+      ],
+      [
+        "¿Cada cuánto cambian los desafíos?",
+        "Todos los días a las 00:00, hora argentina. Los desafíos del día son iguales para todos, así podés comparar tu resultado con amigos."
+      ],
+      [
+        "¿Qué bandas aparecen?",
+        "Más de 100 bandas, con foco en rock nacional: Soda Stereo, los Redondos, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Cerati, La Vela Puerca, El Plan de la Mariposa y muchas más."
+      ],
+      [
+        "¿Puedo jugar desafíos de días anteriores?",
+        "Sí. Desde el inicio elegís un día anterior y jugás sus desafíos. Esos no suman al ranking ni a la racha."
+      ],
+      [
+        "¿Se puede instalar como app?",
+        "Sí. En Android aparece el botón Instalar app, y en iPhone se agrega desde Compartir y Agregar a inicio."
+      ]
     ]
   },
   "diario": {
@@ -110,6 +125,14 @@
     "titulo": "Mis estadísticas | Juegos Rock",
     "descripcion": "Tu racha de días jugados, calendario y estadísticas de cada desafío de Juegos Rock.",
     "h": "Tus números",
+    "noindex": true,
+    "texto": []
+  },
+  "contenido": {
+    "ruta": "/contenido/",
+    "titulo": "Contenido para redes | Juegos Rock",
+    "descripcion": "Imágenes para redes sociales con los desafíos del día de Juegos Rock.",
+    "h": "Contenido para redes",
     "noindex": true,
     "texto": []
   }
