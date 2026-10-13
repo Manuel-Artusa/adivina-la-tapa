@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       todo:
-        description: "Volver a buscar TODOS los discos (tarda ~40 min). Si no, solo los nuevos."
+        description: "Volver a buscar TODOS los discos (tarda ~1 hora). Si no, solo los nuevos."
         type: boolean
         default: false
   schedule:
@@ -16,7 +16,7 @@ permissions:
 jobs:
   armar:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,4 +29,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add discos.json
-          git diff --cached --quiet && echo "Sin cambios" || (git commit -m "Actualizar discos.json" && git push)
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git commit -m "Actualizar discos.json"
+          # Mientras buscaba (tarda un rato) pueden haber subido otros cambios: los trae y reintenta
+          for i in 1 2 3; do
+            git pull --rebase -X theirs origin main && git push && exit 0
+            sleep 10
+          done
+          exit 1

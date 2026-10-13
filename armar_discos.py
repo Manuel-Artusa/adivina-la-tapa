@@ -6,12 +6,17 @@ por el límite de consultas de iTunes y el desafío del día es igual para todos
 
 Uso:
   python armar_discos.py          -> busca solo los discos nuevos (los que no están en discos.json)
-  python armar_discos.py --todo   -> vuelve a buscar todo (tarda unos 30-40 minutos)
+  python armar_discos.py --todo   -> vuelve a buscar todo (tarda unos 30-60 minutos)
+
+Busca en las tiendas de iTunes de EE.UU., Argentina, México y España, por nombre del disco
+y por discografía completa de la banda. Si igual un disco no aparece, se puede cargar a mano
+en discos_manual.json con su link de Apple Music:
+  {"Sumo|Divididos por la felicidad": "https://music.apple.com/ar/album/divididos-por-la-felicidad/123456789"}
 
 Solo usa la librería estándar de Python. Lo corre GitHub Actions (.github/workflows/discos.yml),
 pero también se puede correr a mano.
 """
-import json, re, sys, time, unicodedata, urllib.parse, urllib.request, urllib.error
+import json, os, re, sys, time, unicodedata, urllib.parse, urllib.request, urllib.error
 from datetime import datetime, timezone
 
 PAUSA = 3.2          # segundos entre consultas (iTunes permite ~20 por minuto)
@@ -75,24 +80,92 @@ def itunes(params):
     raise RuntimeError("iTunes no responde")
 
 
-def buscar_disco(art, alb):
-    q = urllib.parse.quote(f"{art} {alb}")
-    res = itunes(f"search?term={q}&entity=album&limit=50").get("results", [])
-    k = norm(alb)
-    cands = sorted(
-        (x for x in res if x.get("artworkUrl100") and x.get("collectionName")
-         and mismo_artista(x.get("artistName", ""), art)
-         and not NO_ROCK.search(norm(x.get("primaryGenreName", "")))),
-        key=lambda x: x["collectionId"])
+PAISES = ["us", "ar", "mx", "es"]   # tiendas de iTunes donde buscar (muchos discos nacionales solo están en la de Argentina)
+MANUAL = "discos_manual.json"       # discos que se cargan a mano: {"Artista|Disco": "link de Apple Music o id"}
+
+
+def titulo_coincide(cat, itunes_titulo):
+    """Compara el título del catálogo con el de iTunes, tolerando 'The', signos, 'Vol.', subtítulos, etc."""
+    art_ = r"^(the|el|la|los|las) "
+    a = re.sub(art_, "", norm(cat)); b = re.sub(art_, "", norm(limpiar_titulo(itunes_titulo)))
+    if not a or not b:
+        return False
+    if a == b or b.startswith(a) or a.startswith(b + " "):
+        return True
+    ta, tb = set(a.split()), set(b.split())
+    return len(ta & tb) / len(ta | tb) >= 0.75
+
+
+def es_rock(x):
+    return not NO_ROCK.search(norm(x.get("primaryGenreName", "")))
+
+
+def con_pais(x, pais):
+    x = dict(x); x["_pais"] = pais
+    return x
+
+
+albumes_artista = {}
+def discos_del_artista(art, pais):
+    """Todos los discos de la banda en esa tienda (buscando primero al artista). Se guarda para no repetir consultas."""
+    k = (norm(art), pais)
+    if k not in albumes_artista:
+        q = urllib.parse.quote(art)
+        arts = itunes(f"search?term={q}&entity=musicArtist&limit=10&country={pais}").get("results", [])
+        ids = [a["artistId"] for a in arts if a.get("artistId") and mismo_artista(a.get("artistName", ""), art)][:3]
+        out = []
+        for i in ids:
+            r = itunes(f"lookup?id={i}&entity=album&limit=200&country={pais}").get("results", [])
+            out += [x for x in r if x.get("wrapperType") == "collection" and x.get("artworkUrl100")]
+        albumes_artista[k] = out
+    return albumes_artista[k]
+
+
+def elegir(cands, art, alb):
+    cands = sorted((x for x in cands if x.get("collectionName") and x.get("artworkUrl100")
+                    and mismo_artista(x.get("artistName", ""), art) and es_rock(x)),
+                   key=lambda x: (FUERA.search(norm(x["collectionName"])) is not None, x["collectionId"]))
     for x in cands:
-        if norm(limpiar_titulo(x["collectionName"])).startswith(k):
+        if titulo_coincide(alb, x["collectionName"]):
             return x
     return None
 
 
-def temas_de(ids):
+def buscar_disco(art, alb):
+    q = urllib.parse.quote(f"{art} {alb}")
+    # 1) búsqueda directa "banda disco" en cada tienda
+    for pais in PAISES[:2]:
+        x = elegir(itunes(f"search?term={q}&entity=album&limit=50&country={pais}").get("results", []), art, alb)
+        if x:
+            return con_pais(x, pais)
+    # 2) toda la discografía de la banda en cada tienda
+    for pais in PAISES:
+        x = elegir(discos_del_artista(art, pais), art, alb)
+        if x:
+            return con_pais(x, pais)
+    # 3) búsqueda directa en las otras tiendas
+    for pais in PAISES[2:]:
+        x = elegir(itunes(f"search?term={q}&entity=album&limit=50&country={pais}").get("results", []), art, alb)
+        if x:
+            return con_pais(x, pais)
+    return None
+
+
+def buscar_manual(valor):
+    """Disco cargado a mano: acepta el link de Apple Music (…/album/nombre/123456789) o el número solo."""
+    m = re.search(r"(\d{6,})(?!.*\d{6,})", str(valor).split("?")[0])
+    if not m:
+        return None
+    for pais in PAISES:
+        r = [x for x in itunes(f"lookup?id={m.group(1)}&country={pais}").get("results", []) if x.get("artworkUrl100")]
+        if r:
+            return con_pais(r[0], pais)
+    return None
+
+
+def temas_de(ids, pais="us"):
     """Temas de varios discos en una sola consulta. Devuelve {id: [[tema, número, disco, preview], ...]}."""
-    r = itunes("lookup?id=" + ",".join(map(str, ids)) + "&entity=song&limit=200")
+    r = itunes("lookup?id=" + ",".join(map(str, ids)) + f"&entity=song&limit=200&country={pais}")
     por = {i: [] for i in ids}
     for x in r.get("results", []):
         if x.get("wrapperType") == "track" and x.get("trackName") and x.get("collectionId") in por:
@@ -123,28 +196,39 @@ def main():
     pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos]
     print(f"Catálogo: {len(catalogo)} discos. A buscar: {len(pendientes)}.", flush=True)
 
+    try:
+        manual = json.load(open(MANUAL, encoding="utf-8"))
+    except (OSError, ValueError):
+        manual = {}
+
     nuevos = {}
     for n, (art, alb, *_ ) in enumerate(pendientes, 1):
-        x = buscar_disco(art, alb)
-        estado = "ok" if x else "NO ESTÁ"
+        k = f"{art}|{alb}"
+        x = buscar_manual(manual[k]) if manual.get(k) else None
+        x = x or buscar_disco(art, alb)
+        estado = f"ok ({x['_pais']}) {x['collectionName']}" if x else "NO ESTÁ"
         print(f"[{n}/{len(pendientes)}] {art} — {alb}: {estado}", flush=True)
         if x:
-            nuevos[f"{art}|{alb}"] = {
+            nuevos[k] = {
                 "id": x["collectionId"], "a": x.get("artistName", art),
                 "url": x["artworkUrl100"].replace("100x100bb", "600x600bb"),
-                "temas": [],
+                "pais": x["_pais"], "temas": [],
             }
 
-    # Temas de a 5 discos por consulta; si alguno vuelve vacío, se pide solo
+    # Temas de a 5 discos por consulta (de la misma tienda); si alguno vuelve vacío, se pide solo
     items = list(nuevos.items())
-    for i in range(0, len(items), 5):
-        lote = items[i:i + 5]
-        res = temas_de([v["id"] for _, v in lote])
-        for k, v in lote:
-            v["temas"] = res.get(v["id"], [])
-            if not v["temas"]:
-                v["temas"] = temas_de([v["id"]]).get(v["id"], [])
-        print(f"Temas: {min(i + 5, len(items))}/{len(items)}", flush=True)
+    hechos = 0
+    for pais in PAISES:
+        grupo = [kv for kv in items if kv[1]["pais"] == pais]
+        for i in range(0, len(grupo), 5):
+            lote = grupo[i:i + 5]
+            res = temas_de([v["id"] for _, v in lote], pais)
+            for k, v in lote:
+                v["temas"] = res.get(v["id"], [])
+                if not v["temas"]:
+                    v["temas"] = temas_de([v["id"]], pais).get(v["id"], [])
+            hechos += len(lote)
+            print(f"Temas: {hechos}/{len(items)}", flush=True)
 
     discos.update(nuevos)
     discos = {k: discos[k] for k in claves if k in discos}   # saca lo que ya no está en el catálogo
@@ -155,6 +239,14 @@ def main():
     print(f"Listo: {len(discos)} discos guardados, {len(faltan)} no están en iTunes.")
     for k in faltan:
         print("  falta:", k)
+    # Resumen en la página de la tarea de GitHub (pestaña Summary)
+    resumen = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resumen:
+        with open(resumen, "a", encoding="utf-8") as f:
+            f.write(f"## discos.json\n\n{len(discos)} discos guardados · {len(faltan)} no encontrados\n\n")
+            if faltan:
+                f.write("Para cargar uno a mano, agregalo a `discos_manual.json` con su link de Apple Music.\n\n")
+                f.write("```\n" + "\n".join(faltan) + "\n```\n")
 
 
 if __name__ == "__main__":
