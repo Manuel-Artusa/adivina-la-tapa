@@ -3,7 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+// Dirección oficial: si alguien entra por la de Render, lo manda a la oficial y se lleva sus datos
+// (nombre, racha, estadísticas), porque el navegador los guarda por separado en cada dirección.
+(function(){
+  var OFICIAL="__SITE_URL__";
+  if(OFICIAL.indexOf("http")!==0) return;
+  try{
+    if(/\.onrender\.com$/.test(location.hostname)){
+      var datos={}, h="";
+      try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.indexOf("tapa-")===0) datos[k]=localStorage.getItem(k) } }catch(e){}
+      var txt=JSON.stringify(datos);
+      if(txt.length>2) h="#migrar="+encodeURIComponent(btoa(unescape(encodeURIComponent(txt))));
+      location.replace(OFICIAL+location.pathname+location.search+h);
+    }else if(location.hash.indexOf("#migrar=")===0){
+      var d=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(location.hash.slice(8))))));
+      for(var k2 in d){ if(k2.indexOf("tapa-")===0&&localStorage.getItem(k2)===null) localStorage.setItem(k2,d[k2]) }
+      history.replaceState(null,"",location.pathname+location.search);
+    }
+  }catch(e){}
+})();
+</script>
 <title>Juegos Rock</title>
+<link rel="canonical" href="__SITE_URL__/">
 <meta name="description" content="Juegos de rock nacional: adiviná la tapa del disco, el tema en 1 segundo, ordená la discografía y más. Un desafío nuevo cada día.">
 <meta property="og:title" content="Juegos Rock">
 <meta property="og:description" content="Juegos de rock nacional: adiviná la tapa, el tema en 1 segundo, conexiones y más. Desafío diario y ranking.">
