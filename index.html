@@ -2463,18 +2463,18 @@ async function placasPost(p){
     x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
     x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
     etiqueta(x,p.tipoDato==="resumen"?"EN POCAS PALABRAS":"¿SABÍAS QUE…?",100,top+22,26,CC.rojo,CC.crema);
-    const max=Math.max(2,Math.floor((H-110)/(34*1.3)));
+    const max=Math.max(2,Math.floor((H-110)/(34*1.3))-(p.fuente?1:0));
     texto(x,p.dato,110,top+128,{f:FB,peso:"800",s:50,w:860,max,lh:1.25,min:22});
-    if(p.fuente) texto(x,"Fuente: Wikipedia",990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
-  }else if(temas.length>1){
-    // sin dato: la lista de temas
-    const H=1205-top, lista=temas.slice(0,14), col=Math.ceil(lista.length/2), paso=Math.min(52,(H-100)/col);
-    x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
+    if(p.fuente) texto(x,`Fuente: ${p.fuente}`,990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
+  }else{
+    // sin dato: invitación a jugar en la web (la lista de temas ya va en otra foto)
+    const H=1205-top;
+    x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.rojo; x.fillRect(80,top,920,H);
     x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
-    etiqueta(x,"LISTA DE TEMAS",100,top+22,26,CC.rojo,CC.crema);
-    lista.forEach((t,i)=>{ const X=110+(i>=col?450:0), Y=top+118+(i%col)*paso;
-      texto(x,String(i+1),X,Y,{f:FM,peso:"500",s:22,c:CC.sombra}); texto(x,t[0],X+44,Y,{f:FB,peso:"600",s:28,w:390,min:16}) });
-    if(temas.length>lista.length) texto(x,`y ${temas.length-lista.length} más`,990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
+    const frase=p.tipo==="aniv"?"¿Cuántas tapas como esta sacás?":"Esta fue la primera de las 10 tapas de hoy";
+    const sub=p.tipo==="aniv"?"Jugá gratis todos los días en la web":"¿Te animás con las otras 9? Jugá gratis en la web";
+    texto(x,frase,540,top+H/2-10,{s:56,c:CC.crema,al:"center",w:820,max:3,lh:1.12,min:30});
+    texto(x,sub,540,top+H-50,{f:FB,peso:"800",s:32,c:CC.papel,al:"center",w:820});
   }
   marca(x,540,1238,40);
   out.push(c);
@@ -2492,7 +2492,7 @@ async function placasPost(p){
       texto(x,String(i+1),130,Y+86,{s:72,c:CC.rojo,al:"center",w:80});
       texto(x,t,190,Y+68,{f:FB,peso:"600",s:46,w:780,max:Math.max(2,Math.floor((H-40)/(34*1.25))),lh:1.25,min:22});
     });
-    if(p.fuente) texto(x,"Fuente: Wikipedia",1000,1200,{f:FM,peso:"500",s:20,c:CC.sombra,al:"right"});
+    if(p.fuente) texto(x,`Fuente: ${p.fuente}`,1000,1200,{f:FM,peso:"500",s:20,c:CC.sombra,al:"right"});
     marca(x,540,1238,40);
     out.push(c);
   }
@@ -2542,26 +2542,45 @@ function textoPost(p){
   if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver datos, la lista de temas y dónde está en su discografía. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
   return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta, datos del disco, la lista de temas y su lugar en la discografía.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
 }
-// Resumen armado con lo que sabemos del disco (fecha, temas), para cuando no hay ningún dato
-function resumenPropio(p){
-  const info=infoDisco(p.r.id), temas=info.temas||[], f=info.fecha&&info.fecha.length===10?info.fecha:"";
-  let t=`${p.r.t} es un disco de ${p.r.a}`+(f?` que salió el ${fechaLarga(f)}.`:p.r.y?` de ${p.r.y}.`:".");
-  if(temas.length>1) t+=` Tiene ${temas.length} temas: arranca con «${temas[0][0]}» y cierra con «${temas[temas.length-1][0]}».`;
-  const anio=+(p.dia||hoyAR()).slice(0,4); if(p.r.y&&anio-p.r.y>0) t+=` Ya tiene ${anio-p.r.y} años.`;
-  return t;
+// Resumen desde Wikidata (productor, sello, género, disco anterior y siguiente) cuando no hay datos en Wikipedia
+async function wikidataResumen(art,alb){
+  try{
+    const api="https://www.wikidata.org/w/api.php?format=json&origin=*&";
+    const r=await (await fetch(api+`action=wbsearchentities&type=item&limit=10&language=es&uselang=es&search=${encodeURIComponent(alb)}`)).json();
+    const banda=norm(art), cand=(r.search||[]).filter(x=>/album|álbum|disco/i.test(x.description||"")&&norm(x.description||"").includes(banda.replace(/^(the|los|las|la|el) /,"")));
+    if(!cand.length) return "";
+    const ents=(await (await fetch(api+`action=wbgetentities&props=claims|labels&languages=es|en&ids=${cand.slice(0,3).map(x=>x.id).join("|")}`)).json()).entities||{};
+    const e=Object.values(ents).find(e=>e.labels&&titulo(e).length&&norm(titulo(e)).startsWith(norm(alb).split(" ").slice(0,2).join(" ")))||Object.values(ents)[0];
+    if(!e||!e.claims) return "";
+    const ids=k=>(e.claims[k]||[]).map(c=>c.mainsnak&&c.mainsnak.datavalue&&c.mainsnak.datavalue.value&&c.mainsnak.datavalue.value.id).filter(Boolean);
+    const props={prod:ids("P162").slice(0,2),sello:ids("P264").slice(0,1),gen:ids("P136").slice(0,2),antes:ids("P155").slice(0,1),despues:ids("P156").slice(0,1),lugar:ids("P483").slice(0,1)};
+    const todos=[...new Set(Object.values(props).flat())]; if(!todos.length) return "";
+    const lab=(await (await fetch(api+`action=wbgetentities&props=labels&languages=es|en&ids=${todos.join("|")}`)).json()).entities||{};
+    const L=id=>{ const l=lab[id]&&lab[id].labels; return l?(l.es||l.en||{}).value||"":"" };
+    const y=lista=>{ const v=lista.map(L).filter(Boolean); return v.length>1?v.slice(0,-1).join(", ")+" y "+v[v.length-1]:v[0]||"" };
+    const fr=[];
+    if(props.prod.length&&y(props.prod)) fr.push(`Lo produjo ${y(props.prod)}.`);
+    if(props.lugar.length&&L(props.lugar[0])) fr.push(`Se grabó en ${L(props.lugar[0])}.`);
+    if(props.sello.length&&L(props.sello[0])) fr.push(`Salió por el sello ${L(props.sello[0])}.`);
+    if(props.gen.length&&y(props.gen)) fr.push(`Es un disco de ${y(props.gen).toLowerCase()}.`);
+    if(props.antes.length&&L(props.antes[0])) fr.push(`Llegó después de «${L(props.antes[0])}».`);
+    if(props.despues.length&&L(props.despues[0])) fr.push(`${props.antes.length?"Y después":"Después"} vino «${L(props.despues[0])}».`);
+    return fr.length>=2?fr.join(" "):"";
+  }catch(e){ return "" }
 }
+const titulo=e=>((e.labels.es||e.labels.en||{}).value||"");
 // Arma la pieza con el dato: "Otro dato" pasa al siguiente, y se puede escribir uno propio
 async function piezaPost(p,titulo,cuando){
   const w0=await wikiDatos(p.r.a,p.r.t), w={...w0,cands:w0.cands.slice()};
-  if(!w.cands.length) w.cands.push({t:resumenPropio(p),wiki:false,tipo:"resumen"});
+  if(!w.cands.length){ const wd=await wikidataResumen(p.r.a,p.r.t); if(wd) w.cands.push({t:wd,wiki:"Wikidata",tipo:"resumen"}) }
   let i=0;
-  const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=!!(c&&c.wiki); p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
+  const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=c&&c.wiki?(c.wiki===true?"Wikipedia":c.wiki):""; p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
     p.extras=w.cands.filter((x,k)=>k!==j&&x.tipo!=="resumen").map(x=>x.t).slice(0,3) };
   usar(0);
   const armar=async()=>{
     const n=w.cands.length;
     const el=contPieza(titulo,cuando,await placasPost(p),p.tipo==="aniv"?"aniversario":"post",p.dia,textoPost(p),
-      `<b>${p.tipoDato==="resumen"?"En pocas palabras":"¿Sabías que…?"}</b> ${p.tipoDato==="resumen"&&n===1?`No encontré datos curiosos de este disco, así que armé un resumen${w.cands[0].wiki?" con Wikipedia":" con la info del disco"}. Si sabés algo mejor, escribilo acá.`:`Dato ${i+1} de ${n}${w.mano&&i<w.mano?" (escrito a mano)":w.cands[i]&&w.cands[i].wiki?" (de Wikipedia: revisalo antes de publicar)":""}. Tocá <b>Otro dato</b> para ver el siguiente, o escribí uno propio.`}${w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">leer en Wikipedia</a>`:""}`);
+      `<b>${p.tipoDato==="resumen"?"En pocas palabras":"¿Sabías que…?"}</b> ${!n?"No encontré datos de este disco: en la foto va una invitación a jugar en la web. Si sabés algo, escribilo acá y tocá Actualizar.":p.tipoDato==="resumen"&&n===1?`No encontré datos curiosos de este disco, así que armé un resumen con ${p.fuente}. Si sabés algo mejor, escribilo acá.`:`Dato ${i+1} de ${n}${w.mano&&i<w.mano?" (escrito a mano)":w.cands[i]&&w.cands[i].wiki?" (de Wikipedia: revisalo antes de publicar)":""}. Tocá <b>Otro dato</b> para ver el siguiente, o escribí uno propio.`}${w.url?` · <a href="${esc(w.url)}" target="_blank" rel="noopener">leer en Wikipedia</a>`:""}`);
     const ta=document.createElement("textarea"); ta.value=p.dato; ta.placeholder="Ej: lo grabaron en una semana en una sala de Palermo…"; ta.style.minHeight="80px";
     const fila=document.createElement("div"); fila.className="fila-acc";
     const otro=document.createElement("button"); otro.type="button"; otro.textContent="Otro dato"; otro.disabled=n<2;
