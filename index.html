@@ -858,7 +858,7 @@ function nuevaPartida(modo){
   G={modo,genero,dia,pasado:modo==="diario"&&dia!==hoyAR(),token:{},ronda:0,puntos:0,intento:0,actual:null,log:[],malos:[],usados:new Set(),proximo:null,terminado:false,saltar:0,restaurar:null,subido:false};
   if(modo==="diario"){
     G.seed=hashStr("tapa-"+dia); rnd=semillaRng(G.seed);
-    G.cola=mezclar(DISCOS.filter(d=>d[1]));
+    G.cola=mezclar(DISCOS.filter(d=>d[1])); G.nac1=true;
     const guardado=leerDia("tapa-d",dia);
     if(guardado){G.log=guardado.log||[];G.puntos=guardado.puntos||0;G.ronda=G.log.length;G.saltar=G.log.length;G.restaurar=guardado.cur||null;G.subido=!!guardado.subido}
   }else{
@@ -869,7 +869,16 @@ function nuevaPartida(modo){
   siguiente();
 }
 
+// Desde el 15/10/2026 la primera tapa del día es siempre de rock nacional (y que esté en discos.json)
+const DESDE_NAC1="2026-10-15";
+async function primeraNacional(cola,dia){
+  if(dia<DESDE_NAC1) return;
+  await esperarCache();
+  const i=cola.findIndex(d=>d[3]==="nac"&&(!CACHE||CACHE.disc[d[0]+"|"+d[1]]));
+  if(i>0) cola.unshift(cola.splice(i,1)[0]);
+}
 async function sacarDisco(g){
+  if(g.nac1){ g.nac1=false; await primeraNacional(g.cola,g.dia) }
   while(g.cola.length){
     const d=g.cola.shift();
     try{
@@ -2185,6 +2194,7 @@ async function contTapa(dia){
     const seed=hashStr("tapa-"+dia); rnd=semillaRng(seed);
     const g={modo:"diario",dia,usados:new Set(),cola:mezclar(DISCOS.filter(d=>d[1])),ronda:0,seed};
     G=g;
+    await primeraNacional(g.cola,dia);
     let r=null;
     while(g.cola.length&&!r){ const d=g.cola.shift(); try{ r=await resolver(d,false,g.usados) }catch(e){} }
     if(!r) return null;
