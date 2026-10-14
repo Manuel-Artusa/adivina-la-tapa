@@ -19,7 +19,7 @@ alter table puntajes drop constraint if exists puntajes_puntos_check;
 alter table puntajes drop constraint if exists puntajes_modo_check;
 alter table puntajes drop constraint if exists puntajes_genero_check;
 alter table puntajes add constraint puntajes_puntos_check check (puntos between 0 and 500);
-alter table puntajes add constraint puntajes_modo_check check (modo in ('diario','normal','tema','antes','orden','abre','conexiones','impostor'));
+alter table puntajes add constraint puntajes_modo_check check (modo in ('diario','normal','tema','antes','orden','abre','conexiones','impostor','banda'));
 alter table puntajes add constraint puntajes_genero_check check (genero in ('todos','nac','int','facil','normal','dificil','diario'));
 
 -- Un solo puntaje por dispositivo, por juego y por día (el segundo intento se rechaza)
@@ -42,7 +42,7 @@ create policy "subir puntaje" on puntajes for insert with check (
   and (
        (modo = 'diario' and genero = 'todos' and puntos <= 50)
     or (modo = 'tema'   and genero = 'todos' and puntos <= 6)
-    or (modo in ('antes','orden','abre','conexiones','impostor') and genero = 'diario'
+    or (modo in ('antes','orden','abre','conexiones','impostor','banda') and genero = 'diario'
         and puntos <= 100 and puntos % 10 = 0)
   )
 );

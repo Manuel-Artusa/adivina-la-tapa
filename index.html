@@ -266,6 +266,29 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .barra .tope{position:absolute;top:0;bottom:0;left:0;background:rgba(215,38,46,.25)}
 .barra .marca{position:absolute;top:0;bottom:0;width:2px;background:var(--sombra)}
 .intentos{display:flex;flex-direction:column;gap:6px}
+.ban-tabla{display:flex;flex-direction:column;gap:5px}
+.ban-fila{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(4,minmax(0,1fr));gap:5px}
+.ban-fila>div{min-height:46px;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px 5px;border:2px solid var(--tinta);background:var(--crema);font:700 .82rem/1.15 var(--body);overflow-wrap:break-word;hyphens:auto}
+.ban-fila .ban-nom{justify-content:flex-start;text-align:left;font-weight:800}
+.ban-cab>div{min-height:0;border:0;background:transparent;font:500 .68rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--sombra)}
+.ban-fila.vacia>div{background:transparent;border-style:dashed;opacity:.45}
+.ban-fila.vacia .ban-nom{justify-content:center;font-family:var(--mono)}
+.ban-c.ok,.leyenda.ok{background:var(--ok)!important;color:var(--crema)}
+.ban-c.cerca,.leyenda.cerca{background:#e0b12e!important;color:var(--tinta)}
+.ban-c.mal{background:#3a352c!important;color:var(--crema)}
+.ban-c.nd{background:transparent;color:var(--sombra)}
+.leyenda{padding:0 5px;font-weight:700}
+.ban-fila.gano .ban-nom{background:var(--ok);color:var(--crema)}
+.ban-pista{display:flex;gap:14px;align-items:center;border:2px solid var(--tinta);background:var(--crema);padding:10px;margin-top:6px}
+.ban-pista canvas{width:96px;height:96px;border:2px solid var(--tinta);image-rendering:pixelated}
+.ban-pista b{display:block;font-family:var(--display);font-weight:400}
+.ban-pista.txt{display:block}
+.ban-fin{display:flex;gap:16px;align-items:center;text-align:left}
+.ban-fin .ban-tapa{width:110px;height:110px;border:3px solid var(--tinta);flex:0 0 auto}
+.ban-fin small{font:500 .75rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sombra)}
+.ban-fin b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.05}
+.ban-fin span{display:block;font-size:.9rem;margin-top:4px}
+.ban-fin .btn{margin-top:10px;font-size:1rem;padding:8px 16px}
 .intentos div{min-height:36px;padding:7px 10px;border:2px solid var(--tinta);background:var(--crema);font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:8px}
 .intentos div.vacio{background:transparent;border-style:dashed;border-color:var(--sombra)}
 .intentos div.salto{color:var(--sombra)}
@@ -456,6 +479,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="normal"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada con cuatro opciones"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="37.1" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="56.2" y="12.0" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="75.3" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="12.0" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="18.0" y="21.6" width="9.9" height="9.9" fill="#c9a227"/><rect x="27.6" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="37.1" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="46.7" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="21.6" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="75.3" y="21.6" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="21.6" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="37.1" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="31.1" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="84.9" y="31.1" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="31.1" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="40.7" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="37.1" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="46.7" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="40.7" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="65.8" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="40.7" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="84.9" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="94.4" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="50.2" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="50.2" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="50.2" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="50.2" width="9.9" height="9.9" fill="#1d1b18"/><rect x="94.4" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="18.0" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="27.6" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="37.1" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="59.8" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="59.8" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="59.8" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="59.8" width="9.9" height="9.9" fill="#2f5d50"/><rect x="18.0" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="27.6" y="69.3" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="37.1" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="75.3" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="18.0" y="78.9" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="37.1" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="78.9" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="78.9" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="78.9" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="27.6" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="46.7" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="88.4" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="88.4" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="88.4" width="9.9" height="9.9" fill="#b5532a"/><rect x="120" y="10" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="17.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="34" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="41.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="58" width="104" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="65.0" width="62.4" height="5" fill="var(--crema)" opacity=".8"/><rect x="120" y="82" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="89.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Libre</small><b>Adiviná la tapa</b><span>La tapa arranca pixelada y se aclara con cada error. Rock nacional e internacional.</span></button>
       <button type="button" data-ir="tema" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
+      <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Nuevo</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
       <button type="button" data-ir="abre"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa de un disco y lista de temas con el primero marcado"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="12" width="84" height="84" fill="var(--tinta)"/><rect x="16.0" y="14.0" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="38.9" y="14.0" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="61.7" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="14.0" width="11.7" height="11.7" fill="#c9a227"/><rect x="84.6" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="27.4" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="25.4" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="50.3" y="25.4" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="61.7" y="25.4" width="11.7" height="11.7" fill="#b5532a"/><rect x="73.1" y="25.4" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="25.4" width="11.7" height="11.7" fill="#1d1b18"/><rect x="16.0" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="27.4" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="38.9" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="36.9" width="11.7" height="11.7" fill="#2f5d50"/><rect x="61.7" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="73.1" y="36.9" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="16.0" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="48.3" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="61.7" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="73.1" y="48.3" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="48.3" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="59.7" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="59.7" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="59.7" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="16.0" y="71.1" width="11.7" height="11.7" fill="#b5532a"/><rect x="27.4" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="50.3" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="61.7" y="71.1" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="71.1" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="84.6" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="16.0" y="82.6" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="82.6" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="38.9" y="82.6" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="50.3" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="73.1" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="84.6" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="112" y="10" width="114" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="24" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="start">1.</text><rect x="138" y="17" width="70" height="5" fill="var(--crema)" opacity=".8"/><rect x="112" y="34" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="48" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">4.</text><rect x="138" y="41" width="62" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="58" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="72" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">7.</text><rect x="138" y="65" width="54" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="82" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="96" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">9.</text><rect x="138" y="89" width="46" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre. El del día son 5 discos.</span></button>
       <button type="button" data-ir="conexiones"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de temas con dos grupos ya armados"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="16" fill="var(--g2)" stroke="var(--tinta)" stroke-width="2"/><rect x="90" y="14" width="60" height="4" fill="var(--tinta)" opacity=".7"/><rect x="14" y="28" width="212" height="16" fill="var(--g3)" stroke="var(--tinta)" stroke-width="2"/><rect x="90" y="34" width="60" height="4" fill="var(--tinta)" opacity=".7"/><rect x="14" y="50" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="20" y="59.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="68" y="50" width="50" height="23" fill="var(--tinta)" stroke="var(--tinta)" stroke-width="2"/><rect x="74" y="59.0" width="34" height="5" fill="var(--papel)" opacity=".8"/><rect x="122" y="50" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="128" y="59.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="176" y="50" width="50" height="23" fill="var(--tinta)" stroke="var(--tinta)" stroke-width="2"/><rect x="182" y="59.0" width="34" height="5" fill="var(--papel)" opacity=".8"/><rect x="14" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="20" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="68" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="74" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="122" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="128" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="176" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="182" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · 4 × 4</small><b>Conexiones</b><span>16 temas de rock nacional. Armá los 4 discos.</span></button>
@@ -499,6 +523,23 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     <div class="fila"><button class="btn" id="antes-otra" type="button" hidden>Jugar de nuevo</button></div>
   </section>
 
+  <section id="v-banda" class="sub" hidden>
+    <button class="link volver" type="button">← Inicio</button>
+    <h2>La banda del día</h2>
+    <div class="chips modo-dia" data-juego="banda" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
+    <p class="bajada">Adiviná la banda en 6 intentos. Cada intento te dice si acertaste el país, si es banda o solista, el año en que arrancó (↑ más nueva, ↓ más vieja) y si sigue tocando. <b class="leyenda ok">verde</b> = igual, <b class="leyenda cerca">amarillo</b> = cerca.</p>
+    <p class="aviso" id="banda-estado" hidden></p>
+    <div class="ban-tabla" id="banda-tabla"></div>
+    <div id="banda-pista"></div>
+    <form class="nombre buscador" id="banda-form" autocomplete="off" hidden>
+      <input id="banda-in" placeholder="Escribí una banda" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="btn" type="submit">Probar</button>
+    </form>
+    <div class="sugerencias" id="banda-sug" role="listbox" hidden></div>
+    <div class="con-msg" id="banda-msg" aria-live="polite"></div>
+    <div class="ban-fin card" id="banda-fin" hidden></div>
+  </section>
+
   <section id="v-orden" class="sub" hidden>
     <button class="link volver" type="button">← Inicio</button>
     <h2>Ordená la discografía</h2>
@@ -532,7 +573,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
     <h3 class="yo-tit">Últimas 4 semanas</h3>
     <div class="cal" id="yo-cal" aria-label="Desafíos jugados por día"></div>
-    <div class="cal-ref"><span>Menos</span><i style="opacity:.15"></i><i style="opacity:.4"></i><i style="opacity:.7"></i><i></i><span>7 de 7</span></div>
+    <div class="cal-ref"><span>Menos</span><i style="opacity:.15"></i><i style="opacity:.4"></i><i style="opacity:.7"></i><i></i><span id="cal-max">Todos</span></div>
     <h3 class="yo-tit">Por desafío</h3>
     <div class="tabla-env"><table class="yo-tabla" id="yo-tabla"></table></div>
     <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). Se guarda en este navegador.</p>
@@ -817,7 +858,7 @@ const cacheListo=(async()=>{
     const r=await fetch("/discos.json",{cache:"no-cache"}); if(!r.ok) throw new Error(r.status);
     const j=await r.json(), porId=new Map();
     for(const v of Object.values(j.discos||{})) porId.set(v.id,v);
-    CACHE={disc:j.discos||{},faltan:new Set(j.faltan||[]),porId};
+    CACHE={disc:j.discos||{},bandas:j.bandas||null,faltan:new Set(j.faltan||[]),porId};
   }catch(e){ CACHE=null }
 })();
 const esperarCache=()=>Promise.race([cacheListo,new Promise(r=>setTimeout(r,4000))]);
@@ -1168,6 +1209,7 @@ const TOPS=[
   {id:"general",n:"General",general:true,vars:[["hoy","Hoy"],["semana","Últimos 7 días"]]},
   {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,u:"pts",d:"Tapa del día de hoy (máximo 50)."},
   {id:"tema",n:"Tema del día",modo:"tema",hoy:true,u:"pts",d:"6 puntos si lo sacás con 1 segundo, 1 punto en el último intento."},
+  {id:"banda",n:"La banda del día",modo:"banda",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 90 al segundo intento… 20 al sexto."},
   {id:"antes",n:"¿Antes o después?",modo:"antes",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por acierto."},
   {id:"orden",n:"Ordená la discografía",modo:"orden",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 60 al segundo intento, 30 al tercero."},
   {id:"abre",n:"Tema número 1",modo:"abre",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 20 puntos por disco acertado."},
@@ -1667,7 +1709,7 @@ function puntos100(j,dia=diaSel(),soloEnFecha=false){
   return x.puntos;
 }
 const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
-const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario"};
+const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario"};
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>kDia(`tapa-${j}-dia`);
 const diaHecho=j=>leerDia(`tapa-${j}-dia`);
@@ -1676,7 +1718,7 @@ const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); cont
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
 const nDia=()=>numDiario(diaSel());
 function jugadoHoy(j){ return puntos100(j)!=null }
-const DIARIOS=["diario","tema","antes","orden","abre","conexiones","impostor"];
+const DIARIOS=["diario","tema","banda","antes","orden","abre","conexiones","impostor"];
 function modoInicial(j){ if(!MODO_ELEGIDO.has(j)) MODO[j]=diaHecho(j)?"libre":"diario"; pintarChipsModo(j) }
 function pintarChipsModo(j){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>{
@@ -2040,6 +2082,140 @@ $("orden-ok").onclick=ordComprobar;
 $("orden-otra").onclick=()=>ordNuevo(Math.random);
 chipsModo("orden",ordIniciar);
 
+// ===== La banda del día: adiviná la banda en 6 intentos con pistas de país, tipo, año y actividad =====
+const BAN={modo:"diario",obj:null,intentos:[],fin:false,gano:false,racha:0,dia:null,pista:null,sugAct:-1};
+const BAN_MAX=6, BAN_PUNTOS=[100,90,80,60,40,20];
+const BAN_REGION={AR:"lat",UY:"lat",CL:"lat",PY:"lat",BO:"lat",PE:"lat",BR:"lat",EC:"lat",CO:"lat",VE:"lat",MX:"lat",CU:"lat",
+  GB:"eur",IE:"eur",FR:"eur",DE:"eur",ES:"eur",IT:"eur",SE:"eur",NO:"eur",NL:"eur",BE:"eur",PT:"eur",DK:"eur",FI:"eur",CH:"eur",AT:"eur",IS:"eur",
+  US:"nam",CA:"nam",AU:"oce",NZ:"oce",JP:"asi"};
+let paisNombre=c=>c;
+try{ const dn=new Intl.DisplayNames(["es"],{type:"region"}); paisNombre=c=>{ try{ return dn.of(c)||c }catch(e){ return c } } }catch(e){}
+const bandera=c=>c&&c.length===2?String.fromCodePoint(...[...c.toUpperCase()].map(x=>0x1F1A5+x.charCodeAt(0))):"";
+const PAIS_CORTO={GB:"Reino Unido",US:"EE.UU."};
+const PAIS_COD={AR:"ARG",UY:"URU",US:"EE.UU.",GB:"UK",AU:"AUS",CL:"CHI",MX:"MÉX",ES:"ESP",CA:"CAN",IE:"IRL",SE:"SUE",DE:"ALE",FR:"FRA",BR:"BRA",CO:"COL",IT:"ITA",NZ:"NZ",JP:"JAP",PE:"PER"};
+const banDatos=a=>CACHE&&CACHE.bandas&&CACHE.bandas[a]||null;
+// Todas las bandas del catálogo (para el buscador)
+const banLista=()=>[...new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
+// Bandas que pueden salir: con 3 discos o más en el juego y datos completos
+function banPool(){
+  const por={};
+  DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]).forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
+  return Object.entries(por).filter(([a,ds])=>ds.length>=3&&banDatos(a)&&banDatos(a).inicio&&banDatos(a).pais);
+}
+function banElegir(rng){
+  const pool=banPool(); if(!pool.length) return null;
+  const nac=pool.filter(([a,ds])=>ds[0][3]==="nac");
+  const [a,ds]=mezR(rng()<.75&&nac.length?nac:pool,rng)[0];
+  return {a,ds,datos:banDatos(a)};
+}
+// Compara un intento con la banda correcta: ok (verde), cerca (amarillo) o mal
+function banComparar(nombre){
+  const g=banDatos(nombre), o=BAN.obj.datos, c=[];
+  if(!g){ return [["nd","?"],["nd","?"],["nd","?"],["nd","?"]] }
+  const reg=x=>BAN_REGION[x]||x;
+  c.push([g.pais===o.pais?"ok":reg(g.pais)===reg(o.pais)?"cerca":"mal",`${bandera(g.pais)} ${PAIS_COD[g.pais]||g.pais}`]);
+  c.push([g.tipo===o.tipo?"ok":"mal",g.tipo==="solista"?"Solista":"Banda"]);
+  if(g.inicio&&o.inicio){ const d=o.inicio-g.inicio; c.push([d===0?"ok":Math.abs(d)<=5?"cerca":"mal",`${g.inicio}${d>0?" ↑":d<0?" ↓":""}`]) }
+  else c.push(["nd","?"]);
+  c.push([g.sigue===o.sigue?"ok":"mal",g.sigue?"Sí":"No"]);
+  return c;
+}
+const banClave=()=>kDia("tapa-banda-prog",BAN.dia);
+function banGuardar(){ if(BAN.modo==="diario") ls.set(banClave(),{intentos:BAN.intentos,fin:BAN.fin,gano:BAN.gano}) }
+async function banIniciar(){
+  modoInicial("banda");
+  $("banda-fin").hidden=true; $("banda-msg").textContent=""; $("banda-tabla").innerHTML=""; $("banda-pista").innerHTML="";
+  $("banda-form").hidden=true; $("banda-estado").textContent="Cargando…"; $("banda-estado").hidden=false;
+  await esperarCache();
+  if(!CACHE||!CACHE.bandas||!banPool().length){ $("banda-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; return }
+  $("banda-estado").hidden=true;
+  if(MODO.banda==="libre") return banNueva(Math.random,"libre");
+  banNueva(rngDia("banda"),"diario");
+}
+function banNueva(rng,modo){
+  BAN.modo=modo; BAN.dia=diaSel(); BAN.obj=banElegir(rng); BAN.rng=rng; BAN.pista=null;
+  BAN.intentos=[]; BAN.fin=false; BAN.gano=false;
+  if(modo==="diario"){ const g=ls.get(banClave())||leerDia("tapa-banda-prog"); if(g){ BAN.intentos=g.intentos||[]; BAN.fin=!!g.fin; BAN.gano=!!g.gano } }
+  // pista: una tapa y un tema de la banda, siempre los mismos para ese día
+  const ds=mezR(BAN.obj.ds,rng), d=ds[0], v=CACHE.disc[d[0]+"|"+d[1]];
+  const d2=ds.find(x=>{ const w=CACHE.disc[x[0]+"|"+x[1]]; return w&&w.temas&&w.temas.length })||d, w2=CACHE.disc[d2[0]+"|"+d2[1]];
+  const temas=(w2&&w2.temas)||[];
+  BAN.pista={url:v.url,disco:d[1],anio:d[2],tema:temas.length?temas[Math.floor(rng()*Math.min(temas.length,5))][0]:null};
+  $("banda-in").value=""; banPintar();
+  if(BAN.fin) banTerminar(true);
+}
+function banPintar(){
+  const filas=BAN.intentos.map(n=>{
+    const c=banComparar(n), ok=n===BAN.obj.a;
+    return `<div class="ban-fila${ok?" gano":""}"><div class="ban-nom">${esc(n)}</div>${c.map(([k,t])=>`<div class="ban-c ${ok?"ok":k}">${esc(t)}</div>`).join("")}</div>`;
+  });
+  for(let i=BAN.intentos.length;i<BAN_MAX;i++) filas.push(`<div class="ban-fila vacia"><div class="ban-nom">${i+1}</div><div class="ban-c"></div><div class="ban-c"></div><div class="ban-c"></div><div class="ban-c"></div></div>`);
+  $("banda-tabla").innerHTML=`<div class="ban-fila ban-cab"><div class="ban-nom">Banda</div><div class="ban-c">País</div><div class="ban-c">Tipo</div><div class="ban-c">Arrancó</div><div class="ban-c">Sigue</div></div>`+filas.join("");
+  // pistas: tapa pixelada después de 3 errores, un tema después de 5
+  const err=BAN.intentos.filter(n=>n!==BAN.obj.a).length;
+  let h="";
+  if(!BAN.fin&&err>=3) h+=`<div class="ban-pista"><canvas id="banda-cv" width="160" height="160"></canvas><div><b>Pista</b><span>Una tapa de la banda</span></div></div>`;
+  if(!BAN.fin&&err>=5&&BAN.pista.tema) h+=`<div class="ban-pista txt"><b>Última pista</b><span>Un tema: «${esc(BAN.pista.tema)}»</span></div>`;
+  if(!BAN.fin&&err<3) h+=`<p class="aviso">Con 3 errores te mostramos una tapa de la banda.</p>`;
+  $("banda-pista").innerHTML=h;
+  if($("banda-cv")) precargar(BAN.pista.url).then(im=>{ const cv=$("banda-cv"); if(!cv) return; const x=cv.getContext("2d"), sm=document.createElement("canvas"); sm.width=sm.height=12;
+    sm.getContext("2d").drawImage(im,0,0,12,12); x.imageSmoothingEnabled=false; x.drawImage(sm,0,0,12,12,0,0,160,160) }).catch(()=>{});
+  $("banda-form").hidden=BAN.fin;
+  if(BAN.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(BAN.intentos.length+(BAN.fin?0:1),BAN_MAX)}/${BAN_MAX}`,"Intento","");
+  else cabecera("Intento",`${Math.min(BAN.intentos.length+(BAN.fin?0:1),BAN_MAX)}/${BAN_MAX}`,"Racha",BAN.racha);
+}
+function banAdivinar(nombre){
+  if(BAN.fin) return;
+  const lista=banLista(), q=norm(nombre);
+  const elegido=lista.find(a=>norm(a)===q)||lista.find(a=>norm(a).startsWith(q)&&q.length>=3);
+  if(!elegido){ $("banda-msg").textContent="Elegí una banda de la lista."; return }
+  if(BAN.intentos.includes(elegido)){ $("banda-msg").textContent="Ya probaste con esa."; return }
+  $("banda-msg").textContent=""; BAN.intentos.push(elegido); $("banda-in").value=""; banSugCerrar();
+  if(elegido===BAN.obj.a){ BAN.fin=true; BAN.gano=true }
+  else if(BAN.intentos.length>=BAN_MAX) BAN.fin=true;
+  banGuardar(); banPintar();
+  if(BAN.fin) banTerminar(false);
+}
+function banTerminar(restaurado){
+  const o=BAN.obj, n=BAN.intentos.length, p=BAN.gano?BAN_PUNTOS[n-1]:0, d=o.datos;
+  const fin=$("banda-fin"); fin.hidden=false;
+  fin.innerHTML=`<img class="ban-tapa" alt="" src="${esc(chico200(BAN.pista.url))}"><div><small>${BAN.gano?(n===1?"¡De una!":`¡La sacaste en ${n}!`):"Era…"}</small><b>${esc(o.a)}</b>
+    <span>${bandera(d.pais)} ${esc(PAIS_CORTO[d.pais]||paisNombre(d.pais))} · ${d.tipo==="solista"?"Solista":"Banda"} · arrancó en ${d.inicio}${d.sigue?"":" · ya no sigue"}</span>
+    <span class="msg"></span></div>`;
+  const msg=fin.querySelector(".msg");
+  if(BAN.modo==="diario"){
+    msg.textContent=`${p} puntos.`;
+    if(!restaurado){ diaCerrar("banda",p,BAN.gano?`${p} puntos (${n}/${BAN_MAX})`:"0 puntos"); pintarChipsModo("banda"); topAuto("banda","diario",p,msg) }
+  }else{
+    if(!restaurado){ BAN.racha=BAN.gano?BAN.racha+1:0 }
+    msg.textContent=BAN.gano?`Racha: ${BAN.racha}.`:"Se cortó la racha.";
+    const b=document.createElement("button"); b.className="btn"; b.type="button"; b.textContent="Otra banda"; b.onclick=()=>banNueva(Math.random,"libre"); fin.querySelector("div").appendChild(b);
+  }
+  banPintar();
+}
+// buscador con sugerencias
+function banSugCerrar(){ $("banda-sug").hidden=true; $("banda-sug").innerHTML=""; BAN.sugAct=-1 }
+function banSugFiltrar(){
+  const q=norm($("banda-in").value), cont=$("banda-sug");
+  if(q.length<1||BAN.fin){ banSugCerrar(); return }
+  const res=banLista().filter(a=>!BAN.intentos.includes(a)&&norm(a).split(" ").some(p=>p.startsWith(q.split(" ")[0]))&&norm(a).includes(q)).slice(0,8);
+  cont.innerHTML=""; BAN.sugAct=-1;
+  if(!res.length) cont.innerHTML=`<div class="vacio">No hay bandas con "${esc($("banda-in").value)}".</div>`;
+  res.forEach(a=>{ const b=document.createElement("button"); b.type="button"; b.setAttribute("role","option"); b.textContent=a;
+    b.onmousedown=e=>e.preventDefault(); b.onclick=()=>banAdivinar(a); cont.appendChild(b) });
+  cont.hidden=false;
+}
+$("banda-in").addEventListener("input",banSugFiltrar);
+$("banda-in").addEventListener("blur",()=>setTimeout(banSugCerrar,150));
+$("banda-in").addEventListener("keydown",e=>{
+  const bs=[...$("banda-sug").querySelectorAll("button")]; if(!bs.length) return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){ e.preventDefault(); BAN.sugAct=(BAN.sugAct+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length; bs.forEach((b,i)=>b.classList.toggle("activa",i===BAN.sugAct)) }
+  else if(e.key==="Enter"&&BAN.sugAct>=0){ e.preventDefault(); bs[BAN.sugAct].click() }
+  else if(e.key==="Escape") banSugCerrar();
+});
+$("banda-form").onsubmit=e=>{ e.preventDefault(); const bs=$("banda-sug").querySelectorAll("button"); if(bs.length===1) bs[0].click(); else banAdivinar($("banda-in").value) };
+chipsModo("banda",banIniciar);
+
 // ===== 4. Tema número 1 =====
 const ABR={j:null,racha:0,modo:"libre",rng:Math.random,cand:[],ci:0,ronda:0,aciertos:0};
 const ABR_DIA=5;
@@ -2274,7 +2450,7 @@ function placasOrden(o){
   // 3) cierre
   [c,x]=lienzo(1080,1350,CC.tinta);
   etiqueta(x,"TODOS LOS DÍAS A LAS 00:00",80,250,30,CC.papel,CC.tinta);
-  texto(x,"7 desafíos",80,500,{s:110,c:CC.papel,w:920});
+  texto(x,"Desafíos",80,500,{s:110,c:CC.papel,w:920});
   texto(x,"nuevos",80,630,{s:110,c:CC.rojo,w:920});
   texto(x,"cada día",80,760,{s:110,c:CC.papel,w:920});
   ["Gratis","Sin registrarte","Ranking con amigos"].forEach((t,i)=>{ x.fillStyle=CC.rojo; x.fillRect(80,858+i*58,20,20); texto(x,t.toUpperCase(),120,878+i*58,{f:FM,peso:"500",s:32,c:CC.papel}) });
@@ -2683,7 +2859,7 @@ async function contArmar(){
 }
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
@@ -2702,7 +2878,7 @@ function seoAplicar(v){
 }
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
-const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre"};
+const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
@@ -2726,6 +2902,7 @@ function irA(v,como){
     if(v==="antes"){ modoInicial("antes"); (ANT.izq&&ANT.modo===MODO.antes)?antCab():antIniciar() }
     if(v==="orden"){ modoInicial("orden"); (ORD.items.length&&ORD.modo===MODO.orden)?ordPintar():ordIniciar() }
     if(v==="abre"){ modoInicial("abre"); (ABR.j&&ABR.modo===MODO.abre)?abrCab():abrIniciar() }
+    if(v==="banda"){ modoInicial("banda"); (BAN.obj&&BAN.modo===MODO.banda&&BAN.dia===diaSel())?banPintar():banIniciar() }
     return;
   }
   if(v==="inicio"){ $("v-hub").hidden=false; window.scrollTo(0,0); hubMarcar(); return }
@@ -2801,7 +2978,7 @@ function elegirDia(dia){
 }
 
 // ---- Resumen del día para compartir ----
-const EMOJI={diario:"🖼️",tema:"🎧",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
+const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
 function resumenTexto(){
   const dia=diaSel(); let total=0;
   const filas=DIARIOS.map(j=>{
@@ -2832,7 +3009,7 @@ function historial(){
       const k=localStorage.key(i); let m;
       if((m=k.match(/^tapa-d-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"diario");
       else if((m=k.match(/^tapa-tema-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"tema");
-      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
+      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
     }
   }catch(e){}
   return h;
@@ -2845,7 +3022,7 @@ function rachas(){
   while(h[d]){ actual++; d=sumarDias(d,-1) }
   return {actual,mejor,dias:dias.length,h};
 }
-const NOMBRES={diario:"Tapa del día",tema:"Tema del día",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
+const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
 function yoPintar(){
   const r=rachas(), hoy=hoyAR();
   $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;

@@ -2,10 +2,10 @@
   "inicio": {
     "ruta": "/",
     "titulo": "Juegos Rock · Juegos de rock nacional y desafíos diarios",
-    "descripcion": "Juegos de rock nacional gratis: adiviná la tapa del disco, el tema en 1 segundo, ordená discografías y armá conexiones. 7 desafíos nuevos cada día y ranking.",
+    "descripcion": "Juegos de rock nacional gratis: adiviná la tapa del disco, el tema en 1 segundo, la banda del día, ordená discografías y más. Desafíos nuevos cada día y ranking.",
     "h": "Juegos de rock nacional, todos los días",
     "texto": [
-      "Juegos Rock es una colección de juegos gratis para fans del rock nacional y el rock en general. Cada día hay 7 desafíos nuevos, iguales para todos: adivinar un disco por su tapa pixelada, reconocer una canción con apenas un segundo de audio, ordenar la discografía de una banda, armar grupos de temas que pertenecen al mismo disco y más.",
+      "Juegos Rock es una colección de juegos gratis para fans del rock nacional y el rock en general. Cada día hay desafíos nuevos, iguales para todos: adivinar un disco por su tapa pixelada, reconocer una canción con apenas un segundo de audio, adivinar la banda del día con pistas, ordenar la discografía de una banda, armar grupos de temas que pertenecen al mismo disco y más.",
       "Aparecen bandas como Soda Stereo, Patricio Rey y sus Redonditos de Ricota, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Gustavo Cerati, Sumo, Virus, Los Fabulosos Cadillacs, La Vela Puerca, No Te Va Gustar, El Plan de la Mariposa, Sueño de Pescado y muchas más, además de clásicos internacionales."
     ],
     "faq": [
@@ -59,6 +59,16 @@
     "texto": [
       "Suena un segundo de un tema de rock: Redondos, La Renga, Divididos, Los Piojos, La Vela Puerca, Callejeros, El Plan de la Mariposa, Sueño de Pescado y más. Si no lo sacás, cada intento desbloquea más audio: 2, 4, 7, 11 y 16 segundos.",
       "Hay un tema del día, igual para todos, y un modo libre para seguir jugando todo lo que quieras."
+    ]
+  },
+  "banda": {
+    "ruta": "/la-banda-del-dia/",
+    "titulo": "La banda del día · Adiviná la banda de rock | Juegos Rock",
+    "descripcion": "Adiviná la banda de rock del día en 6 intentos. Cada intento te dice si acertaste el país, si es banda o solista, el año en que arrancó y si sigue tocando.",
+    "h": "La banda del día: adiviná la banda en 6 intentos",
+    "texto": [
+      "Escribí el nombre de una banda y fijate las pistas: país, banda o solista, año en que arrancó y si sigue en actividad. Verde es igual, amarillo es cerca, y las flechas te dicen si la banda correcta arrancó antes o después.",
+      "Con 3 errores aparece una tapa de la banda como pista, y con 5 un tema. Hay una banda del día igual para todos y un modo libre para seguir jugando."
     ]
   },
   "antes": {
@@ -117,7 +127,7 @@
     "descripcion": "Ranking general y por juego de los desafíos diarios de Juegos Rock. Mirá quién sacó más puntos hoy y en los últimos 7 días.",
     "h": "Ranking",
     "texto": [
-      "El ranking general suma los 7 desafíos del día (hasta 700 puntos). También hay un ranking de cada desafío y uno de los últimos 7 días."
+      "El ranking general suma los desafíos del día: cada uno vale hasta 100 puntos. También hay un ranking de cada desafío y uno de los últimos 7 días."
     ]
   },
   "yo": {

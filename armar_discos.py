@@ -199,12 +199,10 @@ def temas_de(ids, pais="us"):
     return out
 
 mb_ultima = 0.0
-def musicbrainz(art, alb):
-    """Fecha de salida original del disco (AAAA-MM-DD, o AAAA si no se sabe el día). Usa MusicBrainz (1 consulta por segundo)."""
+def mb_get(ruta):
+    """Consulta a MusicBrainz (máximo 1 por segundo, con reintentos). Devuelve el JSON o None."""
     global mb_ultima
-    esc_ = lambda t: str(t).replace('\\', ' ').replace('"', ' ')
-    q = urllib.parse.quote(f'releasegroup:"{esc_(alb)}" AND artist:"{esc_(art)}"')
-    url = f"https://musicbrainz.org/ws/2/release-group?query={q}&fmt=json&limit=10"
+    url = "https://musicbrainz.org/ws/2/" + ruta
     for intento in range(4):
         espera = 1.2 - (time.time() - mb_ultima)
         if espera > 0:
@@ -213,29 +211,61 @@ def musicbrainz(art, alb):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "JuegosRock/1.0 ( https://juegosrock.com.ar )", "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=30) as r:
-                res = json.loads(r.read().decode("utf-8")).get("release-groups", [])
-            break
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
             print(f"   MusicBrainz respondió {e}. Reintento…", flush=True)
             time.sleep(10 * (intento + 1))
-    else:
-        return None
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
+            print(f"   MusicBrainz respondió {e}. Reintento…", flush=True)
+            time.sleep(10 * (intento + 1))
+    return None
+
+
+def musicbrainz(art, alb):
+    """Fecha de salida original del disco (AAAA-MM-DD, o AAAA si no se sabe el día) y el id del artista en MusicBrainz."""
+    esc_ = lambda t: str(t).replace('\\', ' ').replace('"', ' ')
+    q = urllib.parse.quote(f'releasegroup:"{esc_(alb)}" AND artist:"{esc_(art)}"')
+    res = (mb_get(f"release-group?query={q}&fmt=json&limit=10") or {}).get("release-groups", [])
     cands = []
     for g in res:
-        nombres = [c.get("name", "") for c in g.get("artist-credit", []) if isinstance(c, dict)]
-        nombres += [c.get("artist", {}).get("name", "") for c in g.get("artist-credit", []) if isinstance(c, dict)]
-        if not any(n and mismo_artista(n, art) for n in nombres):
+        creditos = [c for c in g.get("artist-credit", []) if isinstance(c, dict)]
+        mbid = next((c.get("artist", {}).get("id") for c in creditos
+                     if mismo_artista(c.get("name", ""), art) or mismo_artista(c.get("artist", {}).get("name", ""), art)), None)
+        if not mbid:
             continue
         if not titulo_coincide(alb, g.get("title", "")):
             continue
         f = g.get("first-release-date") or ""
         if not re.match(r"^\d{4}", f):
             continue
-        cands.append((0 if g.get("primary-type") == "Album" else 1, -int(g.get("score", 0)), f))
+        cands.append((0 if g.get("primary-type") == "Album" else 1, -int(g.get("score", 0)), f, mbid))
     if not cands:
-        return None
+        return None, None
     cands.sort()
-    return cands[0][2]
+    return cands[0][2], cands[0][3]
+
+
+def mb_banda(mbid):
+    """Datos de la banda para el juego La banda del día: país, banda o solista, año en que arrancó y si sigue."""
+    a = mb_get(f"artist/{mbid}?fmt=json")
+    if not a:
+        return None
+    vida = a.get("life-span") or {}
+    inicio = (vida.get("begin") or "")[:4]
+    pais = a.get("country") or ""
+    if not pais:
+        area = a.get("area") or {}
+        codigos = area.get("iso-3166-1-codes") or []
+        pais = codigos[0] if codigos else ""
+    return {
+        "mbid": mbid,
+        "pais": pais,
+        "tipo": "solista" if a.get("type") == "Person" else "banda",
+        "inicio": int(inicio) if inicio.isdigit() else None,
+        "sigue": not vida.get("ended", False),
+    }
 
 
 def main():
@@ -290,17 +320,37 @@ def main():
     # Fecha de salida de cada disco (para los posts de "un día como hoy"). Se busca una sola vez por disco.
     viejos = previo.get("discos", {})
     for k, v in discos.items():
-        if "fecha" not in v and "fecha" in viejos.get(k, {}):
-            v["fecha"] = viejos[k]["fecha"]
-    sin_fecha = [k for k, v in discos.items() if "fecha" not in v]
+        for campo in ("fecha", "mbid"):
+            if campo not in v and campo in viejos.get(k, {}):
+                v[campo] = viejos[k][campo]
+    sin_fecha = [k for k, v in discos.items() if "fecha" not in v or "mbid" not in v]
     print(f"Fechas a buscar en MusicBrainz: {len(sin_fecha)}", flush=True)
     for n, k in enumerate(sin_fecha, 1):
         art, alb = k.split("|", 1)
-        f = musicbrainz(art, alb)
-        discos[k]["fecha"] = f or ""
+        f, mbid = musicbrainz(art, alb)
+        if f or "fecha" not in discos[k]:
+            discos[k]["fecha"] = f or discos[k].get("fecha", "")
+        discos[k]["mbid"] = mbid or ""
         print(f"[{n}/{len(sin_fecha)}] {art} — {alb}: {f or 'sin fecha'}", flush=True)
+
+    # Datos de cada banda (para La banda del día). El artista sale de sus discos en MusicBrainz.
+    bandas_previas = {} if todo else previo.get("bandas", {})
+    bandas = {}
+    por_banda = {}
+    for k, v in discos.items():
+        if v.get("mbid"):
+            por_banda.setdefault(k.split("|", 1)[0], []).append(v["mbid"])
+    print(f"Bandas a revisar: {len(por_banda)}", flush=True)
+    for art, ids in sorted(por_banda.items()):
+        mbid = max(set(ids), key=ids.count)
+        b = bandas_previas.get(art)
+        if not b or b.get("mbid") != mbid:
+            b = mb_banda(mbid)
+            print(f"   {art}: {b}", flush=True)
+        if b:
+            bandas[art] = b
     faltan = [k for k in claves if k not in discos]
-    salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "faltan": faltan}
+    salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "bandas": bandas, "faltan": faltan}
     with open(SALIDA, "w", encoding="utf-8") as f:
         json.dump(salida, f, ensure_ascii=False, separators=(",", ":"))
     print(f"Listo: {len(discos)} discos guardados, {len(faltan)} no están en iTunes.")
