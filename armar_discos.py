@@ -247,6 +247,25 @@ def musicbrainz(art, alb):
     return cands[0][2], cands[0][3]
 
 
+def mb_discografia(mbid):
+    """Discos de estudio de la banda en orden: [[título, año, id], ...]. Sin en vivo, compilados, EPs ni bandas sonoras."""
+    out, offset = [], 0
+    while True:
+        r = mb_get(f"release-group?artist={mbid}&type=album&fmt=json&limit=100&offset={offset}")
+        if not r:
+            break
+        for g in r.get("release-groups", []):
+            anio = (g.get("first-release-date") or "")[:4]
+            if g.get("primary-type") != "Album" or g.get("secondary-types") or not anio.isdigit():
+                continue
+            out.append([g.get("title", ""), int(anio), g.get("id", "")])
+        offset += 100
+        if offset >= r.get("release-group-count", 0):
+            break
+    out.sort(key=lambda x: (x[1], x[0]))
+    return out
+
+
 def mb_banda(mbid):
     """Datos de la banda para el juego La banda del día: país, banda o solista, año en que arrancó y si sigue."""
     a = mb_get(f"artist/{mbid}?fmt=json")
@@ -265,6 +284,7 @@ def mb_banda(mbid):
         "tipo": "solista" if a.get("type") == "Person" else "banda",
         "inicio": int(inicio) if inicio.isdigit() else None,
         "sigue": not vida.get("ended", False),
+        "discografia": mb_discografia(mbid),
     }
 
 
@@ -344,7 +364,7 @@ def main():
     for art, ids in sorted(por_banda.items()):
         mbid = max(set(ids), key=ids.count)
         b = bandas_previas.get(art)
-        if not b or b.get("mbid") != mbid:
+        if not b or b.get("mbid") != mbid or "discografia" not in b:
             b = mb_banda(mbid)
             print(f"   {art}: {b}", flush=True)
         if b:

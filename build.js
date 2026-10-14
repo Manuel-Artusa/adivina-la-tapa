@@ -60,6 +60,8 @@ function jsonld(id) {
   const P = seo[id], urlPag = sitio + P.ruta, datos = [];
   if (id === "inicio") {
     datos.push({ "@context": "https://schema.org", "@type": "WebSite", name: "Juegos Rock", url: sitio + "/", inLanguage: "es-AR", description: P.descripcion });
+    datos.push({ "@context": "https://schema.org", "@type": "Organization", name: "Juegos Rock", url: sitio + "/", logo: sitio + "/favicon-192.png",
+      sameAs: ["https://www.instagram.com/juegosrock", "https://www.tiktok.com/@juegosrock"] });
     datos.push({ "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: P.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) });
     datos.push({ "@context": "https://schema.org", "@type": "ItemList", name: "Juegos de Juegos Rock",
@@ -105,7 +107,7 @@ const urls = Object.values(seo).filter(p => !p.noindex).map(p =>
 fs.writeFileSync("public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
 fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sitio}/sitemap.xml\n`);
 
-for (const f of ["og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json"]) {
+for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json"]) {
   if (fs.existsSync(f)) fs.copyFileSync(f, "public/" + f);
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }

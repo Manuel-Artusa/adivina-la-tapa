@@ -40,7 +40,9 @@
 <meta name="twitter:description" content="Adiviná la tapa, el tema en 1 segundo, conexiones y más. Desafíos del día y ranking.">
 <meta name="twitter:image" content="__SITE_URL__/og.png">
 <meta name="theme-color" content="#f1c232">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141210'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23403a33' stroke-width='1.5'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23d7262e'/%3E%3Ccircle cx='32' cy='32' r='2.5' fill='%23f1c232'/%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <!--JSONLD-->
@@ -2315,7 +2317,8 @@ function contImg(url){
   if(!contImgs.has(url)) contImgs.set(url,new Promise(ok=>{
     const im=new Image(); im.crossOrigin="anonymous";
     im.onload=()=>ok(im);
-    im.onerror=()=>{ const b=new Image(); b.onload=()=>{CONT_SUCIO=true;ok(b)}; b.onerror=()=>ok(null); b.src=url };
+    im.onerror=()=>{ if(/coverartarchive/.test(url)) return ok(null); // si no deja usarla, va sin tapa (no ensucia la imagen)
+      const b=new Image(); b.onload=()=>{CONT_SUCIO=true;ok(b)}; b.onerror=()=>ok(null); b.src=url };
     im.src=url;
   }));
   return contImgs.get(url);
@@ -2364,6 +2367,8 @@ function marca(x,X,Y,s=46,al="center"){
 }
 function letra(x,l,X,Y,s=64){ x.fillStyle=CC.tinta; x.fillRect(X,Y,s,s); texto(x,l,X+s/2,Y+s*.78,{s:s*.62,c:CC.papel,al:"center",w:s}) }
 const hashtag=t=>"#"+norm(t).replace(/\s+/g,"");
+// Compara títulos de discos sin importar mayúsculas, acentos, "(Remastered)" o "The"
+const titulo_igual=(a,b)=>{ const f=t=>norm(limpiarTitulo(String(t))).replace(/^(the|el|la|los|las) /,""); const x=f(a), y=f(b); return !!x&&!!y&&(x===y||x.startsWith(y+" ")||y.startsWith(x+" ")) };
 
 // Ronda 1 de la Tapa del día: mismo disco y mismas opciones que ve el jugador
 async function contTapa(dia){
@@ -2702,23 +2707,35 @@ async function placasPost(p){
     marca(x,540,1238,40);
     out.push(c);
   }
-  // 5) dónde está en la discografía (los discos de la banda que hay en el juego)
+  // 5) dónde está en la discografía: todos los discos de estudio de la banda, en orden, con este resaltado
   const art=p.art||((DISCOS.find(d=>d[1]===p.r.t&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]&&CACHE.disc[d[0]+"|"+d[1]].id===p.r.id)||DISCOS.find(d=>d[1]===p.r.t)||[])[0]);
-  let disco=art?DISCOS.filter(d=>d[0]===art&&d[1]&&d[2]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]).sort((a,b)=>a[2]-b[2]):[];
-  if(disco.length>=3){
-    let k=disco.findIndex(d=>d[1]===p.r.t);
-    if(disco.length>7){ const desde=Math.max(0,Math.min(disco.length-7,k-3)); disco=disco.slice(desde,desde+7); k=disco.findIndex(d=>d[1]===p.r.t) }
-    const imgs=await Promise.all(disco.map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url)));
+  const delJuego=art?DISCOS.filter(d=>d[0]===art&&d[1]&&d[2]):[];
+  const tapaDelJuego=t=>{ const d=delJuego.find(d=>titulo_igual(d[1],t)), v=d&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]; return v?v.url:null };
+  const bd=art&&CACHE&&CACHE.bandas&&CACHE.bandas[art];
+  let lista;
+  if(bd&&bd.discografia&&bd.discografia.length>=2){
+    lista=bd.discografia.map(([t,y,id])=>({t,y,url:tapaDelJuego(t)||(id?`https://coverartarchive.org/release-group/${id}/front-250`:null)}));
+    if(!lista.some(x=>titulo_igual(x.t,p.r.t))) lista.push({t:p.r.t,y:p.r.y,url:p.r.url});
+  }else{
+    lista=delJuego.map(d=>({t:d[1],y:d[2],url:tapaDelJuego(d[1])}));
+  }
+  lista.sort((a,b)=>a.y-b.y||a.t.localeCompare(b.t));
+  if(lista.length>=2){
+    const k=lista.findIndex(x=>titulo_igual(x.t,p.r.t));
+    const imgs=await Promise.all(lista.map(x=>contImg(x.url)));
     [c,x]=lienzo(1080,1350);
     etiqueta(x,"EN SU DISCOGRAFÍA",80,60,30);
     texto(x,art,80,200,{s:64,w:920,min:34});
-    const paso=Math.min(170,(1130-260)/disco.length), y0=250+Math.max(0,((1130-250)-disco.length*paso)/2);
-    disco.forEach((d,i)=>{
-      const Y=y0+i*paso, yo=i===k, S=paso-22;
-      if(yo){ x.fillStyle=CC.rojo; x.fillRect(60,Y-8,960,S+16) }
-      texto(x,String(d[2]),80,Y+S*.68,{s:44,c:yo?CC.crema:CC.rojo,w:170});
-      tapa(x,imgs[i],270,Y,S,0,4);
-      texto(x,d[1],270+S+36,Y+S*.64,{f:FB,peso:"800",s:36,w:960-(270+S+36)+40,min:18,c:yo?CC.crema:CC.tinta});
+    const cols=lista.length>8?2:1, filas=Math.ceil(lista.length/cols), alto=1130-250;
+    const paso=Math.min(cols===1?150:120,alto/filas), y0=250+Math.max(0,(alto-filas*paso)/2), anchoCol=cols===1?960:470;
+    lista.forEach((d,i)=>{
+      const col=Math.floor(i/filas), fila=i%filas, X=60+col*(anchoCol+20), Y=y0+fila*paso, yo=i===k, S=Math.max(30,paso-18);
+      if(yo){ x.fillStyle=CC.rojo; x.fillRect(X,Y-6,anchoCol,S+12) }
+      const sAnio=cols===1?44:Math.min(30,S*.5);
+      texto(x,String(d.y),X+16,Y+S*.5+sAnio*.36,{s:sAnio,c:yo?CC.crema:CC.rojo,w:cols===1?170:110});
+      const xT=X+(cols===1?200:124);
+      tapa(x,imgs[i],xT,Y,S,0,3);
+      texto(x,d.t,xT+S+18,Y+S*.5+(cols===1?12:9),{f:FB,peso:"800",s:cols===1?34:24,w:X+anchoCol-(xT+S+18)-10,min:14,max:cols===1?1:2,lh:1.05,c:yo?CC.crema:CC.tinta});
     });
     texto(x,"¿Te sabés el orden? Jugá Ordená la discografía en",540,1190,{f:FB,peso:"600",s:28,al:"center",w:960});
     marca(x,540,1218,40);
