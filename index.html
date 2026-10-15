@@ -306,6 +306,11 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .arm-stats small,.arm-nota{font-size:.72rem;opacity:.75}
 .mar-editor{display:flex;flex-direction:column;gap:10px;margin:12px 0}
 #marcar-cv{width:100%;max-width:440px;aspect-ratio:1;border:3px solid var(--tinta);touch-action:none;margin:0 auto;display:block;cursor:crosshair}
+.mar-chk{display:flex;gap:8px;align-items:center;font:600 .9rem var(--body)}
+.mar-chk input{width:20px;height:20px;accent-color:var(--rojo)}
+.mar-prev{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mar-prev div{display:flex;flex-direction:column;gap:4px;font-size:.75rem}
+.mar-prev canvas{width:100%;aspect-ratio:1;border:2px solid var(--tinta);background:repeating-conic-gradient(#ccc 0 25%,#fff 0 50%) 0 0/16px 16px;object-fit:contain}
 .mar-buscar{width:100%;font:600 1rem var(--body);padding:10px;border:3px solid var(--tinta);margin:12px 0}
 .gri-tabla{display:grid;grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr));gap:6px}
 .gri-cab{display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:4px;font:800 .78rem/1.15 var(--body);min-height:58px}
@@ -625,6 +630,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <b id="marcar-tit"></b>
       <canvas id="marcar-cv"></canvas>
       <label class="arm-tam"><span>Nombre del elemento</span><input type="text" id="marcar-nombre" placeholder="la banana" maxlength="40"></label>
+      <label class="mar-chk"><input type="checkbox" id="marcar-fondo" checked> Sacar el fondo (que la pieza sea solo el elemento)</label>
+      <div class="mar-prev"><div><small>Así queda la pieza</small><canvas id="marcar-prev-p"></canvas></div><div><small>Así queda la tapa</small><canvas id="marcar-prev-f"></canvas></div></div>
       <div class="fila"><button class="btn" type="button" id="marcar-guardar">Guardar</button><button class="btn sec" type="button" id="marcar-borrar">Borrar trazo</button><button class="btn sec" type="button" id="marcar-quitar">Quitar marca</button></div>
     </div>
     <input type="search" id="marcar-buscar" placeholder="Buscar banda o disco" class="mar-buscar">
@@ -2546,11 +2553,76 @@ function armPiezaCanvas(img,poly,W){
   const c=armCaja(poly), pw=Math.max(1,Math.round(c.w*W)), ph=Math.max(1,Math.round(c.h*W)), cv=document.createElement("canvas"); cv.width=pw; cv.height=ph;
   const x=cv.getContext("2d"); armTrazo(x,poly,W,c.x*W,c.y*W); x.clip(); x.drawImage(img,-c.x*W,-c.y*W,W,W); return cv;
 }
+// Agrupa colores (k-medias simple) para saber cuáles son "fondo"
+function armGrupos(m,k){
+  if(m.length<10) return [];
+  const paso=Math.max(1,Math.floor(m.length/3000)), s=m.filter((_,i)=>i%paso===0);
+  let c=Array.from({length:k},(_,i)=>s[Math.floor(i*s.length/k)].slice()), cuenta=[];
+  for(let it=0;it<10;it++){
+    const acc=c.map(()=>[0,0,0,0]);
+    for(const p of s){ let b=0,bd=1e9; c.forEach((q,j)=>{ const d=(p[0]-q[0])**2+(p[1]-q[1])**2+(p[2]-q[2])**2; if(d<bd){bd=d;b=j} }); const a=acc[b]; a[0]+=p[0];a[1]+=p[1];a[2]+=p[2];a[3]++ }
+    c=acc.map((a,j)=>a[3]?[a[0]/a[3],a[1]/a[3],a[2]/a[3]]:c[j]); cuenta=acc.map(a=>a[3]);
+  }
+  return c.filter((_,j)=>cuenta[j]>=s.length*.025);
+}
+// Prepara la tapa: separa el elemento de su fondo y rellena solo donde estaba (la tapa queda nítida)
+function armPreparar(img,cors,p){
+  const N=Math.min(1000,img.naturalWidth||600);
+  const cv=document.createElement("canvas"); cv.width=cv.height=N; const x=cv.getContext("2d",{willReadFrequently:true}); x.imageSmoothingQuality="high"; x.drawImage(img,0,0,N,N);
+  const cj=armCaja(p.poly), m=Math.ceil(N*.015);
+  const bx=Math.max(0,Math.floor(cj.x*N)-m), by=Math.max(0,Math.floor(cj.y*N)-m), bw=Math.min(N,Math.ceil((cj.x+cj.w)*N)+m)-bx, bh=Math.min(N,Math.ceil((cj.y+cj.h)*N)+m)-by;
+  let datos=null; if(cors){ try{ datos=x.getImageData(bx,by,bw,bh) }catch(e){} }
+  if(!datos||bw<3||bh<3) return {fondo:armSinPieza(img,false,p.poly,N),pieza:armPiezaCanvas(img,p.poly,N),caja:cj,simple:true};
+  const mk=document.createElement("canvas"); mk.width=bw; mk.height=bh; const mx=mk.getContext("2d",{willReadFrequently:true});
+  armTrazo(mx,p.poly,N,bx,by); mx.fill(); const dentro=mx.getImageData(0,0,bw,bh).data;
+  mx.clearRect(0,0,bw,bh); mx.lineWidth=Math.max(3,N/110); armTrazo(mx,p.poly,N,bx,by); mx.stroke(); const anillo=mx.getImageData(0,0,bw,bh).data;
+  const d=datos.data, n=bw*bh, muestras=[];
+  for(let i=0;i<n;i++) if(anillo[i*4+3]>128) muestras.push([d[i*4],d[i*4+1],d[i*4+2]]);
+  // los colores del borde del contorno son el fondo; lo que se distingue de ellos es el elemento
+  const centros=p.fondo===false?[]:armGrupos(muestras,7), a=new Float32Array(n);
+  let suma=0,cuenta=0;
+  for(let i=0;i<n;i++){ if(dentro[i*4+3]<128) continue; cuenta++;
+    let dm=1e9; for(const c of centros){ const dr=d[i*4]-c[0],dg=d[i*4+1]-c[1],db=d[i*4+2]-c[2]; const v=dr*dr+dg*dg+db*db; if(v<dm) dm=v }
+    const v=centros.length?Math.min(1,Math.max(0,(Math.sqrt(dm)-30)/40)):1; a[i]=v; suma+=v }
+  if(!centros.length||suma<cuenta*.04) for(let i=0;i<n;i++) a[i]=dentro[i*4+3]>=128?1:0;
+  // sacar puntitos sueltos (ruido de la imagen)
+  const a2=a.slice();
+  for(let yy=1;yy<bh-1;yy++) for(let xx=1;xx<bw-1;xx++){ const i=yy*bw+xx; if(a[i]<.5) continue; let v=0; for(const o of [-1,1,-bw,bw,-bw-1,-bw+1,bw-1,bw+1]) if(a[i+o]>.5) v++; if(v<2) a2[i]=0 }
+  a.set(a2);
+  // hueco a rellenar: el elemento un poquito agrandado
+  let f=new Uint8Array(n); for(let i=0;i<n;i++) f[i]=a[i]>.12?1:0;
+  for(let k=0,R=Math.max(1,Math.round(N/300));k<R;k++){ const g=f.slice();
+    for(let yy=0;yy<bh;yy++) for(let xx=0;xx<bw;xx++){ const i=yy*bw+xx; if(f[i]) continue; if((xx>0&&f[i-1])||(xx<bw-1&&f[i+1])||(yy>0&&f[i-bw])||(yy<bh-1&&f[i+bw])) g[i]=1 }
+    f=g }
+  for(let xx=0;xx<bw;xx++){ f[xx]=0; f[(bh-1)*bw+xx]=0 } for(let yy=0;yy<bh;yy++){ f[yy*bw]=0; f[yy*bw+bw-1]=0 }
+  const rel=new Uint8ClampedArray(d), falta=f.slice(); let pend=[]; for(let i=0;i<n;i++) if(f[i]) pend.push(i);
+  const veci=[-1,1,-bw,bw,-bw-1,-bw+1,bw-1,bw+1];
+  while(pend.length){ const nuevos=[],resto=[];
+    for(const i of pend){ let r=0,g=0,b=0,c=0; for(const o of veci){ const j=i+o; if(j<0||j>=n||falta[j]) continue; r+=rel[j*4];g+=rel[j*4+1];b+=rel[j*4+2];c++ } if(c) nuevos.push([i,r/c,g/c,b/c]); else resto.push(i) }
+    if(!nuevos.length) break;
+    for(const [i,r,g,b] of nuevos){ rel[i*4]=r;rel[i*4+1]=g;rel[i*4+2]=b;rel[i*4+3]=255;falta[i]=0 }
+    pend=resto }
+  const parche=document.createElement("canvas"); parche.width=bw; parche.height=bh; parche.getContext("2d").putImageData(new ImageData(rel,bw,bh),0,0);
+  // suavizar solo lo rellenado, para que no queden rayas
+  const fm=document.createElement("canvas"); fm.width=bw; fm.height=bh; const fmx=fm.getContext("2d"), fd=fmx.createImageData(bw,bh);
+  for(let i=0;i<n;i++) fd.data[i*4+3]=f[i]?255:0; fmx.putImageData(fd,0,0);
+  const sv=document.createElement("canvas"); sv.width=bw; sv.height=bh; const svx=sv.getContext("2d");
+  svx.filter=`blur(${Math.max(1,N/350)}px)`; svx.drawImage(parche,0,0); svx.filter="none"; svx.globalCompositeOperation="destination-in"; svx.drawImage(fm,0,0);
+  x.putImageData(new ImageData(rel,bw,bh),bx,by); x.drawImage(sv,bx,by);
+  // la pieza: solo el elemento, con su forma
+  let x0=bw,y0=bh,x1=-1,y1=-1; const pd=new ImageData(bw,bh);
+  for(let i=0;i<n;i++){ const v=a[i]; if(v<=0) continue; pd.data[i*4]=d[i*4];pd.data[i*4+1]=d[i*4+1];pd.data[i*4+2]=d[i*4+2];pd.data[i*4+3]=Math.round(v*255);
+    if(v>.4){ const xx=i%bw,yy=(i/bw)|0; if(xx<x0)x0=xx; if(xx>x1)x1=xx; if(yy<y0)y0=yy; if(yy>y1)y1=yy } }
+  if(x1<0) return {fondo:armSinPieza(img,false,p.poly,N),pieza:armPiezaCanvas(img,p.poly,N),caja:cj,simple:true};
+  const tmp=document.createElement("canvas"); tmp.width=bw; tmp.height=bh; tmp.getContext("2d").putImageData(pd,0,0);
+  const pw=x1-x0+1, ph=y1-y0+1, pz=document.createElement("canvas"); pz.width=pw; pz.height=ph; pz.getContext("2d").drawImage(tmp,x0,y0,pw,ph,0,0,pw,ph);
+  return {fondo:cv,pieza:pz,caja:{x:(bx+x0)/N,y:(by+y0)/N,w:pw/N,h:ph/N}};
+}
 // ---- Galería ----
 async function armIniciar(){
   $("armar-juego").hidden=true; $("armar-galeria").hidden=false; $("armar-estado").hidden=false; $("armar-estado").textContent="Cargando…";
   await esperarCache(); const pz=await armPiezas();
-  ARM.lista=Object.entries(pz).map(([k,p])=>{ const v=CACHE&&CACHE.disc[k], [a,t]=k.split("|"); return v&&p&&p.poly&&p.poly.length>2?{k,a,t,url:v.url,poly:p.poly,nombre:p.nombre||"la pieza"}:null }).filter(Boolean);
+  ARM.lista=Object.entries(pz).map(([k,p])=>{ const v=CACHE&&CACHE.disc[k], [a,t]=k.split("|"); return v&&p&&p.poly&&p.poly.length>2?{k,a,t,url:v.url,poly:p.poly,nombre:p.nombre||"la pieza",fondo:p.fondo}:null }).filter(Boolean);
   if(!ARM.lista.length){ $("armar-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; $("armar-grilla").innerHTML=""; $("armar-dia").innerHTML=""; return }
   $("armar-estado").hidden=true; ARM.dia=hoyAR();
   const hoy=mezR(ARM.lista,semillaRng(hashStr("armar-"+hoyAR())))[0], rec=armRec(), h=diaHecho("armar");
@@ -2568,7 +2640,7 @@ async function armMiniaturas(){
     const p=ARM.lista.find(x=>x.k===b.dataset.k), img=b.querySelector("img"); if(!p||!img) continue;
     img.style.visibility="hidden";
     const r=await armImg(chico200(p.url)); if(!r||!img.isConnected) continue;
-    img.replaceWith(armSinPieza(r.im,r.cors,p.poly,240));
+    img.replaceWith(armPreparar(r.im,r.cors,p).fondo);
   }
 }
 // ---- Juego ----
@@ -2581,10 +2653,12 @@ async function armJugar(k){
   $("armar-tam-lbl").textContent=`Tamaño ${/^el /i.test(p.nombre)?"del "+p.nombre.slice(3):"de "+p.nombre}`;
   $("armar-cuenta").hidden=!cuenta; window.scrollTo(0,0);
   const r=await armImg(p.url); if(!r){ $("armar-ayuda").textContent="No pude cargar la tapa. Probá recargar."; return }
-  ARM.cur.img=r.im; ARM.cur.cors=r.cors; ARM.cur.caja=armCaja(p.poly);
-  const c=ARM.cur.caja, rng=Math.random, s=rng()<.5?.55+rng()*.25:1.35+rng()*.35;
-  // arranca lejos de su lugar
-  ARM.cur.pos={cx:c.x+c.w/2>.5?.25:.75,cy:c.y+c.h/2>.5?.28:.72,s};
+  ARM.cur.img=r.im; ARM.cur.cors=r.cors; const pr=armPreparar(r.im,r.cors,p); ARM.cur.fondo=pr.fondo; ARM.cur.pieza=pr.pieza; ARM.cur.caja=pr.caja;
+  const c=ARM.cur.caja, rng=Math.random, smax=Math.min(ARM_ESC[1],.95/Math.max(c.w,c.h));
+  const s=Math.min(smax,rng()<.5||smax<1.3?.55+rng()*.25:1.3+rng()*(smax-1.3)*.6);
+  // arranca lejos de su lugar, pero entera adentro de la tapa
+  const w=c.w*s, hh=c.h*s, ent=(v,l)=>Math.min(1-l/2-.02,Math.max(l/2+.02,v));
+  ARM.cur.pos={cx:ent(c.x+c.w/2>.5?.25:.75,w),cy:ent(c.y+c.h/2>.5?.28:.72,hh),s};
   $("armar-tam").value=Math.round(armEscAPos(s)*1000);
   armDibujar(); cabecera(cuenta?`Del día #${nDia()}`:"Libre","","Récord",armRec()[k]!=null?`${armRec()[k].toFixed(1)}%`:"—");
 }
@@ -2592,10 +2666,10 @@ const armEscAPos=s=>Math.log(s/ARM_ESC[0])/Math.log(ARM_ESC[1]/ARM_ESC[0]);
 const armPosAEsc=v=>ARM_ESC[0]*Math.pow(ARM_ESC[1]/ARM_ESC[0],v);
 function armDibujar(){
   const c=ARM.cur, W=Math.round(($("armar-stage").clientWidth||360)*(window.devicePixelRatio||1));
-  if(c.W!==W){ c.W=W; c.fondo=armSinPieza(c.img,c.cors,c.poly,W); c.pieza=armPiezaCanvas(c.img,c.poly,W) }
-  const cv=$("armar-cv"); cv.width=cv.height=W; const x=cv.getContext("2d");
-  x.drawImage(c.listo?(()=>{const t=document.createElement("canvas");t.width=t.height=W;t.getContext("2d").drawImage(c.img,0,0,W,W);return t})():c.fondo,0,0);
-  if(c.listo){ x.globalAlpha=.35; x.drawImage(c.fondo,0,0); x.globalAlpha=1 }
+  const cv=$("armar-cv"); cv.width=cv.height=W; const x=cv.getContext("2d"); x.imageSmoothingQuality="high";
+  // al terminar se ve la tapa original, con el elemento real apenas marcado
+  x.drawImage(c.listo?c.img:c.fondo,0,0,W,W);
+  if(c.listo){ x.globalAlpha=.4; x.drawImage(c.fondo,0,0,W,W); x.globalAlpha=1 }
   const pc=$("armar-pieza"); pc.width=c.pieza.width; pc.height=c.pieza.height; pc.getContext("2d").drawImage(c.pieza,0,0);
   armUbicar();
 }
@@ -2660,9 +2734,9 @@ function marLista(){
 }
 function marResumen(){ const n=Object.keys(MAR.marcas).length; $("marcar-n").textContent=`${n} tapa${n===1?"":"s"} marcada${n===1?"":"s"}`; ls.set("tapa-marcas",MAR.marcas) }
 async function marElegir(k){
-  MAR.sel=k; const m=MAR.marcas[k]; MAR.pts=m?m.poly.map(p=>p.slice()):[]; $("marcar-nombre").value=m&&m.nombre?m.nombre:"";
+  MAR.sel=k; const m=MAR.marcas[k]; MAR.pts=m?m.poly.map(p=>p.slice()):[]; $("marcar-nombre").value=m&&m.nombre?m.nombre:""; $("marcar-fondo").checked=!(m&&m.fondo===false);
   $("marcar-editor").hidden=false; $("marcar-tit").textContent=k.replace("|"," — ");
-  MAR.img=(await armImg(CACHE.disc[k].url)||{}).im; marPintar(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
+  const r=await armImg(CACHE.disc[k].url)||{}; MAR.img=r.im; MAR.cors=r.cors; marPintar(); marPrevia(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
 }
 function marPintar(){
   const cv=$("marcar-cv"), W=cv.width=cv.height=Math.round(cv.clientWidth*(window.devicePixelRatio||1)||600), x=cv.getContext("2d");
@@ -2674,10 +2748,21 @@ function marPintar(){
   const pto=e=>{ const r=cv.getBoundingClientRect(); return [Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))] };
   cv.addEventListener("pointerdown",e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId); dib=true; MAR.pts=[pto(e)]; marPintar() });
   cv.addEventListener("pointermove",e=>{ if(!dib) return; const p=pto(e), u=MAR.pts[MAR.pts.length-1]; if(Math.hypot(p[0]-u[0],p[1]-u[1])>.012){ MAR.pts.push(p); marPintar() } });
-  const fin=()=>{ dib=false; marPintar() }; cv.addEventListener("pointerup",fin); cv.addEventListener("pointercancel",fin);
+  const fin=()=>{ if(!dib) return; dib=false; marPintar(); marPrevia() }; cv.addEventListener("pointerup",fin); cv.addEventListener("pointercancel",fin);
 })();
+$("marcar-fondo").onchange=()=>marPrevia();
+// muestra cómo va a quedar la pieza y la tapa sin el elemento
+function marPrevia(){
+  const cp=$("marcar-prev-p"), cf=$("marcar-prev-f"), W=300; cp.width=cp.height=cf.width=cf.height=W;
+  const xp=cp.getContext("2d"), xf=cf.getContext("2d"); xp.clearRect(0,0,W,W); xf.clearRect(0,0,W,W);
+  if(!MAR.img||MAR.pts.length<3) return;
+  const pr=armPreparar(MAR.img,MAR.cors,{poly:MAR.pts,fondo:$("marcar-fondo").checked?undefined:false});
+  xf.drawImage(pr.fondo,0,0,W,W);
+  const pw=pr.pieza.width, ph=pr.pieza.height, e=Math.min(W*.9/pw,W*.9/ph); xp.drawImage(pr.pieza,(W-pw*e)/2,(W-ph*e)/2,pw*e,ph*e);
+  if(pr.simple){ xp.fillStyle="#d7262e"; xp.font="bold 15px sans-serif"; xp.fillText("Esta tapa no deja separar el fondo",8,20) }
+}
 $("marcar-guardar").onclick=()=>{ if(!MAR.sel) return; if(MAR.pts.length<3){ alert("Dibujá el contorno del elemento con el dedo o el mouse."); return }
-  const r=v=>Math.round(v*1000)/1000; MAR.marcas[MAR.sel]={poly:MAR.pts.map(([x,y])=>[r(x),r(y)]),nombre:$("marcar-nombre").value.trim()||"la pieza"};
+  const r=v=>Math.round(v*1000)/1000; MAR.marcas[MAR.sel]={poly:MAR.pts.map(([x,y])=>[r(x),r(y)]),nombre:$("marcar-nombre").value.trim()||"la pieza",...($("marcar-fondo").checked?{}:{fondo:false})};
   marResumen(); marLista(); $("marcar-editor").hidden=true };
 $("marcar-borrar").onclick=()=>{ MAR.pts=[]; marPintar() };
 $("marcar-quitar").onclick=()=>{ if(MAR.sel&&MAR.marcas[MAR.sel]){ delete MAR.marcas[MAR.sel]; marResumen(); marLista() } $("marcar-editor").hidden=true };
