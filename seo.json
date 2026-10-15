@@ -71,6 +71,16 @@
       "Con 3 errores aparece una tapa de la banda como pista, y con 5 un tema. Hay una banda del día igual para todos y un modo libre para seguir jugando."
     ]
   },
+  "grilla": {
+    "ruta": "/grilla-rockera/",
+    "titulo": "Grilla rockera · Trivia de bandas de rock en 3×3 | Juegos Rock",
+    "descripcion": "Completá la grilla de 3×3 con bandas de rock que cumplan dos condiciones: país, década, solista, discos y más. Una grilla nueva cada día.",
+    "h": "Grilla rockera: completá los 9 casilleros",
+    "texto": [
+      "Cada casillero cruza la condición de su fila con la de su columna, por ejemplo «De Argentina» y «Arrancó en los 80». Escribí una banda o solista que cumpla las dos.",
+      "Tenés 9 intentos y no podés repetir bandas. Hay una grilla del día igual para todos, con ranking, y un modo libre para seguir jugando."
+    ]
+  },
   "antes": {
     "ruta": "/antes-o-despues/",
     "titulo": "¿Antes o después? · Años de discos de rock | Juegos Rock",
