@@ -107,7 +107,7 @@ const urls = Object.values(seo).filter(p => !p.noindex).map(p =>
 fs.writeFileSync("public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
 fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sitio}/sitemap.xml\n`);
 
-for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json"]) {
+for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json"]) {
   if (fs.existsSync(f)) fs.copyFileSync(f, "public/" + f);
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }

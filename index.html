@@ -268,16 +268,45 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .barra .tope{position:absolute;top:0;bottom:0;left:0;background:rgba(215,38,46,.25)}
 .barra .marca{position:absolute;top:0;bottom:0;width:2px;background:var(--sombra)}
 .intentos{display:flex;flex-direction:column;gap:6px}
-.arm-stage{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:1;border:4px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta);touch-action:none;overflow:visible;background:var(--crema)}
+.arm-sub{margin:18px 0 8px;font:400 1.2rem var(--display)}
+.arm-grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:600px){.arm-grilla{grid-template-columns:repeat(5,1fr)}}
+.arm-card{position:relative;display:flex;flex-direction:column;gap:4px;padding:0;background:none;border:0;text-align:left;cursor:pointer;font:700 .78rem var(--body);color:var(--tinta)}
+.arm-card img,.arm-card canvas{width:100%;aspect-ratio:1;object-fit:cover;border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);display:block;background:var(--crema)}
+.arm-card b{line-height:1.15;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.arm-card small{opacity:.7}
+.arm-card.hecha img{border-color:var(--ok)}
+.arm-badge{position:absolute;top:6px;right:6px;z-index:1;background:var(--tinta);color:var(--crema);font:800 .7rem var(--body);padding:2px 6px}
+.arm-card.dia{flex-direction:row;align-items:center;gap:12px;width:100%;padding:10px;background:var(--crema);border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--rojo)}
+.arm-card.dia img,.arm-card.dia canvas{width:96px;flex:none;box-shadow:none;border-width:2px}
+.arm-card.dia div{display:flex;flex-direction:column;gap:3px}
+.arm-card.dia small{opacity:1;color:var(--rojo);font-weight:800}
+.arm-card.dia b{font:400 1.25rem var(--display)}
+.arm-card.dia em{font-style:normal;font-size:.8rem;color:var(--ok)}
+.arm-tit{font:400 1.2rem var(--display);margin:8px 0}
+.arm-cuenta{font:800 .8rem var(--body);color:var(--rojo);margin:0 0 8px}
+.arm-stage{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:1;border:4px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta);touch-action:none;overflow:hidden;background:var(--crema)}
 .arm-stage #armar-cv{width:100%;height:100%;display:block}
-.arm-pieza{position:absolute;cursor:grab;touch-action:none;outline:3px dashed var(--rojo);outline-offset:-1px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
-.arm-pieza:active{cursor:grabbing}
-.arm-pieza.puesta{outline-color:var(--tinta);box-shadow:none;cursor:default;opacity:.85}
-.arm-real{position:absolute;border:3px solid var(--ok);box-shadow:0 0 0 2px var(--crema);pointer-events:none}
-.arm-tam{display:flex;flex-direction:column;gap:6px;max-width:440px;margin:14px auto 0;font:800 .85rem var(--body)}
-.arm-tam input{width:100%;accent-color:var(--rojo)}
-.arm-msg b{font-family:var(--display);font-weight:400;font-size:1.6rem}
-.arm-msg span{font-size:.9rem}
+.arm-pieza{position:absolute;cursor:grab;touch-action:none;filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 3px #ffe066) drop-shadow(0 6px 10px rgba(0,0,0,.5));animation:arm-brillo 1.6s ease-in-out infinite}
+.arm-pieza.agarrada{cursor:grabbing;animation:none;filter:drop-shadow(0 0 8px #fff) drop-shadow(0 10px 16px rgba(0,0,0,.55))}
+@keyframes arm-brillo{50%{filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 6px #ffe066) drop-shadow(0 6px 10px rgba(0,0,0,.5))}}
+.arm-real{position:absolute;border:3px dashed #fff;outline:2px dashed var(--tinta);pointer-events:none}
+.arm-ayuda{text-align:center;font-size:.9rem;margin:12px 0 0}
+.arm-tam{position:relative;display:flex;flex-direction:column;gap:6px;max-width:440px;margin:10px auto 0;font:800 .85rem var(--body)}
+.arm-tam input[type=range]{width:100%;accent-color:var(--rojo);position:relative;z-index:1;height:28px}
+.arm-tam input[type=text]{font:inherit;font-weight:600;padding:10px;border:3px solid var(--tinta);background:#fff}
+.arm-regla{display:block;height:10px;margin-top:-8px;background:repeating-linear-gradient(90deg,var(--tinta) 0 2px,transparent 2px 10%) ,repeating-linear-gradient(90deg,var(--tinta) 0 1px,transparent 1px 2%);background-size:100% 10px,100% 5px;background-repeat:no-repeat}
+.arm-res{margin-top:16px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.arm-pct{font:400 3rem var(--display);line-height:1;color:var(--rojo)}
+.arm-frase{display:flex;flex-direction:column;gap:2px}
+.arm-frase b{font:400 1.35rem var(--display)}
+.arm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.arm-stats div{display:flex;flex-direction:column;border:2px solid var(--tinta);padding:6px 4px;background:#fff}
+.arm-stats b{font:800 1rem var(--body)}
+.arm-stats small,.arm-nota{font-size:.72rem;opacity:.75}
+.mar-editor{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+#marcar-cv{width:100%;max-width:440px;aspect-ratio:1;border:3px solid var(--tinta);touch-action:none;margin:0 auto;display:block;cursor:crosshair}
+.mar-buscar{width:100%;font:600 1rem var(--body);padding:10px;border:3px solid var(--tinta);margin:12px 0}
 .gri-tabla{display:grid;grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr));gap:6px}
 .gri-cab{display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:4px;font:800 .78rem/1.15 var(--body);min-height:58px}
 .gri-cab.fila{align-items:center;justify-content:flex-start;text-align:left;min-height:0}
@@ -506,7 +535,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="normal"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada con cuatro opciones"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="37.1" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="56.2" y="12.0" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="75.3" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="12.0" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="18.0" y="21.6" width="9.9" height="9.9" fill="#c9a227"/><rect x="27.6" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="37.1" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="46.7" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="21.6" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="75.3" y="21.6" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="21.6" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="37.1" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="31.1" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="84.9" y="31.1" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="31.1" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="40.7" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="37.1" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="46.7" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="40.7" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="65.8" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="40.7" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="84.9" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="94.4" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="50.2" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="50.2" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="50.2" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="50.2" width="9.9" height="9.9" fill="#1d1b18"/><rect x="94.4" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="18.0" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="27.6" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="37.1" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="59.8" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="59.8" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="59.8" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="59.8" width="9.9" height="9.9" fill="#2f5d50"/><rect x="18.0" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="27.6" y="69.3" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="37.1" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="75.3" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="18.0" y="78.9" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="37.1" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="78.9" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="78.9" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="78.9" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="27.6" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="46.7" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="88.4" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="88.4" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="88.4" width="9.9" height="9.9" fill="#b5532a"/><rect x="120" y="10" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="17.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="34" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="41.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="58" width="104" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="65.0" width="62.4" height="5" fill="var(--crema)" opacity=".8"/><rect x="120" y="82" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="89.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Libre</small><b>Adiviná la tapa</b><span>La tapa arranca pixelada y se aclara con cada error. Rock nacional e internacional.</span></button>
       <button type="button" data-ir="tema" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
-      <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta un pedazo: ponelo en su lugar y con su tamaño.</span></button>
+      <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta algo: ponelo en su lugar y con su tamaño.</span></button>
       <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · 3 × 3</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Poné una banda que cumpla las dos.</span></button>
       <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Pistas</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
@@ -555,20 +584,51 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   <section id="v-armar" class="sub" hidden>
     <button class="link volver" type="button">← Inicio</button>
     <h2>Armá la tapa</h2>
-    <div class="chips modo-dia" data-juego="armar" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
-    <p class="bajada">A la tapa le falta un pedazo: arrastralo a su lugar y ajustá el tamaño. Cuanto más exacto, más porcentaje. El del día son 3 tapas.</p>
-    <p class="aviso" id="armar-estado" hidden></p>
+    <div id="armar-galeria">
+      <p class="bajada">A cada tapa le falta algo. Ponelo en su lugar y con su tamaño: ¿cuánto te acordás de la tapa?</p>
+      <p class="aviso" id="armar-estado" hidden></p>
+      <div id="armar-dia"></div>
+      <h3 class="arm-sub">Todas las tapas</h3>
+      <div class="arm-grilla" id="armar-grilla"></div>
+    </div>
     <div id="armar-juego" hidden>
+      <button class="link" type="button" id="armar-volver">← Todas las tapas</button>
+      <p class="arm-tit" id="armar-titulo"></p>
+      <p class="arm-cuenta" id="armar-cuenta" hidden>Tapa del día: este intento cuenta para el ranking</p>
       <div class="arm-stage" id="armar-stage">
         <canvas id="armar-cv"></canvas>
         <div class="arm-real" id="armar-real" hidden></div>
         <canvas class="arm-pieza" id="armar-pieza"></canvas>
       </div>
-      <label class="arm-tam"><span>Tamaño de la pieza</span><input type="range" id="armar-tam" min="100" max="800" step="1"></label>
-      <div class="fila"><button class="btn" id="armar-ok" type="button">Listo</button><button class="btn" id="armar-sig" type="button" hidden>Siguiente tapa</button></div>
+      <div id="armar-ctrl">
+        <p class="arm-ayuda" id="armar-ayuda"></p>
+        <label class="arm-tam"><span id="armar-tam-lbl">Tamaño</span><input type="range" id="armar-tam" min="0" max="1000" step="1"><i class="arm-regla" aria-hidden="true"></i></label>
+        <div class="fila"><button class="btn" id="armar-ok" type="button">¡Listo!</button></div>
+      </div>
+      <div class="arm-res card" id="armar-res" hidden aria-live="polite">
+        <div class="arm-pct" id="armar-pct">0,00%</div>
+        <div class="arm-frase" id="armar-frase"></div>
+        <div class="arm-stats" id="armar-stats"></div>
+        <small class="arm-nota">* medido sobre una tapa de vinilo de 31 cm</small>
+        <div class="fila"><button class="btn" type="button" id="armar-comp">Compartir</button><button class="btn sec" type="button" id="armar-x">En X</button></div>
+        <div class="fila"><button class="btn sec" type="button" id="armar-otra">Otra vez</button><button class="btn sec" type="button" id="armar-otras">Otras tapas</button></div>
+      </div>
     </div>
-    <div class="con-msg arm-msg" id="armar-msg" aria-live="polite"></div>
-    <div class="ban-fin card gri-fin" id="armar-fin" hidden></div>
+  </section>
+
+  <section id="v-marcar" class="sub" hidden>
+    <button class="link volver" type="button">← Inicio</button>
+    <h2>Marcar tapas</h2>
+    <p class="bajada">Elegí una tapa y dibujá con el dedo o el mouse el contorno del elemento que se va a sacar. Ponele un nombre (“la banana”, “el sombrero”) y guardá. Cuando tengas varias, bajá <b>piezas.json</b> y subilo a la carpeta del proyecto.</p>
+    <div class="fila"><b id="marcar-n"></b><button class="btn" type="button" id="marcar-bajar">Bajar piezas.json</button><button class="btn sec" type="button" id="marcar-copiar">Copiar</button></div>
+    <div class="card mar-editor" id="marcar-editor" hidden>
+      <b id="marcar-tit"></b>
+      <canvas id="marcar-cv"></canvas>
+      <label class="arm-tam"><span>Nombre del elemento</span><input type="text" id="marcar-nombre" placeholder="la banana" maxlength="40"></label>
+      <div class="fila"><button class="btn" type="button" id="marcar-guardar">Guardar</button><button class="btn sec" type="button" id="marcar-borrar">Borrar trazo</button><button class="btn sec" type="button" id="marcar-quitar">Quitar marca</button></div>
+    </div>
+    <input type="search" id="marcar-buscar" placeholder="Buscar banda o disco" class="mar-buscar">
+    <div class="arm-grilla" id="marcar-lista"></div>
   </section>
 
   <section id="v-grilla" class="sub" hidden>
@@ -1280,7 +1340,7 @@ const TOPS=[
   {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,u:"pts",d:"Tapa del día de hoy (máximo 50)."},
   {id:"tema",n:"Tema del día",modo:"tema",hoy:true,u:"pts",d:"6 puntos si lo sacás con 1 segundo, 1 punto en el último intento."},
   {id:"banda",n:"La banda del día",modo:"banda",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 90 al segundo intento… 20 al sexto."},
-  {id:"armar",n:"Armá la tapa",modo:"armar",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: precisión promedio de las 3 tapas (redondeada)."},
+  {id:"armar",n:"Armá la tapa",modo:"armar",hoy:true,genero:"diario",u:"pts",d:"Tapa del día: precisión redondeada a la decena."},
   {id:"grilla",n:"Grilla rockera",modo:"grilla",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 por casillero, 100 si la completás."},
   {id:"antes",n:"¿Antes o después?",modo:"antes",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por acierto."},
   {id:"orden",n:"Ordená la discografía",modo:"orden",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 60 al segundo intento, 30 al tercero."},
@@ -2436,111 +2496,193 @@ $("grilla-cerrar").onclick=()=>{ GRI.sel=null; $("grilla-panel").hidden=true; gr
 chipsModo("grilla",griIniciar);
 $("t-n-juegos").textContent=`${document.querySelectorAll(".hub [data-ir]").length} juegos`;
 
-// ===== Armá la tapa: a la tapa le falta un pedazo; ponelo en su lugar y con su tamaño =====
-const ARM={modo:"diario",dia:null,rondas:[],i:0,tapas:[],cur:null,fin:false,racha:0};
-const ARM_RONDAS=3;
-const armPool=()=>DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]&&(d[3]!=="nac"||CON_BANDAS.includes(d[0])));
-// Elige una tapa y el pedazo que falta (en fracciones de la tapa: x, y, lado)
-function armRonda(rng,d){
-  const v=CACHE.disc[d[0]+"|"+d[1]], lado=.28+rng()*.14, x=.04+rng()*(.92-lado), y=.04+rng()*(.92-lado);
-  const escala=rng()<.5?.55+rng()*.25:1.3+rng()*.4; // la pieza arranca más chica o más grande
-  return {d,url:v.url,a:v.a,t:d[1],y:d[2],pz:{x,y,l:lado},ini:{l:Math.min(.75,lado*escala)}};
-}
-const armClave=()=>kDia("tapa-armar-prog",ARM.dia);
-async function armIniciar(){
-  modoInicial("armar");
-  $("armar-fin").hidden=true; $("armar-msg").textContent=""; $("armar-estado").hidden=false; $("armar-estado").textContent="Cargando…"; $("armar-juego").hidden=true;
-  await esperarCache();
-  const pool=armPool(); if(pool.length<10){ $("armar-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; return }
-  ARM.modo=MODO.armar; ARM.dia=diaSel(); ARM.fin=false; ARM.i=0; ARM.rondas=[];
-  if(ARM.modo==="diario"){
-    const rng=rngDia("armar"); ARM.tapas=mezR(pool,rng).slice(0,ARM_RONDAS).map(d=>armRonda(rng,d));
-    const g=ls.get(armClave())||leerDia("tapa-armar-prog"); if(g&&g.rondas){ ARM.rondas=g.rondas; ARM.i=g.rondas.length }
-    if(ARM.i>=ARM_RONDAS){ ARM.fin=true; $("armar-estado").hidden=true; return armTerminar(true) }
-  }else ARM.tapas=[armRonda(Math.random,mezR(pool,Math.random)[0])];
-  armCargar();
-}
-async function armCargar(){
-  const r=ARM.modo==="diario"?ARM.tapas[ARM.i]:ARM.tapas[0];
-  ARM.cur={...r,img:null,pos:null,listo:false};
-  $("armar-estado").textContent="Cargando la tapa…"; $("armar-estado").hidden=false; $("armar-juego").hidden=true; $("armar-msg").textContent="";
-  try{ ARM.cur.img=await precargar(r.url) }catch(e){ $("armar-estado").textContent="No pude cargar la tapa. Probá recargar."; return }
-  $("armar-estado").hidden=true; $("armar-juego").hidden=false;
-  // la pieza arranca en una esquina lejos de su lugar
-  const l=r.ini.l, lejos=r.pz.x+r.pz.l/2<.5?1-l-.03:.03, lejosY=r.pz.y+r.pz.l/2<.5?1-l-.03:.03;
-  ARM.cur.pos={x:lejos,y:lejosY,l};
-  $("armar-tam").value=Math.round(l*1000);
-  $("armar-ok").hidden=false; $("armar-sig").hidden=true; $("armar-tam").disabled=false;
-  armCab(); armPintar();
-}
-function armCab(){
-  if(ARM.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(ARM.i+1,ARM_RONDAS)}/${ARM_RONDAS}`,"Precisión",ARM.rondas.length?`${(ARM.rondas.reduce((a,b)=>a+b,0)/ARM.rondas.length).toFixed(1)}%`:"—");
-  else cabecera("Libre","","Racha",ARM.racha);
-}
-function armPintar(){
-  const c=ARM.cur, cv=$("armar-cv"), W=cv.width=cv.height=Math.round(($("armar-stage").clientWidth||360)*(window.devicePixelRatio||1)), x=cv.getContext("2d");
-  x.imageSmoothingQuality="high"; x.drawImage(c.img,0,0,W,W);
-  const p=c.pz;
-  if(!c.listo){
-    // el hueco: rayado del color del papel
-    x.save(); x.beginPath(); x.rect(p.x*W,p.y*W,p.l*W,p.l*W); x.clip();
-    x.fillStyle="#f1c232"; x.fillRect(p.x*W,p.y*W,p.l*W,p.l*W);
-    x.strokeStyle="rgba(20,18,16,.18)"; x.lineWidth=W/60;
-    for(let k=-W;k<W*2;k+=W/25){ x.beginPath(); x.moveTo(k,0); x.lineTo(k+W,W); x.stroke() }
-    x.restore();
+// ===== Armá la tapa: a la tapa le falta un elemento; ponelo en su lugar y con su tamaño =====
+// Las piezas (qué elemento se saca de cada tapa) están en piezas.json y se marcan en /marcar-tapas/
+const ARM={piezas:null,lista:[],cur:null,dia:null,racha:0};
+const ARM_ESC=[.35,2.2]; // tamaño mínimo y máximo de la pieza respecto del real
+let ARM_PZ=null;
+const armPiezas=()=>ARM_PZ||(ARM_PZ=fetch("/piezas.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({})));
+const armRec=()=>ls.get("tapa-armar-rec")||{};
+const armClave=k=>k.replace(/[^a-z0-9]+/gi,"-");
+function armCaja(poly){ const xs=poly.map(p=>p[0]), ys=poly.map(p=>p[1]); const x=Math.min(...xs), y=Math.min(...ys); return {x,y,w:Math.max(...xs)-x,h:Math.max(...ys)-y} }
+function armTrazo(ctx,poly,W,dx=0,dy=0){ ctx.beginPath(); poly.forEach(([x,y],i)=>ctx[i?"lineTo":"moveTo"](x*W-dx,y*W-dy)); ctx.closePath() }
+// Carga la imagen intentando poder leer sus píxeles (para rellenar bien el hueco)
+function armImg(url){ return new Promise(ok=>{ const im=new Image(); im.crossOrigin="anonymous"; im.onload=()=>ok({im,cors:true});
+  im.onerror=()=>{ const b=new Image(); b.onload=()=>ok({im:b,cors:false}); b.onerror=()=>ok(null); b.src=url }; im.src=url }) }
+// Tapa sin el elemento: rellena el hueco "derramando" los colores de alrededor
+function armSinPieza(img,cors,poly,W){
+  const cv=document.createElement("canvas"); cv.width=cv.height=W; let x=cv.getContext("2d"); x.imageSmoothingQuality="high"; x.drawImage(img,0,0,W,W);
+  const N=120, sm=document.createElement("canvas"); sm.width=sm.height=N; const sx=sm.getContext("2d"); sx.drawImage(img,0,0,N,N);
+  let datos=null; if(cors){ try{ datos=sx.getImageData(0,0,N,N) }catch(e){} }
+  // máscara del hueco, un poco más grande que el contorno para que no quede borde
+  const ms=document.createElement("canvas"); ms.width=ms.height=W; const mz=ms.getContext("2d"); armTrazo(mz,poly,W); mz.fill(); mz.lineWidth=W/70; mz.lineJoin="round"; mz.stroke();
+  const rl=document.createElement("canvas"); rl.width=rl.height=W; x.save(); x=rl.getContext("2d");
+  if(datos){
+    const mk=document.createElement("canvas"); mk.width=mk.height=N; const mx=mk.getContext("2d"); armTrazo(mx,poly,N); mx.fill(); mx.lineWidth=2.5; mx.stroke();
+    const m=mx.getImageData(0,0,N,N).data, d=datos.data, falta=new Uint8Array(N*N);
+    for(let i=0;i<N*N;i++) falta[i]=m[i*4+3]>20?1:0;
+    // relleno de afuera hacia adentro
+    for(let vuelta=0;vuelta<N;vuelta++){
+      const nuevos=[];
+      for(let yy=0;yy<N;yy++) for(let xx=0;xx<N;xx++){ const i=yy*N+xx; if(!falta[i]) continue;
+        let r=0,g=0,b=0,n=0; for(const [ox,oy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]]){ const X=xx+ox,Y=yy+oy; if(X<0||Y<0||X>=N||Y>=N) continue; const j=Y*N+X; if(falta[j]) continue; r+=d[j*4];g+=d[j*4+1];b+=d[j*4+2];n++ }
+        if(n) nuevos.push([i,r/n,g/n,b/n]) }
+      if(!nuevos.length) break;
+      nuevos.forEach(([i,r,g,b])=>{ d[i*4]=r;d[i*4+1]=g;d[i*4+2]=b;d[i*4+3]=255;falta[i]=0 });
+    }
+    sx.putImageData(datos,0,0);
+    x.filter="blur(3px)"; x.drawImage(sm,0,0,W,W); x.filter="none";
+  }else{
+    // sin poder leer píxeles: se borra el hueco y se desenfoca lo de alrededor varias veces para que el color "entre"
+    const t=document.createElement("canvas"); t.width=t.height=W; const tx=t.getContext("2d"); tx.drawImage(img,0,0,W,W);
+    tx.globalCompositeOperation="destination-out"; tx.drawImage(ms,0,0); tx.globalCompositeOperation="source-over";
+    for(const r of [W/6,W/10,W/18,W/30]) for(let k=0;k<4;k++){ x.filter=`blur(${r}px)`; x.drawImage(t,0,0) }
+    x.filter="none";
   }
-  // la pieza
-  const pc=$("armar-pieza"), pw=Math.round(c.pos.l*W);
-  pc.width=pc.height=Math.max(1,pw);
-  pc.getContext("2d").drawImage(c.img,p.x*c.img.naturalWidth,p.y*c.img.naturalHeight,p.l*c.img.naturalWidth,p.l*c.img.naturalHeight,0,0,pw,pw);
-  Object.assign(pc.style,{left:`${c.pos.x*100}%`,top:`${c.pos.y*100}%`,width:`${c.pos.l*100}%`,height:`${c.pos.l*100}%`});
-  pc.classList.toggle("puesta",c.listo);
-  const g=$("armar-real"); g.hidden=!c.listo;
-  if(c.listo) Object.assign(g.style,{left:`${p.x*100}%`,top:`${p.y*100}%`,width:`${p.l*100}%`,height:`${p.l*100}%`});
+  x.globalCompositeOperation="destination-in"; x.drawImage(ms,0,0);
+  const fx=cv.getContext("2d"); fx.restore(); fx.drawImage(rl,0,0); return cv;
 }
-// arrastrar la pieza
+function armPiezaCanvas(img,poly,W){
+  const c=armCaja(poly), pw=Math.max(1,Math.round(c.w*W)), ph=Math.max(1,Math.round(c.h*W)), cv=document.createElement("canvas"); cv.width=pw; cv.height=ph;
+  const x=cv.getContext("2d"); armTrazo(x,poly,W,c.x*W,c.y*W); x.clip(); x.drawImage(img,-c.x*W,-c.y*W,W,W); return cv;
+}
+// ---- Galería ----
+async function armIniciar(){
+  $("armar-juego").hidden=true; $("armar-galeria").hidden=false; $("armar-estado").hidden=false; $("armar-estado").textContent="Cargando…";
+  await esperarCache(); const pz=await armPiezas();
+  ARM.lista=Object.entries(pz).map(([k,p])=>{ const v=CACHE&&CACHE.disc[k], [a,t]=k.split("|"); return v&&p&&p.poly&&p.poly.length>2?{k,a,t,url:v.url,poly:p.poly,nombre:p.nombre||"la pieza"}:null }).filter(Boolean);
+  if(!ARM.lista.length){ $("armar-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; $("armar-grilla").innerHTML=""; $("armar-dia").innerHTML=""; return }
+  $("armar-estado").hidden=true; ARM.dia=hoyAR();
+  const hoy=mezR(ARM.lista,semillaRng(hashStr("armar-"+hoyAR())))[0], rec=armRec(), h=diaHecho("armar");
+  ARM.delDia=hoy.k;
+  $("armar-dia").innerHTML=`<button type="button" class="arm-card dia" data-k="${esc(hoy.k)}"><img alt="" src="${esc(chico200(hoy.url))}"><div><small>Tapa del día #${nDia()} · cuenta para el ranking</small><b>${esc(hoy.t)}</b><span>${esc(hoy.a)}</span>${h?`<em>Jugada · ${esc(h.detalle)}</em>`:""}</div></button>`;
+  $("armar-grilla").innerHTML=ARM.lista.slice().sort((a,b)=>a.a.localeCompare(b.a,"es")||a.t.localeCompare(b.t,"es")).map(p=>{ const r=rec[p.k];
+    return `<button type="button" class="arm-card" data-k="${esc(p.k)}"><span class="arm-badge">${r!=null?`${r.toFixed(2).replace(".",",")}%`:"—"}</span><img alt="" src="${esc(chico200(p.url))}"><b>${esc(p.t)}</b></button>` }).join("");
+  document.querySelectorAll("#v-armar .arm-card").forEach(b=>b.onclick=()=>armJugar(b.dataset.k));
+  armMiniaturas();
+  cabecera("Armá la tapa",`${ARM.lista.length}`,"Récords",Object.keys(rec).length);
+}
+// En la galería las tapas se ven sin el elemento (si no, se regala la respuesta)
+async function armMiniaturas(){
+  for(const b of document.querySelectorAll("#v-armar .arm-card")){
+    const p=ARM.lista.find(x=>x.k===b.dataset.k), img=b.querySelector("img"); if(!p||!img) continue;
+    img.style.visibility="hidden";
+    const r=await armImg(chico200(p.url)); if(!r||!img.isConnected) continue;
+    img.replaceWith(armSinPieza(r.im,r.cors,p.poly,240));
+  }
+}
+// ---- Juego ----
+async function armJugar(k){
+  const p=ARM.lista.find(x=>x.k===k); if(!p) return;
+  const cuenta=k===ARM.delDia&&!diaHecho("armar");
+  ARM.cur={...p,cuenta,listo:false};
+  $("armar-galeria").hidden=true; $("armar-juego").hidden=false; $("armar-res").hidden=true; $("armar-ctrl").hidden=false; $("armar-real").hidden=true;
+  $("armar-titulo").textContent=`${p.t} — ${p.a}`; $("armar-ayuda").textContent=`Arrastrá ${p.nombre} hasta su lugar y ajustá el tamaño con la regla.`;
+  $("armar-tam-lbl").textContent=`Tamaño ${/^el /i.test(p.nombre)?"del "+p.nombre.slice(3):"de "+p.nombre}`;
+  $("armar-cuenta").hidden=!cuenta; window.scrollTo(0,0);
+  const r=await armImg(p.url); if(!r){ $("armar-ayuda").textContent="No pude cargar la tapa. Probá recargar."; return }
+  ARM.cur.img=r.im; ARM.cur.cors=r.cors; ARM.cur.caja=armCaja(p.poly);
+  const c=ARM.cur.caja, rng=Math.random, s=rng()<.5?.55+rng()*.25:1.35+rng()*.35;
+  // arranca lejos de su lugar
+  ARM.cur.pos={cx:c.x+c.w/2>.5?.25:.75,cy:c.y+c.h/2>.5?.28:.72,s};
+  $("armar-tam").value=Math.round(armEscAPos(s)*1000);
+  armDibujar(); cabecera(cuenta?`Del día #${nDia()}`:"Libre","","Récord",armRec()[k]!=null?`${armRec()[k].toFixed(1)}%`:"—");
+}
+const armEscAPos=s=>Math.log(s/ARM_ESC[0])/Math.log(ARM_ESC[1]/ARM_ESC[0]);
+const armPosAEsc=v=>ARM_ESC[0]*Math.pow(ARM_ESC[1]/ARM_ESC[0],v);
+function armDibujar(){
+  const c=ARM.cur, W=Math.round(($("armar-stage").clientWidth||360)*(window.devicePixelRatio||1));
+  if(c.W!==W){ c.W=W; c.fondo=armSinPieza(c.img,c.cors,c.poly,W); c.pieza=armPiezaCanvas(c.img,c.poly,W) }
+  const cv=$("armar-cv"); cv.width=cv.height=W; const x=cv.getContext("2d");
+  x.drawImage(c.listo?(()=>{const t=document.createElement("canvas");t.width=t.height=W;t.getContext("2d").drawImage(c.img,0,0,W,W);return t})():c.fondo,0,0);
+  if(c.listo){ x.globalAlpha=.35; x.drawImage(c.fondo,0,0); x.globalAlpha=1 }
+  const pc=$("armar-pieza"); pc.width=c.pieza.width; pc.height=c.pieza.height; pc.getContext("2d").drawImage(c.pieza,0,0);
+  armUbicar();
+}
+function armUbicar(){
+  const c=ARM.cur, b=c.caja, p=c.pos, w=b.w*p.s, h=b.h*p.s;
+  Object.assign($("armar-pieza").style,{left:`${(p.cx-w/2)*100}%`,top:`${(p.cy-h/2)*100}%`,width:`${w*100}%`,height:`${h*100}%`});
+}
 (()=>{
   const pc=$("armar-pieza"); let ini=null;
   pc.addEventListener("pointerdown",e=>{ if(!ARM.cur||ARM.cur.listo) return; e.preventDefault(); pc.setPointerCapture(e.pointerId);
-    const r=$("armar-stage").getBoundingClientRect(); ini={px:e.clientX,py:e.clientY,x:ARM.cur.pos.x,y:ARM.cur.pos.y,W:r.width} });
-  pc.addEventListener("pointermove",e=>{ if(!ini) return; const c=ARM.cur.pos;
-    c.x=Math.max(-c.l*.5,Math.min(1-c.l*.5,ini.x+(e.clientX-ini.px)/ini.W)); c.y=Math.max(-c.l*.5,Math.min(1-c.l*.5,ini.y+(e.clientY-ini.py)/ini.W));
-    pc.style.left=`${c.x*100}%`; pc.style.top=`${c.y*100}%` });
-  const fin=()=>{ ini=null }; pc.addEventListener("pointerup",fin); pc.addEventListener("pointercancel",fin);
+    const r=$("armar-stage").getBoundingClientRect(); ini={px:e.clientX,py:e.clientY,cx:ARM.cur.pos.cx,cy:ARM.cur.pos.cy,W:r.width}; pc.classList.add("agarrada") });
+  pc.addEventListener("pointermove",e=>{ if(!ini) return; const p=ARM.cur.pos;
+    p.cx=Math.max(0,Math.min(1,ini.cx+(e.clientX-ini.px)/ini.W)); p.cy=Math.max(0,Math.min(1,ini.cy+(e.clientY-ini.py)/ini.W)); armUbicar() });
+  const fin=()=>{ ini=null; pc.classList.remove("agarrada") }; pc.addEventListener("pointerup",fin); pc.addEventListener("pointercancel",fin);
 })();
-$("armar-tam").addEventListener("input",()=>{ if(!ARM.cur||ARM.cur.listo) return; const c=ARM.cur.pos, cx=c.x+c.l/2, cy=c.y+c.l/2;
-  c.l=+$("armar-tam").value/1000; c.x=cx-c.l/2; c.y=cy-c.l/2; armPintar() });
-addEventListener("resize",()=>{ if(ARM.cur&&ARM.cur.img&&!$("v-armar").hidden) armPintar() });
-// precisión: cuánto se superpone la pieza con su lugar real (intersección sobre unión)
+$("armar-tam").addEventListener("input",()=>{ if(!ARM.cur||ARM.cur.listo) return; ARM.cur.pos.s=armPosAEsc(+$("armar-tam").value/1000); armUbicar() });
+addEventListener("resize",()=>{ if(ARM.cur&&ARM.cur.img&&!$("armar-juego").hidden){ ARM.cur.W=0; armDibujar() } });
 function armPrecision(){
-  const a=ARM.cur.pos, b=ARM.cur.pz;
-  const ix=Math.max(0,Math.min(a.x+a.l,b.x+b.l)-Math.max(a.x,b.x)), iy=Math.max(0,Math.min(a.y+a.l,b.y+b.l)-Math.max(a.y,b.y));
-  const inter=ix*iy, union=a.l*a.l+b.l*b.l-inter; return union>0?inter/union*100:0;
+  const b=ARM.cur.caja, p=ARM.cur.pos, tx=b.x+b.w/2, ty=b.y+b.h/2, w=b.w*p.s, h=b.h*p.s;
+  const ix=Math.max(0,Math.min(p.cx+w/2,tx+b.w/2)-Math.max(p.cx-w/2,tx-b.w/2)), iy=Math.max(0,Math.min(p.cy+h/2,ty+b.h/2)-Math.max(p.cy-h/2,ty-b.h/2));
+  const inter=ix*iy, union=w*h+b.w*b.h-inter; return union>0?inter/union*100:0;
 }
+const ARM_FRASES=[[95,"¡Sos fan de verdad!","Esa tapa la tenés grabada."],[80,"¡Muy cerca!","Casi la clavás."],[55,"¿Sos fan de verdad?","Mirá bien la tapa y probá de nuevo."],[25,"Mmm… ¿seguro que escuchaste este disco?","Probá otra vez."],[0,"Ni cerca 😅","Dale otra oportunidad."]];
 $("armar-ok").onclick=()=>{
-  const c=ARM.cur; if(!c||c.listo) return;
-  const pct=Math.round(armPrecision()*100)/100; c.listo=true; $("armar-tam").disabled=true; armPintar();
-  const nota=pct>=90?"¡Perfecto!":pct>=75?"¡Muy bien!":pct>=50?"Bien":pct>0?"Cerca…":"Ni cerca 😅";
-  $("armar-msg").innerHTML=`<b>${pct.toFixed(2).replace(".",",")}%</b> · ${nota}<br><span>${esc(c.t)} — ${esc(c.a)}${c.y?` (${c.y})`:""}</span>`;
-  $("armar-ok").hidden=true;
-  if(ARM.modo==="diario"){
-    ARM.rondas.push(pct); ARM.i++; ls.set(armClave(),{rondas:ARM.rondas});
-    if(ARM.i>=ARM_RONDAS){ ARM.fin=true; armTerminar(false) } else { $("armar-sig").textContent="Siguiente tapa"; $("armar-sig").hidden=false }
-  }else{ ARM.racha=pct>=50?ARM.racha+1:0; $("armar-sig").textContent="Otra tapa"; $("armar-sig").hidden=false }
-  armCab();
+  const c=ARM.cur; if(!c||c.listo||!c.img) return;
+  const pct=Math.round(armPrecision()*100)/100, b=c.caja, tx=b.x+b.w/2, ty=b.y+b.h/2;
+  const mm=Math.hypot(c.pos.cx-tx,c.pos.cy-ty)*310, tam=(c.pos.s-1)*100;
+  c.listo=true; armDibujar(); $("armar-ctrl").hidden=true;
+  Object.assign($("armar-real").style,{left:`${b.x*100}%`,top:`${b.y*100}%`,width:`${b.w*100}%`,height:`${b.h*100}%`}); $("armar-real").hidden=false;
+  // récord
+  const rec=armRec(), antes=rec[c.k]; if(antes==null||pct>antes){ rec[c.k]=pct; ls.set("tapa-armar-rec",rec) }
+  const [, t1,t2]=ARM_FRASES.find(f=>pct>=f[0]);
+  $("armar-res").hidden=false; $("armar-frase").innerHTML=`<b>${esc(t1)}</b><span>${esc(t2)}</span>`;
+  $("armar-stats").innerHTML=`<div><b>${mm.toFixed(1).replace(".",",")} mm</b><small>de su lugar*</small></div><div><b>${tam>0?"+":""}${tam.toFixed(1).replace(".",",")}%</b><small>tamaño</small></div><div><b>${Math.max(pct,antes||0).toFixed(2).replace(".",",")}%</b><small>tu récord</small></div>`;
+  // el porcentaje sube animado
+  const el=$("armar-pct"), t0=performance.now();
+  (function anim(t){ const k=Math.min(1,(t-t0)/1300), v=pct*(1-Math.pow(1-k,3)); el.textContent=`${v.toFixed(2).replace(".",",")}%`; if(k<1) requestAnimationFrame(anim) })(t0);
+  if(c.cuenta){ const pts=Math.min(100,Math.round(pct/10)*10); diaCerrar("armar",pts,`${pct.toFixed(2).replace(".",",")}%`); topAuto("armar","diario",pts,$("armar-frase")); c.cuenta=false; $("armar-cuenta").hidden=true }
+  ARM.ultimo=pct;
 };
-$("armar-sig").onclick=()=>{ if(ARM.modo==="diario") armCargar(); else { ARM.tapas=[armRonda(Math.random,mezR(armPool(),Math.random)[0])]; armCargar() } };
-const armPromedio=()=>ARM.rondas.length?ARM.rondas.reduce((a,b)=>a+b,0)/ARM.rondas.length:0;
-function armTerminar(restaurado){
-  const prom=armPromedio(), p=Math.min(100,Math.round(prom/10)*10), fin=$("armar-fin"); fin.hidden=false;
-  fin.innerHTML=`<b>Precisión del día: ${prom.toFixed(2).replace(".",",")}%</b><span>${ARM.rondas.map((x,i)=>`Tapa ${i+1}: ${x.toFixed(2).replace(".",",")}%`).join(" · ")}</span><span class="msg"></span><div class="fila"><button class="btn" type="button" id="armar-comp">Compartir</button></div>`;
-  const msg=fin.querySelector(".msg"); msg.textContent=`${p} puntos.`;
-  if(!restaurado){ diaCerrar("armar",p,`${prom.toFixed(1)}% de precisión`); pintarChipsModo("armar"); topAuto("armar","diario",p,msg) }
-  $("armar-comp").onclick=async()=>{ const t=`Armá la tapa #${nDia()} — ${prom.toFixed(2).replace(".",",")}% de precisión\n${ARM.rondas.map(x=>x>=90?"🟩":x>=60?"🟨":"🟥").join("")}\n${location.origin}/arma-la-tapa/`, b=$("armar-comp");
-    try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:t}); return } await navigator.clipboard.writeText(t); b.textContent="¡Copiado!" }catch(e){} };
-  $("armar-sig").hidden=true; armCab();
+$("armar-otra").onclick=()=>armJugar(ARM.cur.k);
+$("armar-volver").onclick=$("armar-otras").onclick=()=>armIniciar();
+$("armar-comp").onclick=async()=>{ const c=ARM.cur, t=`🧩 Armá la tapa: ${c.t} (${c.a})\nPrecisión: ${ARM.ultimo.toFixed(2).replace(".",",")}%\n¿Lo superás? ${location.origin}/arma-la-tapa/`, b=$("armar-comp");
+  try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:t}); return } await navigator.clipboard.writeText(t); b.textContent="¡Copiado!" }catch(e){} };
+$("armar-x").onclick=()=>{ const c=ARM.cur, t=`🧩 Saqué ${ARM.ultimo.toFixed(2).replace(".",",")}% armando la tapa de ${c.t} (${c.a}). ¿Lo superás?`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(location.origin+"/arma-la-tapa/")}`,"_blank","noopener") };
+
+// ===== Marcar tapas (/marcar-tapas/): dibujar el contorno del elemento que se saca de cada tapa =====
+const MAR={sel:null,pts:[],img:null,marcas:{},filtro:""};
+async function marIniciar(){
+  await esperarCache(); const base=await armPiezas();
+  MAR.marcas={...base,...(ls.get("tapa-marcas")||{})};
+  $("marcar-buscar").oninput=()=>{ MAR.filtro=norm($("marcar-buscar").value); marLista() };
+  marLista(); marResumen();
 }
-chipsModo("armar",armIniciar);
+function marLista(){
+  const q=MAR.filtro, todos=DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]);
+  const orden=todos.sort((a,b)=>(!!MAR.marcas[b[0]+"|"+b[1]])-(!!MAR.marcas[a[0]+"|"+a[1]])||(b[3]==="nac")-(a[3]==="nac")||(CON_BANDAS.includes(b[0]))-(CON_BANDAS.includes(a[0]))||a[0].localeCompare(b[0],"es"));
+  const vis=orden.filter(d=>!q||norm(d[0]+" "+d[1]).includes(q)).slice(0,120);
+  $("marcar-lista").innerHTML=vis.map(d=>{ const k=d[0]+"|"+d[1]; return `<button type="button" class="arm-card${MAR.marcas[k]?" hecha":""}" data-k="${esc(k)}"><img alt="" loading="lazy" src="${esc(chico200(CACHE.disc[k].url))}"><b>${esc(d[1])}</b><small>${esc(d[0])}</small></button>` }).join("");
+  $("marcar-lista").querySelectorAll(".arm-card").forEach(b=>b.onclick=()=>marElegir(b.dataset.k));
+}
+function marResumen(){ const n=Object.keys(MAR.marcas).length; $("marcar-n").textContent=`${n} tapa${n===1?"":"s"} marcada${n===1?"":"s"}`; ls.set("tapa-marcas",MAR.marcas) }
+async function marElegir(k){
+  MAR.sel=k; const m=MAR.marcas[k]; MAR.pts=m?m.poly.map(p=>p.slice()):[]; $("marcar-nombre").value=m&&m.nombre?m.nombre:"";
+  $("marcar-editor").hidden=false; $("marcar-tit").textContent=k.replace("|"," — ");
+  MAR.img=(await armImg(CACHE.disc[k].url)||{}).im; marPintar(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
+}
+function marPintar(){
+  const cv=$("marcar-cv"), W=cv.width=cv.height=Math.round(cv.clientWidth*(window.devicePixelRatio||1)||600), x=cv.getContext("2d");
+  if(MAR.img) x.drawImage(MAR.img,0,0,W,W);
+  if(MAR.pts.length>1){ x.fillStyle="rgba(215,38,46,.35)"; x.strokeStyle="#d7262e"; x.lineWidth=W/150; armTrazo(x,MAR.pts,W); x.fill(); x.stroke() }
+}
+(()=>{
+  const cv=$("marcar-cv"); let dib=false;
+  const pto=e=>{ const r=cv.getBoundingClientRect(); return [Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))] };
+  cv.addEventListener("pointerdown",e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId); dib=true; MAR.pts=[pto(e)]; marPintar() });
+  cv.addEventListener("pointermove",e=>{ if(!dib) return; const p=pto(e), u=MAR.pts[MAR.pts.length-1]; if(Math.hypot(p[0]-u[0],p[1]-u[1])>.012){ MAR.pts.push(p); marPintar() } });
+  const fin=()=>{ dib=false; marPintar() }; cv.addEventListener("pointerup",fin); cv.addEventListener("pointercancel",fin);
+})();
+$("marcar-guardar").onclick=()=>{ if(!MAR.sel) return; if(MAR.pts.length<3){ alert("Dibujá el contorno del elemento con el dedo o el mouse."); return }
+  const r=v=>Math.round(v*1000)/1000; MAR.marcas[MAR.sel]={poly:MAR.pts.map(([x,y])=>[r(x),r(y)]),nombre:$("marcar-nombre").value.trim()||"la pieza"};
+  marResumen(); marLista(); $("marcar-editor").hidden=true };
+$("marcar-borrar").onclick=()=>{ MAR.pts=[]; marPintar() };
+$("marcar-quitar").onclick=()=>{ if(MAR.sel&&MAR.marcas[MAR.sel]){ delete MAR.marcas[MAR.sel]; marResumen(); marLista() } $("marcar-editor").hidden=true };
+$("marcar-bajar").onclick=()=>{ const b=new Blob([JSON.stringify(MAR.marcas,null,1)],{type:"application/json"}), a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="piezas.json"; a.click() };
+$("marcar-copiar").onclick=()=>contCopiar(JSON.stringify(MAR.marcas,null,1),$("marcar-copiar"));
 
 // ===== 4. Tema número 1 =====
 const ABR={j:null,racha:0,modo:"libre",rng:Math.random,cand:[],ci:0,ronda:0,aciertos:0};
@@ -3200,14 +3342,14 @@ async function contArmar(){
 }
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
   const P=SEO[v]; if(!P) return "";
   let h=`<h2>${esc(P.h)}</h2>`+(P.texto||[]).map(t=>`<p>${esc(t)}</p>`).join("");
   if(P.faq) h+=`<h3>Preguntas frecuentes</h3>`+P.faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
-  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>k!=="yo"&&k!=="contenido"&&SEO[k]).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
+  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>SEO[k]&&!["yo","contenido","marcar"].includes(k)).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
   return h;
 }
 function seoAplicar(v){
@@ -3220,7 +3362,7 @@ function seoAplicar(v){
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
 const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
-const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont",...Object.values(SUBJUEGOS)];
+const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
   if(location.protocol!=="file:"&&RUTAS[v]){
@@ -3243,7 +3385,7 @@ function irA(v,como){
     if(v==="antes"){ modoInicial("antes"); (ANT.izq&&ANT.modo===MODO.antes)?antCab():antIniciar() }
     if(v==="orden"){ modoInicial("orden"); (ORD.items.length&&ORD.modo===MODO.orden)?ordPintar():ordIniciar() }
     if(v==="abre"){ modoInicial("abre"); (ABR.j&&ABR.modo===MODO.abre)?abrCab():abrIniciar() }
-    if(v==="armar"){ modoInicial("armar"); (ARM.cur&&ARM.modo===MODO.armar&&ARM.dia===diaSel())?(armCab(),ARM.cur.img&&armPintar()):armIniciar() }
+    if(v==="armar"){ (ARM.cur&&ARM.cur.img&&ARM.dia===hoyAR()&&!$("armar-juego").hidden)?(ARM.cur.W=0,armDibujar()):armIniciar() }
     if(v==="grilla"){ modoInicial("grilla"); (GRI.filas&&GRI.modo===MODO.grilla&&GRI.dia===diaSel())?griPintar():griIniciar() }
     if(v==="banda"){ modoInicial("banda"); (BAN.obj&&BAN.modo===MODO.banda&&BAN.dia===diaSel())?banPintar():banIniciar() }
     return;
@@ -3251,6 +3393,7 @@ function irA(v,como){
   if(v==="inicio"){ $("v-hub").hidden=false; window.scrollTo(0,0); hubMarcar(); return }
   if(v==="top"){ $("v-top").hidden=false; if(G) actualizar(); cargarTop(); return }
   if(v==="yo"){ $("v-yo").hidden=false; window.scrollTo(0,0); yoPintar(); return }
+  if(v==="marcar"){ $("v-marcar").hidden=false; window.scrollTo(0,0); marIniciar(); return }
   if(v==="contenido"){ $("v-cont").hidden=false; window.scrollTo(0,0); contIniciar(); return }
   $("v-juego").hidden=false; window.scrollTo(0,0);
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";

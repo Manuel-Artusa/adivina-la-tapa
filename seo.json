@@ -64,11 +64,11 @@
   "armar": {
     "ruta": "/arma-la-tapa/",
     "titulo": "Armá la tapa · Poné la pieza que falta en la tapa del disco | Juegos Rock",
-    "descripcion": "A la tapa del disco le falta un pedazo: arrastralo a su lugar y ajustá el tamaño. ¿Cuánta precisión sacás? 3 tapas de rock por día.",
-    "h": "Armá la tapa: poné la pieza que falta",
+    "descripcion": "A la tapa del disco le falta algo: ponelo en su lugar y con su tamaño. ¿Cuánta precisión sacás? Tapas de rock nacional.",
+    "h": "Armá la tapa: poné lo que le falta",
     "texto": [
-      "A una tapa de disco de rock le falta un pedazo. Arrastrá la pieza a su lugar y ajustá el tamaño con la barra: cuanto más exacto quede, más porcentaje de precisión sacás.",
-      "El desafío del día son 3 tapas iguales para todos, con ranking. En el modo libre podés jugar todas las que quieras."
+      "A cada tapa de disco le falta un elemento. Arrastralo a su lugar y ajustá el tamaño con la regla: cuanto más exacto quede, más porcentaje de precisión sacás.",
+      "Todos los días hay una tapa del día que cuenta para el ranking. Las demás las podés jugar todas las veces que quieras para mejorar tu récord."
     ]
   },
   "banda": {
@@ -163,6 +163,14 @@
     "titulo": "Contenido para redes | Juegos Rock",
     "descripcion": "Imágenes para redes sociales con los desafíos del día de Juegos Rock.",
     "h": "Contenido para redes",
+    "noindex": true,
+    "texto": []
+  },
+  "marcar": {
+    "ruta": "/marcar-tapas/",
+    "titulo": "Marcar tapas | Juegos Rock",
+    "descripcion": "Herramienta interna.",
+    "h": "Marcar tapas",
     "noindex": true,
     "texto": []
   }
