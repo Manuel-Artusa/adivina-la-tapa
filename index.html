@@ -1831,9 +1831,10 @@ function temaSugFiltrar(){
   if(q.length<2||!TEMA.j||TEMA.j.fin){ temaSugCerrar(); return }
   const palabras=q.split(" ");
   const res=(TEMA.sug||[]).filter(x=>palabras.every(p=>x.k.includes(p)||x.kb.includes(p)))
-    .sort((a,b)=>(b.k.startsWith(q)-a.k.startsWith(q))||(b.k.includes(q)-a.k.includes(q))||a.t.localeCompare(b.t,"es")).slice(0,8);
+    .sort((a,b)=>(b.k.startsWith(q)-a.k.startsWith(q))||(b.k.includes(q)-a.k.includes(q))||a.b.localeCompare(b.b,"es")||a.t.localeCompare(b.t,"es"));
   cont.innerHTML=""; TEMA.sugAct=-1;
   if(!res.length){ cont.innerHTML=`<div class="vacio">No hay temas con "${esc($("tema-in").value)}". Probá con otra parte del nombre.</div>` }
+  else if(res.length>6){ const c=document.createElement("div"); c.className="vacio"; c.textContent=`${res.length} temas · deslizá para ver todos`; cont.appendChild(c) }
   res.forEach((x,i)=>{
     const b=document.createElement("button"); b.type="button"; b.id="sug"+i; b.setAttribute("role","option");
     const t=document.createElement("span"); t.textContent=x.t; const sm=document.createElement("small"); sm.textContent=x.b;
@@ -2239,7 +2240,7 @@ function banSugCerrar(){ $("banda-sug").hidden=true; $("banda-sug").innerHTML=""
 function banSugFiltrar(){
   const q=norm($("banda-in").value), cont=$("banda-sug");
   if(q.length<1||BAN.fin){ banSugCerrar(); return }
-  const res=banLista().filter(a=>!BAN.intentos.includes(a)&&norm(a).split(" ").some(p=>p.startsWith(q.split(" ")[0]))&&norm(a).includes(q)).slice(0,8);
+  const res=banLista().filter(a=>!BAN.intentos.includes(a)&&norm(a).split(" ").some(p=>p.startsWith(q.split(" ")[0]))&&norm(a).includes(q));
   cont.innerHTML=""; BAN.sugAct=-1;
   if(!res.length) cont.innerHTML=`<div class="vacio">No hay bandas con "${esc($("banda-in").value)}".</div>`;
   res.forEach(a=>{ const b=document.createElement("button"); b.type="button"; b.setAttribute("role","option"); b.textContent=a;
@@ -2385,7 +2386,7 @@ function griSugCerrar(){ $("grilla-sug").hidden=true; $("grilla-sug").innerHTML=
 function griSugFiltrar(){
   const q=norm($("grilla-in").value), cont=$("grilla-sug");
   if(!q||GRI.fin){ griSugCerrar(); return }
-  const res=banLista().filter(a=>!GRI.celdas.includes(a)&&norm(a).includes(q)).sort((x,y)=>(norm(y).startsWith(q)-norm(x).startsWith(q))).slice(0,8);
+  const res=banLista().filter(a=>!GRI.celdas.includes(a)&&norm(a).includes(q)).sort((x,y)=>(norm(y).startsWith(q)-norm(x).startsWith(q)));
   cont.innerHTML=""; GRI.sugAct=-1;
   if(!res.length) cont.innerHTML=`<div class="vacio">No hay bandas con "${esc($("grilla-in").value)}".</div>`;
   res.forEach(a=>{ const b=document.createElement("button"); b.type="button"; b.setAttribute("role","option"); b.textContent=a; b.onmousedown=e=>e.preventDefault(); b.onclick=()=>griProbar(a); cont.appendChild(b) });
