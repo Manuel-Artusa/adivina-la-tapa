@@ -268,6 +268,16 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .barra .tope{position:absolute;top:0;bottom:0;left:0;background:rgba(215,38,46,.25)}
 .barra .marca{position:absolute;top:0;bottom:0;width:2px;background:var(--sombra)}
 .intentos{display:flex;flex-direction:column;gap:6px}
+.arm-stage{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:1;border:4px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta);touch-action:none;overflow:visible;background:var(--crema)}
+.arm-stage #armar-cv{width:100%;height:100%;display:block}
+.arm-pieza{position:absolute;cursor:grab;touch-action:none;outline:3px dashed var(--rojo);outline-offset:-1px;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.arm-pieza:active{cursor:grabbing}
+.arm-pieza.puesta{outline-color:var(--tinta);box-shadow:none;cursor:default;opacity:.85}
+.arm-real{position:absolute;border:3px solid var(--ok);box-shadow:0 0 0 2px var(--crema);pointer-events:none}
+.arm-tam{display:flex;flex-direction:column;gap:6px;max-width:440px;margin:14px auto 0;font:800 .85rem var(--body)}
+.arm-tam input{width:100%;accent-color:var(--rojo)}
+.arm-msg b{font-family:var(--display);font-weight:400;font-size:1.6rem}
+.arm-msg span{font-size:.9rem}
 .gri-tabla{display:grid;grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr));gap:6px}
 .gri-cab{display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:4px;font:800 .78rem/1.15 var(--body);min-height:58px}
 .gri-cab.fila{align-items:center;justify-content:flex-start;text-align:left;min-height:0}
@@ -496,7 +506,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="normal"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada con cuatro opciones"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="37.1" y="12.0" width="9.9" height="9.9" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="56.2" y="12.0" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="75.3" y="12.0" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="12.0" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="12.0" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="18.0" y="21.6" width="9.9" height="9.9" fill="#c9a227"/><rect x="27.6" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="37.1" y="21.6" width="9.9" height="9.9" fill="#1d1b18"/><rect x="46.7" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="21.6" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="75.3" y="21.6" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="21.6" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="21.6" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="27.6" y="31.1" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="37.1" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="31.1" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="31.1" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="31.1" width="9.9" height="9.9" fill="#1d1b18"/><rect x="84.9" y="31.1" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="31.1" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="40.7" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="37.1" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="46.7" y="40.7" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="40.7" width="9.9" height="9.9" fill="#3b4a6b"/><rect x="65.8" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="40.7" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="84.9" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="94.4" y="40.7" width="9.9" height="9.9" fill="#c9a227"/><rect x="18.0" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="50.2" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="50.2" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="50.2" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="50.2" width="9.9" height="9.9" fill="#1d1b18"/><rect x="94.4" y="50.2" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="18.0" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="27.6" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="37.1" y="59.8" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="46.7" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="56.2" y="59.8" width="9.9" height="9.9" fill="#c9a227"/><rect x="65.8" y="59.8" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="59.8" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="59.8" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="94.4" y="59.8" width="9.9" height="9.9" fill="#2f5d50"/><rect x="18.0" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="27.6" y="69.3" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="37.1" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="69.3" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="75.3" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="84.9" y="69.3" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="69.3" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="18.0" y="78.9" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="27.6" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="37.1" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="46.7" y="78.9" width="9.9" height="9.9" fill="#2f5d50"/><rect x="56.2" y="78.9" width="9.9" height="9.9" fill="#5b3a5e"/><rect x="65.8" y="78.9" width="9.9" height="9.9" fill="#c9a227"/><rect x="75.3" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="78.9" width="9.9" height="9.9" fill="#b5532a"/><rect x="94.4" y="78.9" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="18.0" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="27.6" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="37.1" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="46.7" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="56.2" y="88.4" width="9.9" height="9.9" fill="#6f8fa6"/><rect x="65.8" y="88.4" width="9.9" height="9.9" fill="#1d1b18"/><rect x="75.3" y="88.4" width="9.9" height="9.9" fill="#d9d2c0"/><rect x="84.9" y="88.4" width="9.9" height="9.9" fill="#2f5d50"/><rect x="94.4" y="88.4" width="9.9" height="9.9" fill="#b5532a"/><rect x="120" y="10" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="17.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="34" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="41.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/><rect x="120" y="58" width="104" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="65.0" width="62.4" height="5" fill="var(--crema)" opacity=".8"/><rect x="120" y="82" width="104" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="126" y="89.0" width="62.4" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Libre</small><b>Adiviná la tapa</b><span>La tapa arranca pixelada y se aclara con cada error. Rock nacional e internacional.</span></button>
       <button type="button" data-ir="tema" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
-      <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · Nuevo</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Poné una banda que cumpla las dos.</span></button>
+      <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta un pedazo: ponelo en su lugar y con su tamaño.</span></button>
+      <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · 3 × 3</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Poné una banda que cumpla las dos.</span></button>
       <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Pistas</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
       <button type="button" data-ir="abre"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa de un disco y lista de temas con el primero marcado"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="12" width="84" height="84" fill="var(--tinta)"/><rect x="16.0" y="14.0" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="38.9" y="14.0" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="61.7" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="14.0" width="11.7" height="11.7" fill="#c9a227"/><rect x="84.6" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="27.4" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="25.4" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="50.3" y="25.4" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="61.7" y="25.4" width="11.7" height="11.7" fill="#b5532a"/><rect x="73.1" y="25.4" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="25.4" width="11.7" height="11.7" fill="#1d1b18"/><rect x="16.0" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="27.4" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="38.9" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="36.9" width="11.7" height="11.7" fill="#2f5d50"/><rect x="61.7" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="73.1" y="36.9" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="16.0" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="48.3" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="61.7" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="73.1" y="48.3" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="48.3" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="59.7" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="59.7" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="59.7" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="16.0" y="71.1" width="11.7" height="11.7" fill="#b5532a"/><rect x="27.4" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="50.3" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="61.7" y="71.1" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="71.1" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="84.6" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="16.0" y="82.6" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="82.6" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="38.9" y="82.6" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="50.3" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="73.1" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="84.6" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="112" y="10" width="114" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="24" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="start">1.</text><rect x="138" y="17" width="70" height="5" fill="var(--crema)" opacity=".8"/><rect x="112" y="34" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="48" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">4.</text><rect x="138" y="41" width="62" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="58" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="72" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">7.</text><rect x="138" y="65" width="54" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="82" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="96" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">9.</text><rect x="138" y="89" width="46" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre. El del día son 5 discos.</span></button>
@@ -539,6 +550,25 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
     <div class="con-msg" id="antes-msg" aria-live="polite"></div>
     <div class="fila"><button class="btn" id="antes-otra" type="button" hidden>Jugar de nuevo</button></div>
+  </section>
+
+  <section id="v-armar" class="sub" hidden>
+    <button class="link volver" type="button">← Inicio</button>
+    <h2>Armá la tapa</h2>
+    <div class="chips modo-dia" data-juego="armar" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
+    <p class="bajada">A la tapa le falta un pedazo: arrastralo a su lugar y ajustá el tamaño. Cuanto más exacto, más porcentaje. El del día son 3 tapas.</p>
+    <p class="aviso" id="armar-estado" hidden></p>
+    <div id="armar-juego" hidden>
+      <div class="arm-stage" id="armar-stage">
+        <canvas id="armar-cv"></canvas>
+        <div class="arm-real" id="armar-real" hidden></div>
+        <canvas class="arm-pieza" id="armar-pieza"></canvas>
+      </div>
+      <label class="arm-tam"><span>Tamaño de la pieza</span><input type="range" id="armar-tam" min="100" max="800" step="1"></label>
+      <div class="fila"><button class="btn" id="armar-ok" type="button">Listo</button><button class="btn" id="armar-sig" type="button" hidden>Siguiente tapa</button></div>
+    </div>
+    <div class="con-msg arm-msg" id="armar-msg" aria-live="polite"></div>
+    <div class="ban-fin card gri-fin" id="armar-fin" hidden></div>
   </section>
 
   <section id="v-grilla" class="sub" hidden>
@@ -1250,6 +1280,7 @@ const TOPS=[
   {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,u:"pts",d:"Tapa del día de hoy (máximo 50)."},
   {id:"tema",n:"Tema del día",modo:"tema",hoy:true,u:"pts",d:"6 puntos si lo sacás con 1 segundo, 1 punto en el último intento."},
   {id:"banda",n:"La banda del día",modo:"banda",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 90 al segundo intento… 20 al sexto."},
+  {id:"armar",n:"Armá la tapa",modo:"armar",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: precisión promedio de las 3 tapas (redondeada)."},
   {id:"grilla",n:"Grilla rockera",modo:"grilla",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 por casillero, 100 si la completás."},
   {id:"antes",n:"¿Antes o después?",modo:"antes",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por acierto."},
   {id:"orden",n:"Ordená la discografía",modo:"orden",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 60 al segundo intento, 30 al tercero."},
@@ -1750,7 +1781,7 @@ function puntos100(j,dia=diaSel(),soloEnFecha=false){
   return x.puntos;
 }
 const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
-const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario"};
+const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario"};
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>kDia(`tapa-${j}-dia`);
 const diaHecho=j=>leerDia(`tapa-${j}-dia`);
@@ -1759,7 +1790,7 @@ const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); cont
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
 const nDia=()=>numDiario(diaSel());
 function jugadoHoy(j){ return puntos100(j)!=null }
-const DIARIOS=["diario","tema","banda","grilla","antes","orden","abre","conexiones","impostor"];
+const DIARIOS=["diario","tema","armar","banda","grilla","antes","orden","abre","conexiones","impostor"];
 function modoInicial(j){ if(!MODO_ELEGIDO.has(j)) MODO[j]=diaHecho(j)?"libre":"diario"; pintarChipsModo(j) }
 function pintarChipsModo(j){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>{
@@ -2404,6 +2435,112 @@ $("grilla-form").onsubmit=e=>{ e.preventDefault(); const bs=$("grilla-sug").quer
 $("grilla-cerrar").onclick=()=>{ GRI.sel=null; $("grilla-panel").hidden=true; griPintar() };
 chipsModo("grilla",griIniciar);
 $("t-n-juegos").textContent=`${document.querySelectorAll(".hub [data-ir]").length} juegos`;
+
+// ===== Armá la tapa: a la tapa le falta un pedazo; ponelo en su lugar y con su tamaño =====
+const ARM={modo:"diario",dia:null,rondas:[],i:0,tapas:[],cur:null,fin:false,racha:0};
+const ARM_RONDAS=3;
+const armPool=()=>DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]&&(d[3]!=="nac"||CON_BANDAS.includes(d[0])));
+// Elige una tapa y el pedazo que falta (en fracciones de la tapa: x, y, lado)
+function armRonda(rng,d){
+  const v=CACHE.disc[d[0]+"|"+d[1]], lado=.28+rng()*.14, x=.04+rng()*(.92-lado), y=.04+rng()*(.92-lado);
+  const escala=rng()<.5?.55+rng()*.25:1.3+rng()*.4; // la pieza arranca más chica o más grande
+  return {d,url:v.url,a:v.a,t:d[1],y:d[2],pz:{x,y,l:lado},ini:{l:Math.min(.75,lado*escala)}};
+}
+const armClave=()=>kDia("tapa-armar-prog",ARM.dia);
+async function armIniciar(){
+  modoInicial("armar");
+  $("armar-fin").hidden=true; $("armar-msg").textContent=""; $("armar-estado").hidden=false; $("armar-estado").textContent="Cargando…"; $("armar-juego").hidden=true;
+  await esperarCache();
+  const pool=armPool(); if(pool.length<10){ $("armar-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; return }
+  ARM.modo=MODO.armar; ARM.dia=diaSel(); ARM.fin=false; ARM.i=0; ARM.rondas=[];
+  if(ARM.modo==="diario"){
+    const rng=rngDia("armar"); ARM.tapas=mezR(pool,rng).slice(0,ARM_RONDAS).map(d=>armRonda(rng,d));
+    const g=ls.get(armClave())||leerDia("tapa-armar-prog"); if(g&&g.rondas){ ARM.rondas=g.rondas; ARM.i=g.rondas.length }
+    if(ARM.i>=ARM_RONDAS){ ARM.fin=true; $("armar-estado").hidden=true; return armTerminar(true) }
+  }else ARM.tapas=[armRonda(Math.random,mezR(pool,Math.random)[0])];
+  armCargar();
+}
+async function armCargar(){
+  const r=ARM.modo==="diario"?ARM.tapas[ARM.i]:ARM.tapas[0];
+  ARM.cur={...r,img:null,pos:null,listo:false};
+  $("armar-estado").textContent="Cargando la tapa…"; $("armar-estado").hidden=false; $("armar-juego").hidden=true; $("armar-msg").textContent="";
+  try{ ARM.cur.img=await precargar(r.url) }catch(e){ $("armar-estado").textContent="No pude cargar la tapa. Probá recargar."; return }
+  $("armar-estado").hidden=true; $("armar-juego").hidden=false;
+  // la pieza arranca en una esquina lejos de su lugar
+  const l=r.ini.l, lejos=r.pz.x+r.pz.l/2<.5?1-l-.03:.03, lejosY=r.pz.y+r.pz.l/2<.5?1-l-.03:.03;
+  ARM.cur.pos={x:lejos,y:lejosY,l};
+  $("armar-tam").value=Math.round(l*1000);
+  $("armar-ok").hidden=false; $("armar-sig").hidden=true; $("armar-tam").disabled=false;
+  armCab(); armPintar();
+}
+function armCab(){
+  if(ARM.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(ARM.i+1,ARM_RONDAS)}/${ARM_RONDAS}`,"Precisión",ARM.rondas.length?`${(ARM.rondas.reduce((a,b)=>a+b,0)/ARM.rondas.length).toFixed(1)}%`:"—");
+  else cabecera("Libre","","Racha",ARM.racha);
+}
+function armPintar(){
+  const c=ARM.cur, cv=$("armar-cv"), W=cv.width=cv.height=Math.round(($("armar-stage").clientWidth||360)*(window.devicePixelRatio||1)), x=cv.getContext("2d");
+  x.imageSmoothingQuality="high"; x.drawImage(c.img,0,0,W,W);
+  const p=c.pz;
+  if(!c.listo){
+    // el hueco: rayado del color del papel
+    x.save(); x.beginPath(); x.rect(p.x*W,p.y*W,p.l*W,p.l*W); x.clip();
+    x.fillStyle="#f1c232"; x.fillRect(p.x*W,p.y*W,p.l*W,p.l*W);
+    x.strokeStyle="rgba(20,18,16,.18)"; x.lineWidth=W/60;
+    for(let k=-W;k<W*2;k+=W/25){ x.beginPath(); x.moveTo(k,0); x.lineTo(k+W,W); x.stroke() }
+    x.restore();
+  }
+  // la pieza
+  const pc=$("armar-pieza"), pw=Math.round(c.pos.l*W);
+  pc.width=pc.height=Math.max(1,pw);
+  pc.getContext("2d").drawImage(c.img,p.x*c.img.naturalWidth,p.y*c.img.naturalHeight,p.l*c.img.naturalWidth,p.l*c.img.naturalHeight,0,0,pw,pw);
+  Object.assign(pc.style,{left:`${c.pos.x*100}%`,top:`${c.pos.y*100}%`,width:`${c.pos.l*100}%`,height:`${c.pos.l*100}%`});
+  pc.classList.toggle("puesta",c.listo);
+  const g=$("armar-real"); g.hidden=!c.listo;
+  if(c.listo) Object.assign(g.style,{left:`${p.x*100}%`,top:`${p.y*100}%`,width:`${p.l*100}%`,height:`${p.l*100}%`});
+}
+// arrastrar la pieza
+(()=>{
+  const pc=$("armar-pieza"); let ini=null;
+  pc.addEventListener("pointerdown",e=>{ if(!ARM.cur||ARM.cur.listo) return; e.preventDefault(); pc.setPointerCapture(e.pointerId);
+    const r=$("armar-stage").getBoundingClientRect(); ini={px:e.clientX,py:e.clientY,x:ARM.cur.pos.x,y:ARM.cur.pos.y,W:r.width} });
+  pc.addEventListener("pointermove",e=>{ if(!ini) return; const c=ARM.cur.pos;
+    c.x=Math.max(-c.l*.5,Math.min(1-c.l*.5,ini.x+(e.clientX-ini.px)/ini.W)); c.y=Math.max(-c.l*.5,Math.min(1-c.l*.5,ini.y+(e.clientY-ini.py)/ini.W));
+    pc.style.left=`${c.x*100}%`; pc.style.top=`${c.y*100}%` });
+  const fin=()=>{ ini=null }; pc.addEventListener("pointerup",fin); pc.addEventListener("pointercancel",fin);
+})();
+$("armar-tam").addEventListener("input",()=>{ if(!ARM.cur||ARM.cur.listo) return; const c=ARM.cur.pos, cx=c.x+c.l/2, cy=c.y+c.l/2;
+  c.l=+$("armar-tam").value/1000; c.x=cx-c.l/2; c.y=cy-c.l/2; armPintar() });
+addEventListener("resize",()=>{ if(ARM.cur&&ARM.cur.img&&!$("v-armar").hidden) armPintar() });
+// precisión: cuánto se superpone la pieza con su lugar real (intersección sobre unión)
+function armPrecision(){
+  const a=ARM.cur.pos, b=ARM.cur.pz;
+  const ix=Math.max(0,Math.min(a.x+a.l,b.x+b.l)-Math.max(a.x,b.x)), iy=Math.max(0,Math.min(a.y+a.l,b.y+b.l)-Math.max(a.y,b.y));
+  const inter=ix*iy, union=a.l*a.l+b.l*b.l-inter; return union>0?inter/union*100:0;
+}
+$("armar-ok").onclick=()=>{
+  const c=ARM.cur; if(!c||c.listo) return;
+  const pct=Math.round(armPrecision()*100)/100; c.listo=true; $("armar-tam").disabled=true; armPintar();
+  const nota=pct>=90?"¡Perfecto!":pct>=75?"¡Muy bien!":pct>=50?"Bien":pct>0?"Cerca…":"Ni cerca 😅";
+  $("armar-msg").innerHTML=`<b>${pct.toFixed(2).replace(".",",")}%</b> · ${nota}<br><span>${esc(c.t)} — ${esc(c.a)}${c.y?` (${c.y})`:""}</span>`;
+  $("armar-ok").hidden=true;
+  if(ARM.modo==="diario"){
+    ARM.rondas.push(pct); ARM.i++; ls.set(armClave(),{rondas:ARM.rondas});
+    if(ARM.i>=ARM_RONDAS){ ARM.fin=true; armTerminar(false) } else { $("armar-sig").textContent="Siguiente tapa"; $("armar-sig").hidden=false }
+  }else{ ARM.racha=pct>=50?ARM.racha+1:0; $("armar-sig").textContent="Otra tapa"; $("armar-sig").hidden=false }
+  armCab();
+};
+$("armar-sig").onclick=()=>{ if(ARM.modo==="diario") armCargar(); else { ARM.tapas=[armRonda(Math.random,mezR(armPool(),Math.random)[0])]; armCargar() } };
+const armPromedio=()=>ARM.rondas.length?ARM.rondas.reduce((a,b)=>a+b,0)/ARM.rondas.length:0;
+function armTerminar(restaurado){
+  const prom=armPromedio(), p=Math.min(100,Math.round(prom/10)*10), fin=$("armar-fin"); fin.hidden=false;
+  fin.innerHTML=`<b>Precisión del día: ${prom.toFixed(2).replace(".",",")}%</b><span>${ARM.rondas.map((x,i)=>`Tapa ${i+1}: ${x.toFixed(2).replace(".",",")}%`).join(" · ")}</span><span class="msg"></span><div class="fila"><button class="btn" type="button" id="armar-comp">Compartir</button></div>`;
+  const msg=fin.querySelector(".msg"); msg.textContent=`${p} puntos.`;
+  if(!restaurado){ diaCerrar("armar",p,`${prom.toFixed(1)}% de precisión`); pintarChipsModo("armar"); topAuto("armar","diario",p,msg) }
+  $("armar-comp").onclick=async()=>{ const t=`Armá la tapa #${nDia()} — ${prom.toFixed(2).replace(".",",")}% de precisión\n${ARM.rondas.map(x=>x>=90?"🟩":x>=60?"🟨":"🟥").join("")}\n${location.origin}/arma-la-tapa/`, b=$("armar-comp");
+    try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:t}); return } await navigator.clipboard.writeText(t); b.textContent="¡Copiado!" }catch(e){} };
+  $("armar-sig").hidden=true; armCab();
+}
+chipsModo("armar",armIniciar);
 
 // ===== 4. Tema número 1 =====
 const ABR={j:null,racha:0,modo:"libre",rng:Math.random,cand:[],ci:0,ronda:0,aciertos:0};
@@ -3063,7 +3200,7 @@ async function contArmar(){
 }
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
@@ -3082,7 +3219,7 @@ function seoAplicar(v){
 }
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
-const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla"};
+const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
@@ -3106,6 +3243,7 @@ function irA(v,como){
     if(v==="antes"){ modoInicial("antes"); (ANT.izq&&ANT.modo===MODO.antes)?antCab():antIniciar() }
     if(v==="orden"){ modoInicial("orden"); (ORD.items.length&&ORD.modo===MODO.orden)?ordPintar():ordIniciar() }
     if(v==="abre"){ modoInicial("abre"); (ABR.j&&ABR.modo===MODO.abre)?abrCab():abrIniciar() }
+    if(v==="armar"){ modoInicial("armar"); (ARM.cur&&ARM.modo===MODO.armar&&ARM.dia===diaSel())?(armCab(),ARM.cur.img&&armPintar()):armIniciar() }
     if(v==="grilla"){ modoInicial("grilla"); (GRI.filas&&GRI.modo===MODO.grilla&&GRI.dia===diaSel())?griPintar():griIniciar() }
     if(v==="banda"){ modoInicial("banda"); (BAN.obj&&BAN.modo===MODO.banda&&BAN.dia===diaSel())?banPintar():banIniciar() }
     return;
@@ -3183,7 +3321,7 @@ function elegirDia(dia){
 }
 
 // ---- Resumen del día para compartir ----
-const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
+const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",armar:"🧩",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
 function resumenTexto(){
   const dia=diaSel(); let total=0;
   const filas=DIARIOS.map(j=>{
@@ -3214,7 +3352,7 @@ function historial(){
       const k=localStorage.key(i); let m;
       if((m=k.match(/^tapa-d-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"diario");
       else if((m=k.match(/^tapa-tema-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"tema");
-      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
+      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla|armar)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
     }
   }catch(e){}
   return h;
@@ -3227,7 +3365,7 @@ function rachas(){
   while(h[d]){ actual++; d=sumarDias(d,-1) }
   return {actual,mejor,dias:dias.length,h};
 }
-const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",grilla:"Grilla rockera",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
+const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
 function yoPintar(){
   const r=rachas(), hoy=hoyAR();
   $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;

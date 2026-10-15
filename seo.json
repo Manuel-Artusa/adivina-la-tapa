@@ -61,6 +61,16 @@
       "Hay un tema del día, igual para todos, y un modo libre para seguir jugando todo lo que quieras."
     ]
   },
+  "armar": {
+    "ruta": "/arma-la-tapa/",
+    "titulo": "Armá la tapa · Poné la pieza que falta en la tapa del disco | Juegos Rock",
+    "descripcion": "A la tapa del disco le falta un pedazo: arrastralo a su lugar y ajustá el tamaño. ¿Cuánta precisión sacás? 3 tapas de rock por día.",
+    "h": "Armá la tapa: poné la pieza que falta",
+    "texto": [
+      "A una tapa de disco de rock le falta un pedazo. Arrastrá la pieza a su lugar y ajustá el tamaño con la barra: cuanto más exacto quede, más porcentaje de precisión sacás.",
+      "El desafío del día son 3 tapas iguales para todos, con ranking. En el modo libre podés jugar todas las que quieras."
+    ]
+  },
   "banda": {
     "ruta": "/la-banda-del-dia/",
     "titulo": "La banda del día · Adiviná la banda de rock | Juegos Rock",
