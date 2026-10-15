@@ -2649,7 +2649,7 @@ async function armJugar(k){
   const cuenta=k===ARM.delDia&&!diaHecho("armar");
   ARM.cur={...p,cuenta,listo:false};
   $("armar-galeria").hidden=true; $("armar-juego").hidden=false; $("armar-res").hidden=true; $("armar-ctrl").hidden=false; $("armar-real").hidden=true;
-  $("armar-titulo").textContent=`${p.t} — ${p.a}`; $("armar-ayuda").textContent=`Arrastrá ${p.nombre} hasta su lugar y ajustá el tamaño con la regla.`;
+  $("armar-titulo").textContent=`${p.t} — ${p.a}`; $("armar-ayuda").textContent=matchMedia("(pointer:coarse)").matches?`Arrastrá ${p.nombre} hasta su lugar. Pellizcá con dos dedos para agrandar o achicar.`:`Arrastrá ${p.nombre} hasta su lugar. Cambiá el tamaño con la ruedita del mouse o con la regla.`;
   $("armar-tam-lbl").textContent=`Tamaño ${/^el /i.test(p.nombre)?"del "+p.nombre.slice(3):"de "+p.nombre}`;
   $("armar-cuenta").hidden=!cuenta; window.scrollTo(0,0);
   const r=await armImg(p.url); if(!r){ $("armar-ayuda").textContent="No pude cargar la tapa. Probá recargar."; return }
@@ -2677,34 +2677,42 @@ function armUbicar(){
   const c=ARM.cur, b=c.caja, p=c.pos, w=b.w*p.s, h=b.h*p.s;
   Object.assign($("armar-pieza").style,{left:`${(p.cx-w/2)*100}%`,top:`${(p.cy-h/2)*100}%`,width:`${w*100}%`,height:`${h*100}%`});
 }
+// Mover con un dedo (o el mouse) y agrandar/achicar pellizcando con dos dedos (o con la ruedita)
 (()=>{
-  const pc=$("armar-pieza"); let ini=null;
-  pc.addEventListener("pointerdown",e=>{ if(!ARM.cur||ARM.cur.listo) return; e.preventDefault(); pc.setPointerCapture(e.pointerId);
-    const r=$("armar-stage").getBoundingClientRect(); ini={px:e.clientX,py:e.clientY,cx:ARM.cur.pos.cx,cy:ARM.cur.pos.cy,W:r.width}; pc.classList.add("agarrada") });
-  pc.addEventListener("pointermove",e=>{ if(!ini) return; const p=ARM.cur.pos;
-    p.cx=Math.max(0,Math.min(1,ini.cx+(e.clientX-ini.px)/ini.W)); p.cy=Math.max(0,Math.min(1,ini.cy+(e.clientY-ini.py)/ini.W)); armUbicar() });
-  const fin=()=>{ ini=null; pc.classList.remove("agarrada") }; pc.addEventListener("pointerup",fin); pc.addEventListener("pointercancel",fin);
+  const st=$("armar-stage"), pc=$("armar-pieza"), dedos=new Map(); let ini=null;
+  const activo=()=>ARM.cur&&ARM.cur.img&&!ARM.cur.listo;
+  const lim=v=>Math.max(0,Math.min(1,v));
+  const empezar=()=>{ const r=st.getBoundingClientRect(), p=ARM.cur.pos, ds=[...dedos.values()];
+    if(ds.length>=2){ const [a,b]=ds; ini={dos:true,d:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,cx:p.cx,cy:p.cy,s:p.s,W:r.width} }
+    else if(ds.length===1&&ds[0].enPieza){ ini={dos:false,px:ds[0].x,py:ds[0].y,cx:p.cx,cy:p.cy,W:r.width} }
+    else ini=null;
+    pc.classList.toggle("agarrada",!!ini) };
+  st.addEventListener("pointerdown",e=>{ if(!activo()) return; e.preventDefault(); st.setPointerCapture(e.pointerId);
+    dedos.set(e.pointerId,{x:e.clientX,y:e.clientY,enPieza:e.target===pc}); empezar() });
+  st.addEventListener("pointermove",e=>{ if(!dedos.has(e.pointerId)) return; const d=dedos.get(e.pointerId); d.x=e.clientX; d.y=e.clientY;
+    if(!ini||!activo()) return; const p=ARM.cur.pos;
+    if(ini.dos){ const [a,b]=[...dedos.values()], dist=Math.hypot(a.x-b.x,a.y-b.y);
+      p.s=Math.max(ARM_ESC[0],Math.min(ARM_ESC[1],ini.s*dist/ini.d));
+      p.cx=lim(ini.cx+((a.x+b.x)/2-ini.mx)/ini.W); p.cy=lim(ini.cy+((a.y+b.y)/2-ini.my)/ini.W);
+      $("armar-tam").value=Math.round(armEscAPos(p.s)*1000) }
+    else{ p.cx=lim(ini.cx+(e.clientX-ini.px)/ini.W); p.cy=lim(ini.cy+(e.clientY-ini.py)/ini.W) }
+    armUbicar() });
+  const soltar=e=>{ if(!dedos.has(e.pointerId)) return; dedos.delete(e.pointerId);
+    // si queda un dedo después de pellizcar, sigue moviendo desde donde está
+    if(dedos.size===1&&ini&&ini.dos) [...dedos.values()][0].enPieza=true;
+    if(activo()) empezar(); else { ini=null; pc.classList.remove("agarrada") } };
+  st.addEventListener("pointerup",soltar); st.addEventListener("pointercancel",soltar);
+  st.addEventListener("wheel",e=>{ if(!activo()) return; e.preventDefault(); const p=ARM.cur.pos;
+    p.s=Math.max(ARM_ESC[0],Math.min(ARM_ESC[1],p.s*Math.exp(-e.deltaY*.0015))); $("armar-tam").value=Math.round(armEscAPos(p.s)*1000); armUbicar() },{passive:false});
 })();
 $("armar-tam").addEventListener("input",()=>{ if(!ARM.cur||ARM.cur.listo) return; ARM.cur.pos.s=armPosAEsc(+$("armar-tam").value/1000); armUbicar() });
 addEventListener("resize",()=>{ if(ARM.cur&&ARM.cur.img&&!$("armar-juego").hidden){ ARM.cur.W=0; armDibujar() } });
-// Precisión: cuánto se superpone la forma de la pieza (no su recuadro) con la forma real
-function armMascara(c){
-  if(c.mascara) return c.mascara;
-  if(!c.simple) return c.mascara=c.pieza;   // la pieza ya tiene la forma (sin fondo)
-  const b=c.caja, N=600, w=Math.max(1,Math.round(b.w*N)), h=Math.max(1,Math.round(b.h*N)), m=document.createElement("canvas"); m.width=w; m.height=h;
-  const x=m.getContext("2d"); armTrazo(x,c.poly,N,b.x*N,b.y*N); x.fill(); return c.mascara=m;
-}
+// Precisión: qué tan lejos quedó (en proporción al tamaño del elemento) y cuánto le erró al tamaño.
+// Así una firma finita o un objeto grande se miden igual de justo.
 function armPrecision(){
-  const c=ARM.cur, b=c.caja, p=c.pos, G=400, M=armMascara(c), blur=Math.max(1.5,G*Math.max(b.w,b.h)*.025);
-  const capa=(x0,y0,w,h)=>{ const cv=document.createElement("canvas"); cv.width=cv.height=G; const x=cv.getContext("2d",{willReadFrequently:true}); x.filter=`blur(${blur}px)`; x.drawImage(M,x0*G,y0*G,w*G,h*G); return x.getImageData(0,0,G,G).data };
-  const w=b.w*p.s, h=b.h*p.s;
-  try{
-    const real=capa(b.x,b.y,b.w,b.h), puesta=capa(p.cx-w/2,p.cy-h/2,w,h); let inter=0,union=0;
-    for(let i=3;i<real.length;i+=4){ const r=real[i],q=puesta[i]; inter+=r<q?r:q; union+=r>q?r:q }
-    return union>0?inter/union*100:0;
-  }catch(e){ // por las dudas: recuadro
-    const tx=b.x+b.w/2, ty=b.y+b.h/2, ix=Math.max(0,Math.min(p.cx+w/2,tx+b.w/2)-Math.max(p.cx-w/2,tx-b.w/2)), iy=Math.max(0,Math.min(p.cy+h/2,ty+b.h/2)-Math.max(p.cy-h/2,ty-b.h/2));
-    const inter=ix*iy, union=w*h+b.w*b.h-inter; return union>0?inter/union*100:0 }
+  const c=ARM.cur, b=c.caja, p=c.pos, tx=b.x+b.w/2, ty=b.y+b.h/2;
+  const diag=Math.max(.12,Math.hypot(b.w,b.h)), ePos=Math.hypot(p.cx-tx,p.cy-ty)/diag, eTam=Math.abs(Math.log(p.s));
+  return 100*Math.max(0,1-ePos/.55)*Math.max(0,1-eTam/.55);
 }
 const ARM_FRASES=[[95,"¡Sos fan de verdad!","Esa tapa la tenés grabada."],[80,"¡Muy cerca!","Casi la clavás."],[55,"¿Sos fan de verdad?","Mirá bien la tapa y probá de nuevo."],[25,"Mmm… ¿seguro que escuchaste este disco?","Probá otra vez."],[0,"Ni cerca 😅","Dale otra oportunidad."]];
 $("armar-ok").onclick=()=>{
