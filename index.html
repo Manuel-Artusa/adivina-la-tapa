@@ -3208,6 +3208,9 @@ const PALABRAS_JUGOSAS=[
   [/r[eé]cord|vendi|copias|disco de (oro|platino)|primer|[uú]nic|[uú]ltim|m[aá]s vendid|n[uú]mero uno/i,2],
   [/d[ií]as|horas|semanas|meses|a[ñn]os despu[eé]s|tard(ó|aron)|demor/i,1],
   [/invitad|particip|colabor|toc[oó]|cant[oó]|pele|separ|renunci|ingres/i,1],
+  [/cl[aá]sic|m[aá]s (representativ|popular|famos|conocid|exitos)|himno|[eé]xito|hit|consagr|ic[oó]nic|emblem/i,3],
+  [/premi|galard|gardel|grammy|mtv|nominad|mejor (canci[oó]n|disco|[aá]lbum)|posici[oó]n|puesto|lista de los|ranking|rolling stone/i,3],
+  [/in[eé]dit|nuev[oa]s? (canci|tema)|sencillo|corte de difusi|videoclip|video/i,2],
 ];
 function puntajeFrase(f,secc){
   let p=0; for(const [re,v] of PALABRAS_JUGOSAS) if(re.test(f)) p+=v;
@@ -3225,14 +3228,20 @@ function wikiDatos(art,alb){
     try{ const m=(await datosMano())[k]; if(m){ const l=Array.isArray(m)?m:[m]; out.cands.push(...l.map(t=>({t,wiki:false}))); out.mano=l.length } }catch(e){}
     try{
       const api="https://es.wikipedia.org/w/api.php?format=json&origin=*&";
-      const r=await (await fetch(api+`action=query&list=search&srsearch=${encodeURIComponent(`${alb} ${art} álbum`)}&srlimit=6`)).json();
+      const r=await (await fetch(api+`action=query&list=search&srsearch=${encodeURIComponent(`${alb} ${art} álbum`)}&srlimit=8`)).json();
       const clave=norm(alb).split(" ").slice(0,3).join(" "), banda=norm(art).split(" ").filter(p=>p.length>2&&!["los","las","the","del"].includes(p))[0]||norm(art);
-      for(const h of (r.query&&r.query.search)||[]){
-        if(!norm(h.title).includes(clave)) continue;
-        const q=await (await fetch(api+`action=query&prop=extracts|info&inprop=url&explaintext=1&exsectionformat=wikitext&redirects=1&titles=${encodeURIComponent(h.title)}`)).json();
+      // candidatos: primero los títulos típicos de un disco ("X (álbum)", "X (álbum de Banda)"), después la búsqueda
+      const titulos=[`${alb} (álbum de ${art})`,`${alb} (álbum)`,`${alb} (disco)`,alb,...((r.query&&r.query.search)||[]).map(h=>h.title).filter(t=>norm(t).includes(clave))];
+      const vistosT=new Set();
+      for(const titulo of titulos){
+        if(vistosT.has(titulo)) continue; vistosT.add(titulo);
+        const q=await (await fetch(api+`action=query&prop=extracts|info&inprop=url&explaintext=1&exsectionformat=wikitext&redirects=1&titles=${encodeURIComponent(titulo)}`)).json();
         const pg=Object.values((q.query&&q.query.pages)||{})[0]||{}, txt=pg.extract||"";
-        const intro=txt.split(/\n==/)[0];
-        if(!/álbum|disco|LP|EP/i.test(intro)||!norm(intro).includes(banda)) continue;
+        if(!txt) continue;
+        const intro=txt.split(/\n==/)[0], primera=(intro.match(/[^.]+\./)||[intro])[0];
+        if(!/álbum|disco|LP|EP|recopilatorio/i.test(intro)||!norm(intro).includes(banda)) continue;
+        // que sea el artículo del disco y no de una canción con el mismo nombre
+        if(/\b(canci[oó]n|sencillo|single|tema)\b/i.test(primera)&&!/\b([aá]lbum|disco|LP|EP|recopilatorio)\b/i.test(primera)) continue;
         out.url=pg.fullurl||null;
         // separa por secciones y oraciones, y se queda con las más jugosas
         const frases=[]; let secc="intro", nIntro=0;
@@ -3242,19 +3251,36 @@ function wikiDatos(art,alb){
           for(let f of linea.match(/[^.!?]+(?:[.!?]+["»”]?|$)/g)||[]){
             f=f.replace(/\s*\[[^\]]*\]/g,"").replace(/\s+/g," ").trim();
             if(secc==="intro"&&nIntro++===0) continue;           // la primera frase es la presentación
-            if(f.length<50||f.length>300) continue;
+            if(f.length<50||f.length>600) continue;
             frases.push({t:f,p:puntajeFrase(f,secc)});
           }
         }
         frases.sort((a,b)=>b.p-a.p);
         const vistos=new Set();
-        for(const f of frases){ if(f.p<2||out.cands.length>=8+out.mano) break; const kk=norm(f.t).slice(0,40); if(vistos.has(kk)) continue; vistos.add(kk); out.cands.push({t:f.t,wiki:true}) }
+        for(const f of frases){ if(f.p<1||out.cands.length>=8+out.mano) break; const kk=norm(f.t).slice(0,40); if(vistos.has(kk)) continue; vistos.add(kk); out.cands.push({t:f.t,wiki:true}) }
         // si no hubo nada jugoso, al menos la segunda frase de la introducción
         if(out.cands.length===out.mano){
           let s=""; for(const f of (intro.replace(/\s*\([^)]*\)/g,"").match(/[^.!?]+[.!?]+/g)||[])){ if((s+f).length>300&&s) break; s+=f }
           s=s.replace(/\s+/g," ").trim(); if(s.length>40) out.cands.push({t:s,wiki:true,tipo:"resumen"});
         }
+        out.encontrado=true;
         break;
+      }
+      if(!out.encontrado){
+        const tb=[`${art} (banda)`,`${art} (grupo)`,`${art} (músico)`,`${art} (cantante)`,art];
+        for(const titulo of tb){
+          const q=await (await fetch(api+`action=query&prop=extracts|info&inprop=url&explaintext=1&redirects=1&titles=${encodeURIComponent(titulo)}`)).json();
+          const pg=Object.values((q.query&&q.query.pages)||{})[0]||{}, txt=pg.extract||"";
+          if(!txt||!/banda|grupo|m[uú]sic|cantante|rock/i.test(txt.slice(0,600))) continue;
+          const t0=norm(alb), frases=[];
+          for(let f of txt.match(/[^.!?\n]+[.!?]+/g)||[]){
+            f=f.replace(/\s*\[[^\]]*\]/g,"").replace(/\s+/g," ").trim();
+            if(f.length<60||f.length>600||!norm(f).includes(t0)) continue;
+            frases.push({t:f,p:puntajeFrase(f,"")});
+          }
+          frases.sort((a,b)=>b.p-a.p).slice(0,4).forEach(f=>out.cands.push({t:f.t,wiki:true}));
+          if(frases.length){ out.url=pg.fullurl||null; break }
+        }
       }
     }catch(e){}
     return out;
@@ -3310,8 +3336,10 @@ async function placasPost(p){
     x.fillStyle=CC.tinta; x.fillRect(88,top+8,920,H); x.fillStyle=CC.crema; x.fillRect(80,top,920,H);
     x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(80,top,920,H);
     etiqueta(x,p.tipoDato==="resumen"?"EN POCAS PALABRAS":"¿SABÍAS QUE…?",100,top+22,26,CC.rojo,CC.crema);
-    const max=Math.max(2,Math.floor((H-110)/(34*1.3))-(p.fuente?1:0));
-    texto(x,p.dato,110,top+128,{f:FB,peso:"800",s:50,w:860,max,lh:1.25,min:22});
+    // la letra más grande con la que entra todo el dato en el recuadro
+    const alto=H-130-(p.fuente?30:0); let s=50;
+    for(;s>20;s-=2){ x.font=`800 ${s}px ${FB}`; if(partir(x,p.dato,860).length*s*1.25<=alto) break }
+    texto(x,p.dato,110,top+80+s,{f:FB,peso:"800",s,w:860,max:99,lh:1.25,min:s});
     if(p.fuente) texto(x,`Fuente: ${p.fuente}`,990,top+H-18,{f:FM,peso:"500",s:18,c:CC.sombra,al:"right"});
   }else{
     // sin dato: invitación a jugar en la web (la lista de temas ya va en otra foto)
@@ -3431,7 +3459,6 @@ const titulo=e=>((e.labels.es||e.labels.en||{}).value||"");
 // Arma la pieza con el dato: "Otro dato" pasa al siguiente, y se puede escribir uno propio
 async function piezaPost(p,titulo,cuando){
   const w0=await wikiDatos(p.r.a,p.r.t), w={...w0,cands:w0.cands.slice()};
-  if(!w.cands.length){ const wd=await wikidataResumen(p.r.a,p.r.t); if(wd) w.cands.push({t:wd,wiki:"Wikidata",tipo:"resumen"}) }
   let i=0;
   const usar=j=>{ const c=w.cands[j]; p.dato=c?c.t:""; p.fuente=c&&c.wiki?(c.wiki===true?"Wikipedia":c.wiki):""; p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
     p.extras=w.cands.filter((x,k)=>k!==j&&x.tipo!=="resumen").map(x=>x.t).slice(0,3) };
@@ -3555,7 +3582,6 @@ async function datoDe(p){
   try{
     const w=await wikiDatos(p.r.a,p.r.t);
     let c=w.cands.find(x=>x.tipo!=="resumen")||w.cands[0];
-    if(!c){ const wd=await wikidataResumen(p.r.a,p.r.t); if(wd) c={t:wd,wiki:"Wikidata",tipo:"resumen"} }
     p.dato=c?c.t:""; p.fuente=c&&c.wiki?(c.wiki===true?"Wikipedia":c.wiki):""; p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
     p.extras=w.cands.filter(x=>x!==c&&x.tipo!=="resumen").map(x=>x.t).slice(0,3);
   }catch(e){ p.dato=""; p.extras=[] }
