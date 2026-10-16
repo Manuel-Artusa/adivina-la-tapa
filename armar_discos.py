@@ -266,6 +266,22 @@ def mb_discografia(mbid):
     return out
 
 
+def mb_buscar_artista(art, nacional=False):
+    """Si ninguno de sus discos apareció en MusicBrainz, busca la banda directamente por el nombre."""
+    q = urllib.parse.quote(f'artist:"{art.replace(chr(34), " ")}"')
+    res = (mb_get(f"artist?query={q}&fmt=json&limit=10") or {}).get("artists", [])
+    cands = []
+    for a in res:
+        nombres = [a.get("name", "")] + [x.get("name", "") for x in a.get("aliases", []) or []]
+        if not any(norm(n) == norm(art) or mismo_artista(n, art) for n in nombres):
+            continue
+        exacto = 0 if norm(a.get("name", "")) == norm(art) else 1
+        pais = 0 if (not nacional or a.get("country") == "AR") else 1
+        cands.append((exacto, pais, -int(a.get("score", 0)), a.get("id")))
+    cands.sort()
+    return cands[0][3] if cands else None
+
+
 def mb_banda(mbid):
     """Datos de la banda para el juego La banda del día: país, banda o solista, año en que arrancó y si sigue."""
     a = mb_get(f"artist/{mbid}?fmt=json")
@@ -360,6 +376,14 @@ def main():
     for k, v in discos.items():
         if v.get("mbid"):
             por_banda.setdefault(k.split("|", 1)[0], []).append(v["mbid"])
+    # bandas del catálogo sin ningún disco encontrado en MusicBrainz: se buscan por nombre
+    nacionales = {d[0] for d in catalogo if len(d) > 3 and d[3] == "nac"}
+    for art in sorted({k.split("|", 1)[0] for k in discos} - set(por_banda)):
+        previa = bandas_previas.get(art)
+        mbid = previa.get("mbid") if previa else mb_buscar_artista(art, art in nacionales)
+        print(f"   {art}: buscada por nombre → {mbid or 'no está'}", flush=True)
+        if mbid:
+            por_banda[art] = [mbid]
     print(f"Bandas a revisar: {len(por_banda)}", flush=True)
     for art, ids in sorted(por_banda.items()):
         mbid = max(set(ids), key=ids.count)

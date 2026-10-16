@@ -88,7 +88,7 @@
     "h": "Grilla rockera: completá los 9 casilleros",
     "texto": [
       "Cada casillero cruza la condición de su fila con la de su columna, por ejemplo «De Argentina» y «Arrancó en los 80». Escribí una banda o solista que cumpla las dos.",
-      "Tenés 9 intentos y no podés repetir bandas. Hay una grilla del día igual para todos, con ranking, y un modo libre para seguir jugando."
+      "Tenés 60 segundos para llenar los 9 casilleros y no podés repetir bandas. Hay una grilla del día igual para todos, con ranking, y un modo libre para seguir jugando."
     ]
   },
   "antes": {
