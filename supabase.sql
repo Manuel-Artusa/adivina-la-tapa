@@ -44,6 +44,6 @@ create policy "subir puntaje" on puntajes for insert with check (
        (modo = 'diario' and genero = 'todos' and puntos <= 50)
     or (modo = 'tema'   and genero = 'todos' and puntos <= 6)
     or (modo not in ('diario','tema','normal') and genero = 'diario'
-        and puntos <= 100 and puntos % 10 = 0)
+        and puntos <= (case when modo = 'grilla' then 120 else 100 end) and puntos % 10 = 0)
   )
 );
