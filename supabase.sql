@@ -47,3 +47,19 @@ create policy "subir puntaje" on puntajes for insert with check (
         and puntos <= (case when modo = 'grilla' then 120 else 100 end) and puntos % 10 = 0)
   )
 );
+
+-- ===== Publicaciones automáticas en Instagram (tarea de GitHub "Publicar en Instagram") =====
+-- Tabla interna: guarda el token de Instagram (se renueva solo) y qué se publicó cada día.
+-- Sin políticas: solo la puede leer o escribir la clave secreta (service_role) que usa la tarea, nunca la página.
+create table if not exists redes (
+  clave text primary key,
+  valor text,
+  actualizado timestamptz not null default now()
+);
+alter table redes enable row level security;
+
+-- Carpeta pública donde la tarea deja las imágenes y videos del día (Instagram las baja de ahí).
+-- Se borran solas a los 4 días.
+insert into storage.buckets (id, name, public)
+values ('redes', 'redes', true)
+on conflict (id) do update set public = true;

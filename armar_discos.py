@@ -300,6 +300,9 @@ def mb_banda(mbid):
         "tipo": "solista" if a.get("type") == "Person" else "banda",
         "inicio": int(inicio) if inicio.isdigit() else None,
         "sigue": not vida.get("ended", False),
+        # fecha de nacimiento (solistas) o de formación (bandas), y de muerte o separación: para los cumpleaños
+        "desde": vida.get("begin") or "",
+        "hasta": vida.get("end") or "",
         "discografia": mb_discografia(mbid),
     }
 
@@ -388,7 +391,7 @@ def main():
     for art, ids in sorted(por_banda.items()):
         mbid = max(set(ids), key=ids.count)
         b = bandas_previas.get(art)
-        if not b or b.get("mbid") != mbid or "discografia" not in b:
+        if not b or b.get("mbid") != mbid or "discografia" not in b or "desde" not in b:
             b = mb_banda(mbid)
             print(f"   {art}: {b}", flush=True)
         if b:

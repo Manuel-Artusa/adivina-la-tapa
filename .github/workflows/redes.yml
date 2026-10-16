@@ -1,0 +1,60 @@
+name: Publicar en Instagram
+
+on:
+  schedule:
+    - cron: "0 12 * * *"   # 9:00 de Argentina: post del día + historias del desafío
+    - cron: "0 22 * * *"   # 19:00 de Argentina: cumpleaños, efemérides y video
+  workflow_dispatch:
+    inputs:
+      turno:
+        description: "Qué publicar"
+        type: choice
+        options: [manana, tarde, todo]
+        default: manana
+      prueba:
+        description: "Modo prueba: solo arma las imágenes para revisar, no publica"
+        type: boolean
+        default: true
+      dia:
+        description: "Día (AAAA-MM-DD). Vacío = hoy"
+        required: false
+
+concurrency: redes
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    # Las publicaciones automáticas arrancan cuando cargues el secreto IG_TOKEN (ver INSTAGRAM.md)
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.REDES_ACTIVO == 'si' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Instalar Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Armar el sitio
+        env:
+          SUPA_URL: ${{ secrets.SUPA_URL }}
+          SUPA_KEY: ${{ secrets.SUPA_KEY }}
+          SITE_URL: https://juegosrock.com.ar
+        run: node build.js
+      - name: Armar y publicar
+        env:
+          TURNO: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 12 * * *' && 'manana' || 'tarde') || inputs.turno }}
+          PRUEBA: ${{ github.event_name == 'workflow_dispatch' && inputs.prueba && 'true' || 'false' }}
+          DIA: ${{ inputs.dia }}
+          SUPA_URL: ${{ secrets.SUPA_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+        run: node redes/publicar.mjs
+      - name: Guardar las imágenes para revisar
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redes-${{ github.run_id }}
+          path: redes/salida/
+          retention-days: 7

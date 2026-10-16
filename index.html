@@ -3092,7 +3092,7 @@ function placasOrden(o){
   texto(x,o.banda,80,320,{s:84,c:CC.rojo,w:920,max:2,lh:1.05,min:44});
   const pos=[[80,470],[400,470],[720,470],[240,820],[560,820]], S=280;
   o.items.forEach((it,i)=>{ const [X,Y]=pos[i]; tapa(x,it.img,X,Y,S,0,7); letra(x,letras[i],X-7,Y-7,62) });
-  texto(x,"¿Cómo los ordenás? Respuesta en la última foto →",540,1240,{f:FM,peso:"500",s:28,al:"center",w:960});
+  texto(x,"¿Cómo los ordenás? La respuesta, en la foto siguiente →",540,1240,{f:FM,peso:"500",s:28,al:"center",w:960});
   out.push(c);
   // 2) la respuesta
   [c,x]=lienzo(1080,1350);
@@ -3119,10 +3119,10 @@ function placasOrden(o){
   out.push(c);
   return out;
 }
-function placaRanking(filas){
+function placaRanking(filas,etq="RANKING · ÚLTIMOS 7 DÍAS",tit="LOS QUE MÁS SABEN"){
   const [c,x]=lienzo(1080,1920);
-  etiqueta(x,"RANKING · ÚLTIMOS 7 DÍAS",90,200,32);
-  texto(x,"LOS QUE MÁS SABEN",90,380,{s:96,w:900});
+  etiqueta(x,etq,90,200,32);
+  texto(x,tit,90,380,{s:96,w:900});
   filas.slice(0,10).forEach((f,i)=>{
     const Y=440+i*100;
     if(i%2===0){ x.fillStyle="rgba(20,18,16,.07)"; x.fillRect(70,Y,940,92) }
@@ -3287,7 +3287,7 @@ async function placasPost(p){
       texto(x,o.a,X+68,Y+40,{f:FB,peso:"600",s:22,c:CC.sombra,w:W-84});
       texto(x,o.t,X+68,Y+76,{f:FB,peso:"800",s:28,w:W-84,max:1,min:18});
     });
-    texto(x,"Comentá tu respuesta · deslizá para verla →",540,1300,{f:FM,peso:"500",s:27,al:"center",w:960});
+    texto(x,"Deslizá para ver la respuesta →",540,1300,{f:FM,peso:"500",s:27,al:"center",w:960});
   }
   out.push(c);
   // 2) el disco: datos + dato curioso
@@ -3398,8 +3398,8 @@ async function placasPost(p){
   return out;
 }
 function textoPost(p){
-  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}. ¿Cuál es tu tema favorito de este disco? 👇\n\nDeslizá para ver datos, la lista de temas y dónde está en su discografía. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
-  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Comentá la letra (A, B, C o D) y deslizá para ver la respuesta, datos del disco, la lista de temas y su lugar en la discografía.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
+  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}.\n\nDeslizá para ver datos, la lista de temas y dónde está en su discografía. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
+  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Deslizá para ver la respuesta, datos del disco, la lista de temas y su lugar en la discografía.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
 }
 // Resumen desde Wikidata (productor, sello, género, disco anterior y siguiente) cuando no hay datos en Wikipedia
 async function wikidataResumen(art,alb){
@@ -3507,10 +3507,10 @@ async function contArmar(){
     const o=await contOrden(semillaRng(hashStr("orden-"+ayer))); if(n!==CONT_N) return;
     const cs=placasOrden(o);
     const pieza=contPieza(`Ordená la discografía: ${o.banda} (carrusel)`,`Post · es el desafío del ${fechaCorta(ayer)}`,cs,"ordena",ayer,
-      `¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo y comentá tu orden (ej: C B A E D). La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`);
+      `¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo. La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`);
     const otra=document.createElement("button"); otra.type="button"; otra.textContent="Otra banda";
     otra.onclick=async()=>{ otra.disabled=true; otra.textContent="Armando…"; try{ const o2=await contOrden(Math.random); const nueva=contPieza(`Ordená la discografía: ${o2.banda} (carrusel)`,"Post · banda al azar",placasOrden(o2),"ordena-"+norm(o2.banda).replace(/\s+/g,"-"),dia,
-      `¿Te sabés la discografía de ${o2.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo y comentá tu orden (ej: C B A E D). La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o2.banda)}`);
+      `¿Te sabés la discografía de ${o2.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo. La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o2.banda)}`);
       nueva.querySelector(".fila-acc").appendChild(otra); pieza.replaceWith(nueva) }catch(e){} otra.disabled=false; otra.textContent="Otra banda" };
     pieza.querySelector(".fila-acc").appendChild(otra);
     poner(pieza);
@@ -3530,6 +3530,200 @@ async function contArmar(){
   estado.textContent=CONT_SUCIO?"Listo. Algunas tapas no dejaron armar el archivo: si “Descargar” no anda, mantené apretada la imagen o sacale captura.":"Listo.";
   contar("contenido-armar");
 }
+
+// ===== Redes automáticas: qué se publica cada día (lo usa la tarea de GitHub que publica en Instagram) =====
+// redesPlan(dia, turno) devuelve [{id, tipo:"carrusel"|"historia"|"reel", caption, imgs:[canvas], video?}]
+// turno "manana": post del día + historias del desafío. turno "tarde": cumpleaños, efemérides y video.
+const DIAS_SEMANA=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const diaSemana=dia=>new Date(dia+"T12:00:00Z").getUTCDay();
+const edadEn=(desde,dia)=>{ const [y,m,d]=desde.split("-").map(Number), [Y,M,D]=dia.split("-").map(Number); return Y-y-((M<m||(M===m&&D<d))?1:0) };
+const fechaDiaMes=dia=>{ const [,m,d]=dia.split("-").map(Number); return `${d} de ${MESES[m-1]}` };
+// Artistas del catálogo que cumplen años (solistas) o que se formaron un día como hoy (bandas), con fecha completa
+function cumpleanos(dia){
+  if(!CACHE||!CACHE.bandas) return [];
+  const md=dia.slice(5), out=[];
+  for(const [a,b] of Object.entries(CACHE.bandas)){
+    if(!b||!b.desde||b.desde.length!==10||b.desde.slice(5)!==md) continue;
+    const n=edadEn(b.desde,dia); if(n<1) continue;
+    const ds=DISCOS.filter(d=>d[0]===a&&d[1]&&CACHE.disc[d[0]+"|"+d[1]]);
+    if(!ds.length) continue;
+    out.push({a,b,n,ds,solista:b.tipo==="solista",vive:!b.hasta,nac:ds.some(d=>d[3]==="nac")});
+  }
+  return out.sort((x,y)=>(y.nac-x.nac)||(y.solista-x.solista)||(y.n%10===0)-(x.n%10===0)||y.ds.length-x.ds.length);
+}
+async function datoDe(p){
+  try{
+    const w=await wikiDatos(p.r.a,p.r.t);
+    let c=w.cands.find(x=>x.tipo!=="resumen")||w.cands[0];
+    if(!c){ const wd=await wikidataResumen(p.r.a,p.r.t); if(wd) c={t:wd,wiki:"Wikidata",tipo:"resumen"} }
+    p.dato=c?c.t:""; p.fuente=c&&c.wiki?(c.wiki===true?"Wikipedia":c.wiki):""; p.tipoDato=c&&c.tipo==="resumen"?"resumen":"dato";
+    p.extras=w.cands.filter(x=>x!==c&&x.tipo!=="resumen").map(x=>x.t).slice(0,3);
+  }catch(e){ p.dato=""; p.extras=[] }
+  return p;
+}
+// --- placas nuevas ---
+async function placasCumple(c0){
+  const out=[], imgs=await Promise.all(c0.ds.slice(0,4).map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url)));
+  let [c,x]=lienzo(1080,1350);
+  const [,m,d]=c0.b.desde.split("-").map(Number);
+  etiqueta(x,`${c0.solista?"CUMPLEAÑOS":"ANIVERSARIO"} · ${d} DE ${MESES[m-1].toUpperCase()}`,80,70,30);
+  if(c0.solista) texto(x,c0.vive?`Hoy cumple ${c0.n} años`:`Hoy cumpliría ${c0.n} años`,80,230,{s:76,c:CC.rojo,w:920,min:40});
+  else texto(x,`Hace ${c0.n} años se formaba`,80,230,{s:76,c:CC.rojo,w:920,min:40});
+  const yn=texto(x,c0.a,80,355,{s:100,w:920,max:2,lh:1.02,min:50});
+  // mosaico de sus tapas, debajo del nombre (que puede ocupar dos renglones)
+  const top=yn+60, alto=1250-top, dos=imgs.length>1, filas=imgs.length>2?2:1;
+  const S=Math.min(dos?400:600,Math.floor((alto-(filas-1)*40)/filas)), G=40, ancho=dos?S*2+G:S, X0=Math.round((1080-ancho)/2);
+  imgs.forEach((im,i)=>tapa(x,im,X0+(dos?(i%2)*(S+G):0),top+Math.floor(i/2)*(S+G),S,0,8));
+  if(imgs.length===1||imgs.length===2) texto(x,"Deslizá para ver sus discos →",540,1300,{f:FM,peso:"500",s:28,al:"center"});
+  out.push(c);
+  // sus discos en el juego
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"SUS DISCOS EN JUEGOS ROCK",80,70,30);
+  texto(x,c0.a,80,210,{s:64,w:920,min:34});
+  const lista=c0.ds.slice().sort((p,q)=>p[2]-q[2]).slice(0,5);
+  const tapas=await Promise.all(lista.map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url)));
+  lista.forEach((dd,i)=>{
+    const Y=270+i*170;
+    tapa(x,tapas[i],90,Y,140,0,6);
+    texto(x,String(dd[2]||""),280,Y+60,{f:FM,peso:"500",s:32,c:CC.sombra});
+    texto(x,dd[1],280,Y+110,{f:FB,peso:"800",s:42,w:720,max:1,min:24});
+  });
+  texto(x,"¿Los reconocés por la tapa? Jugá en",540,1250,{f:FB,peso:"600",s:32,al:"center"});
+  marca(x,540,1270,40);
+  out.push(c);
+  return out;
+}
+async function placaEfemerides(dia,items){
+  const [c,x]=lienzo(1080,1350);
+  etiqueta(x,`UN DÍA COMO HOY · ${fechaDiaMes(dia).toUpperCase()}`,80,70,30);
+  texto(x,"Efemérides del rock",80,230,{s:82,w:920,min:40});
+  const lista=items.slice(0,5), imgs=await Promise.all(lista.map(it=>contImg(it.url)));
+  lista.forEach((it,i)=>{
+    const Y=300+i*180;
+    tapa(x,imgs[i],90,Y,140,0,6);
+    texto(x,it.cuando,280,Y+50,{f:FM,peso:"500",s:28,c:CC.rojo,w:720});
+    texto(x,it.titulo,280,Y+100,{f:FB,peso:"800",s:40,w:720,max:1,min:22});
+    texto(x,it.sub,280,Y+140,{f:FB,peso:"600",s:28,c:CC.sombra,w:720,max:1,min:18});
+  });
+  marca(x,540,1240,40);
+  return c;
+}
+async function placaBandaDia(dia){
+  const rng=semillaRng(hashStr("banda-"+dia)), o=banElegir(rng); if(!o) return null;
+  const d=mezR(o.ds,rng)[0], img=await contImg(CACHE.disc[d[0]+"|"+d[1]].url);
+  const [c,x]=lienzo(1080,1920);
+  etiqueta(x,`LA BANDA DEL DÍA #${numDiario(dia)}`,90,200,32);
+  texto(x,"¿QUÉ BANDA ES?",90,380,{s:104,w:900});
+  texto(x,"Pista: una de sus tapas",90,460,{f:FB,peso:"800",s:40,c:CC.sombra});
+  tapa(x,img,200,520,680,12);
+  ["País","Tipo","Arrancó","Sigue"].forEach((t,i)=>{ const X=90+i*230; x.fillStyle=CC.crema; x.fillRect(X,1290,210,90); x.strokeStyle=CC.tinta; x.lineWidth=4; x.strokeRect(X,1290,210,90); texto(x,t,X+105,1348,{f:FB,peso:"800",s:30,al:"center",w:190}) });
+  texto(x,"Tenés 6 intentos. Jugá en",540,1520,{f:FB,peso:"600",s:34,al:"center"});
+  marca(x,540,1548,46);
+  return c;
+}
+function placaGrillaDia(dia){
+  const g=griArmar(semillaRng(hashStr("grilla-"+dia))); if(!g) return null;
+  const [c,x]=lienzo(1080,1920);
+  etiqueta(x,`GRILLA ROCKERA #${numDiario(dia)}`,90,200,32);
+  texto(x,"¿LA COMPLETÁS?",90,380,{s:104,w:900});
+  const X0=330,Y0=600,S=230,G=14;
+  g.cols.forEach((cc,j)=>texto(x,cc.t,X0+j*(S+G)+S/2,Y0-90,{f:FB,peso:"800",s:28,al:"center",w:S,max:3,lh:1.1,min:18}));
+  g.filas.forEach((f,i)=>{
+    texto(x,f.t,90,Y0+i*(S+G)+S/2-10,{f:FB,peso:"800",s:28,w:220,max:3,lh:1.1,min:18});
+    g.cols.forEach((cc,j)=>{ const X=X0+j*(S+G), Y=Y0+i*(S+G); x.fillStyle=CC.tinta; x.fillRect(X+6,Y+6,S,S); x.fillStyle=CC.crema; x.fillRect(X,Y,S,S); x.strokeStyle=CC.tinta; x.lineWidth=5; x.strokeRect(X,Y,S,S); texto(x,"+",X+S/2,Y+S/2+30,{s:80,c:CC.sombra,al:"center",w:S}) });
+  });
+  texto(x,"Elegí 90, 60 o 45 segundos. Jugá en",540,1520,{f:FB,peso:"600",s:34,al:"center"});
+  marca(x,540,1548,46);
+  return c;
+}
+async function topDia(dia){
+  const r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=nombre,puntos,modo,genero,dia,jugador&dia=eq.${dia}&modo=in.(${DIARIOS.join(",")})&limit=5000`,{headers:supaHeaders});
+  if(!r.ok) return [];
+  const mejor=new Map(), nombres=new Map();
+  for(const f of await r.json()){
+    if(!(f.modo==="diario"||f.modo==="tema"||f.genero==="diario")) continue;
+    const q=quienEs(f); if(!nombres.has(q)) nombres.set(q,{nombre:f.nombre,jugador:f.jugador});
+    const k=q+"|"+f.modo, p=Math.round(Math.min(f.modo==="grilla"?120:100,f.puntos*(GEN_ESCALA[f.modo]||1)));
+    if(!mejor.has(k)||mejor.get(k)<p) mejor.set(k,p);
+  }
+  const suma=new Map(); for(const [k,p] of mejor){ const q=k.split("|")[0]; suma.set(q,(suma.get(q)||0)+p) }
+  return [...suma].sort((a,b)=>b[1]-a[1]).slice(0,10).map(([q,p])=>({...nombres.get(q),puntos:p}));
+}
+const placaTopDia=(dia,filas)=>placaRanking(filas,`RANKING DEL ${fechaDiaMes(dia).toUpperCase()}`,"LOS MEJORES DE AYER");
+// --- textos de las publicaciones (sin pedir comentarios) ---
+function textoAuto(p){
+  if(p.tipo==="aniv") return `📅 Un día como hoy, hace ${p.anios} años, salía ${p.r.t} de ${p.r.a}.\n\nDeslizá para ver un dato del disco, la lista de temas y dónde está en su discografía. Jugá a adivinar tapas como esta todos los días en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)} #undiacomohoy`;
+  return `¿Qué disco es? 🎸 Es la primera tapa de la Tapa del día #${numDiario(p.dia)}. Deslizá para ver la respuesta, un dato del disco, la lista de temas y su lugar en la discografía.\n\nLas otras 9 de hoy te esperan en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(p.r.a)}`;
+}
+const REDES_VIDEOS=[ // rotan en la tarde de martes, jueves y sábado
+  {archivo:"banda-del-dia.mp4",caption:`🎸 La banda del día: adiviná la banda en 6 intentos con pistas de país, tipo, año y si sigue tocando. Una nueva cada día en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} #labandadeldia`},
+  {archivo:"grilla-rockera.mp4",caption:`#️⃣ Grilla rockera: 9 casilleros, cada uno cruza dos condiciones. Elegí 90, 60 o 45 segundos y sumá más puntos cuanto más rápido. Gratis en juegosrock.com.ar\n\n${CONT_TAGS} #grillarockera`},
+  {archivo:"arma-la-tapa.mp4",caption:`🧩 Armá la tapa: a la tapa le falta algo. Ponelo en su lugar y con su tamaño. ¿Sos fan de verdad? Probalo en juegosrock.com.ar\n\n${CONT_TAGS} #armalatapa`},
+];
+async function redesPlan(dia,turno){
+  try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
+  await esperarCache();
+  const out=[], ayer=sumarDias(dia,-1), ds=diaSemana(dia), err=[];
+  const intentar=async(nombre,fn)=>{ try{ await fn() }catch(e){ err.push(nombre+": "+(e&&e.message||e)); console.error(nombre,e) } };
+  if(turno!=="tarde"){
+    // 1) post del feed: el aniversario más lindo del día, o la primera tapa del día
+    await intentar("post",async()=>{
+      const an=aniversarios(dia).filter(a=>a.r.cat==="nac"||a.anios%5===0);
+      let p;
+      if(an.length){ const a=an[0]; p={tipo:"aniv",dia,r:a.r,art:a.art,anios:a.anios,fecha:a.fecha} }
+      else { const t=await contTapa(dia); if(t) p={tipo:"dia",dia,r:t.r,ops:t.ops} }
+      if(!p) return;
+      await datoDe(p);
+      out.push({id:"post",tipo:"carrusel",caption:textoAuto(p),imgs:await placasPost(p)});
+    });
+    // 2) historias: respuesta de ayer, tapa de hoy, banda del día, grilla del día, ranking de ayer
+    await intentar("respuesta",async()=>{ const t=await contTapa(ayer); if(t) out.push({id:"h-respuesta",tipo:"historia",caption:"",imgs:[await placaRespuesta(ayer,t)]}) });
+    await intentar("pregunta",async()=>{ const t=await contTapa(dia); if(t) out.push({id:"h-pregunta",tipo:"historia",caption:"",imgs:[await placaPregunta(dia,t)]}) });
+    await intentar("banda",async()=>{ const c=await placaBandaDia(dia); if(c) out.push({id:"h-banda",tipo:"historia",caption:"",imgs:[c]}) });
+    await intentar("grilla",async()=>{ const c=placaGrillaDia(dia); if(c) out.push({id:"h-grilla",tipo:"historia",caption:"",imgs:[c]}) });
+    if(TOP_ON) await intentar("top",async()=>{
+      const f=ds===0?await topGeneral("semana"):await topDia(ayer);
+      if(f.length>=3) out.push({id:"h-top",tipo:"historia",caption:"",imgs:[ds===0?placaRanking(f):placaTopDia(ayer,f)]});
+    });
+    // 3) miércoles: carrusel de Ordená la discografía (el de ayer, para no adelantar el de hoy)
+    if(ds===3) await intentar("orden",async()=>{
+      const o=await contOrden(semillaRng(hashStr("orden-"+ayer)));
+      out.push({id:"orden",tipo:"carrusel",caption:`¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo. La respuesta está en la segunda foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`,imgs:placasOrden(o)});
+    });
+  }
+  if(turno!=="manana"){
+    // 4) cumpleaños de artistas (el más importante del día)
+    const cs=cumpleanos(dia);
+    if(cs.length) await intentar("cumple",async()=>{
+      const c0=cs[0];
+      const cap=c0.solista
+        ?`🎂 ${c0.vive?`Hoy cumple ${c0.n} años`:`Hoy cumpliría ${c0.n} años`} ${c0.a}. Deslizá para ver sus discos que están en Juegos Rock: ¿los reconocés por la tapa?\n\njuegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(c0.a)} #cumpleaños`
+        :`🎸 Un día como hoy, hace ${c0.n} años, se formaba ${c0.a}. Deslizá para ver sus discos que están en Juegos Rock.\n\njuegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} ${hashtag(c0.a)} #undiacomohoy`;
+      out.push({id:"cumple",tipo:"carrusel",caption:cap,imgs:await placasCumple(c0)});
+    });
+    // 5) efemérides: los otros discos que cumplen años y los demás cumpleaños (si hay al menos 2 cosas)
+    await intentar("efemerides",async()=>{
+      const an=aniversarios(dia), usado=out.find(o=>o.id==="post"), items=[];
+      an.forEach(a=>items.push({url:a.r.url,cuando:`Hace ${a.anios} años · ${a.r.y}`,titulo:a.r.t,sub:a.r.a,nac:a.r.cat==="nac"}));
+      cs.slice(1).forEach(c=>{ const d=c.ds[0]; items.push({url:CACHE.disc[d[0]+"|"+d[1]].url,cuando:c.solista?(c.vive?`Cumple ${c.n} años`:`Cumpliría ${c.n} años`):`Se formó hace ${c.n} años`,titulo:c.a,sub:c.solista?"Cumpleaños":"Aniversario de la banda",nac:c.nac}) });
+      const lista=items.sort((a,b)=>b.nac-a.nac);
+      if(lista.length<2) return;
+      const txt=lista.slice(0,5).map(it=>`• ${it.titulo} (${it.sub}) — ${it.cuando.toLowerCase()}`).join("\n");
+      out.push({id:"efemerides",tipo:"carrusel",caption:`📅 Efemérides del rock · ${fechaDiaMes(dia)}\n\n${txt}\n\nJugá con tapas de discos todos los días en juegosrock.com.ar\n\n${CONT_TAGS} #undiacomohoy`,imgs:[await placaEfemerides(dia,lista)]});
+    });
+    // 6) martes, jueves y sábado: un video de los juegos (rotan)
+    if(ds===2||ds===4||ds===6){
+      const sem=Math.floor(Date.parse(dia+"T12:00:00Z")/864e5/7), n=(sem*3+[2,4,6].indexOf(ds))%REDES_VIDEOS.length, v=REDES_VIDEOS[n];
+      out.push({id:"reel",tipo:"reel",caption:v.caption,imgs:[],video:v.archivo});
+    }
+  }
+  return {pubs:out,errores:err};
+}
+// Para la tarea de GitHub: devuelve todo listo para guardar (imágenes en JPG)
+window.redesExportar=async(dia,turno)=>{
+  const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo");
+  return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,caption:p.caption,video:p.video||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
+};
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
   orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
