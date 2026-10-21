@@ -328,31 +328,6 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .gri-panel{display:flex;flex-direction:column;gap:8px}
 .gri-cond{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;font-size:.92rem}
 .gri-fin{flex-direction:column;align-items:flex-start}
-.tst-progreso{height:10px;border:2px solid var(--tinta);background:var(--crema);margin:10px 0 14px}
-#test-barra{height:100%;width:0;background:var(--rojo);transition:width .25s}
-.tst-card{display:flex;flex-direction:column;gap:14px}
-.tst-card small{font:500 .75rem var(--mono);color:var(--sombra)}
-.tst-frase{font:400 1.45rem/1.2 var(--display);margin:0;min-height:3.6em}
-.tst-opc{display:flex;flex-direction:column;gap:8px}
-.tst-opc button{padding:12px;border:3px solid var(--tinta);background:var(--crema);font:800 1rem var(--body);color:var(--tinta);cursor:pointer;box-shadow:3px 3px 0 var(--tinta);text-align:left}
-.tst-opc button:hover,.tst-opc button.sel{background:var(--tinta);color:var(--papel)}
-.tst-res{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
-.tst-res>small{font:500 .78rem var(--mono);color:var(--sombra)}
-.tst-tipo{font:400 2rem/1.05 var(--display);color:var(--rojo)}
-.tst-sub{font:800 .9rem var(--body);text-transform:uppercase;letter-spacing:.06em}
-.tst-cv{width:100%;max-width:440px;aspect-ratio:1}
-.tst-ejes{display:flex;gap:14px;font:600 .9rem var(--body)}
-.tst-bandas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
-.tst-bloque{width:100%;text-align:left;border-top:2px dashed var(--tinta);padding-top:10px}
-.tst-bloque h3{font:400 1.15rem var(--display);margin:0 0 8px}
-.tst-bloque p{margin:0}
-.tst-bloque ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
-.tst-disco{display:flex;gap:12px;align-items:center}
-.tst-disco img{width:110px;aspect-ratio:1;border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta)}
-.tst-disco div{display:flex;flex-direction:column;gap:2px}
-.tst-disco b{font:400 1.2rem var(--display)}
-.tst-banda{display:flex;flex-direction:column;gap:4px;align-items:center;font:800 .75rem var(--body)}
-.tst-banda img{width:100%;aspect-ratio:1;object-fit:cover;border:2px solid var(--tinta)}
 .gri-arranque{display:flex;flex-direction:column;align-items:center;gap:8px;margin:10px 0;text-align:center}
 .gri-arranque small{font-size:.85rem}
 .gri-tiempos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:360px}
@@ -425,6 +400,9 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 @media (max-width:440px){.abre-cab,.revelado{grid-template-columns:96px 1fr}}
 .tema-t{min-width:0;min-height:74px;display:flex;align-items:center;justify-content:center;padding:8px 6px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);font:700 .86rem/1.15 var(--body);text-align:center;overflow-wrap:anywhere;cursor:pointer;transition:transform .08s}
 .tema-t[aria-pressed="true"]{background:var(--tinta);color:var(--papel);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
+.tema-t.pista{outline:3px dashed var(--rojo);outline-offset:2px}
+.con-pistas{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}
+.con-pistas p{margin:0;padding:8px 10px;background:var(--crema);border:2px dashed var(--rojo);font:600 .9rem var(--body)}
 .tema-t.mal{animation:sacude .35s}
 @media (max-width:440px){.tema-t{font-size:.7rem;min-height:64px;padding:6px 3px}}
 .grupo{display:flex;align-items:center;gap:12px;text-align:left}
@@ -549,12 +527,14 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
     <div id="con-juego" class="con" hidden>
       <div class="con-hechos" id="con-hechos"></div>
+      <div class="con-pistas" id="con-pistas"></div>
       <div class="grilla" id="con-grilla"></div>
       <div class="con-barra"><span id="con-err">Errores: 0</span><span class="vidas" id="con-vidas"></span></div>
       <div class="con-msg" id="con-msg" aria-live="polite"></div>
       <div class="con-acc" id="con-acc">
         <button class="btn sec" id="con-mezclar" type="button">Mezclar</button>
         <button class="btn sec" id="con-limpiar" type="button">Deseleccionar</button>
+        <button class="btn sec" id="con-pista" type="button">Pista (−10)</button>
         <button class="btn" id="con-enviar" type="button" disabled>Enviar</button>
       </div>
       <div class="con-acc" id="con-fin" hidden>
@@ -586,7 +566,6 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="abre"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa de un disco y lista de temas con el primero marcado"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="12" width="84" height="84" fill="var(--tinta)"/><rect x="16.0" y="14.0" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="38.9" y="14.0" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="61.7" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="14.0" width="11.7" height="11.7" fill="#c9a227"/><rect x="84.6" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="27.4" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="25.4" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="50.3" y="25.4" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="61.7" y="25.4" width="11.7" height="11.7" fill="#b5532a"/><rect x="73.1" y="25.4" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="25.4" width="11.7" height="11.7" fill="#1d1b18"/><rect x="16.0" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="27.4" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="38.9" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="36.9" width="11.7" height="11.7" fill="#2f5d50"/><rect x="61.7" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="73.1" y="36.9" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="16.0" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="48.3" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="61.7" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="73.1" y="48.3" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="48.3" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="59.7" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="59.7" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="59.7" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="16.0" y="71.1" width="11.7" height="11.7" fill="#b5532a"/><rect x="27.4" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="50.3" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="61.7" y="71.1" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="71.1" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="84.6" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="16.0" y="82.6" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="82.6" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="38.9" y="82.6" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="50.3" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="73.1" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="84.6" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="112" y="10" width="114" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="24" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="start">1.</text><rect x="138" y="17" width="70" height="5" fill="var(--crema)" opacity=".8"/><rect x="112" y="34" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="48" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">4.</text><rect x="138" y="41" width="62" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="58" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="72" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">7.</text><rect x="138" y="65" width="54" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="82" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="96" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">9.</text><rect x="138" y="89" width="46" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre. El del día son 5 discos.</span></button>
       <button type="button" data-ir="conexiones"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de temas con dos grupos ya armados"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="16" fill="var(--g2)" stroke="var(--tinta)" stroke-width="2"/><rect x="90" y="14" width="60" height="4" fill="var(--tinta)" opacity=".7"/><rect x="14" y="28" width="212" height="16" fill="var(--g3)" stroke="var(--tinta)" stroke-width="2"/><rect x="90" y="34" width="60" height="4" fill="var(--tinta)" opacity=".7"/><rect x="14" y="50" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="20" y="59.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="68" y="50" width="50" height="23" fill="var(--tinta)" stroke="var(--tinta)" stroke-width="2"/><rect x="74" y="59.0" width="34" height="5" fill="var(--papel)" opacity=".8"/><rect x="122" y="50" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="128" y="59.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="176" y="50" width="50" height="23" fill="var(--tinta)" stroke="var(--tinta)" stroke-width="2"/><rect x="182" y="59.0" width="34" height="5" fill="var(--papel)" opacity=".8"/><rect x="14" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="20" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="68" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="74" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="122" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="128" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/><rect x="176" y="78" width="50" height="23" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="182" y="87.0" width="34" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · 4 × 4</small><b>Conexiones</b><span>16 temas de rock nacional. Armá los 4 discos.</span></button>
       <button type="button" data-ir="impostor"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Disco al centro rodeado de temas, dos marcados en rojo"><rect width="240" height="110" fill="var(--papel)"/><rect x="96" y="31" width="48" height="48" fill="var(--tinta)"/><rect x="98.0" y="33.0" width="9.1" height="9.1" fill="#2f5d50"/><rect x="106.8" y="33.0" width="9.1" height="9.1" fill="#5b3a5e"/><rect x="115.6" y="33.0" width="9.1" height="9.1" fill="#1d1b18"/><rect x="124.4" y="33.0" width="9.1" height="9.1" fill="#c9a227"/><rect x="133.2" y="33.0" width="9.1" height="9.1" fill="#2f5d50"/><rect x="98.0" y="41.8" width="9.1" height="9.1" fill="#3b4a6b"/><rect x="106.8" y="41.8" width="9.1" height="9.1" fill="#8a3b2e"/><rect x="115.6" y="41.8" width="9.1" height="9.1" fill="#c9a227"/><rect x="124.4" y="41.8" width="9.1" height="9.1" fill="#2f5d50"/><rect x="133.2" y="41.8" width="9.1" height="9.1" fill="#6f8fa6"/><rect x="98.0" y="50.6" width="9.1" height="9.1" fill="#2f5d50"/><rect x="106.8" y="50.6" width="9.1" height="9.1" fill="#1d1b18"/><rect x="115.6" y="50.6" width="9.1" height="9.1" fill="#3b4a6b"/><rect x="124.4" y="50.6" width="9.1" height="9.1" fill="#b5532a"/><rect x="133.2" y="50.6" width="9.1" height="9.1" fill="#b5532a"/><rect x="98.0" y="59.4" width="9.1" height="9.1" fill="#b5532a"/><rect x="106.8" y="59.4" width="9.1" height="9.1" fill="#1d1b18"/><rect x="115.6" y="59.4" width="9.1" height="9.1" fill="#b5532a"/><rect x="124.4" y="59.4" width="9.1" height="9.1" fill="#2f5d50"/><rect x="133.2" y="59.4" width="9.1" height="9.1" fill="#1d1b18"/><rect x="98.0" y="68.2" width="9.1" height="9.1" fill="#8a3b2e"/><rect x="106.8" y="68.2" width="9.1" height="9.1" fill="#b5532a"/><rect x="115.6" y="68.2" width="9.1" height="9.1" fill="#2f5d50"/><rect x="124.4" y="68.2" width="9.1" height="9.1" fill="#3b4a6b"/><rect x="133.2" y="68.2" width="9.1" height="9.1" fill="#d9d2c0"/><rect x="133" y="8" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="139" y="13.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/><rect x="180" y="31" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="186" y="36.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/><rect x="180" y="63" width="42" height="15" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><rect x="186" y="68.0" width="26" height="5" fill="var(--crema)" opacity=".8"/><rect x="133" y="86" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="139" y="91.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/><rect x="65" y="86" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="71" y="91.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/><rect x="18" y="63" width="42" height="15" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><rect x="24" y="68.0" width="26" height="5" fill="var(--crema)" opacity=".8"/><rect x="18" y="31" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="24" y="36.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/><rect x="65" y="8" width="42" height="15" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="71" y="13.0" width="26" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · La Vela Puerca</small><b>¿Qué tema no está?</b><span>Un disco y 10 temas. Encontrá los que son de otro.</span></button>
-      <button type="button" data-ir="test"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Mapa de dos ejes con un punto rojo"><rect width="240" height="110" fill="var(--papel)"/><rect x="75" y="8" width="45" height="45" fill="#e9d8a6"/><rect x="120" y="8" width="45" height="45" fill="#f5c26b"/><rect x="75" y="53" width="45" height="45" fill="#d9b38c"/><rect x="120" y="53" width="45" height="45" fill="#f19c79"/><rect x="75" y="8" width="90" height="90" fill="none" stroke="var(--tinta)" stroke-width="2.5"/><path d="M120 8V98M75 53H165" stroke="var(--tinta)" stroke-width="2"/><circle cx="141" cy="30" r="7" fill="var(--rojo)" stroke="var(--crema)" stroke-width="2.5"/><text x="120" y="107" font-family="var(--mono)" font-size="7" text-anchor="middle" fill="var(--tinta)">CRUDO</text><text x="120" y="6" font-family="var(--mono)" font-size="6" text-anchor="middle" fill="var(--tinta)">ELABORADO</text><text x="70" y="56" font-family="var(--mono)" font-size="7" text-anchor="end" fill="var(--tinta)">UNDER</text><text x="170" y="56" font-family="var(--mono)" font-size="7" fill="var(--tinta)">MASIVO</text></svg><small>Test · 9 perfiles</small><b>¿Qué rockero sos?</b><span>Under o masivo, crudo o elaborado: descubrí cuál de los 9 rockeros sos.</span></button>
     </div>
   </section>
 
@@ -703,38 +682,6 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     </div>
     <div class="con-msg" id="grilla-msg" aria-live="polite"></div>
     <div class="ban-fin card gri-fin" id="grilla-fin" hidden></div>
-  </section>
-
-  <section id="v-test" class="sub" hidden>
-    <button class="link volver" type="button">← Inicio</button>
-    <h2>¿Qué rockero sos?</h2>
-    <div id="test-preg">
-      <p class="bajada">18 frases. Decí qué tan de acuerdo estás, sin pensarlo mucho: no hay respuestas correctas.</p>
-      <div class="tst-progreso"><div id="test-barra"></div></div>
-      <div class="card tst-card">
-        <small id="test-num"></small>
-        <p class="tst-frase" id="test-frase"></p>
-        <div class="tst-opc" id="test-opc"></div>
-      </div>
-      <button class="link" type="button" id="test-atras" hidden>← Pregunta anterior</button>
-    </div>
-    <div id="test-res" hidden>
-      <div class="card tst-res">
-        <small>Sos…</small>
-        <b class="tst-tipo" id="test-tipo"></b>
-        <span class="tst-sub" id="test-sub"></span>
-        <canvas id="test-cv" class="tst-cv"></canvas>
-        <div class="tst-ejes" id="test-ejes"></div>
-        <p id="test-desc"></p>
-        <div class="tst-bloque"><h3>¿Por qué sos esto?</h3><div id="test-porque"></div></div>
-        <div class="tst-bloque"><h3>Bandas como vos</h3><div class="tst-bandas" id="test-bandas"></div></div>
-        <div class="tst-bloque"><h3>Un disco para arrancar</h3><div class="tst-disco" id="test-disco"></div></div>
-        <div class="tst-bloque"><h3>Tu plan ideal</h3><p id="test-plan"></p></div>
-        <div class="tst-bloque"><h3>Tu opuesto</h3><p id="test-op"></p></div>
-        <div class="fila"><button class="btn" type="button" id="test-comp">Compartir</button><button class="btn sec" type="button" id="test-bajar">Bajar imagen</button></div>
-        <button class="link" type="button" id="test-otra">Hacer el test de nuevo</button>
-      </div>
-    </div>
   </section>
 
   <section id="v-banda" class="sub" hidden>
@@ -998,6 +945,8 @@ const DISCOS = [
 
 const NIVELES=[16,24,36,56,0]; // bloques por lado según los errores; 0 = tapa nítida
 const VALOR=[5,4,3,2];
+// La Tapa del día se muestra y se suma sobre 100 (cada punto interno vale 2)
+const xDia=g=>g&&g.modo==="diario"?2:1;
 const RONDAS=10;
 const INICIO_DIARIO="2026-10-07";
 const CUADRO={5:"🟩",4:"🟨",3:"🟧",2:"🟥",0:"⬛"};
@@ -1264,7 +1213,7 @@ function elegir(b,o){
   const g=G, r=g.actual, y=r.y?` (${r.y})`:"";
   if(o===r){
     const gan=VALOR[g.intento]||1; g.puntos+=gan;
-    b.classList.add("good"); cerrarRonda(`¡Bien! +${gan}. ${r.t}${y}`,gan);
+    b.classList.add("good"); cerrarRonda(`¡Bien! +${gan*xDia(g)}. ${r.t}${y}`,gan);
   }else{
     b.classList.add("bad"); b.disabled=true; g.intento++; g.malos.push(o.a+"|"+o.t);
     if(g.intento>=3){
@@ -1297,7 +1246,7 @@ function actualizar(){
   $("lbl-pts").textContent="Puntos";
   $("lbl-modo").textContent=G.modo==="diario"?`Diario #${numDiario(G.dia)}`:"Ronda";
   $("ronda").textContent=`${Math.max(G.ronda,1)}/${RONDAS}`;
-  $("pts").textContent=G.puntos;
+  $("pts").textContent=G.puntos*xDia(G);
   const v=VALOR[Math.min(G.intento,3)]||0, cerrada=G.log.length===G.ronda&&G.ronda>0;
   $("vale").textContent=cerrada?"Ronda terminada":`Vale ${v} punto${v===1?"":"s"}`;
   $("tries").innerHTML=[0,1,2].map(i=>`<i class="${i<Math.min(G.intento,3)?"on":""}"></i>`).join("");
@@ -1312,17 +1261,17 @@ function terminar(){
 
 function textoCompartir(g){
   const cab=g.modo==="diario"?`Juegos Rock · Tapa del día #${numDiario(g.dia)}`:"Juegos Rock · Adiviná la tapa";
-  return `${cab} — ${g.puntos}/${RONDAS*5}\n${g.log.map(l=>CUADRO[l.gan]||"⬛").join("")}\n${location.href.split("#")[0]}`;
+  return `${cab} — ${g.puntos*xDia(g)}/${RONDAS*5*xDia(g)}\n${g.log.map(l=>CUADRO[l.gan]||"⬛").join("")}\n${location.href.split("#")[0]}`;
 }
 
 function mostrarFin(){
-  const g=G, max=RONDAS*5, pct=g.puntos/max;
+  const g=G, max=RONDAS*5*xDia(G), pct=g.puntos*xDia(G)/max;
   const titulo=pct>=.8?"Disquero de ley":pct>=.5?"Tenés oreja":pct>=.25?"Escuchás de oído":"A la batea a estudiar";
   $("v-juego").hidden=true;
   const f=$("v-fin"); f.hidden=false;
   const yaSubido=g.subido;
   f.innerHTML=`
-    <h2>${g.puntos}/${max}</h2>
+    <h2>${g.puntos*xDia(g)}/${max}</h2>
     <div class="sub">${titulo}${g.modo==="normal"&&g.recordPrevio?` · récord anterior: ${g.recordPrevio}`:""}</div>
     <div class="cuadros" aria-label="Resultado por ronda">${g.log.map(l=>CUADRO[l.gan]||"⬛").join("")}</div>
     <ol>${g.log.map(l=>`<li>${l.gan?"✔":"✘"} ${esc(l.a)} — <i>${esc(l.t)}</i></li>`).join("")}</ol>
@@ -1385,7 +1334,7 @@ async function subirPuntaje(){
   if(g.subido||g.subiendo) return;
   g.subiendo=true; if(b) b.disabled=true; if(est) est.textContent="Subiendo tu puntaje…";
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.puntos,modo:g.modo,genero:g.modo==="diario"?"todos":g.genero,jugador:jugadorId()})});
+    const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.modo==="diario"?g.puntos*2:g.puntos,modo:g.modo,genero:g.modo==="diario"?"diario":g.genero,jugador:jugadorId()})});
     if(!r.ok&&r.status!==409) throw new Error(r.status);
     g.subido=true; guardarDiario();
     if(G===g&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
@@ -1423,15 +1372,15 @@ $("b-cambiar").onclick=()=>pedirNombre();
 // Cada top: qué filas mira y en qué unidad. vars: [clave, nombre, ¿solo hoy?, unidad]
 const TOPS=[
   {id:"general",n:"General",general:true,vars:[["hoy","Hoy"],["semana","Últimos 7 días"]]},
-  {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,u:"pts",d:"Tapa del día de hoy (máximo 50)."},
-  {id:"tema",n:"Tema del día",modo:"tema",hoy:true,u:"pts",d:"6 puntos si lo sacás con 1 segundo, 1 punto en el último intento."},
+  {id:"diario",n:"Tapa del día",modo:"diario",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: hasta 10 por tapa, 100 si las sacás todas de una."},
+  {id:"tema",n:"Tema del día",modo:"tema",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 con 1 segundo, 80 con 2, 60, 40, 20 y 10 en el último intento."},
   {id:"banda",n:"La banda del día",modo:"banda",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 90 al segundo intento… 20 al sexto."},
   {id:"armar",n:"Armá la tapa",modo:"armar",hoy:true,genero:"diario",u:"pts",d:"Tapa del día: precisión redondeada a la decena."},
   {id:"grilla",n:"Grilla rockera",modo:"grilla",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 4 por casillero (+4 si la completás), multiplicado por el tiempo: 90 s ×2 (hasta 80), 60 s ×2,5 (hasta 100), 45 s ×3 (hasta 120)."},
   {id:"antes",n:"¿Antes o después?",modo:"antes",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por acierto."},
   {id:"orden",n:"Ordená la discografía",modo:"orden",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 60 al segundo intento, 30 al tercero."},
   {id:"abre",n:"Tema número 1",modo:"abre",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 20 puntos por disco acertado."},
-  {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error."},
+  {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error y 10 por pista."},
   {id:"impostor",n:"¿Qué tema no está?",modo:"impostor",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por tema bien marcado."},
 ];
 function topChips(){
@@ -1489,7 +1438,7 @@ async function topGeneral(rango){
     const esDiario=f.modo==="diario"||f.modo==="tema"||f.genero==="diario";
     if(!esDiario) continue;
     const quien=quienEs(f); if(!nombres.has(quien)) nombres.set(quien,{nombre:f.nombre,jugador:f.jugador});
-    const k=quien+"|"+f.dia+"|"+f.modo, p=Math.round(Math.min(f.modo==="grilla"?120:100,f.puntos*(GEN_ESCALA[f.modo]||1)));
+    const k=quien+"|"+f.dia+"|"+f.modo, p=Math.round(Math.min(f.modo==="grilla"?120:100,f.puntos*(f.genero==="todos"?(GEN_ESCALA[f.modo]||1):1)));
     if(!mejor.has(k)||mejor.get(k)<p) mejor.set(k,p);
   }
   const suma=new Map();
@@ -1771,7 +1720,8 @@ async function conEmpezar(){
   if(MODO.conexiones!==modo) return;
   if(!grupos){ $("con-msg").textContent="No pude armar la partida. Revisá la conexión y probá de nuevo."; $("con-fin").hidden=false; return }
   const fichas=mezR(grupos.flatMap((g,gi)=>g.temas.map(t=>({t,gi}))),rng);
-  CON.p={grupos,fichas,sel:new Set(),hechos:[],errores:0,intentos:new Set(),fin:false};
+  CON.p={grupos,fichas,sel:new Set(),hechos:[],errores:0,intentos:new Set(),fin:false,pistas:[],marcadas:new Set()};
+  $("con-pistas").innerHTML="";
   $("con-msg").textContent=""; $("con-acc").hidden=false;
   conPintar(); conMostrar();
 }
@@ -1782,7 +1732,7 @@ function conPintar(){
     if(P.hechos.includes(f.gi)) return;
     const b=document.createElement("button");
     b.type="button"; b.className="tema-t"; b.id="ficha"+i; b.setAttribute("aria-pressed",P.sel.has(i));
-    b.textContent=f.t; b.onclick=()=>conTocar(i);
+    b.textContent=f.t; b.onclick=()=>conTocar(i); if(P.marcadas&&P.marcadas.has(i)) b.classList.add("pista");
     g.appendChild(b);
   });
   conBarra();
@@ -1794,6 +1744,23 @@ function conBarra(){
   $("con-vidas").innerHTML=lim===Infinity?"":Array.from({length:lim},(_,i)=>`<i class="${i<lim-P.errores?"":"off"}"></i>`).join("");
   $("con-enviar").disabled=P.sel.size!==4||P.fin;
   $("con-limpiar").disabled=!P.sel.size;
+  const pistas=(P.pistas||[]).length, quedan=P.grupos.filter((g,gi)=>!P.hechos.includes(gi)&&!(P.pistas||[]).includes(gi)).length;
+  $("con-pista").disabled=P.fin||pistas>=CON_PISTAS||quedan<2;
+  $("con-pista").textContent=pistas>=CON_PISTAS?"Sin pistas":`Pista (−10) · ${CON_PISTAS-pistas}`;
+}
+// Pista: dice de qué disco son dos temas que todavía no encontraste. Resta 10 puntos. Hasta 2 por partida.
+const CON_PISTAS=2;
+function conPista(){
+  const P=CON.p; if(!P||P.fin||P.pistas.length>=CON_PISTAS) return;
+  const libres=P.grupos.map((g,gi)=>gi).filter(gi=>!P.hechos.includes(gi)&&!P.pistas.includes(gi));
+  if(libres.length<2) return;
+  const gi=libres[Math.floor(Math.random()*libres.length)], g=P.grupos[gi];
+  const idx=P.fichas.map((f,i)=>f.gi===gi?i:-1).filter(i=>i>=0).slice(0,2);
+  P.pistas.push(gi); idx.forEach(i=>P.marcadas.add(i));
+  const p=document.createElement("p");
+  p.textContent=`💡 «${P.fichas[idx[0]].t}» y «${P.fichas[idx[1]].t}» son de ${g.d[1]} (${g.d[0]}, ${g.d[2]}).`;
+  $("con-pistas").appendChild(p);
+  $("con-msg").textContent="Pista usada: −10 puntos."; conPintar(); conMostrar();
 }
 
 function conTocar(i){
@@ -1838,7 +1805,8 @@ function conEnviar(){
 function conTerminar(gano){
   const P=CON.p; P.fin=true; P.sel.clear();
   const encontrados=P.hechos.length, diario=CON.modoP==="diario";
-  const pts=diario?Math.max(0,100-10*P.errores):(gano?Math.max(10,100-10*P.errores):encontrados*5);
+  const menos=10*P.errores+10*(P.pistas||[]).length;
+  const pts=diario?Math.max(0,100-menos):(gano?Math.max(10,100-menos):encontrados*5);
   P.grupos.forEach((g,gi)=>{ if(!P.hechos.includes(gi)){P.hechos.push(gi);conGrupoHecho(gi)} });
   conPintar();
   $("con-msg").textContent=gano?(P.errores===0?"¡Perfecto, sin errores!":`¡Completado con ${P.errores} error${P.errores===1?"":"es"}!`):"Te quedaste sin errores. Estos eran los discos.";
@@ -1861,7 +1829,7 @@ function conIniciar(){
   conEmpezar();
 }
 function conMostrar(){
-  if(MODO.conexiones==="diario"){ cabecera(`Del día #${nDia()}`,"Normal","Errores",CON.p?CON.p.errores:0); return }
+  if(MODO.conexiones==="diario"){ const P=CON.p; cabecera(`Del día #${nDia()}`,"Normal","Puntos",P?Math.max(0,100-10*P.errores-10*(P.pistas||[]).length):100); return }
   $("lbl-modo").textContent="Ganadas"; $("lbl-pts").textContent="Nivel"; $("ronda").textContent=ls.get("tapa-con-"+CON.dif)||0;
   $("pts").textContent=CON.dif==="dificil"?"Difícil":CON.dif==="facil"?"Fácil":"Normal";
 }
@@ -1872,6 +1840,7 @@ document.querySelectorAll("#con-dif button").forEach(b=>b.onclick=()=>{
 $("con-empezar").onclick=conEmpezar;
 $("con-enviar").onclick=conEnviar;
 $("con-limpiar").onclick=()=>{CON.p.sel.clear();conPintar()};
+$("con-pista").onclick=conPista;
 $("con-mezclar").onclick=()=>{
   const P=CON.p, quedan=P.fichas.map((f,i)=>i).filter(i=>!P.hechos.includes(P.fichas[i].gi));
   const orden=mez(quedan), nuevas=P.fichas.slice(), sel=new Set();
@@ -1923,7 +1892,7 @@ function puntos100(j,dia=diaSel(),soloEnFecha=false){
   const base=baseDe(j), x=soloEnFecha?ls.get(`${base}-${dia}`):leerDia(base,dia);
   if(!x) return null;
   if(j==="diario") return x.fin?Math.round((x.puntos||0)*2):null;
-  if(j==="tema") return x.fin?(x.gano?Math.round((PASOS.length+1-x.log.length)*100/PASOS.length):0):null;
+  if(j==="tema") return x.fin?(x.gano?TEMA_PTS[x.log.length-1]||10:0):null;
   return x.puntos;
 }
 const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
@@ -1955,6 +1924,7 @@ function cabecera(a,b,c,d){ $("lbl-modo").textContent=a; $("ronda").textContent=
 
 // ===== 1. Adiviná el tema =====
 const PASOS=[1,2,4,7,11,16];
+const TEMA_PTS=[100,80,60,40,20,10]; // puntos según en qué intento lo sacás
 const TEMA={modo:"diario",j:null,audio:null,timer:null};
 // Solo rock (barrial, pesado y afines). Sin pop, ska ni folk.
 const TEMA_BANDAS=["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
@@ -2102,7 +2072,7 @@ function temaFin(){
   f.querySelector("b").textContent=j.p.t;
   f.querySelector("span").textContent=`${j.d[0]} · ${j.d[1]} (${j.d[2]})`;
   f.querySelector(".sub-res").textContent=j.gano?`Lo sacaste en ${j.log.length} intento${j.log.length===1?"":"s"}.`:"Esta vez no salió.";
-  if(j.modo==="diario"&&j.dia===hoyAR()&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","todos",j.gano?PASOS.length+1-j.log.length:0,f.querySelector(".sub-res")) }
+  if(j.modo==="diario"&&j.dia===hoyAR()&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","diario",j.gano?TEMA_PTS[j.log.length-1]||10:0,f.querySelector(".sub-res")) }
   $("tema-comp").onclick=async()=>{
     const txt=`Juegos Rock · Adiviná el tema${j.modo==="diario"?" #"+numTema(j.dia):""} 🔊\n${cuad}\n${location.href.split("#")[0]}`;
     try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches) await navigator.share({text:txt}); else {await navigator.clipboard.writeText(txt);$("tema-comp").textContent="¡Copiado!"} }catch(e){}
@@ -3730,7 +3700,7 @@ async function topDia(dia){
   for(const f of await r.json()){
     if(!(f.modo==="diario"||f.modo==="tema"||f.genero==="diario")) continue;
     const q=quienEs(f); if(!nombres.has(q)) nombres.set(q,{nombre:f.nombre,jugador:f.jugador});
-    const k=q+"|"+f.modo, p=Math.round(Math.min(f.modo==="grilla"?120:100,f.puntos*(GEN_ESCALA[f.modo]||1)));
+    const k=q+"|"+f.modo, p=Math.round(Math.min(f.modo==="grilla"?120:100,f.puntos*(f.genero==="todos"?(GEN_ESCALA[f.modo]||1):1)));
     if(!mejor.has(k)||mejor.get(k)<p) mejor.set(k,p);
   }
   const suma=new Map(); for(const [k,p] of mejor){ const q=k.split("|")[0]; suma.set(q,(suma.get(q)||0)+p) }
@@ -3812,150 +3782,8 @@ window.redesExportar=async(dia,turno)=>{
   return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,caption:p.caption,video:p.video||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
 };
 
-// ===== ¿Qué rockero sos?: test de dos ejes (como el de Nolan) para saber qué rockero sos =====
-// Eje X: del sótano (under) al estadio (masivo). Eje Y: de la distorsión (crudo) a la partitura (elaborado).
-const TST_PREG=[
-  {t:"Un tema pierde algo el día que lo empieza a pasar la radio.",x:-1},
-  {t:"Ver a 50.000 personas cantando el mismo estribillo me pone la piel de gallina.",x:1},
-  {t:"Un solo de guitarra de cuatro minutos no es un exceso: es el punto.",y:1},
-  {t:"Si una canción tiene más de tres acordes, ya sospecho.",y:-1},
-  {t:"Me da un orgullo especial haber escuchado a una banda antes de que la conociera todo el mundo.",x:-1},
-  {t:"Antes de escuchar un disco, me fijo quién lo produjo y dónde lo grabaron.",y:1},
-  {t:"Si una banda llena un estadio, por algo será.",x:1},
-  {t:"Prefiero un disco en vivo, con errores y todo, antes que uno perfecto de estudio.",y:-1},
-  {t:"Una letra que no se termina de entender vale más que una que dice todo de una.",y:1},
-  {t:"Prefiero un sótano con 80 personas y el sonido saturado antes que una pantalla gigante.",x:-1},
-  {t:"Los cantitos de la cancha y del recital también son cultura rockera.",x:1},
-  {t:"Lo que importa es que suene fuerte y con bronca; la técnica viene después.",y:-1},
-  {t:"Un tema que cambia de ritmo a mitad de camino me engancha más que uno que va derecho.",y:1},
-  {t:"Cuando una banda la conocen todos mis amigos, la escucho menos.",x:-1},
-  {t:"El fogón con la guitarra y los clásicos de siempre es mi lugar feliz.",x:1},
-  {t:"Escucho los discos enteros y en orden, como los pensó el artista.",y:1},
-  {t:"Si a los dos minutos el tema no explotó, lo paso.",y:-1},
-  {t:"Una remera de banda vale más si es de una que nadie conoce.",x:-1},
-];
-const TST_OPC=[["Totalmente de acuerdo",2],["De acuerdo",1],["Ni fu ni fa",0],["En desacuerdo",-1],["Para nada",-2]];
-// 9 perfiles: columna (u=under, m=medio, M=masivo) + fila (c=crudo, e=equilibrado, E=elaborado)
-const TST_TIPOS={
-  uc:{t:"El punk de sótano",s:"Under y crudo",d:"Tres acordes, volumen al máximo y nada de vueltas. Te gusta lo urgente, lo que suena sucio y verdadero, mejor si es en un lugar chico y transpirado. La actitud te importa más que la pose.",b:["Los Violadores","Hermética","V8","Attaque 77","Riff","Massacre"],disco:["Los Violadores","Y Ahora Qué Pasa, Eh?"],plan:"Un sábado en un sótano chico, volumen al mango y pogo en primera fila.",op:"ME"},
-  ue:{t:"El cazador de joyitas",s:"Under y equilibrado",d:"Siempre estás un paso adelante: escuchás bandas que tus amigos van a descubrir dentro de dos años. No te importa si es crudo o prolijo, te importa que sea nuevo y tenga algo propio.",b:["El Mató a un Policía Motorizado","Bandalos Chinos","Sueño de Pescado","Farolitos","El Plan de la Mariposa","Los Brujos"],disco:["El Mató a un Policía Motorizado","La Dinastía Scorpio"],plan:"Un ciclo de bandas nuevas un jueves a la noche, en un centro cultural.",op:"Me"},
-  uE:{t:"El melómano de culto",s:"Under y elaborado",d:"Escuchás discos enteros, leés los créditos y te emociona un cambio de acorde que nadie más notó. Preferís descubrir antes que repetir, y tu biblioteca tiene joyas que pocos conocen.",b:["Luis Alberto Spinetta","Invisible","Pescado Rabioso","Almendra","Spinetta Jade","La Máquina de Hacer Pájaros"],disco:["Luis Alberto Spinetta","Artaud"],plan:"Un disco entero con auriculares, de noche, con el librito en la mano.",op:"Mc"},
-  mc:{t:"El rolinga de pura cepa",s:"Medio y crudo",d:"Rock and roll de toda la vida: guitarras con mugre, blues en las venas y canciones para cantar con una birra en la mano. No necesitás que nada sea perfecto, necesitás que suene a calle.",b:["Los Ratones Paranoicos","Viejas Locas","Pappo's Blues","Manal","Guasones","Sumo"],disco:["Los Ratones Paranoicos","Furtivos"],plan:"Un bar con humo de parrilla, una banda de rock and roll y una birra.",op:"mE"},
-  me:{t:"El todoterreno",s:"Justo en el medio",d:"Te va igual de bien un fogón que un disco conceptual, un estadio que un sótano. No te casás con ninguna tribu: te gusta la canción buena, venga de donde venga.",b:["Charly García","Divididos","Los Rodríguez","Andrés Calamaro","León Gieco","Sumo"],disco:["Charly García","Yendo de la Cama al Living"],plan:"Un festival de un día entero, con diez bandas distintas.",op:null},
-  mE:{t:"El arquitecto de canciones",s:"Medio y elaborado",d:"Para vos una canción es una obra: la melodía, la letra, el arreglo justo. Te gustan los grandes autores, los que pueden llenar un teatro y también sorprenderte con un acorde raro.",b:["Charly García","Fito Páez","Serú Girán","Virus","Los Abuelos de la Nada","Sui Generis"],disco:["Serú Girán","La Grasa de las Capitales"],plan:"Un teatro, un piano de cola y canciones que te sabés de memoria.",op:"mc"},
-  Mc:{t:"El rockero de barrio",s:"Masivo y crudo",d:"Lo tuyo es el pogo, la remera de la banda y el estribillo que canta todo el estadio. Te importa más la energía y el ritual compartido que la perfección. Para vos el rock se vive en la calle y con los amigos.",b:["La Renga","Los Piojos","Patricio Rey y sus Redonditos de Ricota","Las Pastillas del Abuelo","La Vela Puerca","Ciro y los Persas"],disco:["La Renga","Despedazado por Mil Partes"],plan:"Un estadio lleno, saltando con todo el barrio.",op:"uE"},
-  Me:{t:"El de los himnos",s:"Masivo y equilibrado",d:"Tu lugar es la fiesta: los temas que todos saben, los estribillos que se gritan abrazados. Te gusta que el rock sea para todos y que no quede nadie sentado.",b:["Los Fabulosos Cadillacs","Los Auténticos Decadentes","Bersuit Vergarabat","Los Enanitos Verdes","Los Pericos","No Te Va Gustar"],disco:["Bersuit Vergarabat","Libertinaje"],plan:"Una fiesta donde suena «Matador» y nadie se queda sentado.",op:"ue"},
-  ME:{t:"El sofisticado de estadio",s:"Masivo y elaborado",d:"Te gustan las canciones enormes, pero bien hechas: arreglos, producción, una voz que sabe lo que hace. Sos de los que defienden que lo popular también puede ser fino, y tenés razón.",b:["Soda Stereo","Gustavo Cerati","Babasónicos","Catupecu Machu","El Cuarteto de Nos","Fito Páez"],disco:["Soda Stereo","Canción Animal"],plan:"Un estadio con un show de luces impecable y el sonido perfecto.",op:"uc"},
-};
-const TST={i:0,resp:[]};
-const TST_CORTE=1/3;
-const tstTipo=(x,y)=>(x<-TST_CORTE?"u":x>TST_CORTE?"M":"m")+(y<-TST_CORTE?"c":y>TST_CORTE?"E":"e");
-function tstPuntos(resp){
-  let x=0,y=0,mx=0,my=0;
-  TST_PREG.forEach((q,i)=>{ const v=resp[i]||0; if(q.x){ x+=v*q.x; mx+=2 } if(q.y){ y+=v*q.y; my+=2 } });
-  return {x:mx?x/mx:0,y:my?y/my:0};
-}
-function tstIniciar(){
-  const g=ls.get("tapa-test");
-  if(g&&g.resp&&g.resp.length===TST_PREG.length&&!TST.rehacer){ TST.resp=g.resp; return tstResultado() }
-  TST.rehacer=false; TST.i=0; TST.resp=[]; $("test-res").hidden=true; $("test-preg").hidden=false; tstPintar();
-}
-function tstPintar(){
-  const q=TST_PREG[TST.i], n=TST_PREG.length;
-  cabecera("¿Qué rockero sos?",`${TST.i+1}/${n}`,"Test","");
-  $("test-barra").style.width=`${TST.i/n*100}%`;
-  $("test-num").textContent=`Pregunta ${TST.i+1} de ${n}`;
-  $("test-frase").textContent=q.t;
-  $("test-opc").innerHTML=TST_OPC.map(([t,v])=>`<button type="button" data-v="${v}" class="${TST.resp[TST.i]===v?"sel":""}">${esc(t)}</button>`).join("");
-  $("test-opc").querySelectorAll("button").forEach(b=>b.onclick=()=>{ TST.resp[TST.i]=+b.dataset.v;
-    if(TST.i<n-1){ TST.i++; tstPintar() } else { ls.set("tapa-test",{resp:TST.resp}); contar("termino-test"); tstResultado(true) } });
-  $("test-atras").hidden=TST.i===0;
-}
-// Dibuja el mapa (sirve para la pantalla y para la imagen de compartir)
-function tstBrujula(x,X,Y,S,p,animT=1){
-  const c=(a,b)=>[X+S/2+a*S/2,Y+S/2-b*S/2], L=S/3, f=S/26;
-  const cols=["u","m","M"], filas=["E","e","c"];
-  const tono={uc:"#d9b38c",ue:"#e3c79e",uE:"#e9d8a6",mc:"#e8a77f",me:"#f0c27a",mE:"#f5d38a",Mc:"#f19c79",Me:"#f5b06e",ME:"#f5c26b"};
-  const mio=tstTipo(p.x,p.y);
-  filas.forEach((fi,r)=>cols.forEach((co,k)=>{ const id=co+fi, X0=X+k*L, Y0=Y+r*L;
-    x.fillStyle=tono[id]; x.fillRect(X0,Y0,L,L);
-    if(id===mio&&animT>=1){ x.strokeStyle=CC.rojo; x.lineWidth=S/90; x.strokeRect(X0+S/180,Y0+S/180,L-S/90,L-S/90) }
-    texto(x,TST_TIPOS[id].t.replace(/^El /,""),X0+L/2,Y0+L/2+f*.35,{f:FB,peso:"800",s:f,al:"center",w:L-14,max:3,lh:1.1,min:9,c:id===mio?CC.tinta:"rgba(20,18,16,.5)"});
-  }));
-  x.strokeStyle=CC.tinta; x.lineWidth=S/150;
-  x.beginPath(); for(let i=1;i<3;i++){ x.moveTo(X+i*L,Y); x.lineTo(X+i*L,Y+S); x.moveTo(X,Y+i*L); x.lineTo(X+S,Y+i*L) } x.stroke();
-  x.lineWidth=S/110; x.strokeRect(X,Y,S,S);
-  texto(x,"ELABORADO",X+S/2,Y-f*.6,{f:FM,peso:"500",s:f*.85,al:"center",w:S});
-  texto(x,"CRUDO",X+S/2,Y+S+f*1.4,{f:FM,peso:"500",s:f*.85,al:"center",w:S});
-  x.save(); x.translate(X-f*.6,Y+S/2); x.rotate(-Math.PI/2); texto(x,"UNDER",0,0,{f:FM,peso:"500",s:f*.85,al:"center",w:S}); x.restore();
-  x.save(); x.translate(X+S+f*.6,Y+S/2); x.rotate(Math.PI/2); texto(x,"MASIVO",0,0,{f:FM,peso:"500",s:f*.85,al:"center",w:S}); x.restore();
-  const k=1-Math.pow(1-animT,3), [px,py]=c(p.x*.94*k,p.y*.94*k), r=S/30;
-  x.fillStyle=CC.tinta; x.beginPath(); x.arc(px+3,py+3,r,0,7); x.fill();
-  x.fillStyle=CC.rojo; x.beginPath(); x.arc(px,py,r,0,7); x.fill(); x.strokeStyle=CC.crema; x.lineWidth=r/3; x.stroke();
-}
-// Las 2 respuestas que más te empujaron hacia tu perfil
-function tstPorque(resp,p){
-  const sx=Math.sign(p.x)||1, sy=Math.sign(p.y)||1, cand=[];
-  TST_PREG.forEach((q,i)=>{ const v=resp[i]||0; if(!v) return;
-    const peso=q.x?v*q.x*sx*(Math.abs(p.x)>TST_CORTE?1.2:.6):v*q.y*sy*(Math.abs(p.y)>TST_CORTE?1.2:.6);
-    if(peso>0) cand.push({q,v,peso}) });
-  cand.sort((a,b)=>b.peso-a.peso);
-  const verbo=v=>v===2?"estuviste totalmente de acuerdo con":v===1?"estuviste de acuerdo con":v===-1?"no estuviste de acuerdo con":"no estuviste para nada de acuerdo con";
-  return cand.slice(0,2).map(c=>`${verbo(c.v)} «${c.q.t.replace(/\.$/,"")}»`);
-}
-const tstBandas=tipo=>{ const cat=new Set(DISCOS.filter(d=>d[1]).map(d=>d[0])); return TST_TIPOS[tipo].b.filter(a=>cat.has(a)) };
-async function tstResultado(anim){
-  const p=tstPuntos(TST.resp), tipo=tstTipo(p.x,p.y), T=TST_TIPOS[tipo];
-  $("test-preg").hidden=true; $("test-res").hidden=false; window.scrollTo(0,0);
-  cabecera("Test","✓","","");
-  $("test-tipo").textContent=T.t; $("test-sub").textContent=T.s; $("test-desc").textContent=T.d;
-  const pct=v=>Math.round(Math.abs(v)*100);
-  $("test-ejes").innerHTML=`<span>${p.x>=0?"Masivo":"Under"} <b>${pct(p.x)}%</b></span><span>${p.y>=0?"Elaborado":"Crudo"} <b>${pct(p.y)}%</b></span>`;
-  const cv=$("test-cv"), W=cv.width=cv.height=Math.round(Math.min(440,cv.clientWidth||340)*(window.devicePixelRatio||1)), x=cv.getContext("2d");
-  const dib=t=>{ x.fillStyle=CC.crema; x.fillRect(0,0,W,W); tstBrujula(x,W*.09,W*.09,W*.82,p,t) };
-  if(anim){ const t0=performance.now(); (function a(t){ const k=Math.min(1,(t-t0)/1100); dib(k); if(k<1) requestAnimationFrame(a) })(t0) } else dib(1);
-  // por qué
-  const pq=tstPorque(TST.resp,p);
-  $("test-porque").innerHTML=`<p>Tirás un <b>${pct(p.x)}%</b> para lo ${p.x>=0?"masivo":"under"} y un <b>${pct(p.y)}%</b> para lo ${p.y>=0?"elaborado":"crudo"}.</p>`+(pq.length?`<ul>${pq.map(t=>`<li>Porque ${esc(t)}.</li>`).join("")}</ul>`:"");
-  $("test-plan").textContent=T.plan;
-  const O=T.op&&TST_TIPOS[T.op];
-  $("test-op").innerHTML=O?`<b>${esc(O.t)}</b> <span>(${esc(O.s.toLowerCase())})</span>. Si se cruzan en un recital, no se van a poner de acuerdo en nada… y por eso la charla va a estar buenísima.`:"No tenés: te llevás bien con todos los rockeros.";
-  await esperarCache();
-  const tapaDe=(a,t)=>{ const d=DISCOS.find(d=>d[0]===a&&d[1]&&(!t||d[1]===t)&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]); return d?{d,u:CACHE.disc[d[0]+"|"+d[1]].url}:null };
-  const bs=tstBandas(tipo);
-  $("test-bandas").innerHTML=bs.slice(0,6).map(a=>{ const r=tapaDe(a); return `<div class="tst-banda">${r?`<img alt="" src="${esc(chico200(r.u))}">`:""}<span>${esc(a)}</span></div>` }).join("")||`<p>${esc(T.b.join(" · "))}</p>`;
-  const dr=tapaDe(T.disco[0],T.disco[1]);
-  $("test-disco").innerHTML=dr?`<img alt="" src="${esc(dr.u)}"><div><b>${esc(dr.d[1])}</b><span>${esc(dr.d[0])} · ${dr.d[2]}</span></div>`:`<div><b>${esc(T.disco[1])}</b><span>${esc(T.disco[0])}</span></div>`;
-}
-async function tstImagen(){
-  const p=tstPuntos(TST.resp), tipo=tstTipo(p.x,p.y), T=TST_TIPOS[tipo];
-  try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
-  const [c,x]=lienzo(1080,1350);
-  etiqueta(x,"¿QUÉ ROCKERO SOS?",80,60,30);
-  texto(x,"Soy…",80,190,{f:FB,peso:"800",s:44});
-  texto(x,T.t,80,275,{s:76,c:CC.rojo,w:920,max:2,lh:1.05,min:44});
-  tstBrujula(x,230,430,620,p,1);
-  texto(x,T.s.toUpperCase(),540,1170,{f:FM,peso:"500",s:30,al:"center"});
-  texto(x,"¿Y vos qué rockero sos? Hacé el test en",540,1225,{f:FB,peso:"600",s:32,al:"center"});
-  marca(x,540,1245,40);
-  return c;
-}
-$("test-atras").onclick=()=>{ if(TST.i>0){ TST.i--; tstPintar() } };
-$("test-otra").onclick=()=>{ TST.rehacer=true; tstIniciar() };
-$("test-comp").onclick=async()=>{
-  const p=tstPuntos(TST.resp), T=TST_TIPOS[tstTipo(p.x,p.y)], b=$("test-comp");
-  const txt=`🎸 Hice el test ¿Qué rockero sos? y salí «${T.t}» (${T.s.toLowerCase()}). ¿Y vos qué rockero sos?\n${location.origin}/que-rockero-sos/`;
-  try{
-    const c=await tstImagen(), blob=await new Promise(ok=>c.toBlob(ok,"image/png")), f=new File([blob],"que-rockero-sos.png",{type:"image/png"});
-    if(navigator.canShare&&navigator.canShare({files:[f]})){ await navigator.share({files:[f],text:txt}); return }
-    if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:txt}); return }
-    await navigator.clipboard.writeText(txt); b.textContent="¡Copiado!"; setTimeout(()=>b.textContent="Compartir",1500);
-  }catch(e){}
-};
-$("test-bajar").onclick=async()=>{ const c=await tstImagen(); contDescargar(c,"que-rockero-sos.png") };
-
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/",test:"/que-rockero-sos/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
@@ -3974,7 +3802,7 @@ function seoAplicar(v){
 }
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
-const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar",test:"v-test"};
+const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
@@ -3993,7 +3821,6 @@ function irA(v,como){
   if(v in SUBJUEGOS){
     $(SUBJUEGOS[v]).hidden=false; window.scrollTo(0,0);
     if(v==="impostor") impIniciar();
-    if(v==="test") tstIniciar();
     if(v==="conexiones") conIniciar();
     if(v==="tema") TEMA.j?temaPintar():temaNuevo();
     if(v==="antes"){ modoInicial("antes"); (ANT.izq&&ANT.modo===MODO.antes)?antCab():antIniciar() }

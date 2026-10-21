@@ -173,15 +173,5 @@
     "h": "Marcar tapas",
     "noindex": true,
     "texto": []
-  },
-  "test": {
-    "ruta": "/que-rockero-sos/",
-    "titulo": "¿Qué rockero sos? · Test de rock en 18 preguntas | Juegos Rock",
-    "descripcion": "Test de rock en 18 preguntas: ¿sos under o masivo, crudo o elaborado? Descubrí cuál de los 9 rockeros sos y qué bandas de rock nacional te van.",
-    "h": "¿Qué rockero sos? El test de rock",
-    "texto": [
-      "Un test de dos ejes, como el de Nolan, pero para el rock: del sótano al estadio y de la distorsión a la partitura. Respondé 18 frases sobre recitales, discos y canciones y fijate en qué parte del mapa caés.",
-      "Hay nueve tipos de rockero, del punk de sótano al sofisticado de estadio, pasando por el cazador de joyitas, el rolinga de pura cepa, el arquitecto de canciones y el todoterreno. Cada uno te dice por qué sos así, qué bandas se te parecen, un disco para arrancar, tu plan ideal y tu opuesto."
-    ]
   }
 }

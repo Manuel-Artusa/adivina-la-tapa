@@ -41,9 +41,13 @@ create policy "subir puntaje" on puntajes for insert with check (
   jugador is not null
   and dia = (now() at time zone 'America/Argentina/Buenos_Aires')::date
   and (
+       -- formato viejo (se dejan para no romper puntajes de días anteriores)
        (modo = 'diario' and genero = 'todos' and puntos <= 50)
     or (modo = 'tema'   and genero = 'todos' and puntos <= 6)
-    or (modo not in ('diario','tema','normal') and genero = 'diario'
+    -- Tapa del día sobre 100 (va de a 2)
+    or (modo = 'diario' and genero = 'diario' and puntos <= 100 and puntos % 2 = 0)
+    -- el resto de los desafíos del día (incluido el Tema del día) sobre 100, de a 10; la grilla hasta 120
+    or (modo not in ('diario','normal') and genero = 'diario'
         and puntos <= (case when modo = 'grilla' then 120 else 100 end) and puntos % 10 = 0)
   )
 );
