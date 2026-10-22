@@ -1,0 +1,25 @@
+name: Conectar TikTok
+
+on:
+  workflow_dispatch:
+    inputs:
+      codigo:
+        description: "Código de juegosrock.com.ar/tiktok/ (vacío = te muestra el link para autorizar)"
+        required: false
+
+jobs:
+  conectar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Conectar
+        env:
+          CODIGO: ${{ inputs.codigo }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          SUPA_URL: ${{ secrets.SUPA_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node redes/tiktok-conectar.mjs

@@ -141,6 +141,127 @@ async function publicar(token, uid, p, urls) {
   return (await ig(token, `${uid}/media_publish`, { creation_id: id })).id;
 }
 
+// ---------- Threads ----------
+const THREADS_HOSTS = ["https://graph.threads.net", "https://graph.threads.com"];
+async function th(token, ruta, params = {}, metodo = "POST") {
+  let ultimo;
+  for (const host of THREADS_HOSTS) {
+    const q = new URLSearchParams({ ...params, access_token: token });
+    try {
+      const r = metodo === "GET" ? await fetch(`${host}/v1.0/${ruta}?${q}`) : await fetch(`${host}/v1.0/${ruta}`, { method: "POST", body: q });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && !j.error) return j;
+      ultimo = new Error(`Threads (${ruta}): ${j.error ? j.error.message : r.status}`);
+      if (r.status !== 404) break;
+    } catch (e) { ultimo = e }
+  }
+  throw ultimo;
+}
+async function thToken() {
+  const g = await leerClave("th_token");
+  let token = g && g.valor || env.THREADS_TOKEN || "";
+  if (!token) return null;
+  if (!g || Date.now() - Date.parse(g.actualizado) > 5 * 864e5) {
+    for (const host of THREADS_HOSTS) {
+      const r = await fetch(`${host}/refresh_access_token?grant_type=th_refresh_token&access_token=${encodeURIComponent(token)}`).catch(() => null);
+      const j = r ? await r.json().catch(() => ({})) : {};
+      if (r && r.ok && j.access_token) { token = j.access_token; log("🔑 Token de Threads renovado"); break }
+    }
+    await guardarClave("th_token", token);
+  }
+  return token;
+}
+// Threads deja 500 caracteres: sin hashtags y cortado prolijo
+function textoThreads(c) {
+  let t = (c || "").replace(/(^|\s)#[^\s#]+/g, "").replace(/\n{3,}/g, "\n\n").trim();
+  if (t.length > 480) { t = t.slice(0, 440); t = t.slice(0, Math.max(t.lastIndexOf(". "), t.lastIndexOf("\n"), 200) + 1).trim() + "\n\njuegosrock.com.ar" }
+  return t;
+}
+async function thListo(token, id) {
+  for (let i = 0; i < 20; i++) {
+    const s = await th(token, id, { fields: "status,error_message" }, "GET").catch(() => ({}));
+    if (s.status === "FINISHED") return;
+    if (s.status === "ERROR" || s.status === "EXPIRED") throw new Error(`Threads no pudo procesar el archivo: ${s.error_message || s.status}`);
+    await esperar(i < 3 ? 10000 : 15000);
+  }
+}
+async function publicarThreads(token, uid, p, urls) {
+  const text = textoThreads(p.caption);
+  let id;
+  if (p.tipo === "reel") id = (await th(token, `${uid}/threads`, { media_type: "VIDEO", video_url: urls[0], text })).id;
+  else if (urls.length === 1) id = (await th(token, `${uid}/threads`, { media_type: "IMAGE", image_url: urls[0], text })).id;
+  else {
+    const hijos = [];
+    for (const u of urls.slice(0, 20)) hijos.push((await th(token, `${uid}/threads`, { media_type: "IMAGE", image_url: u, is_carousel_item: "true" })).id);
+    for (const h of hijos) await thListo(token, h);
+    id = (await th(token, `${uid}/threads`, { media_type: "CAROUSEL", children: hijos.join(","), text })).id;
+  }
+  await thListo(token, id);
+  return (await th(token, `${uid}/threads_publish`, { creation_id: id })).id;
+}
+
+// ---------- Facebook (página) ----------
+const FB = "https://graph.facebook.com/v23.0";
+async function fb(token, ruta, params = {}, metodo = "POST", host = FB) {
+  const q = new URLSearchParams({ ...params, access_token: token });
+  const r = metodo === "GET" ? await fetch(`${host}/${ruta}?${q}`) : await fetch(`${host}/${ruta}`, { method: "POST", body: q });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.error) throw new Error(`Facebook (${ruta}): ${j.error ? j.error.message : r.status}`);
+  return j;
+}
+// Con un token de usuario de larga duración se saca el token de la página, que no vence
+async function fbPagina() {
+  const g = await leerClave("fb_pagina");
+  if (g && g.valor) { try { return JSON.parse(g.valor) } catch (e) {} }
+  const token = env.FB_TOKEN || "";
+  if (!token) return null;
+  let pag = null;
+  try {
+    const cuentas = (await fb(token, "me/accounts", { fields: "id,name,access_token" }, "GET")).data || [];
+    pag = cuentas.find(c => c.id === env.FB_PAGE_ID) || cuentas.find(c => /juegos\s*rock/i.test(c.name)) || cuentas[0] || null;
+    if (pag) pag = { id: pag.id, name: pag.name, token: pag.access_token };
+  } catch (e) {
+    const yo = await fb(token, "me", { fields: "id,name" }, "GET"); // ya era un token de página
+    pag = { id: yo.id, name: yo.name, token };
+  }
+  if (!pag) throw new Error("Ese token de Facebook no administra ninguna página");
+  await guardarClave("fb_pagina", JSON.stringify(pag));
+  log(`🔑 Facebook conectado a la página «${pag.name}»`);
+  return pag;
+}
+async function publicarFacebook(pag, p, urls) {
+  if (p.tipo === "reel") return (await fb(pag.token, `${pag.id}/videos`, { file_url: urls[0], description: p.caption }, "POST", "https://graph-video.facebook.com/v23.0")).id;
+  if (urls.length === 1) return (await fb(pag.token, `${pag.id}/photos`, { url: urls[0], message: p.caption })).post_id;
+  const fotos = [];
+  for (const u of urls.slice(0, 10)) fotos.push((await fb(pag.token, `${pag.id}/photos`, { url: u, published: "false" })).id);
+  const params = { message: p.caption };
+  fotos.forEach((id, i) => params[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id }));
+  return (await fb(pag.token, `${pag.id}/feed`, params)).id;
+}
+
+// ---------- TikTok (el video llega a la bandeja de TikTok: se publica con un toque y se le pone música) ----------
+async function ttToken() {
+  const g = await leerClave("tt_refresh");
+  if (!g || !g.valor || !env.TIKTOK_CLIENT_KEY || !env.TIKTOK_CLIENT_SECRET) return null;
+  const r = await fetch("https://open.tiktokapis.com/v2/oauth/token/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ client_key: env.TIKTOK_CLIENT_KEY, client_secret: env.TIKTOK_CLIENT_SECRET, grant_type: "refresh_token", refresh_token: g.valor }) });
+  const j = await r.json().catch(() => ({}));
+  if (!j.access_token) throw new Error(`TikTok no renovó el acceso: ${j.error_description || j.error || r.status}. Volvé a correr «Conectar TikTok».`);
+  if (j.refresh_token && j.refresh_token !== g.valor) await guardarClave("tt_refresh", j.refresh_token);
+  return j.access_token;
+}
+async function subirTikTok(token, archivo) {
+  const tam = fs.statSync(archivo).size;
+  const r = await fetch("https://open.tiktokapis.com/v2/post/publish/inbox/video/init/", { method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json; charset=UTF-8" },
+    body: JSON.stringify({ source_info: { source: "FILE_UPLOAD", video_size: tam, chunk_size: tam, total_chunk_count: 1 } }) });
+  const j = await r.json().catch(() => ({}));
+  if (!j.data || !j.data.upload_url) throw new Error(`TikTok: ${j.error && j.error.message || r.status}`);
+  const up = await fetch(j.data.upload_url, { method: "PUT", headers: { "Content-Type": "video/mp4", "Content-Range": `bytes 0-${tam - 1}/${tam}` }, body: fs.readFileSync(archivo) });
+  if (!up.ok) throw new Error(`TikTok no aceptó el video (${up.status})`);
+  return j.data.publish_id;
+}
+
 // ---------- principal ----------
 let fallas = 0;
 try {
@@ -148,30 +269,47 @@ try {
   const pubs = await armar();
   log(`🖼️ Armé ${pubs.length} publicaciones: ${pubs.map(p => p.id).join(", ") || "ninguna"}`);
   if (!PRUEBA && pubs.length) {
-    const token = await igToken();
-    const yo = await ig(token, "me", { fields: "user_id,username" }, "GET");
-    const uid = yo.user_id || yo.id;
-    log(`📷 Publicando en @${yo.username}`);
+    // conectar cada red (las que no estén configuradas se saltean)
+    const R = {};
+    try { const token = await igToken(); const yo = await ig(token, "me", { fields: "user_id,username" }, "GET"); R.ig = { token, uid: yo.user_id || yo.id }; log(`📷 Instagram: @${yo.username}`) }
+    catch (e) { fallas++; log(`❌ Instagram: ${e.message}`) }
+    try { const token = await thToken(); if (token) { const yo = await th(token, "me", { fields: "id,username" }, "GET"); R.th = { token, uid: yo.id }; log(`🧵 Threads: @${yo.username}`) } }
+    catch (e) { fallas++; log(`❌ Threads: ${e.message}`) }
+    try { const pag = await fbPagina(); if (pag) { R.fb = pag; log(`📘 Facebook: ${pag.name}`) } }
+    catch (e) { fallas++; log(`❌ Facebook: ${e.message}`) }
+    try { const token = await ttToken(); if (token) { R.tt = { token }; log("🎵 TikTok conectado") } }
+    catch (e) { fallas++; log(`❌ TikTok: ${e.message}`) }
     // las historias primero (respuesta de ayer antes que la pregunta de hoy), después el feed
     const orden = pubs.sort((a, b) => (a.tipo === "historia" ? 0 : 1) - (b.tipo === "historia" ? 0 : 1));
     for (const p of orden) {
-      const clave = `pub:${DIA}:${TURNO}:${p.id}`;
+      let urls, archivoVideo;
       try {
-        if (await leerClave(clave)) { log(`⏭️ ${p.id}: ya estaba publicado`); continue }
-        let urls;
         if (p.tipo === "reel") {
-          const f = path.join(RAIZ, "redes", "videos", p.video);
-          if (!fs.existsSync(f)) { log(`⏭️ ${p.id}: falta el video redes/videos/${p.video}`); continue }
-          urls = [await subir(f, `${DIA}/${p.video}`, "video/mp4")];
+          archivoVideo = path.join(RAIZ, "redes", "videos", p.video);
+          if (!fs.existsSync(archivoVideo)) { log(`⏭️ ${p.id}: falta el video redes/videos/${p.video}`); continue }
+          urls = [await subir(archivoVideo, `${DIA}/${p.video}`, "video/mp4")];
         } else urls = await Promise.all(p.archivos.map(f => subir(f, `${DIA}/${path.basename(f)}`, "image/jpeg")));
-        const mid = await publicar(token, uid, p, urls);
-        await guardarClave(clave, mid);
-        log(`✅ ${p.id} (${p.tipo}) publicado`);
-        await esperar(4000);
-      } catch (e) { fallas++; log(`❌ ${p.id}: ${e.message}`) }
+      } catch (e) { fallas++; log(`❌ ${p.id}: ${e.message}`); continue }
+      // qué va a cada red: historias solo a Instagram; videos también a TikTok
+      const destinos = [
+        ["ig", "Instagram", `pub:${DIA}:${TURNO}:${p.id}`, () => publicar(R.ig.token, R.ig.uid, p, urls)],
+        ["th", "Threads", `th:${DIA}:${TURNO}:${p.id}`, () => publicarThreads(R.th.token, R.th.uid, p, urls), p.tipo !== "historia"],
+        ["fb", "Facebook", `fb:${DIA}:${TURNO}:${p.id}`, () => publicarFacebook(R.fb, p, urls), p.tipo !== "historia"],
+        ["tt", "TikTok", `tt:${DIA}:${TURNO}:${p.id}`, () => subirTikTok(R.tt.token, archivoVideo), p.tipo === "reel"],
+      ];
+      for (const [red, nombre, clave, hacer, va = true] of destinos) {
+        if (!va || !R[red]) continue;
+        try {
+          if (await leerClave(clave)) { log(`⏭️ ${p.id} en ${nombre}: ya estaba`); continue }
+          const mid = await hacer();
+          await guardarClave(clave, String(mid || "ok"));
+          log(`✅ ${p.id} (${p.tipo}) → ${nombre}${red === "tt" ? " (te llegó a la bandeja de TikTok para publicarlo)" : ""}`);
+          await esperar(3000);
+        } catch (e) { fallas++; log(`❌ ${p.id} en ${nombre}: ${e.message}`) }
+      }
     }
     await limpiarViejos().catch(() => {});
   }
 } catch (e) { fallas++; log(`❌ ${e.message}`) }
-if (env.GITHUB_STEP_SUMMARY) fs.appendFileSync(env.GITHUB_STEP_SUMMARY, "## Instagram\n\n" + resumen.map(l => "- " + l).join("\n") + "\n");
+if (env.GITHUB_STEP_SUMMARY) fs.appendFileSync(env.GITHUB_STEP_SUMMARY, "## Redes\n\n" + resumen.map(l => "- " + l).join("\n") + "\n");
 process.exit(fallas ? 1 : 0);

@@ -1380,7 +1380,7 @@ const TOPS=[
   {id:"antes",n:"¿Antes o después?",modo:"antes",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por acierto."},
   {id:"orden",n:"Ordená la discografía",modo:"orden",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 de una, 60 al segundo intento, 30 al tercero."},
   {id:"abre",n:"Tema número 1",modo:"abre",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 20 puntos por disco acertado."},
-  {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error y 10 por pista."},
+  {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error y 10 por pista. Hasta 10 errores."},
   {id:"impostor",n:"¿Qué tema no está?",modo:"impostor",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por tema bien marcado."},
 ];
 function topChips(){
@@ -1631,7 +1631,7 @@ $("imp-otro").onclick=()=>impNueva(Math.random);
 chipsModo("impostor",impIniciar);
 
 // ===== Minijuego: Conexiones (16 temas, 4 discos) =====
-const CON_LIMITE={facil:Infinity,normal:Infinity,dificil:5};
+const CON_LIMITE={facil:Infinity,normal:10,dificil:5};
 const CON={dif:"normal",p:null,cargando:false};
 const temasCache=new Map();
 async function temasDe(id){

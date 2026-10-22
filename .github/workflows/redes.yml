@@ -1,9 +1,13 @@
-name: Publicar en Instagram
+name: Publicar en redes
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # 9:00 de Argentina: post del día + historias del desafío
-    - cron: "0 22 * * *"   # 19:00 de Argentina: cumpleaños, efemérides y video
+    # GitHub atrasa mucho las tareas programadas a la hora en punto: por eso minutos "raros"
+    # y un segundo intento por turno (si el primero ya publicó, el segundo no repite nada)
+    - cron: "7 11 * * *"    # 8:07 de Argentina: post del día + historias del desafío
+    - cron: "37 13 * * *"   # 10:37: segundo intento de la mañana
+    - cron: "7 21 * * *"    # 18:07: cumpleaños, efemérides y video
+    - cron: "37 23 * * *"   # 20:37: segundo intento de la tarde
   workflow_dispatch:
     inputs:
       turno:
@@ -44,12 +48,17 @@ jobs:
         run: node build.js
       - name: Armar y publicar
         env:
-          TURNO: ${{ github.event_name == 'schedule' && (github.event.schedule == '0 12 * * *' && 'manana' || 'tarde') || inputs.turno }}
+          TURNO: ${{ github.event_name == 'schedule' && ((github.event.schedule == '7 11 * * *' || github.event.schedule == '37 13 * * *') && 'manana' || 'tarde') || inputs.turno }}
           PRUEBA: ${{ github.event_name == 'workflow_dispatch' && inputs.prueba && 'true' || 'false' }}
           DIA: ${{ inputs.dia }}
           SUPA_URL: ${{ secrets.SUPA_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          THREADS_TOKEN: ${{ secrets.THREADS_TOKEN }}
+          FB_TOKEN: ${{ secrets.FB_TOKEN }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
         run: node redes/publicar.mjs
       - name: Guardar las imágenes para revisar
         if: always()
