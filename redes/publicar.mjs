@@ -107,19 +107,25 @@ async function igToken() {
   return token;
 }
 async function ig(token, ruta, params = {}, metodo = "POST") {
-  const q = new URLSearchParams({ ...params, access_token: token });
-  const r = metodo === "GET" ? await fetch(`${IG}/${ruta}?${q}`) : await fetch(`${IG}/${ruta}`, { method: "POST", body: q });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok || j.error) throw new Error(`Instagram (${ruta}): ${j.error ? j.error.message : r.status}`);
-  return j;
+  for (let intento = 0; ; intento++) {
+    const q = new URLSearchParams({ ...params, access_token: token });
+    const r = metodo === "GET" ? await fetch(`${IG}/${ruta}?${q}`) : await fetch(`${IG}/${ruta}`, { method: "POST", body: q });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && !j.error) return j;
+    const msg = j.error ? j.error.message : String(r.status);
+    // Instagram frena si se le pide mucho seguido, o si el archivo todavía no está listo: esperar y reintentar
+    const limite = /request limit|too many|rate limit/i.test(msg), noListo = /does not exist|not ready|media id is not available/i.test(msg) && ruta.endsWith("media_publish");
+    if ((limite || noListo) && intento < 3) { log(`   ⏳ Instagram pidió esperar (${limite ? "límite de pedidos" : "archivo no listo"}), reintento…`); await esperar(limite ? 70000 : 20000); continue }
+    throw new Error(`Instagram (${ruta}): ${msg}`);
+  }
 }
 const esperar = ms => new Promise(r => setTimeout(r, ms));
-async function listo(token, id, max = 40) {
+async function listo(token, id, max = 25) {
   for (let i = 0; i < max; i++) {
     const s = await ig(token, id, { fields: "status_code" }, "GET");
     if (s.status_code === "FINISHED") return;
     if (s.status_code === "ERROR" || s.status_code === "EXPIRED") throw new Error(`Instagram no pudo procesar el archivo (${s.status_code})`);
-    await esperar(i < 5 ? 3000 : 15000);
+    await esperar(i === 0 ? 5000 : i < 4 ? 10000 : 20000);
   }
   throw new Error("Instagram tardó demasiado en procesar el archivo");
 }
@@ -137,7 +143,7 @@ async function publicar(token, uid, p, urls) {
     for (const h of hijos) await listo(token, h);
     id = (await ig(token, `${uid}/media`, { media_type: "CAROUSEL", children: hijos.join(","), caption: p.caption })).id;
   }
-  await listo(token, id, p.tipo === "reel" ? 40 : 20);
+  await listo(token, id, p.tipo === "reel" ? 30 : 15);
   return (await ig(token, `${uid}/media_publish`, { creation_id: id })).id;
 }
 
@@ -210,19 +216,23 @@ async function fb(token, ruta, params = {}, metodo = "POST", host = FB) {
   return j;
 }
 // Con un token de usuario de larga duración se saca el token de la página, que no vence
+const esLaPagina = p => p && (env.FB_PAGE_ID ? p.id === env.FB_PAGE_ID : /juegos\s*rock/i.test(p.name || ""));
 async function fbPagina() {
   const g = await leerClave("fb_pagina");
-  if (g && g.valor) { try { return JSON.parse(g.valor) } catch (e) {} }
+  if (g && g.valor) { try { const p = JSON.parse(g.valor); if (esLaPagina(p)) return p } catch (e) {} }
   const token = env.FB_TOKEN || "";
   if (!token) return null;
   let pag = null;
   try {
     const cuentas = (await fb(token, "me/accounts", { fields: "id,name,access_token" }, "GET")).data || [];
-    pag = cuentas.find(c => c.id === env.FB_PAGE_ID) || cuentas.find(c => /juegos\s*rock/i.test(c.name)) || cuentas[0] || null;
-    if (pag) pag = { id: pag.id, name: pag.name, token: pag.access_token };
+    pag = cuentas.find(c => esLaPagina(c)) || null;
+    if (!pag) throw new Error(`no encontré la página de Juegos Rock. Este token ve: ${cuentas.map(c => `«${c.name}» (${c.id})`).join(", ") || "ninguna página"}. Generá el token eligiendo la página de Juegos Rock, o cargá su número en el secreto FB_PAGE_ID.`);
+    pag = { id: pag.id, name: pag.name, token: pag.access_token };
   } catch (e) {
+    if (/no encontré la página/.test(e.message)) throw e;
     const yo = await fb(token, "me", { fields: "id,name" }, "GET"); // ya era un token de página
     pag = { id: yo.id, name: yo.name, token };
+    if (!esLaPagina(pag)) throw new Error(`el token es de la página «${yo.name}», no de Juegos Rock`);
   }
   if (!pag) throw new Error("Ese token de Facebook no administra ninguna página");
   await guardarClave("fb_pagina", JSON.stringify(pag));
