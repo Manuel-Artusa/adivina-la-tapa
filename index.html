@@ -393,6 +393,27 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .orden .mov button:disabled{opacity:.25;cursor:default}
 
 /* Tema número 1 */
+.aho-cab{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.aho-dib{width:100%;height:auto;background:var(--crema);border:3px solid var(--tinta);box-shadow:4px 4px 0 var(--tinta)}
+.aho-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.aho-info small{font-family:var(--mono);font-size:.8rem}
+.aho-info b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.05}
+.aho-disco{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:center;font-size:.9rem;font-weight:700}
+.aho-disco .mini-tapa{width:56px;height:56px}
+.aho-palabra{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;padding:6px 0}
+.aho-pal{display:flex;gap:4px}
+.aho-c{width:clamp(22px,7vw,32px);height:clamp(30px,9vw,42px);display:flex;align-items:center;justify-content:center;background:var(--crema);border:2px solid var(--tinta);font-family:var(--display);font-size:clamp(1rem,4.6vw,1.45rem);line-height:1}
+.aho-c.oculta{background:transparent;border-width:0 0 3px}
+.aho-c.perdida{color:var(--rojo);background:transparent;border-width:0 0 3px}
+.aho-c.signo{background:transparent;border:0;width:auto;min-width:8px}
+.aho-teclado{display:flex;flex-direction:column;gap:6px;align-items:center}
+.aho-fila{display:flex;gap:5px;justify-content:center;width:100%}
+.aho-fila button{flex:1 1 0;max-width:44px;min-width:0;height:46px;padding:0;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);box-shadow:2px 2px 0 var(--tinta);font:800 1rem var(--body);cursor:pointer}
+.aho-fila button:active:not(:disabled){transform:translate(2px,2px);box-shadow:none}
+.aho-fila button.si{background:var(--ok);color:var(--crema);box-shadow:none}
+.aho-fila button.no{background:transparent;color:var(--sombra);border-color:var(--sombra);box-shadow:none}
+.aho-fila button:disabled:not(.si):not(.no){opacity:.5;cursor:default}
+@media (max-width:440px){.aho-cab{grid-template-columns:96px 1fr}.aho-fila{gap:3px}.aho-fila button{height:42px;font-size:.9rem}}
 .abre-cab{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
 .abre-cab b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.05;display:block}
 .abre-preg{font-weight:800;font-size:1.05rem}
@@ -560,6 +581,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <button type="button" data-ir="tema" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
       <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta algo: ponelo en su lugar y con su tamaño.</span></button>
+      <button type="button" data-ir="ahorcado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Horca con medio muñequito y un título con letras por adivinar"><rect width="240" height="110" fill="var(--papel)"/><path d="M14 100 H70 M30 100 V12 H66 V22 M30 30 L48 12" stroke="var(--tinta)" stroke-width="4" fill="none"/><circle cx="66" cy="32" r="9" fill="var(--crema)" stroke="var(--tinta)" stroke-width="3"/><path d="M66 41 V66 M66 50 L55 60 M66 50 L77 60" stroke="var(--tinta)" stroke-width="3" stroke-linecap="round"/><rect x="96" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="96" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="122" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="58" width="20" height="3" fill="var(--tinta)"/><text x="132" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="148" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="148" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="174" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="174" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="200" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="58" width="20" height="3" fill="var(--tinta)"/><text x="210" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="96" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="148" y="76" width="20" height="18" fill="transparent" stroke="var(--tinta)" stroke-width="2"/><rect x="174" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Ahorcado rockero</b><span>Adiviná el nombre del tema letra por letra antes de que se complete el dibujo.</span></button>
       <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · contra reloj</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Llenalos antes de que se termine el tiempo.</span></button>
       <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Pistas</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
@@ -723,6 +745,34 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
     <div class="opts" id="abre-opts"></div>
     <div class="con-msg" id="abre-msg" aria-live="polite"></div>
     <div class="fila"><button class="btn" id="abre-sig" type="button" hidden>Siguiente</button></div>
+  </section>
+
+  <section id="v-ahorcado" class="sub" hidden>
+    <button class="link volver" type="button">← Inicio</button>
+    <h2>Ahorcado rockero</h2>
+    <div class="chips modo-dia" data-juego="ahorcado" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
+    <p class="bajada">Adiviná el nombre del tema letra por letra. Con 6 errores se completa el dibujo y perdés. El del día son 3 temas.</p>
+    <div class="aho-cab">
+      <svg class="aho-dib" viewBox="0 0 120 130" role="img" aria-label="Dibujo del ahorcado">
+        <path d="M10 124 H80 M30 124 V8 H82 V22 M30 30 L50 8" stroke="var(--tinta)" stroke-width="5" fill="none" stroke-linecap="square"/>
+        <circle id="aho-p0" cx="82" cy="34" r="12" stroke="var(--tinta)" stroke-width="4" fill="var(--crema)"/>
+        <path id="aho-p1" d="M82 46 V84" stroke="var(--tinta)" stroke-width="4"/>
+        <path id="aho-p2" d="M82 56 L66 72" stroke="var(--tinta)" stroke-width="4" stroke-linecap="round"/>
+        <path id="aho-p3" d="M82 56 L98 72" stroke="var(--tinta)" stroke-width="4" stroke-linecap="round"/>
+        <path id="aho-p4" d="M82 84 L68 106" stroke="var(--tinta)" stroke-width="4" stroke-linecap="round"/>
+        <path id="aho-p5" d="M82 84 L96 106" stroke="var(--rojo)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <div class="aho-info">
+        <small id="aho-n"></small>
+        <b id="aho-banda">Cargando…</b>
+        <div class="aho-disco" id="aho-disco" hidden><img class="mini-tapa" id="aho-tapa" alt=""><span id="aho-disco-t"></span></div>
+        <button class="link" id="aho-pista" type="button" hidden>Pista: ver de qué disco es (cuesta 1 error)</button>
+      </div>
+    </div>
+    <div class="aho-palabra" id="aho-palabra"></div>
+    <div class="aho-teclado" id="aho-teclado" role="group" aria-label="Letras"></div>
+    <div class="con-msg" id="aho-msg" aria-live="polite"></div>
+    <div class="fila"><button class="btn" id="aho-sig" type="button" hidden>Siguiente</button></div>
   </section>
 
   <section id="v-yo" class="sub" hidden>
@@ -1382,6 +1432,7 @@ const TOPS=[
   {id:"abre",n:"Tema número 1",modo:"abre",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 20 puntos por disco acertado."},
   {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error y 10 por pista. Hasta 10 errores."},
   {id:"impostor",n:"¿Qué tema no está?",modo:"impostor",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por tema bien marcado."},
+  {id:"ahorcado",n:"Ahorcado rockero",modo:"ahorcado",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas; cada uno vale 100 menos 10 por error (la pista cuenta como error). Se promedia."},
 ];
 function topChips(){
   const cfg=TOPS.find(t=>t.id===topTab.t)||TOPS[0];
@@ -1896,7 +1947,7 @@ function puntos100(j,dia=diaSel(),soloEnFecha=false){
   return x.puntos;
 }
 const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
-const MODO={antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario"};
+const MODO={ahorcado:"diario",antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario"};
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>kDia(`tapa-${j}-dia`);
 const diaHecho=j=>leerDia(`tapa-${j}-dia`);
@@ -1905,7 +1956,7 @@ const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); cont
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
 const nDia=()=>numDiario(diaSel());
 function jugadoHoy(j){ return puntos100(j)!=null }
-const DIARIOS=["diario","tema","armar","banda","grilla","antes","orden","abre","conexiones","impostor"];
+const DIARIOS=["diario","tema","armar","banda","grilla","antes","orden","abre","conexiones","impostor","ahorcado"];
 function modoInicial(j){ if(!MODO_ELEGIDO.has(j)) MODO[j]=diaHecho(j)?"libre":"diario"; pintarChipsModo(j) }
 function pintarChipsModo(j){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>{
@@ -2988,6 +3039,173 @@ function abrResp(p,b){
 chipsModo("abre",abrIniciar);
 $("abre-sig").onclick=abrNuevo;
 
+// ===== Ahorcado rockero: adiviná el título del tema letra por letra =====
+// Solo el NOMBRE del tema (nunca la letra de la canción). Los temas salen de los más escuchados de cada banda en iTunes.
+const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros");
+const AHO_VIDAS=6, AHO_DIA=3;
+const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};
+const ahoTop=new Map();
+// letra "base": sin tildes (Á→A, Ü→U) pero la Ñ queda como Ñ
+const ahoBase=c=>{ const u=c.toUpperCase(); if(u==="Ñ") return "Ñ"; return u.normalize("NFD").replace(/[̀-ͯ]/g,"") };
+const ahoEsLetra=c=>/^[A-ZÑ]$/.test(ahoBase(c));
+const ahoLimpio=t=>limpiarTema(t).replace(/\s*[\(\[][^\)\]]*(feat|ft\.|con |with )[^\)\]]*[\)\]]/gi,"").replace(/\s+(feat\.?|ft\.)\s.*$/i,"").trim();
+// Los temas más escuchados de una banda (orden de iTunes), sin repetir
+async function ahoTemas(banda){
+  if(ahoTop.has(banda)) return ahoTop.get(banda);
+  const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
+  let r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
+  if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base);
+  const vistos=new Set(), out=[];
+  for(const x of r.results||[]){
+    if(x.wrapperType!=="track"||!x.trackName||norm(x.artistName||"")!==norm(banda)) continue;
+    if(FUERA.test(norm(x.collectionName||""))&&out.length) continue;
+    const t=ahoLimpio(x.trackName), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
+    if(!k||vistos.has(k)||letras<4||letras>26||/intro|interludio|bonus|demo/i.test(t)) continue;
+    vistos.add(k);
+    out.push({t,banda,disco:limpiarTitulo(x.collectionName||""),anio:(x.releaseDate||"").slice(0,4),tapa:(x.artworkUrl100||"").replace("100x100bb","200x200bb")});
+  }
+  ahoTop.set(banda,out); return out;
+}
+// Un tema conocido de la banda: de los 12 más escuchados (ordenados por nombre, así a todos les toca el mismo)
+async function ahoElegir(banda,rng){
+  const ts=(await ahoTemas(banda)).slice(0,12).sort((a,b)=>a.t.localeCompare(b.t,"es"));
+  if(ts.length<3) throw new Error("pocos temas");
+  return ts[rng()*ts.length|0];
+}
+const ahoClave=()=>kDia("tapa-ahorcado-prog");
+function ahoGuardar(){ if(AHO.modo!=="diario") return; ls.set(ahoClave(),{ronda:AHO.ronda,res:AHO.res,usadas:AHO.j?[...AHO.j.usadas]:[],pista:AHO.j?AHO.j.pista:false}) }
+const ahoPtsTema=j=>j.gano?100-10*j.err:0;
+const ahoTotal=res=>Math.round(res.reduce((a,b)=>a+b,0)/AHO_DIA/10)*10;
+function ahoCab(){
+  if(AHO.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(AHO.ronda+1,AHO_DIA)}/${AHO_DIA}`,"Errores",AHO.j?`${AHO.j.err}/${AHO_VIDAS}`:"–");
+  else cabecera("Racha",AHO.racha,"Récord",ls.get("tapa-aho-rec")||0);
+}
+function ahoIniciar(){
+  modoInicial("ahorcado");
+  AHO.j=null; AHO.dia=diaSel();
+  if(MODO.ahorcado==="libre"){ AHO.modo="libre"; return ahoNuevo() }
+  AHO.modo="diario";
+  const h=diaHecho("ahorcado");
+  if(h){ ahoLimpiar(); $("aho-banda").textContent="Desafío de hoy completo"; $("aho-msg").textContent=yaJugado(h); cabecera(`Del día #${nDia()}`,"✓","Puntos",h.puntos); return }
+  const rng=rngDia("ahorcado"); AHO.cand=mezR(AHO_BANDAS,rng); AHO.ci=0;
+  const prog=ls.get(ahoClave());
+  AHO.ronda=prog?prog.ronda:0; AHO.res=prog?prog.res:[];
+  ahoNuevo(prog);
+}
+function ahoLimpiar(){
+  $("aho-sig").hidden=true; $("aho-msg").textContent=""; $("aho-palabra").innerHTML=""; $("aho-teclado").innerHTML="";
+  $("aho-disco").hidden=true; $("aho-pista").hidden=true; $("aho-n").textContent=""; ahoDibujar(0);
+}
+async function ahoNuevo(prog){
+  const modo=AHO.modo, dia=AHO.dia;
+  ahoLimpiar(); $("aho-banda").textContent="Cargando…";
+  let t=null;
+  if(modo==="diario"){
+    // cada tema del día sale de una banda distinta, siempre en el mismo orden
+    const rng=semillaRng(hashStr(`ahorcado-${diaSel()}-${AHO.ronda}`));
+    for(let k=0;k<6&&!t;k++){ const b=AHO.cand[(AHO.ronda*6+k)%AHO.cand.length]; try{ t=await ahoElegir(b,rng) }catch(e){} }
+  }else{
+    for(let k=0;k<6&&!t;k++){ try{ t=await ahoElegir(AHO_BANDAS[Math.random()*AHO_BANDAS.length|0],Math.random) }catch(e){} }
+  }
+  if(AHO.modo!==modo||AHO.dia!==dia) return;
+  if(!t){ $("aho-banda").textContent="No pude cargar el tema. Revisá la conexión."; $("aho-sig").textContent="Probar de nuevo"; $("aho-sig").hidden=false; return }
+  AHO.j={...t,usadas:new Set(),err:0,pista:false,fin:false,gano:false,letras:new Set([...t.t].filter(ahoEsLetra).map(ahoBase))};
+  if(prog&&prog.ronda===AHO.ronda){ if(prog.pista) ahoPista(true); (prog.usadas||[]).forEach(l=>ahoLetra(l,true)) }
+  ahoPintar();
+}
+function ahoDibujar(n){ for(let i=0;i<AHO_VIDAS;i++){ const p=$("aho-p"+i); if(p) p.style.visibility=i<n?"visible":"hidden" } }
+function ahoPintar(){
+  const j=AHO.j; if(!j) return;
+  $("aho-n").textContent=AHO.modo==="diario"?`Tema ${AHO.ronda+1} de ${AHO_DIA}`:"Libre";
+  $("aho-banda").textContent=j.banda;
+  // el título, palabra por palabra (las palabras no se cortan)
+  const pal=$("aho-palabra"); pal.innerHTML="";
+  for(const w of j.t.split(/\s+/)){
+    const g=document.createElement("span"); g.className="aho-pal";
+    for(const c of w){
+      const s=document.createElement("span");
+      if(ahoEsLetra(c)){
+        const vista=j.usadas.has(ahoBase(c));
+        s.className="aho-c"+(vista?"":" oculta")+(!vista&&j.fin?" perdida":"");
+        s.textContent=vista||j.fin?c.toUpperCase():"";
+      }else{ s.className="aho-c signo"; s.textContent=c }
+      g.appendChild(s);
+    }
+    pal.appendChild(g);
+  }
+  pal.setAttribute("aria-label",j.fin?`El tema era ${j.t}`:`Título de ${[...j.t].filter(ahoEsLetra).length} letras`);
+  // teclado
+  const tec=$("aho-teclado"); tec.innerHTML="";
+  for(const fila of ["QWERTYUIOP","ASDFGHJKLÑ","ZXCVBNM"]){
+    const f=document.createElement("div"); f.className="aho-fila";
+    for(const l of fila){
+      const b=document.createElement("button"); b.type="button"; b.textContent=l; b.id="aho-k"+l;
+      if(j.usadas.has(l)){ b.disabled=true; b.className=j.letras.has(l)?"si":"no" }
+      if(j.fin) b.disabled=true;
+      b.onclick=()=>ahoLetra(l);
+      f.appendChild(b);
+    }
+    tec.appendChild(f);
+  }
+  $("aho-pista").hidden=j.pista||j.fin;
+  $("aho-pista").disabled=j.err>=AHO_VIDAS-1;
+  ahoDibujar(j.err); ahoCab();
+}
+// Pista: muestra el disco del tema; cuesta un error
+function ahoPista(silencio){
+  const j=AHO.j; if(!j||j.fin||j.pista) return;
+  if(!silencio&&j.err>=AHO_VIDAS-1) return;
+  j.pista=true; j.err++;
+  $("aho-disco").hidden=false;
+  if(j.tapa){ $("aho-tapa").src=j.tapa; $("aho-tapa").alt="Tapa de "+j.disco; $("aho-tapa").hidden=false } else $("aho-tapa").hidden=true;
+  $("aho-disco-t").textContent=`Está en ${j.disco}${j.anio?` (${j.anio})`:""}`;
+  if(!silencio){ ahoGuardar(); ahoPintar() }
+}
+function ahoLetra(l,silencio){
+  const j=AHO.j; if(!j||j.fin) return;
+  l=ahoBase(l); if(!/^[A-ZÑ]$/.test(l)||j.usadas.has(l)) return;
+  j.usadas.add(l);
+  if(!j.letras.has(l)) j.err++;
+  if([...j.letras].every(x=>j.usadas.has(x))){ j.fin=true; j.gano=true }
+  else if(j.err>=AHO_VIDAS){ j.fin=true; j.gano=false }
+  if(j.fin) return ahoTerminar(silencio);
+  if(!silencio){ ahoGuardar(); ahoPintar() }
+}
+function ahoTerminar(silencio){
+  const j=AHO.j;
+  ahoPintar();
+  if(j.pista===false&&j.tapa){ /* al terminar se muestra el disco igual */ $("aho-disco").hidden=false; $("aho-tapa").src=j.tapa; $("aho-tapa").hidden=false; $("aho-disco-t").textContent=`Está en ${j.disco}${j.anio?` (${j.anio})`:""}` }
+  const msg=j.gano?(j.err?`¡Bien! Lo sacaste con ${j.err} error${j.err===1?"":"es"}.`:"¡Perfecto! Sin errores."):`Era «${j.t}».`;
+  $("aho-msg").textContent=msg;
+  if(AHO.modo==="diario"){
+    AHO.res[AHO.ronda]=ahoPtsTema(j); AHO.ronda++;
+    if(AHO.ronda>=AHO_DIA){
+      const pts=ahoTotal(AHO.res), sacados=AHO.res.filter(x=>x>0).length;
+      $("aho-msg").textContent+=` Terminaste: ${sacados} de ${AHO_DIA} temas · ${pts} puntos.`;
+      try{ localStorage.removeItem(ahoClave()) }catch(e){}
+      diaCerrar("ahorcado",pts,`${sacados} de ${AHO_DIA} temas, ${pts} puntos`); pintarChipsModo("ahorcado");
+      cabecera(`Del día #${nDia()}`,"✓","Puntos",pts);
+      topAuto("ahorcado","diario",pts,$("aho-msg")); return;
+    }
+    ls.set(ahoClave(),{ronda:AHO.ronda,res:AHO.res,usadas:[],pista:false});
+    $("aho-sig").textContent=`Siguiente (${AHO.ronda+1}/${AHO_DIA})`;
+  }else{
+    AHO.racha=j.gano?AHO.racha+1:0;
+    if(AHO.racha>(ls.get("tapa-aho-rec")||0)) ls.set("tapa-aho-rec",AHO.racha);
+    $("aho-sig").textContent="Otro tema";
+  }
+  ahoCab();
+  $("aho-sig").hidden=false; if(!silencio) $("aho-sig").focus();
+}
+chipsModo("ahorcado",ahoIniciar);
+$("aho-sig").onclick=()=>{ if(AHO.modo==="diario"&&!AHO.j&&!diaHecho("ahorcado")) return ahoIniciar(); ahoNuevo() };
+$("aho-pista").onclick=()=>ahoPista();
+addEventListener("keydown",e=>{
+  if($("v-ahorcado").hidden||e.ctrlKey||e.metaKey||e.altKey) return;
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||"")) return;
+  if(e.key.length===1&&ahoEsLetra(e.key)){ e.preventDefault(); ahoLetra(e.key) }
+});
+
 // ---- Navegación ----
 
 // ---- Una dirección por juego (para Google y para compartir links directos) ----
@@ -3783,7 +4001,7 @@ window.redesExportar=async(dia,turno)=>{
 };
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",ahorcado:"/ahorcado-rockero/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
@@ -3802,7 +4020,7 @@ function seoAplicar(v){
 }
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
-const SUBJUEGOS={impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
+const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
@@ -3825,6 +4043,7 @@ function irA(v,como){
     if(v==="tema") TEMA.j?temaPintar():temaNuevo();
     if(v==="antes"){ modoInicial("antes"); (ANT.izq&&ANT.modo===MODO.antes)?antCab():antIniciar() }
     if(v==="orden"){ modoInicial("orden"); (ORD.items.length&&ORD.modo===MODO.orden)?ordPintar():ordIniciar() }
+    if(v==="ahorcado"){ modoInicial("ahorcado"); (AHO.j&&AHO.modo===MODO.ahorcado&&AHO.dia===diaSel())?ahoPintar():ahoIniciar() }
     if(v==="abre"){ modoInicial("abre"); (ABR.j&&ABR.modo===MODO.abre)?abrCab():abrIniciar() }
     if(v==="armar"){ (ARM.cur&&ARM.cur.img&&ARM.dia===hoyAR()&&!$("armar-juego").hidden)?(ARM.cur.W=0,armDibujar()):armIniciar() }
     if(v==="grilla"){ modoInicial("grilla"); (GRI.filas&&GRI.modo===MODO.grilla&&GRI.dia===diaSel())?griPintar():griIniciar() }
@@ -3913,7 +4132,7 @@ function elegirDia(dia){
   DIA_SEL=dia===hoyAR()?null:dia;
   // cada juego vuelve a arrancar con el día elegido
   if(typeof temaParar==="function") temaParar();
-  G=null; TEMA.j=null; TEMA.modo="diario"; ANT.izq=null; ANT.cad=null; ORD.items=[]; ABR.j=null; CON.p=null; CON.modoP=null; IMP.ronda=null;
+  G=null; TEMA.j=null; TEMA.modo="diario"; ANT.izq=null; ANT.cad=null; ORD.items=[]; ABR.j=null; AHO.j=null; AHO.dia=null; CON.p=null; CON.modoP=null; IMP.ronda=null;
   MODO_ELEGIDO.clear(); Object.keys(MODO).forEach(j=>MODO[j]="diario");
   document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==="diario"));
   $("t-diario-n").textContent="Diario #"+nDia();
@@ -3921,7 +4140,7 @@ function elegirDia(dia){
 }
 
 // ---- Resumen del día para compartir ----
-const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",armar:"🧩",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️"};
+const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",armar:"🧩",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️",ahorcado:"🔤"};
 function resumenTexto(){
   const dia=diaSel(); let total=0;
   const filas=DIARIOS.map(j=>{
@@ -3952,7 +4171,7 @@ function historial(){
       const k=localStorage.key(i); let m;
       if((m=k.match(/^tapa-d-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"diario");
       else if((m=k.match(/^tapa-tema-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"tema");
-      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla|armar)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
+      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla|armar|ahorcado)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
     }
   }catch(e){}
   return h;
@@ -3965,7 +4184,7 @@ function rachas(){
   while(h[d]){ actual++; d=sumarDias(d,-1) }
   return {actual,mejor,dias:dias.length,h};
 }
-const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?"};
+const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?",ahorcado:"Ahorcado rockero"};
 function yoPintar(){
   const r=rachas(), hoy=hoyAR();
   $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;

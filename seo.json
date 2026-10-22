@@ -141,6 +141,16 @@
       "Incluye discos como De Bichos y Flores, A Contraluz, El Impulso, Piel y Hueso, Destilar y Discopático."
     ]
   },
+  "ahorcado": {
+    "ruta": "/ahorcado-rockero/",
+    "titulo": "Ahorcado rockero · Adiviná el nombre del tema | Juegos Rock",
+    "descripcion": "El ahorcado con nombres de temas de rock nacional: adiviná el título letra por letra antes de que se complete el dibujo. Desafío diario de 3 temas y modo libre.",
+    "h": "Ahorcado rockero: adiviná el nombre del tema",
+    "texto": [
+      "Te decimos la banda y cuántas letras tiene el nombre del tema. Andá probando letras: con 6 errores se completa el dibujo y perdés.",
+      "Si te trabás, la pista te muestra de qué disco es, pero cuenta como un error. El desafío del día son 3 temas y en el modo libre jugás por rachas."
+    ]
+  },
   "top": {
     "ruta": "/ranking/",
     "titulo": "Ranking de los desafíos del día | Juegos Rock",
