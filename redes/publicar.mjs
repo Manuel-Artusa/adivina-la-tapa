@@ -115,6 +115,10 @@ async function ig(token, ruta, params = {}, metodo = "POST") {
     const msg = j.error ? j.error.message : String(r.status);
     // Instagram frena si se le pide mucho seguido, o si el archivo todavía no está listo: esperar y reintentar
     const limite = /request limit|too many|rate limit/i.test(msg), noListo = /does not exist|not ready|media id is not available/i.test(msg) && ruta.endsWith("media_publish");
+    if (limite && ruta.endsWith("media_publish")) {
+      const c = params.creation_id && await fetch(`${IG}/${params.creation_id}?${new URLSearchParams({ fields: "status_code", access_token: token })}`).then(r => r.json()).catch(() => ({}));
+      if (c && c.status_code === "PUBLISHED") return { id: params.creation_id };
+    }
     if ((limite || noListo) && intento < 3) { log(`   ⏳ Instagram pidió esperar (${limite ? "límite de pedidos" : "archivo no listo"}), reintento…`); await esperar(limite ? 70000 : 20000); continue }
     throw new Error(`Instagram (${ruta}): ${msg}`);
   }
@@ -129,8 +133,17 @@ async function listo(token, id, max = 25) {
   }
   throw new Error("Instagram tardó demasiado en procesar el archivo");
 }
+// ¿Ya hay un post reciente con este mismo texto? (para no publicar dos veces cuando la API contesta error pero publicó igual)
+const huella = t => (t || "").toLowerCase().replace(/\s+/g, " ").trim().slice(0, 90);
+async function igYaEsta(token, uid, caption) {
+  if (!caption) return null;
+  const r = await ig(token, `${uid}/media`, { fields: "id,caption,timestamp", limit: "8" }, "GET").catch(() => null);
+  const x = r && (r.data || []).find(m => huella(m.caption) === huella(caption) && Date.now() - Date.parse(m.timestamp) < 20 * 3600e3);
+  return x ? x.id : null;
+}
 async function publicar(token, uid, p, urls) {
   let id;
+  if (p.tipo !== "historia") { const ya = await igYaEsta(token, uid, p.caption); if (ya) { log(`   ℹ️ ${p.id}: ya estaba publicado en Instagram`); return ya } }
   if (p.tipo === "historia") {
     id = (await ig(token, `${uid}/media`, { media_type: "STORIES", image_url: urls[0] })).id;
   } else if (p.tipo === "reel") {
@@ -144,7 +157,20 @@ async function publicar(token, uid, p, urls) {
     id = (await ig(token, `${uid}/media`, { media_type: "CAROUSEL", children: hijos.join(","), caption: p.caption })).id;
   }
   await listo(token, id, p.tipo === "reel" ? 30 : 15);
-  return (await ig(token, `${uid}/media_publish`, { creation_id: id })).id;
+  for (let intento = 0; ; intento++) {
+    try { return (await ig(token, `${uid}/media_publish`, { creation_id: id })).id }
+    catch (e) {
+      // a veces Instagram publica aunque conteste con error ("Fatal"): esperar un poco y fijarse antes de reintentar
+      log(`   ⏳ Instagram contestó «${e.message.replace(/^Instagram \([^)]*\): /, "")}»; me fijo si quedó publicado…`);
+      await esperar(45000);
+      const s = await ig(token, id, { fields: "status_code" }, "GET").catch(() => ({}));
+      if (s.status_code === "PUBLISHED") { log("   ℹ️ Quedó publicado igual"); return id }
+      if (p.tipo !== "historia") { const ya = await igYaEsta(token, uid, p.caption); if (ya) { log("   ℹ️ Quedó publicado igual"); return ya } }
+      if (intento >= 2) throw e;
+      log("   🔁 No se publicó: pruebo de nuevo");
+      await esperar(60000);
+    }
+  }
 }
 
 // ---------- Threads ----------
@@ -191,8 +217,14 @@ async function thListo(token, id) {
     await esperar(i < 3 ? 10000 : 15000);
   }
 }
+async function thYaEsta(token, uid, text) {
+  const r = await th(token, `${uid}/threads`, { fields: "id,text,timestamp", limit: "8" }, "GET").catch(() => null);
+  const x = r && (r.data || []).find(m => huella(m.text) === huella(text) && Date.now() - Date.parse(m.timestamp) < 20 * 3600e3);
+  return x ? x.id : null;
+}
 async function publicarThreads(token, uid, p, urls) {
   const text = textoThreads(p.caption);
+  const ya = await thYaEsta(token, uid, text); if (ya) { log(`   ℹ️ ${p.id}: ya estaba publicado en Threads`); return ya }
   let id;
   if (p.tipo === "reel") id = (await th(token, `${uid}/threads`, { media_type: "VIDEO", video_url: urls[0], text })).id;
   else if (urls.length === 1) id = (await th(token, `${uid}/threads`, { media_type: "IMAGE", image_url: urls[0], text })).id;
@@ -203,7 +235,17 @@ async function publicarThreads(token, uid, p, urls) {
     id = (await th(token, `${uid}/threads`, { media_type: "CAROUSEL", children: hijos.join(","), text })).id;
   }
   await thListo(token, id);
-  return (await th(token, `${uid}/threads_publish`, { creation_id: id })).id;
+  // Threads recomienda esperar ~30 s antes de publicar; si todavía "no existe", se reintenta
+  await esperar(urls.length > 1 || p.tipo === "reel" ? 30000 : 10000);
+  for (let intento = 0; ; intento++) {
+    try { return (await th(token, `${uid}/threads_publish`, { creation_id: id })).id }
+    catch (e) {
+      if (intento >= 4 || !/does not exist|not ready|not available|try again|unknown|unexpected/i.test(e.message)) throw e;
+      log(`   ⏳ Threads todavía no tenía listo el post, reintento…`);
+      await esperar(30000);
+      const ya2 = await thYaEsta(token, uid, text); if (ya2) return ya2;
+    }
+  }
 }
 
 // ---------- Facebook (página) ----------
@@ -289,8 +331,8 @@ try {
     catch (e) { fallas++; log(`❌ Facebook: ${e.message}`) }
     try { const token = await ttToken(); if (token) { R.tt = { token }; log("🎵 TikTok conectado") } }
     catch (e) { fallas++; log(`❌ TikTok: ${e.message}`) }
-    // las historias primero (respuesta de ayer antes que la pregunta de hoy), después el feed
-    const orden = pubs.sort((a, b) => (a.tipo === "historia" ? 0 : 1) - (b.tipo === "historia" ? 0 : 1));
+    // primero el feed (así el post principal no choca con el límite de pedidos), después las historias en su orden
+    const orden = pubs.sort((a, b) => (a.tipo === "historia" ? 1 : 0) - (b.tipo === "historia" ? 1 : 0));
     for (const p of orden) {
       let urls, archivoVideo;
       try {
