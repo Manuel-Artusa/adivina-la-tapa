@@ -1,3 +1,444 @@
 {
- "temas": []
+ "temas": [
+  {
+   "tema": "Esa Estrella Era Mi Lujo",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Mordí el anzuelo una vez más",
+    "(siempre un iluso).",
+    "Nuestra estrella se agotó",
+    "y era mi lujo."
+   ]
+  },
+  {
+   "tema": "Héroe del Whisky",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Venderá algún milagro (nada de más)",
+    "De bebedores entrenados ¡no digo más!",
+    "Y regresará a su ciudad en la caja de un camión",
+    "Las estrellas ahí nomás, a su alcance"
+   ]
+  },
+  {
+   "tema": "La Parabellum del Buen Psicópata",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "La noche tira un salto mortal",
+    "Pura tontera del punto g",
+    "Y el joven lobo",
+    "¡Quemándose de amor!"
+   ]
+  },
+  {
+   "tema": "Maldición Va a Ser un Día Hermoso",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Sé de alguien que obliga en su aventura",
+    "a pagar los platos rotos de la gira",
+    "es el rufián arrepentido de los días",
+    "del único grito que sabía."
+   ]
+  },
+  {
+   "tema": "Nadie Es Perfecto",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Le hizo ¡crack! ¡crack! el hueso al final,",
+    "¡qué ruido! ¡crack! ¡crack! ¡crack! (hasta astillar…)",
+    "Le hizo ¡crack! ¡crack! el hueso al final,",
+    "¡nunca nada especial!"
+   ]
+  },
+  {
+   "tema": "Nuestro Amo Juega al Esclavo",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Formidables guerreros en jeeps",
+    "los titanes del orden viril.",
+    "¿Qué botines esperan ganar?",
+    "si nunca un perro mira al cielo."
+   ]
+  },
+  {
+   "tema": "Rock para los Dientes",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Este mundo, esta empresa, este mundo de hoy",
+    "Que te esnifa la cabeza una y otra vez",
+    "Es una línea y otra línea",
+    "Y otra línea más"
+   ]
+  },
+  {
+   "tema": "Ropa Sucia",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "El tango que ocultamos mejor",
+    "Del que preferimos no hablar",
+    "Es el que nos tiene",
+    "Anarcotizados"
+   ]
+  },
+  {
+   "tema": "Un Pacman en el Savoy",
+   "disco": "Bang! Bang!! Estás Liquidado",
+   "banda": "redondos",
+   "frases": [
+    "Un buen par de ojos de vidrio",
+    "y tu mirada tiende a mejorar",
+    "las nuevas supersticiones,",
+    "Y todo el hambre del nuevo PAC-MAN."
+   ]
+  },
+  {
+   "tema": "Barbazul Versus el Amor Letal",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Esta vez, por fin, la prisión",
+    "Te va a gustar",
+    "El reo semental se va a licuar",
+    "Esta prisión"
+   ]
+  },
+  {
+   "tema": "Criminal Mambo",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Es un criminal mambo",
+    "Es un criminal mambo",
+    "Es un criminal mambo",
+    "Es un criminal mambo"
+   ]
+  },
+  {
+   "tema": "El Infierno Está Encantador Esta Noche",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "¿Son por acaso ustedes, hoy, un público respetable?",
+    "¿pueden acaso beber el vino por ustedes envasado?",
+    "¿puede alguien decirme? -¡Me voy a comer tu dolor!-",
+    "y repetirme –te voy a salvar esta noche-"
+   ]
+  },
+  {
+   "tema": "La Bestia Pop",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Mi amigo está groggie sin destilar",
+    "pero yo sé que hay caballos",
+    "que se mueren potros sin galopar.",
+    "¡A brillar mi amor!"
+   ]
+  },
+  {
+   "tema": "Ñam Fri Fruli Fali Fru",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Voy a cuidar de mi amorcito",
+    "Que está borracha por demás otra vez",
+    "Me llama nene-doctor",
+    "Yo no la cambio por nada"
+   ]
+  },
+  {
+   "tema": "Pierre, El Vitricida",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Como se ríe el Gordo Pierre",
+    "y rompió el vidrio el Gordo Pierre",
+    "como rajó el Gordo Pierre",
+    "y como tose el Gordo Pierre, Pierre, Pierre."
+   ]
+  },
+  {
+   "tema": "Roto y Mal Parado",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Quemás tu vida en este día,",
+    "en esta tibia, tibia fila.",
+    "Que más, que más, quemás",
+    "Que más, que más, quemás, tu vida"
+   ]
+  },
+  {
+   "tema": "Superlógico",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Ahí van los machos para consumar",
+    "una hermosa dotación vital.",
+    "¡Superlógico! ¡si!",
+    "¡Superlógico! ¡si!"
+   ]
+  },
+  {
+   "tema": "Te Voy a Atornillar",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Te espumo mucho",
+    "Te asfixio mucho",
+    "Te impacto mucho",
+    "Te siento mucho"
+   ]
+  },
+  {
+   "tema": "Unos Pocos Peligros Sensatos",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Si vos cuidás que tu animal",
+    "no nos muestre libremente",
+    "lo que ya sabe del cuento de la muerte.",
+    "¡¡Golpe de suerte!!"
+   ]
+  },
+  {
+   "tema": "Yo No Me Caí del Cielo",
+   "disco": "Gulp!",
+   "banda": "redondos",
+   "frases": [
+    "Nena, hay mucho olor a gato!",
+    "Nena no quiero perderte,",
+    "si quieres puedes apostar.",
+    "Nena, hay alegrías y alegrías"
+   ]
+  },
+  {
+   "tema": "Blues de la Artillería",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Pero… ¿cabe todo lo tuyo en una maldita valija?",
+    "¿De líder dealer sin freno?",
+    "Sos el as del «Club París»,",
+    "(sos la joya del lugar)"
+   ]
+  },
+  {
+   "tema": "El Pibe de los Astilleros",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Le hizo un par de promesas imprudentes",
+    "y así fue que de ella se aburrió.",
+    "Las minitas aman los payasos",
+    "y la pasta de campeón."
+   ]
+  },
+  {
+   "tema": "Fusilados por la Cruz Roja",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Vas apartando a golpes tus dolores, nene,",
+    "así, vas a ser el más premiado de la morgue.",
+    "¡Porque estás hundido en tu propia herida!",
+    "¡Porque estás hundido en tu propia herida!"
+   ]
+  },
+  {
+   "tema": "Mi Perro Dinamita",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Yo no sé si a tu perro le gusta ladrar a lo bobo.",
+    "¡Mi perro, ¡no! ¡no quiere, no!",
+    "¡con el hocico afiebrado, ¡no!",
+    "recuperando palitos, corriendo a lo bobo."
+   ]
+  },
+  {
+   "tema": "Nueva Roma",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Mi vieja crió un idiota de corazón lunático",
+    "Dicen mil rocanroles por los satélites",
+    "Dicen mil rocanroles desde los satélites",
+    "A un perro se lo cura como se cura a un perro"
+   ]
+  },
+  {
+   "tema": "Queso Ruso",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Pasó de moda el Golfo",
+    "como todo, ¿viste vos?",
+    "como tanta otra tristeza",
+    "a la que te acostumbrás."
+   ]
+  },
+  {
+   "tema": "Salando las Heridas",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Saliste ya mil veces",
+    "de la pista a respirar",
+    "a reclutar, bien maquillado",
+    "y ocultando tu lunar."
+   ]
+  },
+  {
+   "tema": "Tarea Fina",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Sobrio no te puedo ni hablar,",
+    "estoy perdido sin mi estupidez.",
+    "Un auto guapo va a venir por vos",
+    "y nada va a cambiar."
+   ]
+  },
+  {
+   "tema": "Toxi-Taxi",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Te tenemos allí",
+    "Abandonado allí",
+    "Preso como un animal",
+    "Como un animal feroz"
+   ]
+  },
+  {
+   "tema": "Un Poco de Amor Francés",
+   "disco": "La Mosca y la Sopa",
+   "banda": "redondos",
+   "frases": [
+    "Quiere, si quiere más",
+    "(ya no la engatuzás)",
+    "es una copa de lo mejor cuando se ríe.",
+    "Quiere, si quiere más"
+   ]
+  },
+  {
+   "tema": "Canción para Naufragios",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Es tan chiflado y obnubilado que puede ser…",
+    "Tan caprichoso y tan sonado que puede ser…",
+    "Rayos de aquí para allá.",
+    "Que linda calma dan."
+   ]
+  },
+  {
+   "tema": "Divina TV. Führer",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Si no me protege el empleado mayor",
+    "(que proyecta todo el tiempo mi televisor)",
+    "seré promovido para Navidad",
+    "¿Cómo no se nos ocurrió?"
+   ]
+  },
+  {
+   "tema": "Fuegos de Octubre",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "De regreso a octubre",
+    "Desde octubre",
+    "Sin un estandarte",
+    "De mi parte"
+   ]
+  },
+  {
+   "tema": "Ji Ji Ji",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Este film da una imagen exquisita",
+    "Esos chicos son como bombas pequeñitas",
+    "El peor camino a la cueva del perico",
+    "Para tipos que no duermen por la noche"
+   ]
+  },
+  {
+   "tema": "Motor Psico",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Junto a la hemoglobina me fui",
+    "ya no sangro más.",
+    "De la nada a la gloria me voy",
+    "(¡así me das más…!)"
+   ]
+  },
+  {
+   "tema": "Música para Pastillas",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Roqueros bonitos, educaditos.",
+    "Con grandes gastos, educaditos.",
+    "Emboquen el tiro libre,",
+    "que los buenos volvieron"
+   ]
+  },
+  {
+   "tema": "Preso en Mi Ciudad",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Fue un esclavo sensible y chillón",
+    "y fácil para el gatillo",
+    "atrapó un beso bienhechor con ojos al rojo vivo.",
+    "Ahora ya no llora…"
+   ]
+  },
+  {
+   "tema": "Semen-Up",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "Saludable y católica",
+    "no le gusta que ande solo,",
+    "se ha montado en mi nariz",
+    "y es para mí la mejor fruta."
+   ]
+  },
+  {
+   "tema": "Ya Nadie Va a Escuchar Tu Remera",
+   "disco": "Oktubre",
+   "banda": "redondos",
+   "frases": [
+    "¡Un último secuestro no!",
+    "el de tu estado de ánimo, ¡no!",
+    "Tu aliento vas a proteger",
+    "en este día y cada día."
+   ]
+  },
+  {
+   "tema": "Masacre en el Puticlub",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Por una pipa del 9 arrancó",
+    "la gran masacre del Puticlub",
+    "con «pastillita» en tren gladiador",
+    "(puso un huevo y la cosa explotó)."
+   ]
+  }
+ ]
 }
