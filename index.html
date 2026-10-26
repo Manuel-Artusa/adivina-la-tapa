@@ -2,7 +2,7 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
 // Dirección oficial: si alguien entra por la de Render, lo manda a la oficial y se lleva sus datos
 // (nombre, racha, estadísticas), porque el navegador los guarda por separado en cada dirección.
@@ -467,7 +467,126 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .modal .card{width:100%;max-width:420px}
 .modal p{margin:0;text-align:center}
 .modal .err{color:var(--rojo);font-weight:600;min-height:1.2em;text-align:center;font-size:.85rem}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- Movimiento y toques de diseño: todo suma encima del afiche, sin cambiar los juegos ---- */
+:root{--rebote:cubic-bezier(.34,1.56,.64,1);--suave:cubic-bezier(.22,1,.36,1)}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+button,.btn,a{touch-action:manipulation}
+::selection{background:var(--tinta);color:var(--papel)}
+body{background-attachment:fixed}
+/* Pantallas: entran deslizando cada vez que se muestran */
+.wrap>section:not([hidden]),#con-juego:not([hidden]),#con-inicio:not([hidden]){animation:vista-entra .45s var(--suave) both}
+@keyframes vista-entra{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+/* Encabezado: el logo se mueve con onda */
+h1 .logo{transition:transform .25s var(--rebote)}
+h1 .logo:hover{transform:rotate(-3deg) scale(1.04)}
+h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite;transform-origin:left bottom}
+@keyframes logo-late{0%,86%,100%{transform:none}90%{transform:rotate(-4deg) translateY(-2px)}94%{transform:rotate(2deg)}}
+.stats b{transition:transform .2s var(--rebote),color .2s}
+.stats b.salta{animation:salta .5s var(--rebote)}
+@keyframes salta{0%{scale:1}35%{scale:1.35;rotate:-4deg;color:var(--rojo)}100%{scale:1;rotate:0deg}}
+/* Pestañas */
+.tabs button{transition:background .2s,color .2s,transform .12s}
+.tabs button:active{transform:scale(.95)}
+.tabs button[aria-pressed="true"]{animation:pestana .3s var(--rebote)}
+@keyframes pestana{from{scale:.9}to{scale:1}}
+/* Menú de juegos: tarjetas que entran en cascada, se levantan y se inclinan */
+.hub button{opacity:0;animation:tarjeta-entra .5s var(--suave) forwards;transition:transform .22s var(--rebote),box-shadow .22s var(--rebote),background .2s;position:relative;overflow:hidden}
+.hub button:nth-child(1){animation-delay:.03s}.hub button:nth-child(2){animation-delay:.07s}.hub button:nth-child(3){animation-delay:.11s}
+.hub button:nth-child(4){animation-delay:.15s}.hub button:nth-child(5){animation-delay:.19s}.hub button:nth-child(6){animation-delay:.23s}
+.hub button:nth-child(7){animation-delay:.27s}.hub button:nth-child(8){animation-delay:.31s}.hub button:nth-child(9){animation-delay:.35s}
+.hub button:nth-child(10){animation-delay:.39s}.hub button:nth-child(11){animation-delay:.43s}.hub button:nth-child(n+12){animation-delay:.47s}
+@keyframes tarjeta-entra{from{opacity:0;translate:0 22px;rotate:-1.5deg}to{opacity:1;translate:0 0;rotate:0deg}}
+.hub button:nth-child(odd):hover{transform:translate(-3px,-4px) rotate(-.8deg);box-shadow:8px 9px 0 var(--tinta)}
+.hub button:nth-child(even):hover{transform:translate(-3px,-4px) rotate(.8deg);box-shadow:8px 9px 0 var(--tinta)}
+.hub button:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 var(--tinta)!important;transition-duration:.06s}
+.hub .prev{transition:transform .35s var(--suave)}
+.hub button:hover .prev{transform:scale(1.03)}
+.hub button.destacado::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,246,220,.22) 50%,transparent 65%);transform:translateX(-120%);animation:brillo 4.5s ease-in-out 1.2s infinite}
+.hub button.destacado:nth-child(2)::after{animation-delay:2.2s}
+@keyframes brillo{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.hub .check{animation:sello .45s var(--rebote) .5s both}
+@keyframes sello{from{scale:2.2;rotate:-12deg;opacity:0}to{scale:1;rotate:0deg;opacity:1}}
+/* Botones: se levantan al pasar y se hunden al tocar */
+.btn{transition:transform .15s var(--rebote),box-shadow .15s var(--rebote),background .2s,opacity .2s}
+.btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--tinta);transition-duration:.05s}
+.chips button,.dif button,.dias button,.archivo button,.gri-tiempos button,.disco-t,.tema-t,.tema,.gri-c,.sugerencias button{transition:transform .14s var(--rebote),background .18s,color .18s,box-shadow .14s}
+.chips button:active,.dif button:active,.dias button:active,.archivo button:active,.gri-tiempos button:active{transform:scale(.94)}
+.chips button[aria-pressed="true"],.dif button[aria-pressed="true"],.dias button[aria-pressed="true"]{animation:pestana .28s var(--rebote)}
+.disco-t,.tema-t,.tema,.gri-c{transition:translate .14s var(--rebote),transform .14s var(--rebote),background .18s,color .18s,box-shadow .14s}
+.disco-t:hover:not([aria-pressed="true"]),.tema-t:hover:not([aria-pressed="true"]),.tema:hover:not(:disabled){translate:-1px -2px}
+.gri-c:not(.ok):not(.vacia):hover{translate:-1px -2px;box-shadow:4px 5px 0 var(--tinta)}
+.link{transition:color .15s}
+.volver{transition:transform .2s var(--rebote)}
+.volver:hover{transform:translateX(-4px)}
+/* Opciones de respuesta: entran una tras otra */
+.opts button{animation:opcion-entra .35s var(--suave) both}
+.opts button:nth-child(2){animation-delay:.05s}.opts button:nth-child(3){animation-delay:.1s}.opts button:nth-child(4){animation-delay:.15s}
+.opts button:nth-child(5){animation-delay:.2s}.opts button:nth-child(6){animation-delay:.25s}
+@keyframes opcion-entra{from{opacity:0;translate:0 10px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
+/* Aciertos y errores */
+.opts button.good,.intentos div.bien,.gri-c.ok,.tema.bien,.orden li.fijo,.ban-fila.gano .ban-nom,.aho-fila button.si.nueva,.tema.cazado{animation:acierto .5s var(--rebote)}
+@keyframes acierto{0%{scale:1}40%{scale:1.07;rotate:-1deg}100%{scale:1;rotate:0deg}}
+.opts button.bad,.intentos div.mal,.orden li.mal,.aho-fila button.no.nueva,.tema.escapado{animation:tiembla .38s}
+@keyframes tiembla{25%{translate:-5px 0}50%{translate:4px 0}75%{translate:-2px 0}}
+.ban-fila:not(.vacia):not(.ban-cab):is(:has(+ .vacia),:last-child)>div{animation:volteo .45s var(--suave) both}
+.ban-fila>div:nth-child(2){animation-delay:.06s}.ban-fila>div:nth-child(3){animation-delay:.12s}.ban-fila>div:nth-child(4){animation-delay:.18s}.ban-fila>div:nth-child(5){animation-delay:.24s}
+@keyframes volteo{from{transform:rotateX(90deg);opacity:0}to{transform:none;opacity:1}}
+.aho-c.nueva{animation:letra .35s var(--rebote) both}
+@keyframes letra{from{translate:0 -8px;scale:.6;opacity:0}to{translate:0 0;scale:1;opacity:1}}
+.hint:not(:empty){animation:aparece .3s var(--suave)}
+.con-msg:not(:empty),.imp-res:not(:empty){animation:aparece .3s var(--suave)}
+@keyframes aparece{from{opacity:0;translate:0 4px}to{opacity:1;translate:0 0}}
+/* La tapa: aparece con un pequeño zoom */
+.stage{transition:box-shadow .3s}
+.stage canvas{transition:opacity .35s,transform .5s var(--suave)}
+.stage canvas[style*="opacity: 0"]{transform:scale(1.06)}
+.stage:has(+ .meta) .msg{animation:titila 1.2s ease-in-out infinite}
+@keyframes titila{50%{opacity:.45}}
+.tries i{transition:background .2s,transform .3s var(--rebote)}
+.tries i.on{transform:scale(1.15)}
+.vidas i{transition:background .25s,transform .3s var(--rebote)}
+.vidas i.off{transform:scale(.8)}
+/* Final de partida: la tarjeta cae como un sello */
+.card:not([hidden]),.wrap>section.card:not([hidden]){animation:tarjeta-fin .55s var(--rebote) both}
+@keyframes tarjeta-fin{from{opacity:0;translate:0 24px;scale:.94;rotate:-1deg}to{opacity:1;translate:0 0;scale:1;rotate:0deg}}
+.card h2{animation:sello .5s var(--rebote) .15s both}
+.yo-grandes div{animation:tarjeta-entra .45s var(--suave) both;transition:transform .2s var(--rebote)}
+.yo-grandes div:nth-child(2){animation-delay:.06s}.yo-grandes div:nth-child(3){animation-delay:.12s}
+.yo-grandes div:hover{transform:translateY(-3px) rotate(-1deg)}
+.cal i b{animation:sello .35s var(--rebote) both}
+.ranking li{animation:aparece .35s var(--suave) both}
+.ranking li:nth-child(2){animation-delay:.03s}.ranking li:nth-child(3){animation-delay:.06s}.ranking li:nth-child(4){animation-delay:.09s}
+.ranking li:nth-child(5){animation-delay:.12s}.ranking li:nth-child(n+6){animation-delay:.15s}
+.ranking li:nth-child(-n+3) .pos{display:inline-block;animation:sello .45s var(--rebote) both}
+/* Ventana del nombre */
+.modal:not([hidden]){animation:fundido .25s ease-out;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.modal:not([hidden]) .card{animation:tarjeta-fin .45s var(--rebote) both}
+@keyframes fundido{from{opacity:0}}
+/* Papelitos al ganar */
+#festejo{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+
+/* Celular: la barra de pestañas queda abajo, al alcance del pulgar, como una app */
+@media (max-width:640px){
+  .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .tabs{position:fixed;z-index:15;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));box-shadow:4px 4px 0 var(--tinta),0 10px 30px rgba(20,18,16,.25);animation:barra-sube .5s var(--rebote) .2s both}
+  .tabs button{padding:11px 4px}
+  @keyframes barra-sube{from{translate:0 140%}to{translate:0 0}}
+  .hub{gap:14px}
+  .hub button:hover{transform:none;box-shadow:5px 5px 0 var(--tinta)}
+  .btn:hover:not(:disabled){transform:none;box-shadow:4px 4px 0 var(--tinta)}
+}
+@media (hover:none){
+  .hub button:hover,.btn:hover:not(:disabled),.disco-t:hover,.tema-t:hover,.tema:hover,.gri-c:hover,.opts button:hover:not(:disabled){transform:none}
+  .hub button:hover .prev{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}
+  html{scroll-behavior:auto}
+  #festejo{display:none}
+}
 </style>
 </head>
 <body>
@@ -3126,7 +3245,7 @@ function ahoPintar(){
       const s=document.createElement("span");
       if(ahoEsLetra(c)){
         const vista=j.usadas.has(ahoBase(c));
-        s.className="aho-c"+(vista?"":" oculta")+(!vista&&j.fin?" perdida":"");
+        s.className="aho-c"+(vista?"":" oculta")+(!vista&&j.fin?" perdida":"")+(vista&&ahoBase(c)===j.ult?" nueva":"");
         s.textContent=vista||j.fin?c.toUpperCase():"";
       }else{ s.className="aho-c signo"; s.textContent=c }
       g.appendChild(s);
@@ -3140,7 +3259,7 @@ function ahoPintar(){
     const f=document.createElement("div"); f.className="aho-fila";
     for(const l of fila){
       const b=document.createElement("button"); b.type="button"; b.textContent=l; b.id="aho-k"+l;
-      if(j.usadas.has(l)){ b.disabled=true; b.className=j.letras.has(l)?"si":"no" }
+      if(j.usadas.has(l)){ b.disabled=true; b.className=(j.letras.has(l)?"si":"no")+(l===j.ult?" nueva":"") }
       if(j.fin) b.disabled=true;
       b.onclick=()=>ahoLetra(l);
       f.appendChild(b);
@@ -3164,7 +3283,7 @@ function ahoPista(silencio){
 function ahoLetra(l,silencio){
   const j=AHO.j; if(!j||j.fin) return;
   l=ahoBase(l); if(!/^[A-ZÑ]$/.test(l)||j.usadas.has(l)) return;
-  j.usadas.add(l);
+  j.usadas.add(l); j.ult=l;
   if(!j.letras.has(l)) j.err++;
   if([...j.letras].every(x=>j.usadas.has(x))){ j.fin=true; j.gano=true }
   else if(j.err>=AHO_VIDAS){ j.fin=true; j.gano=false }
@@ -4224,6 +4343,52 @@ addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); pedidoInstalar=e
 addEventListener("appinstalled",()=>{ $("b-instalar").hidden=true; contar("app-instalada") });
 $("b-instalar").onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.prompt(); try{ await pedidoInstalar.userChoice }catch(e){} pedidoInstalar=null; $("b-instalar").hidden=true };
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!yaInstalada()) $("ios-ayuda").hidden=false;
+// ---- Movimiento: papelitos al ganar, vibración al acertar o errar y números que saltan ----
+const quieto=matchMedia("(prefers-reduced-motion: reduce)");
+function vibrar(p){ try{ if(!quieto.matches&&navigator.vibrate) navigator.vibrate(p) }catch(e){} }
+function festejo(desde,cant){
+  if(quieto.matches) return;
+  let cv=$("festejo");
+  if(!cv){ cv=document.createElement("canvas"); cv.id="festejo"; cv.setAttribute("aria-hidden","true"); document.body.appendChild(cv) }
+  const dpr=Math.min(devicePixelRatio||1,2), W=innerWidth, H=innerHeight, x=cv.getContext("2d");
+  cv.width=W*dpr; cv.height=H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+  const r=desde?desde.getBoundingClientRect():null, ox=r?r.left+r.width/2:W/2, oy=r?r.top+r.height/2:H*.35;
+  const colores=["#d7262e","#141210","#fff6dc","#1f7a3a","#f6a04d","#6fb3d9"];
+  const ps=Array.from({length:cant||90},()=>{ const a=-Math.PI/2+(Math.random()-.5)*Math.PI*1.1, v=4+Math.random()*(r?6:9);
+    return {x:ox,y:oy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.18+Math.random()*.1,w:5+Math.random()*6,h:3+Math.random()*5,
+      rot:Math.random()*6,vr:(Math.random()-.5)*.4,c:colores[Math.random()*colores.length|0],vida:60+Math.random()*50} });
+  cancelAnimationFrame(festejo.raf);
+  (function paso(){
+    x.clearRect(0,0,W,H); let vivos=0;
+    for(const p of ps){ if(p.vida<=0) continue; vivos++;
+      p.vy+=p.g; p.vx*=.985; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.vida--;
+      x.save(); x.globalAlpha=Math.min(1,p.vida/20); x.translate(p.x,p.y); x.rotate(p.rot); x.fillStyle=p.c;
+      x.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.rot*2))+1); x.restore() }
+    if(vivos) festejo.raf=requestAnimationFrame(paso); else x.clearRect(0,0,W,H);
+  })();
+}
+const ACIERTO=["good","bien","ok","fijo","gano","cazado"], ERROR=["bad","mal","no","escapado"];
+new MutationObserver(ms=>{
+  // si en la misma tanda se tocaron las pantallas principales, es una navegación y no un final de partida
+  const nav=ms.some(m=>m.attributeName==="hidden"&&["v-hub","v-top","v-yo"].includes(m.target.id));
+  for(const m of ms){
+    const el=m.target;
+    if(m.type==="characterData"||m.type==="childList"){
+      const b=m.type==="characterData"?el.parentElement:el;
+      if(b&&b.matches(".stats b")){ b.classList.remove("salta"); void b.offsetWidth; b.classList.add("salta") }
+      continue;
+    }
+    if(m.attributeName==="hidden"){
+      if(!el.hidden&&/^(v|tema|banda|grilla|con)-fin$/.test(el.id)&&!nav){ festejo(null,120); vibrar([20,40,20]) }
+      continue;
+    }
+    if(m.attributeName!=="class") continue;
+    const antes=(m.oldValue||"").split(/\s+/), ahora=[...el.classList];
+    const gano=ACIERTO.some(c=>ahora.includes(c)&&!antes.includes(c)), erro=ERROR.some(c=>ahora.includes(c)&&!antes.includes(c));
+    if(gano&&el.matches("button,li,.ban-nom,.intentos div,.gri-c")){ vibrar(15); if(el.matches(".opts button,.gri-c,.tema")) festejo(el,26) }
+    else if(erro&&el.matches("button,li,.intentos div")) vibrar([30,40,30]);
+  }
+}).observe(document.body,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:["class","hidden"],characterData:true,childList:true});
 irA(vistaDeRuta(location.pathname),"inicial");
 mostrarQuien();
 if(!ls.get("tapa-nombre")&&vista!=="contenido") pedirNombre();
