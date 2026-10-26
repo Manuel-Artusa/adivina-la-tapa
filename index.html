@@ -2,7 +2,7 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
 // Dirección oficial: si alguien entra por la de Render, lo manda a la oficial y se lleva sus datos
 // (nombre, racha, estadísticas), porque el navegador los guarda por separado en cada dirección.
@@ -10,7 +10,8 @@
   var OFICIAL="__SITE_URL__";
   if(OFICIAL.indexOf("http")!==0) return;
   try{
-    if(/\.onrender\.com$/.test(location.hostname)){
+    // las vistas previas de Render (adivina-la-tapa-pr-N.onrender.com) se quedan donde están, para poder probarlas
+    if(/\.onrender\.com$/.test(location.hostname)&&!/-pr-\d+\./.test(location.hostname)){
       var datos={}, h="";
       try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.indexOf("tapa-")===0) datos[k]=localStorage.getItem(k) } }catch(e){}
       var txt=JSON.stringify(datos);
@@ -77,9 +78,7 @@ h1 span{color:var(--rojo)}
 .logo{all:unset;cursor:pointer;display:block}
 .logo:focus-visible{outline:3px solid var(--rojo);outline-offset:3px}
 .titulo-juego{font-family:var(--display);font-weight:400;font-size:1.8rem;margin:0;line-height:1}
-.hub button.destacado{background:var(--tinta);color:var(--papel)}
-.hub button.destacado small{color:var(--papel)}
-.hub button.jugado,.hub button.destacado.jugado{background:#d7ead0;color:var(--tinta);border-color:var(--ok);box-shadow:5px 5px 0 var(--ok)}
+.hub button.jugado{background:#d7ead0;color:var(--tinta);border-color:var(--ok);box-shadow:5px 5px 0 var(--ok)}
 .hub button.jugado small{color:var(--ok)}
 .hub button.jugado .prev{filter:grayscale(.85);opacity:.55;border-color:var(--ok)}
 .hub button.jugado b::after{content:" ✓";color:var(--ok)}
@@ -127,7 +126,6 @@ h1 span{color:var(--rojo)}
 .hub .check{align-self:flex-start;font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;background:var(--ok);color:var(--crema)}
 .modo-dia button{font-size:.78rem}
 .hub .prev{display:block;width:100%;height:auto;aspect-ratio:240/110;border:2px solid var(--tinta);margin-bottom:4px}
-.hub button.destacado .prev{border-color:var(--papel)}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
 
@@ -467,7 +465,133 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .modal .card{width:100%;max-width:420px}
 .modal p{margin:0;text-align:center}
 .modal .err{color:var(--rojo);font-weight:600;min-height:1.2em;text-align:center;font-size:.85rem}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- Movimiento y toques de diseño: todo suma encima del afiche, sin cambiar los juegos ---- */
+:root{--rebote:cubic-bezier(.34,1.56,.64,1);--suave:cubic-bezier(.22,1,.36,1)}
+html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
+button,.btn,a{touch-action:manipulation}
+::selection{background:var(--tinta);color:var(--papel)}
+body{background-attachment:fixed}
+/* Pantallas: entran deslizando cada vez que se muestran */
+.wrap>section:not([hidden]),#con-juego:not([hidden]),#con-inicio:not([hidden]){animation:vista-entra .45s var(--suave) both}
+@keyframes vista-entra{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+/* Encabezado: el logo se mueve con onda */
+h1 .logo{transition:transform .25s var(--rebote)}
+h1 .logo:hover{transform:rotate(-3deg) scale(1.04)}
+h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite;transform-origin:left bottom}
+@keyframes logo-late{0%,86%,100%{transform:none}90%{transform:rotate(-4deg) translateY(-2px)}94%{transform:rotate(2deg)}}
+.stats b{transition:transform .2s var(--rebote),color .2s}
+.stats b.salta{animation:salta .5s var(--rebote)}
+@keyframes salta{0%{scale:1}35%{scale:1.35;rotate:-4deg;color:var(--rojo)}100%{scale:1;rotate:0deg}}
+/* Pestañas */
+.tabs button{transition:background .2s,color .2s,transform .12s}
+.tabs button:active{transform:scale(.95)}
+.tabs button[aria-pressed="true"]{animation:pestana .3s var(--rebote)}
+@keyframes pestana{from{scale:.9}to{scale:1}}
+/* Menú de juegos: tarjetas que entran en cascada, se levantan y se inclinan */
+.hub button{opacity:0;animation:tarjeta-entra .5s var(--suave) forwards;transition:transform .22s var(--rebote),box-shadow .22s var(--rebote),background .2s;position:relative;overflow:hidden}
+.hub button:nth-child(1){animation-delay:.03s}.hub button:nth-child(2){animation-delay:.07s}.hub button:nth-child(3){animation-delay:.11s}
+.hub button:nth-child(4){animation-delay:.15s}.hub button:nth-child(5){animation-delay:.19s}.hub button:nth-child(6){animation-delay:.23s}
+.hub button:nth-child(7){animation-delay:.27s}.hub button:nth-child(8){animation-delay:.31s}.hub button:nth-child(9){animation-delay:.35s}
+.hub button:nth-child(10){animation-delay:.39s}.hub button:nth-child(11){animation-delay:.43s}.hub button:nth-child(n+12){animation-delay:.47s}
+@keyframes tarjeta-entra{from{opacity:0;translate:0 22px;rotate:-1.5deg}to{opacity:1;translate:0 0;rotate:0deg}}
+.hub button:nth-child(odd):hover{transform:translate(-3px,-4px) rotate(-.8deg);box-shadow:8px 9px 0 var(--tinta)}
+.hub button:nth-child(even):hover{transform:translate(-3px,-4px) rotate(.8deg);box-shadow:8px 9px 0 var(--tinta)}
+.hub button:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 var(--tinta)!important;transition-duration:.06s}
+.hub .prev{transition:transform .35s var(--suave)}
+.hub button:hover .prev{transform:scale(1.03)}
+/* Top 1 del día en ese juego: la tarjeta se pone dorada */
+.hub button.top1{background:linear-gradient(135deg,#fff3b0 0%,#f5c542 30%,#e0a019 55%,#fbe08a 80%,#d99a12 100%);color:var(--tinta);border-color:var(--tinta);box-shadow:5px 5px 0 #7a5208,0 0 0 3px #f5c542}
+.hub button.top1 small{color:#6b3f00}
+.hub button.top1 .prev{filter:none;opacity:1;border-color:var(--tinta)}
+.hub button.top1 b::after{content:""}
+.hub button.top1::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:brillo 3.5s ease-in-out .8s infinite}
+@keyframes brillo{0%,65%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.hub .corona{position:absolute;top:10px;right:10px;z-index:1;padding:3px 8px;background:var(--tinta);color:#f5c542;
+  font:500 .68rem var(--mono);text-transform:uppercase;letter-spacing:.05em;animation:sello .5s var(--rebote) .3s both}
+.hub button.top1 .check{background:var(--tinta);color:#f5c542}
+.hub .check{animation:sello .45s var(--rebote) .5s both}
+@keyframes sello{from{scale:2.2;rotate:-12deg;opacity:0}to{scale:1;rotate:0deg;opacity:1}}
+/* Botones: se levantan al pasar y se hunden al tocar */
+.btn{transition:transform .15s var(--rebote),box-shadow .15s var(--rebote),background .2s,opacity .2s}
+.btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+.btn:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--tinta);transition-duration:.05s}
+.chips button,.dif button,.dias button,.archivo button,.gri-tiempos button,.disco-t,.tema-t,.tema,.gri-c,.sugerencias button{transition:transform .14s var(--rebote),background .18s,color .18s,box-shadow .14s}
+.chips button:active,.dif button:active,.dias button:active,.archivo button:active,.gri-tiempos button:active{transform:scale(.94)}
+.chips button[aria-pressed="true"],.dif button[aria-pressed="true"],.dias button[aria-pressed="true"]{animation:pestana .28s var(--rebote)}
+.disco-t,.tema-t,.tema,.gri-c{transition:translate .14s var(--rebote),transform .14s var(--rebote),background .18s,color .18s,box-shadow .14s}
+.disco-t:hover:not([aria-pressed="true"]),.tema-t:hover:not([aria-pressed="true"]),.tema:hover:not(:disabled){translate:-1px -2px}
+.gri-c:not(.ok):not(.vacia):hover{translate:-1px -2px;box-shadow:4px 5px 0 var(--tinta)}
+.link{transition:color .15s}
+.volver{transition:transform .2s var(--rebote)}
+.volver:hover{transform:translateX(-4px)}
+/* Opciones de respuesta: entran una tras otra */
+.opts button{animation:opcion-entra .35s var(--suave) both}
+.opts button:nth-child(2){animation-delay:.05s}.opts button:nth-child(3){animation-delay:.1s}.opts button:nth-child(4){animation-delay:.15s}
+.opts button:nth-child(5){animation-delay:.2s}.opts button:nth-child(6){animation-delay:.25s}
+@keyframes opcion-entra{from{opacity:0;translate:0 10px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
+/* Aciertos y errores */
+.opts button.good,.intentos div.bien,.gri-c.ok,.tema.bien,.orden li.fijo,.ban-fila.gano .ban-nom,.aho-fila button.si.nueva,.tema.cazado{animation:acierto .5s var(--rebote)}
+@keyframes acierto{0%{scale:1}40%{scale:1.07;rotate:-1deg}100%{scale:1;rotate:0deg}}
+.opts button.bad,.intentos div.mal,.orden li.mal,.aho-fila button.no.nueva,.tema.escapado{animation:tiembla .38s}
+@keyframes tiembla{25%{translate:-5px 0}50%{translate:4px 0}75%{translate:-2px 0}}
+.ban-fila:not(.vacia):not(.ban-cab):is(:has(+ .vacia),:last-child)>div{animation:volteo .45s var(--suave) both}
+.ban-fila>div:nth-child(2){animation-delay:.06s}.ban-fila>div:nth-child(3){animation-delay:.12s}.ban-fila>div:nth-child(4){animation-delay:.18s}.ban-fila>div:nth-child(5){animation-delay:.24s}
+@keyframes volteo{from{transform:rotateX(90deg);opacity:0}to{transform:none;opacity:1}}
+.aho-c.nueva{animation:letra .35s var(--rebote) both}
+@keyframes letra{from{translate:0 -8px;scale:.6;opacity:0}to{translate:0 0;scale:1;opacity:1}}
+.hint:not(:empty){animation:aparece .3s var(--suave)}
+.con-msg:not(:empty),.imp-res:not(:empty){animation:aparece .3s var(--suave)}
+@keyframes aparece{from{opacity:0;translate:0 4px}to{opacity:1;translate:0 0}}
+/* La tapa: aparece con un pequeño zoom */
+.stage{transition:box-shadow .3s}
+.stage canvas{transition:opacity .35s,transform .5s var(--suave)}
+.stage canvas[style*="opacity: 0"]{transform:scale(1.06)}
+.stage:has(+ .meta) .msg{animation:titila 1.2s ease-in-out infinite}
+@keyframes titila{50%{opacity:.45}}
+.tries i{transition:background .2s,transform .3s var(--rebote)}
+.tries i.on{transform:scale(1.15)}
+.vidas i{transition:background .25s,transform .3s var(--rebote)}
+.vidas i.off{transform:scale(.8)}
+/* Final de partida: la tarjeta cae como un sello */
+.card:not([hidden]),.wrap>section.card:not([hidden]){animation:tarjeta-fin .55s var(--rebote) both}
+@keyframes tarjeta-fin{from{opacity:0;translate:0 24px;scale:.94;rotate:-1deg}to{opacity:1;translate:0 0;scale:1;rotate:0deg}}
+.card h2{animation:sello .5s var(--rebote) .15s both}
+.yo-grandes div{animation:tarjeta-entra .45s var(--suave) both;transition:transform .2s var(--rebote)}
+.yo-grandes div:nth-child(2){animation-delay:.06s}.yo-grandes div:nth-child(3){animation-delay:.12s}
+.yo-grandes div:hover{transform:translateY(-3px) rotate(-1deg)}
+.cal i b{animation:sello .35s var(--rebote) both}
+.ranking li{animation:aparece .35s var(--suave) both}
+.ranking li:nth-child(2){animation-delay:.03s}.ranking li:nth-child(3){animation-delay:.06s}.ranking li:nth-child(4){animation-delay:.09s}
+.ranking li:nth-child(5){animation-delay:.12s}.ranking li:nth-child(n+6){animation-delay:.15s}
+.ranking li:nth-child(-n+3) .pos{display:inline-block;animation:sello .45s var(--rebote) both}
+/* Ventana del nombre */
+.modal:not([hidden]){animation:fundido .25s ease-out;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.modal:not([hidden]) .card{animation:tarjeta-fin .45s var(--rebote) both}
+@keyframes fundido{from{opacity:0}}
+/* Papelitos al ganar */
+#festejo{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+
+/* Celular: la barra de pestañas queda abajo, al alcance del pulgar, como una app */
+@media (max-width:640px){
+  .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+  .tabs{position:fixed;z-index:15;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));box-shadow:4px 4px 0 var(--tinta),0 10px 30px rgba(20,18,16,.25);animation:barra-sube .5s var(--rebote) .2s both}
+  .tabs button{padding:11px 4px}
+  @keyframes barra-sube{from{translate:0 140%}to{translate:0 0}}
+  .hub{gap:14px}
+  .hub button:hover{transform:none;box-shadow:5px 5px 0 var(--tinta)}
+  .btn:hover:not(:disabled){transform:none;box-shadow:4px 4px 0 var(--tinta)}
+}
+@media (hover:none){
+  .hub button:hover,.btn:hover:not(:disabled),.disco-t:hover,.tema-t:hover,.tema:hover,.gri-c:hover,.opts button:hover:not(:disabled){transform:none}
+  .hub button:hover .prev{transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important}
+  html{scroll-behavior:auto}
+  #festejo{display:none}
+}
 </style>
 </head>
 <body>
@@ -577,8 +701,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
       <p class="aviso" id="ios-ayuda" hidden>Para tenerla como app en el iPhone: tocá <b>Compartir</b> y después <b>Agregar a inicio</b>.</p>
     </div>
     <div class="hub">
-      <button type="button" data-ir="diario" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada y resultado del día en cuadritos"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="14.6" height="14.6" fill="#c9a227"/><rect x="32.3" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="61.0" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="18.0" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="32.3" y="26.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="26.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="18.0" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="32.3" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="40.7" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="40.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="75.3" y="40.7" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="89.7" y="40.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="18.0" y="55.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="32.3" y="55.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="46.7" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="75.3" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="55.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="32.3" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="69.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="75.3" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="69.3" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="32.3" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="46.7" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="61.0" y="83.7" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="75.3" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="89.7" y="83.7" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="122" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="30" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="30" width="16" height="16" fill="#e07b2a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="122" y="50" width="16" height="16" fill="#1d1b18" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="50" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><text x="122" y="22" font-family="var(--display)" font-size="13" fill="var(--tinta)" text-anchor="start">#3</text></svg><small id="t-diario-n">Diario #1</small><b>Tapa del día</b><span>10 tapas pixeladas, las mismas para todos. Una vez por día.</span></button>
-      <button type="button" data-ir="tema" class="destacado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
+      <button type="button" data-ir="diario"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa pixelada y resultado del día en cuadritos"><rect width="240" height="110" fill="var(--papel)"/><rect x="16" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="18.0" y="12.0" width="14.6" height="14.6" fill="#c9a227"/><rect x="32.3" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="46.7" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="61.0" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="18.0" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="32.3" y="26.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="75.3" y="26.3" width="14.6" height="14.6" fill="#b5532a"/><rect x="89.7" y="26.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="18.0" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="32.3" y="40.7" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="40.7" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="40.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="75.3" y="40.7" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="89.7" y="40.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="18.0" y="55.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="32.3" y="55.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="46.7" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="61.0" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="75.3" y="55.0" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="55.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="32.3" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="46.7" y="69.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="61.0" y="69.3" width="14.6" height="14.6" fill="#1d1b18"/><rect x="75.3" y="69.3" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="89.7" y="69.3" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="18.0" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="32.3" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="46.7" y="83.7" width="14.6" height="14.6" fill="#b5532a"/><rect x="61.0" y="83.7" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="75.3" y="83.7" width="14.6" height="14.6" fill="#2f5d50"/><rect x="89.7" y="83.7" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="122" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="30" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="30" width="16" height="16" fill="#e07b2a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="30" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="122" y="50" width="16" height="16" fill="#1d1b18" stroke="var(--tinta)" stroke-width="1.5"/><rect x="142" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="162" y="50" width="16" height="16" fill="#e0b43a" stroke="var(--tinta)" stroke-width="1.5"/><rect x="182" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><rect x="202" y="50" width="16" height="16" fill="#3a8f4f" stroke="var(--tinta)" stroke-width="1.5"/><text x="122" y="22" font-family="var(--display)" font-size="13" fill="var(--tinta)" text-anchor="start">#3</text></svg><small id="t-diario-n">Diario #1</small><b>Tapa del día</b><span>10 tapas pixeladas, las mismas para todos. Una vez por día.</span></button>
+      <button type="button" data-ir="tema"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Onda de audio y barra de segundos"><rect width="240" height="110" fill="var(--papel)"/><rect x="50.0" y="28.5" width="3.6" height="23" fill="var(--tinta)" opacity="1"/><rect x="56.2" y="19.0" width="3.6" height="42" fill="var(--tinta)" opacity="1"/><rect x="62.4" y="32.0" width="3.6" height="16" fill="var(--tinta)" opacity="1"/><rect x="68.6" y="24.5" width="3.6" height="31" fill="var(--tinta)" opacity="1"/><rect x="74.8" y="21.0" width="3.6" height="38" fill="var(--tinta)" opacity="1"/><rect x="81.0" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="87.2" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="93.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="99.6" y="28.0" width="3.6" height="24" fill="var(--sombra)" opacity="0.45"/><rect x="105.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="112.0" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="118.2" y="30.0" width="3.6" height="20" fill="var(--sombra)" opacity="0.45"/><rect x="124.4" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="130.6" y="19.0" width="3.6" height="42" fill="var(--sombra)" opacity="0.45"/><rect x="136.8" y="18.5" width="3.6" height="43" fill="var(--sombra)" opacity="0.45"/><rect x="143.0" y="21.0" width="3.6" height="38" fill="var(--sombra)" opacity="0.45"/><rect x="149.2" y="23.5" width="3.6" height="33" fill="var(--sombra)" opacity="0.45"/><rect x="155.4" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="161.6" y="29.0" width="3.6" height="22" fill="var(--sombra)" opacity="0.45"/><rect x="167.8" y="31.5" width="3.6" height="17" fill="var(--sombra)" opacity="0.45"/><rect x="174.0" y="19.5" width="3.6" height="41" fill="var(--sombra)" opacity="0.45"/><rect x="180.2" y="24.0" width="3.6" height="32" fill="var(--sombra)" opacity="0.45"/><rect x="186.4" y="36.0" width="3.6" height="8" fill="var(--sombra)" opacity="0.45"/><rect x="192.6" y="34.0" width="3.6" height="12" fill="var(--sombra)" opacity="0.45"/><rect x="198.8" y="31.0" width="3.6" height="18" fill="var(--sombra)" opacity="0.45"/><rect x="205.0" y="35.0" width="3.6" height="10" fill="var(--sombra)" opacity="0.45"/><rect x="211.2" y="26.5" width="3.6" height="27" fill="var(--sombra)" opacity="0.45"/><rect x="217.4" y="35.5" width="3.6" height="9" fill="var(--sombra)" opacity="0.45"/><circle cx="28" cy="40" r="17" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/><path d="M23 31 L36 40 L23 49 Z" fill="var(--crema)"/><rect x="14" y="74" width="212" height="14" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="15" y="75" width="13" height="12" fill="var(--tinta)"/><rect x="27.2" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="40.5" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="67.0" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="106.8" y="74" width="2" height="14" fill="var(--sombra)"/><rect x="159.8" y="74" width="2" height="14" fill="var(--sombra)"/><text x="14" y="104" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">1 seg</text></svg><small>Diario · Con audio</small><b>Adiviná el tema</b><span>Suena 1 segundo de un tema de rock. Cada error te da más.</span></button>
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
       <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta algo: ponelo en su lugar y con su tamaño.</span></button>
       <button type="button" data-ir="ahorcado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Horca con medio muñequito y un título con letras por adivinar"><rect width="240" height="110" fill="var(--papel)"/><path d="M14 100 H70 M30 100 V12 H66 V22 M30 30 L48 12" stroke="var(--tinta)" stroke-width="4" fill="none"/><circle cx="66" cy="32" r="9" fill="var(--crema)" stroke="var(--tinta)" stroke-width="3"/><path d="M66 41 V66 M66 50 L55 60 M66 50 L77 60" stroke="var(--tinta)" stroke-width="3" stroke-linecap="round"/><rect x="96" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="96" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="122" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="58" width="20" height="3" fill="var(--tinta)"/><text x="132" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="148" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="148" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="174" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="174" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="200" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="58" width="20" height="3" fill="var(--tinta)"/><text x="210" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="96" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="148" y="76" width="20" height="18" fill="transparent" stroke="var(--tinta)" stroke-width="2"/><rect x="174" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Ahorcado rockero</b><span>Adiviná el nombre del tema letra por letra antes de que se complete el dibujo.</span></button>
@@ -1386,7 +1510,7 @@ async function subirPuntaje(){
   try{
     const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:g.modo==="diario"?g.puntos*2:g.puntos,modo:g.modo,genero:g.modo==="diario"?"diario":g.genero,jugador:jugadorId()})});
     if(!r.ok&&r.status!==409) throw new Error(r.status);
-    g.subido=true; guardarDiario();
+    g.subido=true; guardarDiario(); TOP1.t=0;
     if(G===g&&$("v-fin")&&!$("v-fin").hidden) mostrarFin();
   }catch(e){
     if(b) b.disabled=false;
@@ -1508,7 +1632,7 @@ async function topAuto(modo,genero,puntos,el){
     const r=await fetch(`${SUPA_URL}/rest/v1/puntajes`,{method:"POST",headers:{...supaHeaders,Prefer:"return=minimal"},body:JSON.stringify({nombre,puntos:Math.max(0,Math.min(500,Math.round(puntos))),modo,genero,jugador:jugadorId()})});
     if(r.status===409){ nota("ya estaba en el top de hoy"); return }
     if(!r.ok) throw new Error(r.status);
-    nota("subido al top ✔");
+    nota("subido al top ✔"); TOP1.t=0;
   }catch(e){ nota("no se pudo subir al top") }
 }
 
@@ -3126,7 +3250,7 @@ function ahoPintar(){
       const s=document.createElement("span");
       if(ahoEsLetra(c)){
         const vista=j.usadas.has(ahoBase(c));
-        s.className="aho-c"+(vista?"":" oculta")+(!vista&&j.fin?" perdida":"");
+        s.className="aho-c"+(vista?"":" oculta")+(!vista&&j.fin?" perdida":"")+(vista&&ahoBase(c)===j.ult?" nueva":"");
         s.textContent=vista||j.fin?c.toUpperCase():"";
       }else{ s.className="aho-c signo"; s.textContent=c }
       g.appendChild(s);
@@ -3140,7 +3264,7 @@ function ahoPintar(){
     const f=document.createElement("div"); f.className="aho-fila";
     for(const l of fila){
       const b=document.createElement("button"); b.type="button"; b.textContent=l; b.id="aho-k"+l;
-      if(j.usadas.has(l)){ b.disabled=true; b.className=j.letras.has(l)?"si":"no" }
+      if(j.usadas.has(l)){ b.disabled=true; b.className=(j.letras.has(l)?"si":"no")+(l===j.ult?" nueva":"") }
       if(j.fin) b.disabled=true;
       b.onclick=()=>ahoLetra(l);
       f.appendChild(b);
@@ -3164,7 +3288,7 @@ function ahoPista(silencio){
 function ahoLetra(l,silencio){
   const j=AHO.j; if(!j||j.fin) return;
   l=ahoBase(l); if(!/^[A-ZÑ]$/.test(l)||j.usadas.has(l)) return;
-  j.usadas.add(l);
+  j.usadas.add(l); j.ult=l;
   if(!j.letras.has(l)) j.err++;
   if([...j.letras].every(x=>j.usadas.has(x))){ j.fin=true; j.gano=true }
   else if(j.err>=AHO_VIDAS){ j.fin=true; j.gano=false }
@@ -4093,6 +4217,27 @@ function hubMarcar(){
   $("b-resumen").disabled=!n;
   $("b-resumen").textContent=pasado?`Compartir el #${nDia()}`:"Compartir mi día";
   hubDias();
+  hubTop1();
+}
+// Juegos en los que sos el primero del top de hoy: la tarjeta se pone dorada
+const TOP1={t:0,dia:"",modos:new Set()};
+async function hubTop1(){
+  const pintar=()=>document.querySelectorAll(".hub [data-ir]").forEach(b=>{
+    const si=!esPasado()&&TOP1.dia===hoyAR()&&TOP1.modos.has(b.dataset.ir); let c=b.querySelector(".corona");
+    b.classList.toggle("top1",si);
+    if(si&&!c){ c=document.createElement("span"); c.className="corona"; c.textContent="👑 Top 1 hoy"; b.appendChild(c) }
+    if(!si&&c) c.remove();
+  });
+  pintar();
+  if(!TOP_ON||esPasado()||(TOP1.dia===hoyAR()&&Date.now()-TOP1.t<60e3)) return;
+  TOP1.t=Date.now();
+  try{
+    const dia=hoyAR(), r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=modo,nombre,jugador&dia=eq.${dia}&genero=eq.diario&modo=in.(${DIARIOS.join(",")})&order=puntos.desc,created_at.asc&limit=2000`,{headers:supaHeaders});
+    if(!r.ok) return;
+    const primero=new Map(); for(const f of await r.json()) if(!primero.has(f.modo)) primero.set(f.modo,f);
+    const yo=jugadorId(); TOP1.dia=dia; TOP1.modos=new Set([...primero].filter(([,f])=>quienEs(f)===yo).map(([m])=>m));
+    if(vista==="inicio") pintar();
+  }catch(e){}
 }
 
 // ---- Selector de día (jugar desafíos anteriores) ----
@@ -4224,6 +4369,52 @@ addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); pedidoInstalar=e
 addEventListener("appinstalled",()=>{ $("b-instalar").hidden=true; contar("app-instalada") });
 $("b-instalar").onclick=async()=>{ if(!pedidoInstalar) return; pedidoInstalar.prompt(); try{ await pedidoInstalar.userChoice }catch(e){} pedidoInstalar=null; $("b-instalar").hidden=true };
 if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!yaInstalada()) $("ios-ayuda").hidden=false;
+// ---- Movimiento: papelitos al ganar, vibración al acertar o errar y números que saltan ----
+const quieto=matchMedia("(prefers-reduced-motion: reduce)");
+function vibrar(p){ try{ if(!quieto.matches&&navigator.vibrate) navigator.vibrate(p) }catch(e){} }
+function festejo(desde,cant){
+  if(quieto.matches) return;
+  let cv=$("festejo");
+  if(!cv){ cv=document.createElement("canvas"); cv.id="festejo"; cv.setAttribute("aria-hidden","true"); document.body.appendChild(cv) }
+  const dpr=Math.min(devicePixelRatio||1,2), W=innerWidth, H=innerHeight, x=cv.getContext("2d");
+  cv.width=W*dpr; cv.height=H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+  const r=desde?desde.getBoundingClientRect():null, ox=r?r.left+r.width/2:W/2, oy=r?r.top+r.height/2:H*.35;
+  const colores=["#d7262e","#141210","#fff6dc","#1f7a3a","#f6a04d","#6fb3d9"];
+  const ps=Array.from({length:cant||90},()=>{ const a=-Math.PI/2+(Math.random()-.5)*Math.PI*1.1, v=4+Math.random()*(r?6:9);
+    return {x:ox,y:oy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.18+Math.random()*.1,w:5+Math.random()*6,h:3+Math.random()*5,
+      rot:Math.random()*6,vr:(Math.random()-.5)*.4,c:colores[Math.random()*colores.length|0],vida:60+Math.random()*50} });
+  cancelAnimationFrame(festejo.raf);
+  (function paso(){
+    x.clearRect(0,0,W,H); let vivos=0;
+    for(const p of ps){ if(p.vida<=0) continue; vivos++;
+      p.vy+=p.g; p.vx*=.985; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.vida--;
+      x.save(); x.globalAlpha=Math.min(1,p.vida/20); x.translate(p.x,p.y); x.rotate(p.rot); x.fillStyle=p.c;
+      x.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.rot*2))+1); x.restore() }
+    if(vivos) festejo.raf=requestAnimationFrame(paso); else x.clearRect(0,0,W,H);
+  })();
+}
+const ACIERTO=["good","bien","ok","fijo","gano","cazado"], ERROR=["bad","mal","no","escapado"];
+new MutationObserver(ms=>{
+  // si en la misma tanda se tocaron las pantallas principales, es una navegación y no un final de partida
+  const nav=ms.some(m=>m.attributeName==="hidden"&&["v-hub","v-top","v-yo"].includes(m.target.id));
+  for(const m of ms){
+    const el=m.target;
+    if(m.type==="characterData"||m.type==="childList"){
+      const b=m.type==="characterData"?el.parentElement:el;
+      if(b&&b.matches(".stats b")){ b.classList.remove("salta"); void b.offsetWidth; b.classList.add("salta") }
+      continue;
+    }
+    if(m.attributeName==="hidden"){
+      if(!el.hidden&&/^(v|tema|banda|grilla|con)-fin$/.test(el.id)&&!nav){ festejo(null,120); vibrar([20,40,20]) }
+      continue;
+    }
+    if(m.attributeName!=="class") continue;
+    const antes=(m.oldValue||"").split(/\s+/), ahora=[...el.classList];
+    const gano=ACIERTO.some(c=>ahora.includes(c)&&!antes.includes(c)), erro=ERROR.some(c=>ahora.includes(c)&&!antes.includes(c));
+    if(gano&&el.matches("button,li,.ban-nom,.intentos div,.gri-c")){ vibrar(15); if(el.matches(".opts button,.gri-c,.tema")) festejo(el,26) }
+    else if(erro&&el.matches("button,li,.intentos div")) vibrar([30,40,30]);
+  }
+}).observe(document.body,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:["class","hidden"],characterData:true,childList:true});
 irA(vistaDeRuta(location.pathname),"inicial");
 mostrarQuien();
 if(!ls.get("tapa-nombre")&&vista!=="contenido") pedirNombre();
