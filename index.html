@@ -4637,7 +4637,10 @@ document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
 $("t-diario-n").textContent="Diario #"+numDiario(hoyAR());
 $("logo").onclick=()=>irA("inicio");
 // ---- Instalar como app ----
-if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("/sw.js",{scope:"/"}).catch(()=>{});
+// updateViaCache "none": el navegador siempre revisa si hay un sw.js nuevo; y lo vuelve a revisar al volver a la app
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).then(reg=>{
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") reg.update().catch(()=>{}) });
+}).catch(()=>{});
 let pedidoInstalar=null;
 const yaInstalada=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
 addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); pedidoInstalar=e; if(!yaInstalada()) $("b-instalar").hidden=false });
