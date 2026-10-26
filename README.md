@@ -11,8 +11,8 @@ Juegos web de rock, con foco en rock nacional: adiviná la tapa, el tema en 1 se
 - **Compartir mi día:** arma un mensaje con los puntos de los 7 desafíos.
 - **Se instala como app** en el celular (manifest + service worker).
 - **Juegos:** Adiviná el tema (fragmentos de audio), ¿Antes o después?, Ordená la discografía, Tema número 1, Conexiones y ¿Qué tema no está? (La Vela Puerca).
-- **¿De qué tema es?** (Redondos e Indio): las frases se cargan a mano en `/cargar-frases/` y se guardan en `frases.json`.
-  El juego aparece en el inicio cuando hay 10 frases o más.
+- **¿De qué tema es?** (Redondos e Indio): escribís el tema; si errás, aparece otra frase. Las frases (hasta 4 por tema)
+  se cargan a mano en `/cargar-frases/` y se guardan en `frases.json`. El juego aparece cuando hay 10 temas cargados o más.
 
 La página es `index.html`. Las tapas, temas y audios salen de iTunes y se guardan en `discos.json`
 (lo arma `armar_discos.py` con GitHub Actions), así el juego no depende de buscar en vivo.

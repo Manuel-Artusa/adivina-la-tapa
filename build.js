@@ -40,9 +40,12 @@ fs.mkdirSync("public");
 let base = fs.readFileSync("index.html", "utf8");
 base = base.replace("__SUPA_URL__", url).replace("__SUPA_KEY__", key);
 base = base.split("__SITE_URL__").join(sitio);
-// ¿De qué tema es?: el juego aparece (y suma al día) recién con 10 frases o más en frases.json
+// ¿De qué tema es?: el juego aparece (y suma al día) recién con 10 temas con frases en frases.json
 let nFrases = 0;
-try { nFrases = (JSON.parse(fs.readFileSync("frases.json", "utf8")).frases || []).filter(f => f && f.tema && f.frase).length; } catch {}
+try {
+  const d = JSON.parse(fs.readFileSync("frases.json", "utf8"));
+  nFrases = (d.temas || d.frases || []).filter(x => x && x.tema && ((Array.isArray(x.frases) && x.frases.length) || x.frase)).length;
+} catch {}
 const letraOn = nFrases >= 10;
 base = base.replace("__LETRA_ON__", letraOn ? "1" : "0");
 if (!letraOn) seo.letra.noindex = true;
@@ -136,5 +139,5 @@ console.log([
   sitio ? "SITE_URL " + sitio : "sin SITE_URL",
   goat ? "contador de visitas activado" : "sin contador",
   fs.existsSync("discos.json") ? "con discos.json" : "sin discos.json",
-  `${nFrases} frases (¿De qué tema es? ${letraOn ? "activado" : "oculto hasta tener 10"})`,
+  `${nFrases} temas con frases (¿De qué tema es? ${letraOn ? "activado" : "oculto hasta tener 10"})`,
 ].join(" · "));
