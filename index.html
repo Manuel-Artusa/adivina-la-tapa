@@ -10,7 +10,8 @@
   var OFICIAL="__SITE_URL__";
   if(OFICIAL.indexOf("http")!==0) return;
   try{
-    if(/\.onrender\.com$/.test(location.hostname)){
+    // las vistas previas de Render (adivina-la-tapa-pr-N.onrender.com) se quedan donde están, para poder probarlas
+    if(/\.onrender\.com$/.test(location.hostname)&&!/-pr-\d+\./.test(location.hostname)){
       var datos={}, h="";
       try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.indexOf("tapa-")===0) datos[k]=localStorage.getItem(k) } }catch(e){}
       var txt=JSON.stringify(datos);
