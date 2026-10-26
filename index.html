@@ -466,6 +466,36 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .modal p{margin:0;text-align:center}
 .modal .err{color:var(--rojo);font-weight:600;min-height:1.2em;text-align:center;font-size:.85rem}
 
+/* ---- ¿De qué tema es? (Redondos e Indio) ---- */
+.let-frase{position:relative;margin:4px 0 0;padding:26px 22px 22px;background:var(--tinta);color:var(--crema);border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--rojo);
+  font:600 clamp(1.15rem,4.6vw,1.5rem)/1.35 var(--body);text-align:center;text-wrap:balance;min-height:120px;display:grid;place-items:center;animation:aparece .4s var(--suave)}
+.let-frase::before{content:"“";position:absolute;left:10px;top:-14px;font:400 4.2rem/1 var(--display);color:var(--rojo)}
+.let-frase::after{content:"”";position:absolute;right:12px;bottom:-40px;font:400 4.2rem/1 var(--display);color:var(--rojo)}
+.let-frases{display:flex;flex-direction:column;gap:22px}
+.let-frase.vieja{background:var(--crema);color:var(--tinta);box-shadow:4px 4px 0 var(--tinta);font-size:1rem;min-height:0;padding:18px 18px 14px;animation:none}
+.let-frase.vieja::before,.let-frase.vieja::after{font-size:3rem}
+.let-frase.vieja::after{bottom:-28px}
+.let-res{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center;padding:10px;border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta);animation:tarjeta-fin .45s var(--rebote) both}
+.let-res b{font-family:var(--display);font-weight:400;font-size:1.25rem;line-height:1.05;display:block}
+.let-res span{font-size:.85rem}
+/* Cargar frases (página interna) */
+.fra-barra{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;font:600 .9rem var(--body)}
+.fra-lista{display:flex;flex-direction:column;border:2px solid var(--tinta);background:var(--crema);max-height:min(50vh,420px);overflow-y:auto}
+.fra-lista button{display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;padding:9px 12px;border:0;border-bottom:1px solid rgba(20,18,16,.15);background:transparent;color:var(--tinta);font:700 .95rem/1.2 var(--body);cursor:pointer}
+.fra-lista button small{grid-column:1;font:500 .75rem var(--body);color:var(--sombra)}
+.fra-lista button em{grid-row:1/3;grid-column:2;align-self:center;font:500 .7rem var(--mono);font-style:normal;text-transform:uppercase;color:var(--sombra)}
+.fra-lista button.tiene em{color:var(--ok)}
+.fra-lista button[aria-pressed="true"]{background:var(--tinta);color:var(--papel)}
+.fra-lista button[aria-pressed="true"] small,.fra-lista button[aria-pressed="true"] em{color:var(--papel)}
+.fra-edit{display:flex;flex-direction:column;gap:10px;padding:14px;border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
+.fra-edit b{font-family:var(--display);font-weight:400;font-size:1.2rem}
+.fra-edit textarea{font:600 1rem/1.4 var(--body);width:100%;min-height:84px;border:2px solid var(--tinta);padding:10px;background:#fff;resize:vertical}
+.fra-edit .fila{justify-content:flex-start}
+.fra-edit .btn{font-size:1rem;padding:8px 16px}
+.fra-ayuda{font-size:.85rem;margin:0}
+#fra-google{text-decoration:none}
+.fra-ayuda code{font:500 .8rem var(--mono);background:var(--crema);padding:1px 4px}
+
 /* ---- Movimiento y toques de diseño: todo suma encima del afiche, sin cambiar los juegos ---- */
 :root{--rebote:cubic-bezier(.34,1.56,.64,1);--suave:cubic-bezier(.22,1,.36,1)}
 html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
@@ -706,6 +736,7 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
       <button type="button" data-ir="antes" data-dia="antes"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Dos discos, uno con año y otro con signo de pregunta"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="22.0" y="14.0" width="12.7" height="12.7" fill="#2f5d50"/><rect x="34.4" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="14.0" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="14.0" width="12.7" height="12.7" fill="#1d1b18"/><rect x="71.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="22.0" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="34.4" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="46.8" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="59.2" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="71.6" y="26.4" width="12.7" height="12.7" fill="#1d1b18"/><rect x="22.0" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="38.8" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="46.8" y="38.8" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="71.6" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="22.0" y="51.2" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="34.4" y="51.2" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="46.8" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="59.2" y="51.2" width="12.7" height="12.7" fill="#c9a227"/><rect x="71.6" y="51.2" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="22.0" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="34.4" y="63.6" width="12.7" height="12.7" fill="#2f5d50"/><rect x="46.8" y="63.6" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="59.2" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="71.6" y="63.6" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="148" y="12" width="66" height="66" fill="var(--tinta)"/><rect x="150.0" y="14.0" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="162.4" y="14.0" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="174.8" y="14.0" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="187.2" y="14.0" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="199.6" y="14.0" width="12.7" height="12.7" fill="#b5532a"/><rect x="150.0" y="26.4" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="26.4" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="26.4" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="26.4" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="26.4" width="12.7" height="12.7" fill="#5b3a5e"/><rect x="150.0" y="38.8" width="12.7" height="12.7" fill="#b5532a"/><rect x="162.4" y="38.8" width="12.7" height="12.7" fill="#2f5d50"/><rect x="174.8" y="38.8" width="12.7" height="12.7" fill="#1d1b18"/><rect x="187.2" y="38.8" width="12.7" height="12.7" fill="#6f8fa6"/><rect x="199.6" y="38.8" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="150.0" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="162.4" y="51.2" width="12.7" height="12.7" fill="#3b4a6b"/><rect x="174.8" y="51.2" width="12.7" height="12.7" fill="#2f5d50"/><rect x="187.2" y="51.2" width="12.7" height="12.7" fill="#1d1b18"/><rect x="199.6" y="51.2" width="12.7" height="12.7" fill="#d9d2c0"/><rect x="150.0" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="162.4" y="63.6" width="12.7" height="12.7" fill="#1d1b18"/><rect x="174.8" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><rect x="187.2" y="63.6" width="12.7" height="12.7" fill="#8a3b2e"/><rect x="199.6" y="63.6" width="12.7" height="12.7" fill="#c9a227"/><text x="53" y="100" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">1986</text><text x="181" y="100" font-family="var(--display)" font-size="22" fill="var(--rojo)" text-anchor="middle">?</text><path d="M100 38 L118 38 M112 32 L118 38 L112 44" stroke="var(--tinta)" stroke-width="3" fill="none"/><path d="M134 62 L116 62 M122 56 L116 62 L122 68" stroke="var(--rojo)" stroke-width="3" fill="none"/></svg><small>Diario · Racha</small><b>¿Antes o después?</b><span>¿Este disco salió antes o después que el otro? Seguí hasta que le erres.</span></button>
       <button type="button" data-ir="armar"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa con un pedazo que falta y la pieza al costado"><rect width="240" height="110" fill="var(--papel)"/><rect x="20" y="10" width="90" height="90" fill="var(--tinta)"/><rect x="22.0" y="12.0" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="12.0" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="12.0" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64.9" y="12.0" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="12.0" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="93.5" y="12.0" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="36.3" y="26.3" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="50.6" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="64.9" y="26.3" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="79.2" y="26.3" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="26.3" width="14.6" height="14.6" fill="#c9a227"/><rect x="22.0" y="40.6" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="40.6" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="50.6" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="40.6" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="79.2" y="40.6" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="93.5" y="40.6" width="14.6" height="14.6" fill="#2f5d50"/><rect x="22.0" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="54.9" width="14.6" height="14.6" fill="#c9a227"/><rect x="50.6" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="64.9" y="54.9" width="14.6" height="14.6" fill="#2f5d50"/><rect x="79.2" y="54.9" width="14.6" height="14.6" fill="#b5532a"/><rect x="93.5" y="54.9" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="22.0" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="36.3" y="69.2" width="14.6" height="14.6" fill="#2f5d50"/><rect x="50.6" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="64.9" y="69.2" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="79.2" y="69.2" width="14.6" height="14.6" fill="#3b4a6b"/><rect x="93.5" y="69.2" width="14.6" height="14.6" fill="#5b3a5e"/><rect x="22.0" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="36.3" y="83.5" width="14.6" height="14.6" fill="#d9d2c0"/><rect x="50.6" y="83.5" width="14.6" height="14.6" fill="#b5532a"/><rect x="64.9" y="83.5" width="14.6" height="14.6" fill="#6f8fa6"/><rect x="79.2" y="83.5" width="14.6" height="14.6" fill="#2f5d50"/><rect x="93.5" y="83.5" width="14.6" height="14.6" fill="#8a3b2e"/><rect x="64" y="40" width="34" height="34" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2" stroke-dasharray="4 3"/><rect x="150" y="24" width="48" height="48" fill="#b5532a" stroke="var(--rojo)" stroke-width="3" stroke-dasharray="5 3"/><rect x="152" y="26" width="22" height="22" fill="#3b4a6b"/><rect x="174" y="48" width="22" height="22" fill="#2f5d50"/><path d="M140 50 L118 56" stroke="var(--tinta)" stroke-width="3"/><path d="M124 50 L117 57 L126 60" stroke="var(--tinta)" stroke-width="3" fill="none"/><rect x="140" y="88" width="80" height="4" fill="var(--tinta)"/><rect x="186" y="82" width="10" height="16" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Armá la tapa</b><span>A la tapa le falta algo: ponelo en su lugar y con su tamaño.</span></button>
       <button type="button" data-ir="ahorcado"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Horca con medio muñequito y un título con letras por adivinar"><rect width="240" height="110" fill="var(--papel)"/><path d="M14 100 H70 M30 100 V12 H66 V22 M30 30 L48 12" stroke="var(--tinta)" stroke-width="4" fill="none"/><circle cx="66" cy="32" r="9" fill="var(--crema)" stroke="var(--tinta)" stroke-width="3"/><path d="M66 41 V66 M66 50 L55 60 M66 50 L77 60" stroke="var(--tinta)" stroke-width="3" stroke-linecap="round"/><rect x="96" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="96" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="122" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="58" width="20" height="3" fill="var(--tinta)"/><text x="132" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="148" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="148" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="174" y="34" width="20" height="26" fill="none" stroke="var(--tinta)" stroke-width="0"/><rect x="174" y="58" width="20" height="3" fill="var(--tinta)"/><rect x="200" y="34" width="20" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="58" width="20" height="3" fill="var(--tinta)"/><text x="210" y="54" font-family="var(--display)" font-size="17" fill="var(--tinta)" text-anchor="middle">A</text><rect x="96" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="148" y="76" width="20" height="18" fill="transparent" stroke="var(--tinta)" stroke-width="2"/><rect x="174" y="76" width="20" height="18" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="76" width="20" height="18" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Nuevo</small><b>Ahorcado rockero</b><span>Adiviná el nombre del tema letra por letra antes de que se complete el dibujo.</span></button>
+      <button type="button" data-ir="letra" id="hub-letra" hidden><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Una frase entre comillas y cuatro opciones, una marcada"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="10" width="212" height="44" fill="var(--tinta)"/><text x="22" y="44" font-family="var(--display)" font-size="34" fill="var(--rojo)">“</text><rect x="44" y="24" width="150" height="6" fill="var(--crema)"/><rect x="44" y="36" width="110" height="6" fill="var(--crema)"/><text x="208" y="54" font-family="var(--display)" font-size="34" fill="var(--rojo)">”</text><rect x="14" y="64" width="102" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="64" width="102" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="86" width="102" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="86" width="102" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Redondos e Indio</small><b>¿De qué tema es?</b><span>Una frase de una canción de los Redondos o del Indio. Escribí de qué tema es; si errás, te damos otra.</span></button>
       <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · contra reloj</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Llenalos antes de que se termine el tiempo.</span></button>
       <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Pistas</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
@@ -914,6 +945,41 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
     <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). Se guarda en este navegador.</p>
   </section>
 
+  <section id="v-letra" class="sub" hidden>
+    <button class="link volver" type="button">← Inicio</button>
+    <h2>¿De qué tema es?</h2>
+    <div class="chips modo-dia" data-juego="letra" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
+    <p class="bajada">Solo Patricio Rey y sus Redonditos de Ricota e Indio Solari. Leé la frase y escribí de qué tema es. Si errás o pasás, te damos otra frase del mismo tema. El del día son 3 temas.</p>
+    <div class="let-frases" id="let-frases"><blockquote class="let-frase">Cargando…</blockquote></div>
+    <div class="intentos" id="let-intentos"></div>
+    <form class="nombre buscador" id="let-form" autocomplete="off">
+      <input id="let-in" placeholder="Escribí el nombre del tema" autocomplete="off" autocapitalize="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="let-sug">
+      <button class="btn" id="let-env" type="submit">Adivinar</button>
+    </form>
+    <div class="sugerencias" id="let-sug" role="listbox" hidden></div>
+    <div class="fila" id="let-acc"><button class="btn sec" id="let-pasar" type="button">Pasar (otra frase)</button></div>
+    <div id="let-res"></div>
+    <div class="con-msg" id="let-msg" aria-live="polite"></div>
+    <div class="fila"><button class="btn" id="let-sig" type="button" hidden>Siguiente</button></div>
+  </section>
+
+  <section id="v-frases" class="sub" hidden>
+    <h2>Cargar frases</h2>
+    <p class="bajada">Para el juego ¿De qué tema es? Elegí un tema, tocá <b>Buscar letra</b> y escribí hasta 4 frases cortas, <b>una por renglón</b>: la primera es la que se ve al empezar (la más difícil) y las otras aparecen si el jugador erra (cada vez más fáciles). Se guarda en este navegador mientras trabajás.</p>
+    <div class="fra-barra"><span id="fra-cuenta">Cargando…</span><span><label><input type="checkbox" id="fra-faltan"> Solo los que faltan</label></span></div>
+    <input class="mar-buscar" id="fra-buscar" placeholder="Buscar tema o disco" autocomplete="off" spellcheck="false">
+    <div class="fra-lista" id="fra-lista" role="listbox" aria-label="Temas"></div>
+    <div class="fra-edit" id="fra-edit" hidden>
+      <div><small id="fra-sel-disco"></small><br><b id="fra-sel-tema"></b></div>
+      <div class="fila"><a class="btn sec" id="fra-google" target="_blank" rel="noopener">Buscar letra ↗</a></div>
+      <textarea id="fra-texto" maxlength="700" rows="5" placeholder="Una frase por renglón (hasta 4). Primero la más difícil."></textarea>
+      <div class="fila"><button class="btn" id="fra-guardar" type="button">Guardar</button><button class="btn sec" id="fra-borrar" type="button">Borrar frase</button></div>
+    </div>
+    <h3 class="arm-sub">Subir al juego</h3>
+    <p class="fra-ayuda">Cuando termines, tocá <b>Copiar todo</b>, abrí <a id="fra-gh" target="_blank" rel="noopener" href="https://github.com/Manuel-Artusa/adivina-la-tapa/edit/main/frases.json"><code>frases.json</code> en GitHub</a>, reemplazá todo el texto por lo copiado y guardá (Commit changes). Con 10 temas cargados o más, el juego aparece solo en el inicio.</p>
+    <div class="fila"><button class="btn" id="fra-copiar" type="button">Copiar todo</button><button class="btn sec" id="fra-bajar" type="button">Descargar frases.json</button></div>
+  </section>
+
   <section id="v-cont" class="sub" hidden>
     <h2>Contenido para redes</h2>
     <p class="bajada">Imágenes listas para Instagram y TikTok, armadas con los mismos datos de los desafíos. Tocá <b>Compartir</b> para mandarlas directo a Instagram, o <b>Descargar</b>.</p>
@@ -946,6 +1012,8 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
 <script>
 // ===== Top compartido (Supabase). Pegá acá la URL del proyecto y la clave pública (anon / publishable) =====
 // Render los completa al publicar (variables SUPA_URL y SUPA_KEY). No pegues las claves acá.
+// ¿De qué tema es? entra a los desafíos cuando frases.json tiene al menos 10 frases (lo decide build.js al publicar)
+const LETRA_ON="__LETRA_ON__"==="1";
 const SUPA_URL = "__SUPA_URL__";
 const SUPA_KEY = "__SUPA_KEY__";
 const TOP_ON = !!(SUPA_URL && SUPA_KEY && !SUPA_URL.startsWith("__") && !SUPA_KEY.startsWith("__"));
@@ -1557,7 +1625,8 @@ const TOPS=[
   {id:"conexiones",n:"Conexiones",modo:"conexiones",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 100 menos 10 por error y 10 por pista. Hasta 10 errores."},
   {id:"impostor",n:"¿Qué tema no está?",modo:"impostor",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 10 puntos por tema bien marcado."},
   {id:"ahorcado",n:"Ahorcado rockero",modo:"ahorcado",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas; cada uno vale 100 menos 10 por error (la pista cuenta como error). Se promedia."},
-];
+  {id:"letra",n:"¿De qué tema es?",modo:"letra",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas. Cada uno vale 100 con la primera frase, 70 con la segunda, 40 con la tercera y 20 con la cuarta. Se promedia."},
+].filter(t=>t.id!=="letra"||LETRA_ON);
 function topChips(){
   const cfg=TOPS.find(t=>t.id===topTab.t)||TOPS[0];
   $("top-juegos").innerHTML=""; $("top-vars").innerHTML="";
@@ -2071,7 +2140,7 @@ function puntos100(j,dia=diaSel(),soloEnFecha=false){
   return x.puntos;
 }
 const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
-const MODO={ahorcado:"diario",antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario"};
+const MODO={ahorcado:"diario",antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario",letra:"diario"};
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>kDia(`tapa-${j}-dia`);
 const diaHecho=j=>leerDia(`tapa-${j}-dia`);
@@ -2080,7 +2149,7 @@ const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); cont
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
 const nDia=()=>numDiario(diaSel());
 function jugadoHoy(j){ return puntos100(j)!=null }
-const DIARIOS=["diario","tema","armar","banda","grilla","antes","orden","abre","conexiones","impostor","ahorcado"];
+const DIARIOS=["diario","tema","armar","banda","grilla","antes","orden","abre","conexiones","impostor","ahorcado",...(LETRA_ON?["letra"]:[])];
 function modoInicial(j){ if(!MODO_ELEGIDO.has(j)) MODO[j]=diaHecho(j)?"libre":"diario"; pintarChipsModo(j) }
 function pintarChipsModo(j){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>{
@@ -2787,7 +2856,8 @@ $("grilla-form").onsubmit=e=>{ e.preventDefault(); const bs=$("grilla-sug").quer
 $("grilla-empezar").onclick=griEmpezar;
 $("grilla-cerrar").onclick=()=>{ GRI.sel=null; $("grilla-panel").hidden=true; griPintar() };
 chipsModo("grilla",griIniciar);
-$("t-n-juegos").textContent=`${document.querySelectorAll(".hub [data-ir]").length} juegos`;
+$("hub-letra").hidden=!LETRA_ON;
+$("t-n-juegos").textContent=`${document.querySelectorAll(".hub [data-ir]:not([hidden])").length} juegos`;
 
 // ===== Armá la tapa: a la tapa le falta un elemento; ponelo en su lugar y con su tamaño =====
 // Las piezas (qué elemento se saca de cada tapa) están en piezas.json y se marcan en /marcar-tapas/
@@ -3162,6 +3232,209 @@ function abrResp(p,b){
 }
 chipsModo("abre",abrIniciar);
 $("abre-sig").onclick=abrNuevo;
+
+// ===== Minijuego: ¿De qué tema es? (solo Redondos e Indio, con las frases de frases.json) =====
+// Se escribe el nombre del tema; si errás o pasás, aparece otra frase del mismo tema
+const LET_BANDAS={redondos:"Patricio Rey y sus Redonditos de Ricota",indio:"Indio Solari"};
+const LET_DIA=3, LET_PTS=[100,70,40,20], LET_MAX=4;
+const LET={j:null,racha:0,modo:"libre",rng:Math.random,lista:[],ronda:0,pts:[],sugAct:-1};
+let FRASES=null;
+// Cada tema: {tema, disco, banda, frases:[...]} (también acepta el formato viejo de una sola "frase")
+const letFrasesDe=x=>(Array.isArray(x.frases)?x.frases:x.frase?[x.frase]:[]).map(f=>String(f).trim()).filter(Boolean).slice(0,LET_MAX);
+const frasesListas=(async()=>{ try{ const r=await fetch("/frases.json",{cache:"no-cache"}); if(r.ok){ const d=await r.json(); FRASES=(d.temas||d.frases||[]).filter(x=>x&&x.tema&&letFrasesDe(x).length) } }catch(e){} if(!FRASES) FRASES=[] })();
+// Todos los temas de los discos de los Redondos y del Indio que hay en discos.json
+function letTemas(){
+  const out=[], vistos=new Set();
+  if(!CACHE) return out;
+  for(const [k,v] of Object.entries(CACHE.disc)){
+    const [art,disco]=k.split("|"), banda=Object.keys(LET_BANDAS).find(b=>LET_BANDAS[b]===art);
+    if(!banda||!v.temas) continue;
+    const d=DISCOS.find(x=>x[0]===art&&x[1]===disco);
+    for(const [t] of v.temas){ const n=norm(t); if(!n||vistos.has(banda+n)) continue; vistos.add(banda+n); out.push({t,disco,banda,url:v.url,anio:d?d[2]:"",k:n}) }
+  }
+  return out;
+}
+function letCab(){
+  if(LET.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(LET.ronda+1,LET_DIA)}/${LET_DIA}`,"Puntos",LET.pts.reduce((a,b)=>a+b,0));
+  else cabecera("Racha",LET.racha,"Récord",ls.get("tapa-letra-rec")||0);
+}
+function letLimpiar(){ $("let-sig").hidden=true; $("let-msg").textContent=""; $("let-res").innerHTML=""; $("let-intentos").innerHTML=""; $("let-in").value=""; letSugCerrar() }
+function letJugando(si){ $("let-form").hidden=!si; $("let-acc").hidden=!si }
+function letAviso(t){ $("let-frases").innerHTML=`<blockquote class="let-frase"></blockquote>`; $("let-frases").firstChild.textContent=t }
+async function letIniciar(){
+  modoInicial("letra"); letLimpiar(); letJugando(false); letAviso("Cargando…");
+  await Promise.all([frasesListas,esperarCache()]);
+  if(FRASES.length<LET_DIA){ letAviso("Este juego todavía se está preparando. Volvé en unos días."); return }
+  if(MODO.letra==="libre"){ LET.modo="libre"; LET.rng=Math.random; return letNuevo() }
+  const h=diaHecho("letra");
+  LET.modo="diario";
+  if(h){ LET.j=null; letAviso("Desafío de hoy completo"); $("let-msg").textContent=yaJugado(h); cabecera(`Del día #${nDia()}`,"✓","Puntos",h.puntos); return }
+  LET.rng=rngDia("letra"); LET.lista=mezR(FRASES,LET.rng).slice(0,LET_DIA); LET.ronda=0; LET.pts=[];
+  letNuevo();
+}
+function letNuevo(){
+  letLimpiar();
+  const x=LET.modo==="diario"?LET.lista[LET.ronda]:FRASES[Math.random()*FRASES.length|0];
+  if(!x){ letAviso("No hay frases cargadas."); return }
+  const nt=norm(x.tema), temas=letTemas();
+  const datos=temas.find(y=>y.k===nt&&(!x.banda||y.banda===x.banda))||{t:x.tema,disco:x.disco||"",banda:x.banda||"redondos",url:"",anio:"",k:nt};
+  LET.j={x,datos,frases:letFrasesDe(x),vistas:1,intentos:[],fin:false,gano:false,temas};
+  letJugando(true); letPintar();
+}
+function letPintar(){
+  const j=LET.j; if(!j) return;
+  const cont=$("let-frases"); cont.innerHTML="";
+  j.frases.slice(0,j.fin?j.frases.length:j.vistas).forEach((f,i)=>{
+    const q=document.createElement("blockquote"); q.className="let-frase"+(i<j.vistas-1||j.fin&&i!==j.vistas-1?" vieja":"");
+    q.textContent=f; cont.appendChild(q);
+  });
+  const int=$("let-intentos"); int.innerHTML="";
+  j.intentos.forEach(t=>{ const d=document.createElement("div"); d.className=t.ok?"bien":t.pasado?"salto":"mal"; d.textContent=t.ok?`✓ ${t.txt}`:t.pasado?"Pasaste":`✗ ${t.txt}`; int.appendChild(d) });
+  if(!j.fin){
+    const quedan=j.frases.length-j.vistas;
+    $("let-pasar").hidden=!quedan;
+    $("let-in").placeholder=`¿Qué tema es? (frase ${j.vistas}/${j.frases.length})`;
+  }
+  letCab();
+}
+// Lo que escribió el jugador: el tema elegido de la lista, o el texto tal cual
+function letLeer(txt){
+  const t=norm(String(txt).split(" — ")[0]);
+  return t?LET.j.temas.find(y=>y.k===t)||{t:txt.split(" — ")[0].trim(),k:t,suelto:true}:null;
+}
+function letIntento(txt,pasado){
+  const j=LET.j; if(!j||j.fin) return;
+  let ok=false, nombre="";
+  if(!pasado){
+    const e=letLeer(txt); if(!e){ $("let-in").focus(); return }
+    ok=e.k===j.datos.k;
+    // si no coincide con un tema exacto, que lo elija de la lista (así un nombre a medias no cuenta como error)
+    if(!ok&&e.suelto){ $("let-msg").textContent="Elegí el tema de la lista que aparece mientras escribís."; letSugFiltrar(); return }
+    nombre=e.t;
+  }
+  $("let-msg").textContent=""; $("let-in").value=""; letSugCerrar();
+  j.intentos.push({txt:nombre,ok,pasado:!!pasado});
+  if(ok){ j.fin=true; j.gano=true }
+  else if(j.vistas<j.frases.length){ j.vistas++; vibrar(30) }
+  else j.fin=true;
+  if(j.fin) return letTerminar();
+  letPintar(); if(!pasado) $("let-in").focus();
+}
+function letTerminar(){
+  const j=LET.j, d=j.datos, p=j.gano?(LET_PTS[j.vistas-1]||10):0;
+  letJugando(false); letPintar();
+  $("let-res").innerHTML=`<div class="let-res">${d.url?`<img class="mini-tapa" alt="">`:`<div class="mini-tapa"></div>`}<div><b></b><span></span></div></div>`;
+  const r=$("let-res");
+  if(d.url){ r.querySelector("img").src=chico200(d.url); r.querySelector("img").alt="Tapa de "+d.disco }
+  r.querySelector("b").textContent=d.t;
+  r.querySelector("span").textContent=[LET_BANDAS[d.banda],d.disco,d.anio].filter(Boolean).join(" · ");
+  $("let-msg").textContent=j.gano?`¡Bien! Con ${j.vistas===1?"la primera frase":`${j.vistas} frases`}.${LET.modo==="diario"?` +${p}`:""}`:`Era "${d.t}".`;
+  if(LET.modo==="diario"){
+    LET.pts.push(p); LET.ronda++;
+    if(LET.ronda>=Math.min(LET_DIA,LET.lista.length)){
+      const total=Math.round(LET.pts.reduce((a,b)=>a+b,0)/LET.pts.length/10)*10, bien=LET.pts.filter(Boolean).length;
+      $("let-msg").textContent+=` Terminaste: ${bien} de ${LET.ronda} · ${total} puntos.`;
+      diaCerrar("letra",total,`${bien} de ${LET.ronda}, ${total} puntos`); pintarChipsModo("letra");
+      cabecera(`Del día #${nDia()}`,"✓","Puntos",total);
+      if(LETRA_ON) topAuto("letra","diario",total,$("let-msg"));
+      return;
+    }
+    letCab(); $("let-sig").textContent=`Siguiente (${LET.ronda+1}/${LET_DIA})`;
+    $("let-sig").hidden=false; $("let-sig").focus(); return;
+  }
+  LET.racha=j.gano?LET.racha+1:0;
+  if(LET.racha>(ls.get("tapa-letra-rec")||0)) ls.set("tapa-letra-rec",LET.racha);
+  letCab(); $("let-sig").textContent="Otro tema";
+  $("let-sig").hidden=false; $("let-sig").focus();
+}
+// Sugerencias: todos los temas de los Redondos y del Indio
+function letSugCerrar(){ $("let-sug").hidden=true; $("let-sug").innerHTML=""; $("let-in").setAttribute("aria-expanded","false"); LET.sugAct=-1 }
+function letSugFiltrar(){
+  const q=norm($("let-in").value), cont=$("let-sug");
+  if(q.length<2||!LET.j||LET.j.fin){ letSugCerrar(); return }
+  const palabras=q.split(" ");
+  const res=LET.j.temas.filter(x=>palabras.every(p=>x.k.includes(p))).sort((a,b)=>(b.k.startsWith(q)-a.k.startsWith(q))||a.t.localeCompare(b.t,"es"));
+  cont.innerHTML=""; LET.sugAct=-1;
+  if(!res.length){ cont.innerHTML=`<div class="vacio">No hay temas con "${esc($("let-in").value)}". Probá con otra parte del nombre.</div>` }
+  res.forEach((x,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.setAttribute("role","option");
+    const t=document.createElement("span"); t.textContent=x.t; const sm=document.createElement("small"); sm.textContent=x.banda==="indio"?"Indio Solari":"Redondos";
+    b.append(t,sm);
+    b.onmousedown=e=>e.preventDefault();
+    b.onclick=()=>{ letSugCerrar(); letIntento(x.t,false) };
+    cont.appendChild(b);
+  });
+  cont.hidden=false; $("let-in").setAttribute("aria-expanded","true");
+}
+$("let-in").addEventListener("input",letSugFiltrar);
+$("let-in").addEventListener("blur",()=>setTimeout(letSugCerrar,150));
+$("let-in").addEventListener("keydown",e=>{
+  const bs=[...$("let-sug").querySelectorAll("button")]; if(!bs.length) return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+    e.preventDefault(); LET.sugAct=(LET.sugAct+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length;
+    bs.forEach((b,i)=>b.classList.toggle("activa",i===LET.sugAct)); bs[LET.sugAct].scrollIntoView({block:"nearest"});
+  }else if(e.key==="Enter"&&LET.sugAct>=0){ e.preventDefault(); bs[LET.sugAct].click() }
+  else if(e.key==="Escape") letSugCerrar();
+});
+$("let-form").onsubmit=e=>{ e.preventDefault(); letSugCerrar(); letIntento($("let-in").value,false) };
+$("let-pasar").onclick=()=>letIntento("",true);
+chipsModo("letra",letIniciar);
+$("let-sig").onclick=letNuevo;
+
+// ---- Cargar frases (página interna /cargar-frases/) ----
+// Arranca con lo que ya está en frases.json y guarda el borrador en el navegador
+const FRA={temas:[],frases:new Map(),sel:null};
+const fraClave=x=>x.banda+"|"+norm(x.t||x.tema);
+function fraGuardarBorrador(){ ls.set("tapa-frases-borrador",[...FRA.frases.values()]) }
+async function fraIniciar(){
+  $("fra-cuenta").textContent="Cargando…";
+  await Promise.all([frasesListas,esperarCache()]);
+  FRA.temas=letTemas();
+  if(!FRA.temas.length){ $("fra-cuenta").textContent="No pude cargar los temas (falta discos.json)."; return }
+  FRA.frases=new Map();
+  for(const x of [...FRASES,...(ls.get("tapa-frases-borrador")||[])]){
+    const fs=x&&x.tema?letFrasesDe(x):[];
+    if(fs.length) FRA.frases.set(fraClave({banda:x.banda||"redondos",tema:x.tema}),{tema:x.tema,disco:x.disco||"",banda:x.banda||"redondos",frases:fs});
+  }
+  fraPintar();
+}
+function fraJson(){
+  const lista=[...FRA.frases.values()].sort((a,b)=>a.banda.localeCompare(b.banda)||(a.disco||"").localeCompare(b.disco||"")||a.tema.localeCompare(b.tema));
+  return JSON.stringify({temas:lista},null,1)+"\n";
+}
+function fraPintar(){
+  const q=norm($("fra-buscar").value), faltan=$("fra-faltan").checked, n=FRA.frases.size;
+  $("fra-cuenta").textContent=`${n} tema${n===1?"":"s"} con frases · ${FRA.temas.length} temas${n<10?` · faltan ${10-n} para que aparezca el juego`:""}`;
+  const cont=$("fra-lista"); cont.innerHTML="";
+  FRA.temas.filter(x=>(!q||norm(x.t+" "+x.disco).includes(q))&&(!faltan||!FRA.frases.has(fraClave(x)))).forEach(x=>{
+    const b=document.createElement("button"); b.type="button"; const f=FRA.frases.get(fraClave(x));
+    b.className=f?"tiene":""; b.setAttribute("aria-pressed",FRA.sel===x);
+    b.innerHTML=`<span></span><small></small><em>${f?`✓ ${f.frases.length} frase${f.frases.length===1?"":"s"}`:"falta"}</em>`;
+    b.querySelector("span").textContent=x.t; b.querySelector("small").textContent=`${x.banda==="indio"?"Indio":"Redondos"} · ${x.disco}`;
+    b.onclick=()=>{ FRA.sel=x; fraEditar(); fraPintar() };
+    cont.appendChild(b);
+  });
+}
+function fraEditar(){
+  const x=FRA.sel; $("fra-edit").hidden=!x; if(!x) return;
+  $("fra-sel-tema").textContent=x.t; $("fra-sel-disco").textContent=`${LET_BANDAS[x.banda]} · ${x.disco}`;
+  $("fra-google").href="https://www.google.com/search?q="+encodeURIComponent(`${x.banda==="indio"?"Indio Solari":"Redondos"} ${x.t} letra`);
+  const f=FRA.frases.get(fraClave(x)); $("fra-texto").value=f?f.frases.join("\n"):"";
+  $("fra-borrar").hidden=!f; $("fra-texto").focus();
+}
+$("fra-buscar").oninput=fraPintar;
+$("fra-faltan").onchange=fraPintar;
+$("fra-guardar").onclick=()=>{
+  const x=FRA.sel; if(!x) return;
+  const fs=$("fra-texto").value.split("\n").map(t=>t.replace(/\s+/g," ").trim()).filter(t=>t.length>=6).slice(0,LET_MAX);
+  if(!fs.length){ $("fra-texto").focus(); return }
+  FRA.frases.set(fraClave(x),{tema:x.t,disco:x.disco,banda:x.banda,frases:fs}); fraGuardarBorrador();
+  // pasa solo al siguiente tema que falta
+  FRA.sel=FRA.temas.find(y=>!FRA.frases.has(fraClave(y)))||null; fraEditar(); fraPintar();
+};
+$("fra-borrar").onclick=()=>{ const x=FRA.sel; if(!x) return; FRA.frases.delete(fraClave(x)); fraGuardarBorrador(); fraEditar(); fraPintar() };
+$("fra-copiar").onclick=async()=>{ const b=$("fra-copiar"); try{ await navigator.clipboard.writeText(fraJson()); b.textContent="¡Copiado!" }catch(e){ b.textContent="No se pudo copiar" } setTimeout(()=>b.textContent="Copiar todo",2000) };
+$("fra-bajar").onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([fraJson()],{type:"application/json"})); a.download="frases.json"; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000) };
 
 // ===== Ahorcado rockero: adiviná el título del tema letra por letra =====
 // Solo el NOMBRE del tema (nunca la letra de la canción). Los temas salen de los más escuchados de cada banda en iTunes.
@@ -4125,14 +4398,14 @@ window.redesExportar=async(dia,turno)=>{
 };
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
-  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",ahorcado:"/ahorcado-rockero/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
+  orden:"/ordena-la-discografia/",abre:"/tema-numero-1/",ahorcado:"/ahorcado-rockero/",conexiones:"/conexiones/",impostor:"/que-tema-no-esta/",top:"/ranking/",yo:"/mis-estadisticas/",contenido:"/contenido/",letra:"/de-que-tema-es/",frases:"/cargar-frases/",banda:"/la-banda-del-dia/",grilla:"/grilla-rockera/",armar:"/arma-la-tapa/",marcar:"/marcar-tapas/"};
 const vistaDeRuta=p=>{ p=(p||"/").replace(/index\.html$/,""); if(!p.endsWith("/")) p+="/"; return Object.keys(RUTAS).find(k=>RUTAS[k]===p)||"inicio" };
 const SEO=window.SEO_PAGINAS||{};
 function seoBloque(v){
   const P=SEO[v]; if(!P) return "";
   let h=`<h2>${esc(P.h)}</h2>`+(P.texto||[]).map(t=>`<p>${esc(t)}</p>`).join("");
   if(P.faq) h+=`<h3>Preguntas frecuentes</h3>`+P.faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
-  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>SEO[k]&&!["yo","contenido","marcar"].includes(k)).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
+  h+=`<h3>Todos los juegos</h3><nav aria-label="Juegos">`+Object.keys(RUTAS).filter(k=>SEO[k]&&!["yo","contenido","marcar","frases"].includes(k)&&(k!=="letra"||LETRA_ON)).map(k=>`<a href="${RUTAS[k]}" data-ir="${k}">${k==="inicio"?"Inicio":esc(SEO[k].h.split(":")[0])}</a>`).join("")+`</nav>`;
   return h;
 }
 function seoAplicar(v){
@@ -4144,8 +4417,8 @@ function seoAplicar(v){
 }
 addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
-const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar"};
-const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar",...Object.values(SUBJUEGOS)];
+const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar",letra:"v-letra"};
+const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar","v-frases",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
   if(location.protocol!=="file:"&&RUTAS[v]){
@@ -4169,6 +4442,7 @@ function irA(v,como){
     if(v==="orden"){ modoInicial("orden"); (ORD.items.length&&ORD.modo===MODO.orden)?ordPintar():ordIniciar() }
     if(v==="ahorcado"){ modoInicial("ahorcado"); (AHO.j&&AHO.modo===MODO.ahorcado&&AHO.dia===diaSel())?ahoPintar():ahoIniciar() }
     if(v==="abre"){ modoInicial("abre"); (ABR.j&&ABR.modo===MODO.abre)?abrCab():abrIniciar() }
+    if(v==="letra"){ modoInicial("letra"); (LET.j&&LET.modo===MODO.letra)?letCab():letIniciar() }
     if(v==="armar"){ (ARM.cur&&ARM.cur.img&&ARM.dia===hoyAR()&&!$("armar-juego").hidden)?(ARM.cur.W=0,armDibujar()):armIniciar() }
     if(v==="grilla"){ modoInicial("grilla"); (GRI.filas&&GRI.modo===MODO.grilla&&GRI.dia===diaSel())?griPintar():griIniciar() }
     if(v==="banda"){ modoInicial("banda"); (BAN.obj&&BAN.modo===MODO.banda&&BAN.dia===diaSel())?banPintar():banIniciar() }
@@ -4179,6 +4453,7 @@ function irA(v,como){
   if(v==="yo"){ $("v-yo").hidden=false; window.scrollTo(0,0); yoPintar(); return }
   if(v==="marcar"){ $("v-marcar").hidden=false; window.scrollTo(0,0); marIniciar(); return }
   if(v==="contenido"){ $("v-cont").hidden=false; window.scrollTo(0,0); contIniciar(); return }
+  if(v==="frases"){ $("v-frases").hidden=false; window.scrollTo(0,0); fraIniciar(); return }
   $("v-juego").hidden=false; window.scrollTo(0,0);
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";
   if(G) actualizar();
@@ -4277,7 +4552,7 @@ function elegirDia(dia){
   DIA_SEL=dia===hoyAR()?null:dia;
   // cada juego vuelve a arrancar con el día elegido
   if(typeof temaParar==="function") temaParar();
-  G=null; TEMA.j=null; TEMA.modo="diario"; ANT.izq=null; ANT.cad=null; ORD.items=[]; ABR.j=null; AHO.j=null; AHO.dia=null; CON.p=null; CON.modoP=null; IMP.ronda=null;
+  G=null; TEMA.j=null; TEMA.modo="diario"; ANT.izq=null; ANT.cad=null; ORD.items=[]; ABR.j=null; LET.j=null; AHO.j=null; AHO.dia=null; CON.p=null; CON.modoP=null; IMP.ronda=null;
   MODO_ELEGIDO.clear(); Object.keys(MODO).forEach(j=>MODO[j]="diario");
   document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==="diario"));
   $("t-diario-n").textContent="Diario #"+nDia();
@@ -4285,7 +4560,7 @@ function elegirDia(dia){
 }
 
 // ---- Resumen del día para compartir ----
-const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",armar:"🧩",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️",ahorcado:"🔤"};
+const EMOJI={diario:"🖼️",tema:"🎧",banda:"🎸",grilla:"#️⃣",armar:"🧩",antes:"⏳",orden:"📚",abre:"1️⃣",conexiones:"🔗",impostor:"🕵️",ahorcado:"🔤",letra:"💬"};
 function resumenTexto(){
   const dia=diaSel(); let total=0;
   const filas=DIARIOS.map(j=>{
@@ -4316,7 +4591,7 @@ function historial(){
       const k=localStorage.key(i); let m;
       if((m=k.match(/^tapa-d-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"diario");
       else if((m=k.match(/^tapa-tema-(\d{4}-\d\d-\d\d)$/))) poner(m[1],"tema");
-      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla|armar|ahorcado)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
+      else if((m=k.match(/^tapa-(antes|orden|abre|conexiones|impostor|banda|grilla|armar|ahorcado|letra)-dia-(\d{4}-\d\d-\d\d)$/))) poner(m[2],m[1]);
     }
   }catch(e){}
   return h;
@@ -4329,7 +4604,7 @@ function rachas(){
   while(h[d]){ actual++; d=sumarDias(d,-1) }
   return {actual,mejor,dias:dias.length,h};
 }
-const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?",ahorcado:"Ahorcado rockero"};
+const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?",ahorcado:"Ahorcado rockero",letra:"¿De qué tema es?"};
 function yoPintar(){
   const r=rachas(), hoy=hoyAR();
   $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;
@@ -4417,7 +4692,7 @@ new MutationObserver(ms=>{
 }).observe(document.body,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:["class","hidden"],characterData:true,childList:true});
 irA(vistaDeRuta(location.pathname),"inicial");
 mostrarQuien();
-if(!ls.get("tapa-nombre")&&vista!=="contenido") pedirNombre();
+if(!ls.get("tapa-nombre")&&vista!=="contenido"&&vista!=="frases") pedirNombre();
 </script>
 </body>
 </html>
