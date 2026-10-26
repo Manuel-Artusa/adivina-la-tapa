@@ -151,6 +151,16 @@
       "Si te trabás, la pista te muestra de qué disco es, pero cuenta como un error. El desafío del día son 3 temas y en el modo libre jugás por rachas."
     ]
   },
+  "letra": {
+    "ruta": "/de-que-tema-es/",
+    "titulo": "¿De qué tema es? · Frases de los Redondos y el Indio | Juegos Rock",
+    "descripcion": "Leé una frase de una canción de Patricio Rey y sus Redonditos de Ricota o del Indio Solari y adiviná de qué tema es. Desafío diario y modo libre.",
+    "h": "¿De qué tema es?: frases de los Redondos y el Indio Solari",
+    "texto": [
+      "Te mostramos una frase de una canción de los Redondos o del Indio Solari y cuatro temas. Elegí de cuál es. Al responder ves la tapa del disco.",
+      "El desafío del día son 5 frases, iguales para todos, y en el modo libre jugás por rachas."
+    ]
+  },
   "top": {
     "ruta": "/ranking/",
     "titulo": "Ranking de los desafíos del día | Juegos Rock",
@@ -181,6 +191,14 @@
     "titulo": "Marcar tapas | Juegos Rock",
     "descripcion": "Herramienta interna.",
     "h": "Marcar tapas",
+    "noindex": true,
+    "texto": []
+  },
+  "frases": {
+    "ruta": "/cargar-frases/",
+    "titulo": "Cargar frases | Juegos Rock",
+    "descripcion": "Herramienta interna.",
+    "h": "Cargar frases",
     "noindex": true,
     "texto": []
   }

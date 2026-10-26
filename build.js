@@ -40,6 +40,12 @@ fs.mkdirSync("public");
 let base = fs.readFileSync("index.html", "utf8");
 base = base.replace("__SUPA_URL__", url).replace("__SUPA_KEY__", key);
 base = base.split("__SITE_URL__").join(sitio);
+// ¿De qué tema es?: el juego aparece (y suma al día) recién con 10 frases o más en frases.json
+let nFrases = 0;
+try { nFrases = (JSON.parse(fs.readFileSync("frases.json", "utf8")).frases || []).filter(f => f && f.tema && f.frase).length; } catch {}
+const letraOn = nFrases >= 10;
+base = base.replace("__LETRA_ON__", letraOn ? "1" : "0");
+if (!letraOn) seo.letra.noindex = true;
 if (goat) {
   base = base.replace("<!--ANALYTICS-->",
     `<script data-goatcounter="https://${goat}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`);
@@ -107,7 +113,7 @@ const urls = Object.values(seo).filter(p => !p.noindex).map(p =>
 fs.writeFileSync("public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
 fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sitio}/sitemap.xml\n`);
 
-for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json"]) {
+for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json", "frases.json"]) {
   if (fs.existsSync(f)) fs.copyFileSync(f, "public/" + f);
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }
@@ -130,4 +136,5 @@ console.log([
   sitio ? "SITE_URL " + sitio : "sin SITE_URL",
   goat ? "contador de visitas activado" : "sin contador",
   fs.existsSync("discos.json") ? "con discos.json" : "sin discos.json",
+  `${nFrases} frases (¿De qué tema es? ${letraOn ? "activado" : "oculto hasta tener 10"})`,
 ].join(" · "));
