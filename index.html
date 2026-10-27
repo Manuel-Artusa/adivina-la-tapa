@@ -1172,7 +1172,7 @@ const DISCOS = [
  ["Gustavo Cerati","Amor Amarillo",1993,"nac"],["Gustavo Cerati","Siempre es Hoy",2002,"nac"],["Gustavo Cerati","Fuerza Natural",2009,"nac"],
  ["Los Fabulosos Cadillacs","Bares y Fondas",1986,"nac"],["Los Fabulosos Cadillacs","El Ritmo Mundial",1988,"nac"],["Los Fabulosos Cadillacs","Rey Azúcar",1995,"nac"],
  ["Los Fabulosos Cadillacs","La Marcha del Golazo Solitario",1999,"nac"],["Los Piojos","Chactuchac",1992,"nac"],["Los Piojos","Ay Ay Ay",1994,"nac"],
- ["Los Piojos","3er Arco",1996,"nac"],["Los Piojos","Máquina de Sangre",2003,"nac"],["Los Piojos","Civilización",2007,"nac"],
+ ["Los Piojos","3er Arco",1996,"nac"],["Los Piojos","Verde Paisaje del Infierno",2000,"nac","2026-10-28"],["Los Piojos","Máquina de Sangre",2003,"nac"],["Los Piojos","Civilización",2007,"nac"],
  ["La Renga","Esquivando Charcos",1991,"nac"],["La Renga","A Donde Me Lleva la Vida",1994,"nac"],["La Renga","La Esquina del Infinito",2000,"nac"],
  ["La Renga","Truenotierra",2006,"nac"],["La Renga","Algún Rayo",2010,"nac"],["La Renga","Pesados Vestigios",2014,"nac"],
  ["Guasones","Guasones",2000,"nac"],["Guasones","Con la Casa en Orden",2001,"nac"],["Guasones","Como Animales",2003,"nac"],["Guasones","Toro Rojo",2005,"nac"],["Guasones","Esclavo",2008,"nac"],
@@ -1181,6 +1181,9 @@ const DISCOS = [
  ["Babasónicos","Miami",1999,"nac"],["Babasónicos","Anoche",2005,"nac"],["Babasónicos","Mucho",2008,"nac"],
  ["Babasónicos","Romantisísmico",2013,"nac"],["Bersuit Vergarabat","Hijos del Culo",2000,"nac"],["Bersuit Vergarabat","La Argentinidad al Palo",2004,"nac"],
  ["Catupecu Machu","A Morir!!!",1997,"nac"],["Catupecu Machu","Dale!",2000,"nac"],["Las Pelotas","Esperando el Milagro",2003,"nac"],
+ ["Turf","Una Pila de Vida",1997,"nac","2026-10-28"],["Turf","Siempre Libre",1999,"nac","2026-10-28"],["Turf","Turfshow",2001,"nac","2026-10-28"],["Turf","Para Mí, Para Vos",2004,"nac","2026-10-28"],["Turf","Odisea",2017,"nac","2026-10-28"],["Turf","Renacimiento",2023,"nac","2026-10-28"],["Turf","Polvo de Estrellas",2025,"nac","2026-10-28"],
+ ["Kapanga","A 15 cm de la Realidad",1998,"nac","2026-10-28"],["Kapanga","Un Asado en Abbey Road",1999,"nac","2026-10-28"],["Kapanga","Operación Rebenque",2000,"nac","2026-10-28"],["Kapanga","Botanika",2002,"nac","2026-10-28"],["Kapanga","¡Esta!",2004,"nac","2026-10-28"],["Kapanga","Crece",2007,"nac","2026-10-28"],["Kapanga","Todoterreno",2009,"nac","2026-10-28"],["Kapanga","Lima",2012,"nac","2026-10-28"],["Kapanga","Motormúsica",2015,"nac","2026-10-28"],
+ ["Los Gardelitos","Rock Sudaka",1996,"nac","2026-10-28"],["Los Gardelitos","Gardeliando",1998,"nac","2026-10-28"],["Los Gardelitos","Fiesta Sudaka, Parte 1",1999,"nac","2026-10-28"],["Los Gardelitos","En Tierra de Sueños, Parte 2",2004,"nac","2026-10-28"],["Los Gardelitos","Oxígeno",2008,"nac","2026-10-28"],["Los Gardelitos","Ciudad Oculta",2014,"nac","2026-10-28"],
  ["Las Pelotas","Corderos en la Noche",1991,"nac","2026-10-28"],["Las Pelotas","Máscaras de Sal",1994,"nac","2026-10-28"],["Las Pelotas","Amor Seco",1995,"nac","2026-10-28"],["Las Pelotas","¿Para Qué?",1998,"nac","2026-10-28"],["Las Pelotas","Todo por un Polvo",1999,"nac","2026-10-28"],["Las Pelotas","Basta",2007,"nac","2026-10-28"],["Las Pelotas","Despierta",2009,"nac","2026-10-28"],["Las Pelotas","Cerca de las Nubes",2012,"nac","2026-10-28"],["Las Pelotas","Brindando por Nada",2016,"nac","2026-10-28"],["Las Pelotas","Es Así",2020,"nac","2026-10-28"],["Las Pelotas","Sin la Piel",2026,"nac","2026-10-28"],
  ["No Te Va Gustar","Solo de Noche",2000,"nac"],["No Te Va Gustar","Aunque Cueste Ver el Sol",2004,"nac"],["No Te Va Gustar","Por Lo Menos Hoy",2012,"nac"],
  ["No Te Va Gustar","El Tiempo Otra Vez Avanza",2014,"nac"],["La Vela Puerca","Deskarado",1998,"nac"],["El Cuarteto de Nos","Raro",2006,"nac"],
@@ -1269,10 +1272,10 @@ const hoyAR=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Bue
 // El Bingo rockero entra a los desafíos el 28/10 (así no cambia el total del día en curso)
 const BINGO_ON=hoyAR()>="2026-10-28";
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
-const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set();
+const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set(), DISCOS_FUTUROS=[], CACHE_FUTURO={};
 { const hoy=hoyAR(), bandas=new Set(DISCOS.map(d=>d[0]));
   for(let i=DISCOS.length-1;i>=0;i--){ const d=DISCOS[i];
-    if((d[4]&&hoy<d[4])||(d[5]&&hoy>=d[5])){ if(d[1]&&d[4]&&hoy<d[4]) CATALOGO_FUTURO.add(d[0]+"|"+d[1]); DISCOS.splice(i,1) } }
+    if((d[4]&&hoy<d[4])||(d[5]&&hoy>=d[5])){ if(d[1]&&d[4]&&hoy<d[4]){ CATALOGO_FUTURO.add(d[0]+"|"+d[1]); DISCOS_FUTUROS.push(d.slice(0,4)) } DISCOS.splice(i,1) } }
   DISCOS.forEach(d=>{ CATALOGO_FUTURO.delete(d[0]+"|"+d[1]); d.length=4 }); // el resto del juego ve [banda, disco, año, tipo]
   const vigentes=new Set(DISCOS.map(d=>d[0])); bandas.forEach(b=>{ if(!vigentes.has(b)) BANDAS_FUTURAS.add(b) }) }
 const sinFuturas=lista=>{ for(let i=lista.length-1;i>=0;i--) if(BANDAS_FUTURAS.has(lista[i])) lista.splice(i,1); return lista };
@@ -1339,7 +1342,7 @@ const cacheListo=(async()=>{
     for(const v of Object.values(j.discos||{})) porId.set(v.id,v);
     CACHE={disc:j.discos||{},bandas:j.bandas||null,faltan:new Set(j.faltan||[]),porId};
     // lo que todavía no entró al catálogo tampoco se usa desde discos.json
-    CATALOGO_FUTURO.forEach(k=>{ const v=CACHE.disc[k]; if(v){ delete CACHE.disc[k]; porId.delete(v.id) } });
+    CATALOGO_FUTURO.forEach(k=>{ const v=CACHE.disc[k]; if(v){ CACHE_FUTURO[k]=v; delete CACHE.disc[k]; porId.delete(v.id) } });
     if(CACHE.bandas) BANDAS_FUTURAS.forEach(b=>delete CACHE.bandas[b]);
   }catch(e){ CACHE=null }
 })();
@@ -3666,7 +3669,9 @@ $("fra-bajar").onclick=()=>{ const a=document.createElement("a"); a.href=URL.cre
 // ===== Ahorcado rockero: adiviná el título del tema letra por letra =====
 // Solo el NOMBRE del tema (nunca la letra de la canción). Los temas salen de los más escuchados de cada banda en iTunes.
 // Bandas que se suman a la lista desde una fecha (al final, así no cambian los desafíos del día en curso)
-[["Las Pelotas","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
+[["Las Pelotas","2026-10-28"],["Turf","2026-10-28"],["Kapanga","2026-10-28"],["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
+// también a Adiviná el tema (rock barrial)
+[["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!TEMA_BANDAS.includes(b)) TEMA_BANDAS.push(b) });
 const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros");
 const AHO_VIDAS=6, AHO_DIA=3;
 const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};
@@ -4060,8 +4065,9 @@ const infoDisco=id=>(CACHE&&CACHE.porId.get(id))||{};
 function aniversarios(dia){
   if(!CACHE) return [];
   const md=dia.slice(5), anio=+dia.slice(0,4), out=[];
-  for(const d of DISCOS){
-    const v=d[1]&&CACHE.disc[d[0]+"|"+d[1]];
+  // también los discos que entran más adelante: un aniversario es contenido, no cambia los juegos
+  for(const d of DISCOS.concat(DISCOS_FUTUROS.filter(f=>!DISCOS.some(x=>x[0]===f[0]&&x[1]===f[1])))){
+    const v=d[1]&&(CACHE.disc[d[0]+"|"+d[1]]||CACHE_FUTURO[d[0]+"|"+d[1]]);
     if(!v||!v.fecha||v.fecha.length!==10||v.fecha.slice(5)!==md) continue;
     const n=anio-+v.fecha.slice(0,4); if(n<1) continue;
     out.push({r:{id:v.id,a:v.a,t:d[1],y:+v.fecha.slice(0,4),url:v.url,cat:d[3]},art:d[0],anios:n,fecha:v.fecha});
@@ -4374,8 +4380,8 @@ async function contArmar(){
   if(n!==CONT_N) return;
   try{
     const an=aniversarios(dia);
-    if(an.length){
-      const a=an[0], otros=an.slice(1,4).map(x=>`${x.r.t} de ${x.r.a} (${x.anios} años)`).join(", ");
+    for(const a of an.slice(0,3)){
+      const otros=an.filter(x=>x!==a).slice(0,3).map(x=>`${x.r.t} de ${x.r.a} (${x.anios} años)`).join(", ");
       const el=await piezaPost({tipo:"aniv",dia,r:a.r,art:a.art,anios:a.anios,fecha:a.fecha},`Un día como hoy: ${a.r.t} (post)`,`Post del ${fechaCorta(dia)} · ¡día especial!${otros?" · también cumplen: "+otros:""}`);
       if(n!==CONT_N) return; poner(el);
     }

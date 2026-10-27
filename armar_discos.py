@@ -4,6 +4,9 @@ guarda su id de iTunes, la tapa y la lista de temas con el fragmento de audio.
 Así el juego no tiene que buscar en iTunes cada vez: carga más rápido, no se traba
 por el límite de consultas de iTunes y el desafío del día es igual para todos.
 
+Fechas exactas a mano (para los aniversarios), también en discos_manual.json:
+  {"fechas": {"Los Piojos|Verde Paisaje del Infierno": "2000-10-27"}}
+
 Uso:
   python armar_discos.py          -> busca solo los discos nuevos (los que no están en discos.json)
   python armar_discos.py --todo   -> vuelve a buscar todo (tarda unos 30-60 minutos)
@@ -418,6 +421,10 @@ def main():
         discos[k]["mbid"] = mbid or ""
         print(f"[{n}/{len(sin_fecha)}] {art} — {alb}: {f or 'sin fecha'}", flush=True)
 
+    # Fechas cargadas a mano en discos_manual.json ("fechas": {"Banda|Disco": "AAAA-MM-DD"}), cuando MusicBrainz no tiene el día
+    for k, f in (manual.get("fechas") or {}).items():
+        if k in discos:
+            discos[k]["fecha"] = f
     # Datos de cada banda (para La banda del día). El artista sale de sus discos en MusicBrainz.
     bandas_previas = {} if todo else previo.get("bandas", {})
     bandas = {}
@@ -426,12 +433,14 @@ def main():
         if v.get("mbid"):
             por_banda.setdefault(k.split("|", 1)[0], []).append(v["mbid"])
     # bandas del catálogo sin ningún disco encontrado en MusicBrainz: se buscan por nombre
-    nacionales = {d[0] for d in catalogo if len(d) > 3 and d[3] == "nac"}
+    nacionales = {d[0] for d in leer_catalogo(todos=True) if len(d) > 3 and d[3] == "nac"}
     # también las que figuran en el catálogo solo con el nombre (sin discos): así queda su discografía para sumarla
     solo_nombre = {d[0] for d in leer_catalogo(todos=True) if not d[1]}
     for art in sorted(({k.split("|", 1)[0] for k in discos} | solo_nombre) - set(por_banda)):
         previa = bandas_previas.get(art)
-        mbid = previa.get("mbid") if previa else mb_buscar_artista(art, art in nacionales)
+        # si una banda nacional había quedado con una homónima de otro país (pasó con Airbag), se busca de nuevo
+        dudosa = previa and art in nacionales and previa.get("pais") not in ("AR", "UY", "")
+        mbid = previa.get("mbid") if previa and not dudosa else mb_buscar_artista(art, art in nacionales)
         print(f"   {art}: buscada por nombre → {mbid or 'no está'}", flush=True)
         if mbid:
             por_banda[art] = [mbid]
@@ -447,7 +456,7 @@ def main():
     # Logos (para el Bingo rockero): solo se buscan los que todavía no se buscaron
     for art, b in sorted(bandas.items()):
         previa = bandas_previas.get(art) or {}
-        if "logo" in previa and (not previa["logo"] or os.path.exists(previa["logo"].lstrip("/"))):
+        if "logo" in previa and previa.get("mbid") == b.get("mbid") and (not previa["logo"] or os.path.exists(previa["logo"].lstrip("/"))):
             b["logo"] = previa["logo"]
             continue
         b["logo"] = buscar_logo(art, b.get("mbid"))
