@@ -4614,9 +4614,22 @@ function elegirDia(dia){
 }
 
 // ---- Compartir el resultado de un desafío del día: WhatsApp, imagen para historias o copiar ----
+// Cuadraditos de cada juego: los que tienen rondas muestran cómo salió cada una (verde, amarillo, naranja, rojo)
+const COMP_COLOR=p=>p>=100?"🟩":p>=70?"🟨":p>=40?"🟧":p>0?"🟥":"⬛";
+const COMP_GRILLA={
+  diario:()=>G&&G.log&&G.log.length?G.log.map(l=>CUADRO[l.gan]||"⬛").join(""):null,
+  tema:()=>{ const j=TEMA.j; return j&&j.log&&j.log.length?j.log.map(l=>l.tipo==="bien"?"🟩":l.tipo==="salto"?"⬛":"🟥").join("")+"⬜".repeat(Math.max(0,PASOS.length-j.log.length)):null },
+  letra:()=>LET.pts.length?LET.pts.map(COMP_COLOR).join(""):null,
+  grilla:()=>GRI.celdas&&GRI.celdas.length===9?[0,1,2].map(i=>GRI.celdas.slice(i*3,i*3+3).map(v=>v?"🟩":"⬛").join("")).join("\n"):null,
+};
+// Para el resto: 5 cuadraditos de 20 puntos; el que quedó a medias va en amarillo
+function compBarra(p){
+  const v=Math.min(100,p), llenos=Math.floor(v/20), medio=llenos<5&&v%20>=10?1:0;
+  return "🟩".repeat(llenos)+"🟨".repeat(medio)+"⬛".repeat(5-llenos-medio);
+}
 function compTexto(j,p){
-  const v=Math.floor(Math.min(100,p)/20);
-  return `${EMOJI[j]} ${NOMBRES[j]} · Juegos Rock #${nDia()}\n${"🟩".repeat(v)}${"⬛".repeat(5-v)} ${p} puntos\n¿Me ganás? ${location.origin}${RUTAS[j]||"/"}`;
+  let g=null; try{ g=COMP_GRILLA[j]&&COMP_GRILLA[j]() }catch(e){}
+  return `${EMOJI[j]} ${NOMBRES[j]} · Juegos Rock #${nDia()}\n${g||compBarra(p)}${g&&g.includes("\n")?"\n":" "}${p} puntos\n¿Me ganás? ${location.origin}${RUTAS[j]||"/"}`;
 }
 const compFrase=p=>p>=100?"¡Perfecto!":p>=80?"Rockero de ley":p>=50?"Nada mal":p>0?"Hay que escuchar más":"Mañana va la revancha";
 async function compImagen(j,p){
@@ -4630,8 +4643,8 @@ async function compImagen(j,p){
   texto(x,`${EMOJI[j]||""} ${NOMBRES[j]}`.trim(),530,795,{s:68,al:"center",w:780,max:2});
   texto(x,String(p),530,1170,{s:250,al:"center",c:CC.rojo,w:780});
   texto(x,"PUNTOS",530,1245,{f:FM,peso:"500",s:42,al:"center",w:780});
-  const v=Math.floor(Math.min(100,p)/20), S=100, G=22, X0=530-(5*S+4*G)/2;
-  for(let i=0;i<5;i++){ const X=X0+i*(S+G); x.fillStyle=CC.tinta; x.fillRect(X+8,1298,S,S); x.fillStyle=i<v?CC.ok:"#3a352c"; x.fillRect(X,1290,S,S) }
+  const cs=[...compBarra(p)].map(c=>c==="🟩"?CC.ok:c==="🟨"?"#e0b12e":"#3a352c"), S=100, G=22, X0=530-(5*S+4*G)/2;
+  cs.forEach((c,i)=>{ const X=X0+i*(S+G); x.fillStyle=CC.tinta; x.fillRect(X+8,1298,S,S); x.fillStyle=c; x.fillRect(X,1290,S,S) });
   texto(x,compFrase(p),530,1470,{f:FB,peso:"800",s:52,al:"center",w:780});
   texto(x,"¿Me ganás?",540,1690,{s:100,al:"center",w:900});
   marca(x,540,1740,56);
