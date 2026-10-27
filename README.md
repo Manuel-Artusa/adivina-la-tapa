@@ -11,6 +11,7 @@ Juegos web de rock, con foco en rock nacional: adiviná la tapa, el tema en 1 se
 - **Compartir mi día:** arma un mensaje con los puntos de los 7 desafíos.
 - **Se instala como app** en el celular (manifest + service worker).
 - **Juegos:** Adiviná el tema (fragmentos de audio), ¿Antes o después?, Ordená la discografía, Tema número 1, Conexiones y ¿Qué tema no está? (La Vela Puerca).
+- **Bingo rockero**: arriba una tapa y abajo 12 bandas; tocá la que grabó el disco o salteala. Contra reloj (90, 60 o 45 s).
 - **¿De qué tema es?** (Redondos e Indio): escribís el tema; si errás, aparece otra frase. Las frases (hasta 4 por tema)
   se cargan a mano en `/cargar-frases/` y se guardan en `frases.json`. El juego aparece cuando hay 10 temas cargados o más.
 
