@@ -1,6 +1,61 @@
 {
  "temas": [
   {
+   "tema": "Amnesia",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "La piba esa, él y un atún",
+    "Y un agujero allí de un año",
+    "Ningún recuerdo, nada, nada",
+    "No actúa por amor ni por esplendor"
+   ]
+  },
+  {
+   "tema": "El Tesoro de los Inocentes",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "¡Un hermoso día el de hoy!",
+    "¡Ay! ¡Qué bello día es hoy!",
+    "está para desatar nuestra tormenta",
+    "que va a tronar por el dolor."
+   ]
+  },
+  {
+   "tema": "La Piba de Blockbuster",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Con tiza un círculo cerré",
+    "Con él la atrapé y ya no pudo salir",
+    "Silenciosos o muy sonoros",
+    "Sus besos son suaves bendiciones"
+   ]
+  },
+  {
+   "tema": "Nike Es la Cultura",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Almacenes coloridos",
+    "A los que llamás \"ciudad\" te envuelven",
+    "Con canciones indoloras",
+    "Como hilo musical"
+   ]
+  },
+  {
+   "tema": "Tomasito Podés Oírme? Tomasito Podés Verme?",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Mañana van Los Pétalos",
+    "que son una turmita gay",
+    "y “el monsieur” va a relojear tanto",
+    "que se van a flipar"
+   ]
+  },
+  {
    "tema": "Esa Estrella Era Mi Lujo",
    "disco": "Bang! Bang!! Estás Liquidado",
    "banda": "redondos",
@@ -331,6 +386,385 @@
    ]
   },
   {
+   "tema": "Buenas Noticias",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Esa banda inconsolable de perros sin folleto,",
+    "brujas de alma sencilla, patéticos viajantes.",
+    "Pobres tontos, pobres diablos, lunáticos diamantes",
+    "prometidos de carne, lánguidos, impalpables"
+   ]
+  },
+  {
+   "tema": "Capricho Magyar",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Instrumental"
+   ]
+  },
+  {
+   "tema": "El Lobo Caído",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Muy mucha merca, poco bongó",
+    "Y el mal gusto encalló",
+    "En un manantial frío, dije",
+    "Frío de bisturí"
+   ]
+  },
+  {
+   "tema": "Espejismo",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Cerrás los ojos y ves la boutique del rock",
+    "y sus jugadas que siguen saliendo bien.",
+    "Lo mejor de nuestra piel,",
+    "es que no nos deja huir…"
+   ]
+  },
+  {
+   "tema": "Gran Lady",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Lionel Ritchie en el Bar Princesa",
+    "Sonaba ensoñador",
+    "Y la Gran lady se tatuaba",
+    "En una hamaca tibia al Sol"
+   ]
+  },
+  {
+   "tema": "Invocación",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "¡Lobo!…",
+    "¡Lobo!…",
+    "¡Lobo!…",
+    "¡Lobo!…"
+   ]
+  },
+  {
+   "tema": "La Hija del Fletero",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "En mi buzón hay un par de cartas suyas",
+    "fueron juntándose, y no tengo el valor…",
+    "Todavía su amor me da descargas",
+    "(nunca tuvo el higo seco junto a mí)."
+   ]
+  },
+  {
+   "tema": "Rock para el Negro Atila",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Quiero verte huir como un ladrón",
+    "Al que nunca pueden atrapar",
+    "Y apretar, en tu bolsillo",
+    "Todo el metálico brillo, sin temor"
+   ]
+  },
+  {
+   "tema": "Shopping Disco-Zen",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Un desayuno de campeones ordenás",
+    "y con tu propia lengua te estrangulás.",
+    "Si vas de gira en el Shoping-Disco Zen,",
+    "tu belleza es de Shoping-Disco Zen."
+   ]
+  },
+  {
+   "tema": "Sorpresa de Shangai",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Tengo el hocico listo",
+    "Estoy acalorado",
+    "Voy a chasquear la lengua, un poco",
+    "Voy a escupir misiles"
+   ]
+  },
+  {
+   "tema": "Susanita",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Su pelo endulza su pañuelo",
+    "(y a nadie le amarga un dulce)",
+    "vino un gato y festejó lo dulce",
+    "que tu padre trajo."
+   ]
+  },
+  {
+   "tema": "Sushi",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "[Instrumental]"
+   ]
+  },
+  {
+   "tema": "Un Ángel para Tu Soledad",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos",
+   "frases": [
+    "Tu esqueleto te trajo hasta aquí",
+    "Con un cuerpo hambriento, veloz",
+    "Y aquí, gracias a Dios",
+    "Uno no cree en lo que oye"
+   ]
+  },
+  {
+   "tema": "Blues de la Libertad",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Mi amor, la libertad no es fantástica",
+    "No es tormenta mental que da el prestigio loco",
+    "Es mar gruesa y oscuridad",
+    "Y el chasquido que quiere proteger"
+   ]
+  },
+  {
+   "tema": "Cruz Diablo!",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Zippo, que estaba hecho migas",
+    "Se mandó en una picada",
+    "Chistando a su mala sombra",
+    "Sin copiloto ni nada"
+   ]
+  },
+  {
+   "tema": "Ella Baila Con Todos",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Es una de esas noches",
+    "Donde a todos nos gusta",
+    "La misma bailarina, ay",
+    "Y el mismo lunar"
+   ]
+  },
+  {
+   "tema": "Fanfarria del Cabrío",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "-Ni cuando robó el fuego",
+    "tuvo ésa rapidez.",
+    "No vino hasta éste mundo",
+    "a caerte en gracia a vos."
+   ]
+  },
+  {
+   "tema": "Juguetes Perdidos",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "-Perfume al filo del dolor",
+    "así, invisible",
+    "licor venéreo del amor",
+    "que está en las pieles"
+   ]
+  },
+  {
+   "tema": "La Dicha No Es una Cosa Alegre",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "-Una rumbita se armó",
+    "una fea carajada",
+    "incombustible no sos",
+    "¿cómo bancás ése infierno?"
+   ]
+  },
+  {
+   "tema": "Luzbelito y las Sirenas",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "-Un par de culos va a patear",
+    "de los que le juran más lealtad",
+    "y llorará en su corazón",
+    "como un nazareno del Cuzco."
+   ]
+  },
+  {
+   "tema": "Mariposa Pontiac - Rock del País",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Ven a mi casa suburbana",
+    "Me obsesiona tu prisión",
+    "Ven a mi casa suburbana",
+    "Me obsesiona tu prisión"
+   ]
+  },
+  {
+   "tema": "Me Matan Limón!",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Pasan las dos (delatándolo)",
+    "Apenas las dos (delatándolo a las dos)",
+    "De la tarde, y zumba feo algún moscón",
+    "Voy sangrando, Limón (padrecito de)"
+   ]
+  },
+  {
+   "tema": "Nuotatori Professionisti",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "¿Cómo actúan esos tipos felices?",
+    "¿Cómo brillan sus muecas festivas?",
+    "Si acarician pasteles de culo",
+    "Sanos, muy fuertes y azucarados"
+   ]
+  },
+  {
+   "tema": "Rock Yugular",
+   "disco": "Luzbelito",
+   "banda": "redondos",
+   "frases": [
+    "Caen, caen al fin, caen los disfraces",
+    "Caen desnudándote",
+    "Mientras unos fantasmas, fieles amigos",
+    "Ríen de vos y se roban tu fe"
+   ]
+  },
+  {
+   "tema": "Dr. Saturno",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Estoy hasta la pasta",
+    "De misas cómicas mal",
+    "A prueba de bobos y a las tres en casa",
+    "¿Querés creer? Oh, no"
+   ]
+  },
+  {
+   "tema": "El Templo de Momo",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "También hay pastel de ponzoña salada",
+    "Licor y baladas para embaucar",
+    "Aquel rubio que se tragaba cien lucas",
+    "Hace lo que puede para vivir"
+   ]
+  },
+  {
+   "tema": "La Murga de la Virgencita",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Marita lo hace por guita",
+    "Con los bomberos del cuartel",
+    "Su barrio es tan inclemente",
+    "Y su comparsa siempre es cruel"
+   ]
+  },
+  {
+   "tema": "La Murga de los Renegados",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Entre sopores, modorras ciegas",
+    "Y oscuridad de bodega sin luz",
+    "Va esa murga desencantada",
+    "Que lleva siglos así"
+   ]
+  },
+  {
+   "tema": "Morta Punto Com",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Uh, uh, va perdiendo aceite",
+    "Uh, uh, relincha de más",
+    "Con sus gambas de polio brinca",
+    "Y cae levemente hacia su estribor"
+   ]
+  },
+  {
+   "tema": "Murga Purga",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Sos un moscón zumbón",
+    "Que quedó atrapado",
+    "En un vaso boca abajo",
+    "Penas del corazón"
+   ]
+  },
+  {
+   "tema": "Pensando Como una Acelga",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Volanteás, volcás",
+    "Tu taxi paranormal",
+    "Tan fuera de foco",
+    "Meloneando el coco"
+   ]
+  },
+  {
+   "tema": "Pool, Averna y Papusa",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Sin bulchitear a nobody, man",
+    "una corazonada fue esta vez…",
+    "lo puso en la ruta… (¡bie bie!)",
+    "con pases de chabona y lágrimas."
+   ]
+  },
+  {
+   "tema": "Rato Molhado",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Tumberito, jamón y porrón",
+    "Mirá vos, que tan lejos llegó",
+    "Va por un golpe más de bourbon",
+    "Y a la Plaza Irlanda a guapear"
+   ]
+  },
+  {
+   "tema": "Sheriff",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "No tienen norte, no tienen salvación",
+    "hace el trabajo y redimilos, por favor",
+    "Que se mejoren allá en la eternidad...",
+    "partíles el buñuelo y quitá mi pena así"
+   ]
+  },
+  {
+   "tema": "Una Piba Con la Remera de Greenpeace",
+   "disco": "Momo Sampler",
+   "banda": "redondos",
+   "frases": [
+    "Está dormida o finge que duerme",
+    "Llega una mosca y se posa en su boca",
+    "Y sin embargo mi mundo termina en ella",
+    "Ya se cansó de dormir todo el tiempo en sillones"
+   ]
+  },
+  {
    "tema": "Canción para Naufragios",
    "disco": "Oktubre",
    "banda": "redondos",
@@ -430,6 +864,138 @@
    ]
   },
   {
+   "tema": "Alien Duce",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Si su look «bola de efectos» te palmó",
+    "y recoges tu hígado desde un rincón.",
+    "¡Flotando en ese minestrón",
+    "va Porco Rex a Porno Rock!"
+   ]
+  },
+  {
+   "tema": "Drogocop",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Juicio fantasma de los muertos queridos",
+    "Y una muy larga botella de gin",
+    "Drogocop, oh",
+    "Drogocop, oh"
+   ]
+  },
+  {
+   "tema": "El Árbol del Gran Bonete",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Pida lo que usted quiera, señor",
+    "El límite es el cielo, señor",
+    "De un Dios nuevo, mejor hecho",
+    "Y bajo nuestro pulgar"
+   ]
+  },
+  {
+   "tema": "Estás Frito Angelito",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Tu naturaleza te quiere matar",
+    "Ojos con dos pupilas te van a matar",
+    "Dale que va, dale que va",
+    "¡Estás frito, angelito!"
+   ]
+  },
+  {
+   "tema": "Esto Es To-To-Todo Amigos!",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Con este bonus-track",
+    "De mierda de guerra",
+    "La armada Buscapina",
+    "Ahora va a pirar"
+   ]
+  },
+  {
+   "tema": "Gualicho",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Caldos de Venus",
+    "que son como agua bendita",
+    "y un par de rounds de amor",
+    "con la tele encendida."
+   ]
+  },
+  {
+   "tema": "La Pequeña Novia del Carioca",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Solo un cuento fue",
+    "Que ayudó a pasar un buen rato",
+    "Un castillo de naipes que cayó",
+    "Y palabras baratas"
+   ]
+  },
+  {
+   "tema": "Las Increíbles Andanzas del Capitán Buscapina en Cybersiberia",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Ay, mientras Walter invade nuestra fiesta",
+    "El Capitán Buscapina salda deudas",
+    "Sentado, en bolas, watcheando la tele",
+    "Donde se matan, hoy, el Pincha y los Canallas"
+   ]
+  },
+  {
+   "tema": "Pogo",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Son más lindas que prudentes",
+    "Son las monas culeadoras",
+    "Comen de la cajita feliz",
+    "Y bailan el pogo del payaso asesino"
+   ]
+  },
+  {
+   "tema": "Scaramanzia",
+   "disco": "Último Bondi a Finisterre",
+   "banda": "redondos",
+   "frases": [
+    "Un nuevo juego ligué",
+    "Donde sos la heroína",
+    "Scaramanzia, cábala de amor virtual",
+    "Scaramanzia para un Sony samurái"
+   ]
+  },
+  {
+   "tema": "Aquella Solitaria Vaca Cubana",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Miraba el cielo justo a tiempo,",
+    "miraba el cielo justo a tiempo…",
+    "Salvada del motor eterno,",
+    "salvada del motor eterno y justo a tiempo."
+   ]
+  },
+  {
+   "tema": "Ella Debe Estar Tan Linda",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Conduje toda la noche",
+    "reventando los cambios",
+    "con mis ojos de durax lastimado.",
+    "¡Por Dios! ¡La ruta está trabada y fría!"
+   ]
+  },
+  {
    "tema": "Masacre en el Puticlub",
    "disco": "Un Baión para el Ojo Idiota",
    "banda": "redondos",
@@ -438,6 +1004,61 @@
     "la gran masacre del Puticlub",
     "con «pastillita» en tren gladiador",
     "(puso un huevo y la cosa explotó)."
+   ]
+  },
+  {
+   "tema": "Noticias de Ayer",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Buenos atracos, perfectos atentados",
+    "Bien iluminados",
+    "Las monjas verdes revolucionarias",
+    "Para gran consumo"
+   ]
+  },
+  {
+   "tema": "Todo Preso Es Político",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Quince años pagó ayer",
+    "Con tres bucos políticos",
+    "Todos esquivándole",
+    "Temerosos políticos"
+   ]
+  },
+  {
+   "tema": "Todo un Palo",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Yo voy en trenes",
+    "No tengo donde ir",
+    "Algo me late",
+    "Y no es mi corazón"
+   ]
+  },
+  {
+   "tema": "Vamos las Bandas",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "¿Y cuanto vale dormir tan custodiado",
+    "De expertos cínicos y botones dorados?",
+    "¿Y cuánto vale ser la banda nueva",
+    "Y andar trepando radares militares?"
+   ]
+  },
+  {
+   "tema": "Vencedores Vencidos",
+   "disco": "Un Baión para el Ojo Idiota",
+   "banda": "redondos",
+   "frases": [
+    "Te has fugado",
+    "Me hago humo",
+    "Den la alarma",
+    "Ensayo general para la farsa actual"
    ]
   }
  ]
