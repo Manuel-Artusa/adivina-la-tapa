@@ -515,6 +515,7 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .bin-c:disabled{cursor:default}
 .bin-c.logo{background:var(--tinta);padding:6px}
 .bin-c.logo img{width:100%;height:100%;object-fit:contain;display:block}
+.bin-c.logo.claro{background:var(--crema)}
 .bin-c.ok{background:var(--papel);border-color:var(--ok);box-shadow:3px 3px 0 var(--ok);padding:0}
 .bin-c.ok img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
 .bin-c.ok span{position:absolute;left:0;right:0;bottom:0;padding:2px 3px;background:var(--ok);color:var(--crema);font:700 .58rem/1.1 var(--body)}
@@ -2947,6 +2948,19 @@ function binGuardar(){ if(BIN.modo==="diario") ls.set(binClave(),{i:BIN.i,celdas
 const BIN_CORTO={"Patricio Rey y sus Redonditos de Ricota":"Los Redondos","Los Fabulosos Cadillacs":"Fabulosos Cadillacs","Luis Alberto Spinetta":"Spinetta","Los Abuelos de la Nada":"Abuelos de la Nada","Las Pastillas del Abuelo":"Pastillas del Abuelo"};
 const binNombre=b=>BIN_CORTO[b]||b;
 // logo de la banda (logos/, lo baja la tarea de GitHub desde TheAudioDB); si no hay, va el nombre
+// Mira el logo una vez: si no tiene transparencia es una foto o un recuadro (va el nombre); si es oscuro, va sobre fondo claro
+const BIN_LOGO_TIPO=new Map();
+function binTipoLogo(im){
+  const k=im.getAttribute("src"); if(BIN_LOGO_TIPO.has(k)) return BIN_LOGO_TIPO.get(k);
+  let t="claro";
+  try{
+    const c=document.createElement("canvas"), w=c.width=Math.min(120,im.naturalWidth), h=c.height=Math.max(1,Math.round(w*im.naturalHeight/im.naturalWidth));
+    const x=c.getContext("2d"); x.drawImage(im,0,0,w,h); const d=x.getImageData(0,0,w,h).data;
+    let op=0, lum=0; for(let i=0;i<d.length;i+=4) if(d[i+3]>128){ op++; lum+=.299*d[i]+.587*d[i+1]+.114*d[i+2] }
+    t=op/(w*h)>.85?"no":op&&lum/op<90?"oscuro":"claro";
+  }catch(e){}
+  BIN_LOGO_TIPO.set(k,t); return t;
+}
 const binLogo=b=>{ const d=CACHE&&CACHE.bandas&&CACHE.bandas[b]; return d&&d.logo||"" };
 const binTapa=k=>{ const v=CACHE&&CACHE.disc[k]; return v&&v.url?v.url.replace("600x600bb","300x300bb"):"" };
 // 12 bandas conocidas con 2 discos o más (con tapa). El mazo: una tapa de cada banda, otra más de 6 de ellas
@@ -2997,8 +3011,10 @@ function binPintar(mal){
   BIN.bandas.forEach((b,idx)=>{
     const x=document.createElement("button"); x.type="button"; x.className="bin-c"; x.disabled=!binJugando()||!!BIN.celdas[idx];
     if(BIN.celdas[idx]){ x.classList.add("ok"); x.innerHTML=`<img alt=""><span></span>`; x.querySelector("img").src=binTapa(BIN.celdas[idx]); x.querySelector("span").textContent=binNombre(b) }
-    else if(!tapada&&binLogo(b)){ x.classList.add("logo"); x.innerHTML=`<img alt="">`; const im=x.querySelector("img"); im.src=binLogo(b); im.alt=b; x.title=b;
-      im.onerror=()=>{ x.classList.remove("logo"); x.textContent=binNombre(b) } } // si el logo no carga, va el nombre
+    else if(!tapada&&binLogo(b)&&BIN_LOGO_TIPO.get(binLogo(b))!=="no"){ x.classList.add("logo"); x.innerHTML=`<img alt="">`; const im=x.querySelector("img"); im.alt=b; x.title=b;
+      const nombre=()=>{ x.classList.remove("logo","claro"); x.textContent=binNombre(b) };
+      im.onload=()=>{ const t=binTipoLogo(im); if(t==="no") nombre(); else x.classList.toggle("claro",t==="oscuro") };
+      im.onerror=nombre; im.src=binLogo(b) } // si el logo no carga o no sirve, va el nombre
     else x.textContent=tapada?"?????":binNombre(b);
     if(idx===mal) x.classList.add("mal");
     x.onclick=()=>binElegir(idx); g.appendChild(x);
