@@ -1060,7 +1060,8 @@ const DISCOS = [
  ["Los Piojos","Azul",1998,"nac"],["La Renga","Despedazado por Mil Partes",1996,"nac"],
  ["Andrés Calamaro","Alta Suciedad",1997,"nac"],["Los Abuelos de la Nada","Vasos y Besos",1983,"nac"],
  ["Gustavo Cerati","Bocanada",1999,"nac"],["Fito Páez","El Amor Después del Amor",1992,"nac"],
- ["Callejeros","Rocanroles sin Destino",2004,"nac"],
+ ["Callejeros","Sed",2001,"nac"],["Callejeros","Presión",2003,"nac"],["Callejeros","Rocanroles sin Destino",2004,"nac"],["Callejeros","Disco Escultura",2008,"nac"],
+ ["Don Osvaldo","Casi Justicia Social",2015,"nac"],["Don Osvaldo","Casi Justicia Social II",2019,"nac"],["Don Osvaldo","Flor de Ceibo",2022,"nac"],
  ["Los Enanitos Verdes","Igual Que Ayer",1992,"nac"],["Catupecu Machu","Cuentos Decapitados",2004,"nac"],
  ["Bersuit Vergarabat","Libertinaje",1998,"nac"],
  ["Sui Generis","Pequeñas Anécdotas Sobre las Instituciones",1974,"nac"],["Sui Generis","Vida",1972,"nac"],
@@ -1910,7 +1911,7 @@ async function temasDe(id){
 // Solo rock nacional y bandas bien conocidas
 const CON_BANDAS=["Soda Stereo","Gustavo Cerati","Charly García","Serú Girán","Sui Generis","Luis Alberto Spinetta","Pescado Rabioso","Almendra",
   "Patricio Rey y sus Redonditos de Ricota","Indio Solari","Sumo","Divididos","Virus","Los Abuelos de la Nada","Fito Páez","Andrés Calamaro",
-  "Los Rodríguez","Los Fabulosos Cadillacs","Los Piojos","La Renga","Babasónicos","Bersuit Vergarabat","Callejeros","Guasones","Catupecu Machu",
+  "Los Rodríguez","Los Fabulosos Cadillacs","Los Piojos","La Renga","Babasónicos","Bersuit Vergarabat","Callejeros","Don Osvaldo","Guasones","Catupecu Machu",
   "Attaque 77","Rata Blanca","Los Enanitos Verdes","Los Auténticos Decadentes","Los Pericos","Viejas Locas","Las Pastillas del Abuelo",
   "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"];
 function conCandidatos(rng){
@@ -2184,7 +2185,7 @@ const TEMA_PTS=[100,80,60,40,20,10]; // puntos según en qué intento lo sacás
 const TEMA={modo:"diario",j:null,audio:null,timer:null};
 // Solo rock (barrial, pesado y afines). Sin pop, ska ni folk.
 const TEMA_BANDAS=["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
-  "La Renga","Los Piojos","Callejeros","Guasones","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
+  "La Renga","Los Piojos","Callejeros","Don Osvaldo","Guasones","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
   "No Te Va Gustar","El Plan de la Mariposa","Sueño de Pescado","Farolitos","Bersuit Vergarabat","Catupecu Machu",
   "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"];
 const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0]));
