@@ -974,14 +974,14 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
   <section id="v-frases" class="sub" hidden>
     <h2>Cargar frases</h2>
     <p class="bajada">Para el juego ¿De qué tema es? Elegí un tema, tocá <b>Buscar letra</b> y escribí hasta 4 frases cortas, <b>una por renglón</b>: la primera es la que se ve al empezar (la más difícil) y las otras aparecen si el jugador erra (cada vez más fáciles). Se guarda en este navegador mientras trabajás.</p>
-    <div class="fra-barra"><span id="fra-cuenta">Cargando…</span><span><label><input type="checkbox" id="fra-faltan"> Solo los que faltan</label></span></div>
+    <div class="fra-barra"><span id="fra-cuenta">Cargando…</span><span><label><input type="checkbox" id="fra-faltan"> Solo los que faltan</label> <label><input type="checkbox" id="fra-ver-instr"> Ver instrumentales</label></span></div>
     <input class="mar-buscar" id="fra-buscar" placeholder="Buscar tema o disco" autocomplete="off" spellcheck="false">
     <div class="fra-lista" id="fra-lista" role="listbox" aria-label="Temas"></div>
     <div class="fra-edit" id="fra-edit" hidden>
       <div><small id="fra-sel-disco"></small><br><b id="fra-sel-tema"></b></div>
       <div class="fila"><a class="btn sec" id="fra-google" target="_blank" rel="noopener">Buscar letra ↗</a></div>
       <textarea id="fra-texto" maxlength="700" rows="5" placeholder="Una frase por renglón (hasta 4). Primero la más difícil."></textarea>
-      <div class="fila"><button class="btn" id="fra-guardar" type="button">Guardar</button><button class="btn sec" id="fra-borrar" type="button">Borrar frase</button></div>
+      <div class="fila"><button class="btn" id="fra-guardar" type="button">Guardar</button><button class="btn sec" id="fra-borrar" type="button">Borrar frase</button><button class="btn sec" id="fra-instr" type="button">Es instrumental (ocultar)</button></div>
     </div>
     <h3 class="arm-sub">Subir al juego</h3>
     <p class="fra-ayuda">Cuando termines, tocá <b>Copiar todo</b>, abrí <a id="fra-gh" target="_blank" rel="noopener" href="https://github.com/Manuel-Artusa/adivina-la-tapa/edit/main/frases.json"><code>frases.json</code> en GitHub</a>, reemplazá todo el texto por lo copiado y guardá (Commit changes). Con 10 temas cargados o más, el juego aparece solo en el inicio.</p>
@@ -3252,17 +3252,28 @@ const LET_DIA=3, LET_PTS=[100,70,40,20], LET_MAX=4;
 const LET={j:null,racha:0,modo:"libre",rng:Math.random,lista:[],ronda:0,pts:[],sugAct:-1};
 let FRASES=null;
 // Cada tema: {tema, disco, banda, frases:[...]} (también acepta el formato viejo de una sola "frase")
-const letFrasesDe=x=>(Array.isArray(x.frases)?x.frases:x.frase?[x.frase]:[]).map(f=>String(f).trim()).filter(Boolean).slice(0,LET_MAX);
-const frasesListas=(async()=>{ try{ const r=await fetch("/frases.json",{cache:"no-cache"}); if(r.ok){ const d=await r.json(); FRASES=(d.temas||d.frases||[]).filter(x=>x&&x.tema&&letFrasesDe(x).length) } }catch(e){} if(!FRASES) FRASES=[] })();
-// Todos los temas de los discos de los Redondos y del Indio que hay en discos.json
-function letTemas(){
+// (sin frases repetidas dentro del mismo tema)
+const letFrasesDe=x=>(Array.isArray(x.frases)?x.frases:x.frase?[x.frase]:[]).map(f=>String(f).trim()).filter((f,i,a)=>f&&a.findIndex(g=>norm(g)===norm(f))===i).slice(0,LET_MAX);
+// Temas instrumentales: no se muestran ni en el juego ni en la carga. Van en "instrumentales" de frases.json
+// (también cuenta un tema cuya única "frase" es "Instrumental")
+const letClave=(banda,tema)=>(banda||"redondos")+"|"+norm(tema);
+const letEsInstr=x=>{ const fs=letFrasesDe(x); return fs.length>0&&fs.every(f=>norm(f)==="instrumental") };
+const INSTR=new Set();
+const frasesListas=(async()=>{ try{ const r=await fetch("/frases.json",{cache:"no-cache"}); if(r.ok){ const d=await r.json();
+  (d.instrumentales||[]).forEach(x=>x&&x.tema&&INSTR.add(letClave(x.banda,x.tema)));
+  const ts=(d.temas||d.frases||[]).filter(x=>x&&x.tema&&letFrasesDe(x).length);
+  ts.filter(letEsInstr).forEach(x=>INSTR.add(letClave(x.banda,x.tema)));
+  FRASES=ts.filter(x=>!INSTR.has(letClave(x.banda,x.tema))) } }catch(e){} if(!FRASES) FRASES=[] })();
+// Todos los temas de los discos de los Redondos y del Indio que hay en discos.json (sin los instrumentales)
+function letTemas(conInstr=false){
   const out=[], vistos=new Set();
   if(!CACHE) return out;
   for(const [k,v] of Object.entries(CACHE.disc)){
     const [art,disco]=k.split("|"), banda=Object.keys(LET_BANDAS).find(b=>LET_BANDAS[b]===art);
     if(!banda||!v.temas) continue;
     const d=DISCOS.find(x=>x[0]===art&&x[1]===disco);
-    for(const [t] of v.temas){ const n=norm(t); if(!n||vistos.has(banda+n)) continue; vistos.add(banda+n); out.push({t,disco,banda,url:v.url,anio:d?d[2]:"",k:n}) }
+    for(const [t] of v.temas){ const n=norm(t); if(!n||vistos.has(banda+n)) continue; vistos.add(banda+n);
+      const instr=INSTR.has(banda+"|"+n); if(instr&&!conInstr) continue; out.push({t,disco,banda,url:v.url,anio:d?d[2]:"",k:n,instr}) }
   }
   return out;
 }
@@ -3395,33 +3406,38 @@ $("let-sig").onclick=letNuevo;
 
 // ---- Cargar frases (página interna /cargar-frases/) ----
 // Arranca con lo que ya está en frases.json y guarda el borrador en el navegador
-const FRA={temas:[],frases:new Map(),sel:null};
-const fraClave=x=>x.banda+"|"+norm(x.t||x.tema);
-function fraGuardarBorrador(){ ls.set("tapa-frases-borrador",[...FRA.frases.values()]) }
+const FRA={temas:[],frases:new Map(),instr:new Set(),sel:null};
+const fraClave=x=>letClave(x.banda,x.t||x.tema);
+function fraGuardarBorrador(){ ls.set("tapa-frases-borrador",[...FRA.frases.values()]); ls.set("tapa-frases-instr",[...FRA.instr]) }
 async function fraIniciar(){
   $("fra-cuenta").textContent="Cargando…";
   await Promise.all([frasesListas,esperarCache()]);
-  FRA.temas=letTemas();
+  FRA.temas=letTemas(true);
   if(!FRA.temas.length){ $("fra-cuenta").textContent="No pude cargar los temas (falta discos.json)."; return }
-  FRA.frases=new Map();
+  FRA.frases=new Map(); FRA.instr=new Set([...INSTR,...(ls.get("tapa-frases-instr")||[])]);
   for(const x of [...FRASES,...(ls.get("tapa-frases-borrador")||[])]){
     const fs=x&&x.tema?letFrasesDe(x):[];
-    if(fs.length) FRA.frases.set(fraClave({banda:x.banda||"redondos",tema:x.tema}),{tema:x.tema,disco:x.disco||"",banda:x.banda||"redondos",frases:fs});
+    if(!fs.length) continue;
+    if(letEsInstr(x)){ FRA.instr.add(fraClave(x)); continue }
+    FRA.frases.set(fraClave({banda:x.banda||"redondos",tema:x.tema}),{tema:x.tema,disco:x.disco||"",banda:x.banda||"redondos",frases:fs});
   }
+  FRA.instr.forEach(k=>FRA.frases.delete(k));
   fraPintar();
 }
 function fraJson(){
   const lista=[...FRA.frases.values()].sort((a,b)=>a.banda.localeCompare(b.banda)||(a.disco||"").localeCompare(b.disco||"")||a.tema.localeCompare(b.tema));
-  return JSON.stringify({temas:lista},null,1)+"\n";
+  const instr=FRA.temas.filter(x=>FRA.instr.has(fraClave(x))).map(x=>({tema:x.t,disco:x.disco,banda:x.banda}));
+  return JSON.stringify({temas:lista,instrumentales:instr},null,1)+"\n";
 }
 function fraPintar(){
-  const q=norm($("fra-buscar").value), faltan=$("fra-faltan").checked, n=FRA.frases.size;
-  $("fra-cuenta").textContent=`${n} tema${n===1?"":"s"} con frases · ${FRA.temas.length} temas${n<10?` · faltan ${10-n} para que aparezca el juego`:""}`;
+  const q=norm($("fra-buscar").value), faltan=$("fra-faltan").checked, verInstr=$("fra-ver-instr").checked, n=FRA.frases.size, ni=FRA.instr.size;
+  const total=FRA.temas.length-ni;
+  $("fra-cuenta").textContent=`${n} de ${total} temas con frases${ni?` · ${ni} instrumental${ni===1?"":"es"} ocult${ni===1?"o":"os"}`:""}${n<10?` · faltan ${10-n} para que aparezca el juego`:""}`;
   const cont=$("fra-lista"); cont.innerHTML="";
-  FRA.temas.filter(x=>(!q||norm(x.t+" "+x.disco).includes(q))&&(!faltan||!FRA.frases.has(fraClave(x)))).forEach(x=>{
-    const b=document.createElement("button"); b.type="button"; const f=FRA.frases.get(fraClave(x));
+  FRA.temas.filter(x=>{ const instr=FRA.instr.has(fraClave(x)); return (verInstr||!instr)&&(!q||norm(x.t+" "+x.disco).includes(q))&&(!faltan||instr||!FRA.frases.has(fraClave(x))) }).forEach(x=>{
+    const b=document.createElement("button"); b.type="button"; const f=FRA.frases.get(fraClave(x)), instr=FRA.instr.has(fraClave(x));
     b.className=f?"tiene":""; b.setAttribute("aria-pressed",FRA.sel===x);
-    b.innerHTML=`<span></span><small></small><em>${f?`✓ ${f.frases.length} frase${f.frases.length===1?"":"s"}`:"falta"}</em>`;
+    b.innerHTML=`<span></span><small></small><em>${instr?"instrumental":f?`✓ ${f.frases.length} frase${f.frases.length===1?"":"s"}`:"falta"}</em>`;
     b.querySelector("span").textContent=x.t; b.querySelector("small").textContent=`${x.banda==="indio"?"Indio":"Redondos"} · ${x.disco}`;
     b.onclick=()=>{ FRA.sel=x; fraEditar(); fraPintar() };
     cont.appendChild(b);
@@ -3431,9 +3447,18 @@ function fraEditar(){
   const x=FRA.sel; $("fra-edit").hidden=!x; if(!x) return;
   $("fra-sel-tema").textContent=x.t; $("fra-sel-disco").textContent=`${LET_BANDAS[x.banda]} · ${x.disco}`;
   $("fra-google").href="https://www.google.com/search?q="+encodeURIComponent(`${x.banda==="indio"?"Indio Solari":"Redondos"} ${x.t} letra`);
-  const f=FRA.frases.get(fraClave(x)); $("fra-texto").value=f?f.frases.join("\n"):"";
-  $("fra-borrar").hidden=!f; $("fra-texto").focus();
+  const f=FRA.frases.get(fraClave(x)), instr=FRA.instr.has(fraClave(x)); $("fra-texto").value=f?f.frases.join("\n"):"";
+  $("fra-borrar").hidden=!f; $("fra-instr").textContent=instr?"No es instrumental":"Es instrumental (ocultar)";
+  $("fra-texto").disabled=instr; $("fra-guardar").disabled=instr; if(!instr) $("fra-texto").focus();
 }
+$("fra-instr").onclick=()=>{
+  const x=FRA.sel; if(!x) return; const k=fraClave(x);
+  if(FRA.instr.has(k)){ FRA.instr.delete(k); fraGuardarBorrador(); fraEditar(); fraPintar(); return }
+  FRA.instr.add(k); FRA.frases.delete(k); fraGuardarBorrador();
+  // pasa solo al siguiente tema que falta
+  FRA.sel=FRA.temas.find(y=>!FRA.frases.has(fraClave(y))&&!FRA.instr.has(fraClave(y)))||null; fraEditar(); fraPintar();
+};
+$("fra-ver-instr").onchange=fraPintar;
 $("fra-buscar").oninput=fraPintar;
 $("fra-faltan").onchange=fraPintar;
 $("fra-guardar").onclick=()=>{
@@ -3442,7 +3467,7 @@ $("fra-guardar").onclick=()=>{
   if(!fs.length){ $("fra-texto").focus(); return }
   FRA.frases.set(fraClave(x),{tema:x.t,disco:x.disco,banda:x.banda,frases:fs}); fraGuardarBorrador();
   // pasa solo al siguiente tema que falta
-  FRA.sel=FRA.temas.find(y=>!FRA.frases.has(fraClave(y)))||null; fraEditar(); fraPintar();
+  FRA.sel=FRA.temas.find(y=>!FRA.frases.has(fraClave(y))&&!FRA.instr.has(fraClave(y)))||null; fraEditar(); fraPintar();
 };
 $("fra-borrar").onclick=()=>{ const x=FRA.sel; if(!x) return; FRA.frases.delete(fraClave(x)); fraGuardarBorrador(); fraEditar(); fraPintar() };
 $("fra-copiar").onclick=async()=>{ const b=$("fra-copiar"); try{ await navigator.clipboard.writeText(fraJson()); b.textContent="¡Copiado!" }catch(e){ b.textContent="No se pudo copiar" } setTimeout(()=>b.textContent="Copiar todo",2000) };
