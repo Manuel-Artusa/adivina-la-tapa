@@ -1181,6 +1181,7 @@ const DISCOS = [
  ["Babasónicos","Miami",1999,"nac"],["Babasónicos","Anoche",2005,"nac"],["Babasónicos","Mucho",2008,"nac"],
  ["Babasónicos","Romantisísmico",2013,"nac"],["Bersuit Vergarabat","Hijos del Culo",2000,"nac"],["Bersuit Vergarabat","La Argentinidad al Palo",2004,"nac"],
  ["Catupecu Machu","A Morir!!!",1997,"nac"],["Catupecu Machu","Dale!",2000,"nac"],["Las Pelotas","Esperando el Milagro",2003,"nac"],
+ ["Las Pelotas","Corderos en la Noche",1991,"nac","2026-10-28"],["Las Pelotas","Máscaras de Sal",1994,"nac","2026-10-28"],["Las Pelotas","Amor Seco",1995,"nac","2026-10-28"],["Las Pelotas","¿Para Qué?",1998,"nac","2026-10-28"],["Las Pelotas","Todo por un Polvo",1999,"nac","2026-10-28"],["Las Pelotas","Basta",2007,"nac","2026-10-28"],["Las Pelotas","Despierta",2009,"nac","2026-10-28"],["Las Pelotas","Cerca de las Nubes",2012,"nac","2026-10-28"],["Las Pelotas","Brindando por Nada",2016,"nac","2026-10-28"],["Las Pelotas","Es Así",2020,"nac","2026-10-28"],["Las Pelotas","Sin la Piel",2026,"nac","2026-10-28"],
  ["No Te Va Gustar","Solo de Noche",2000,"nac"],["No Te Va Gustar","Aunque Cueste Ver el Sol",2004,"nac"],["No Te Va Gustar","Por Lo Menos Hoy",2012,"nac"],
  ["No Te Va Gustar","El Tiempo Otra Vez Avanza",2014,"nac"],["La Vela Puerca","Deskarado",1998,"nac"],["El Cuarteto de Nos","Raro",2006,"nac"],
  ["El Cuarteto de Nos","Bipolar",2009,"nac"],["El Cuarteto de Nos","Porfiado",2012,"nac"],["El Cuarteto de Nos","Habla Tu Espejo",2014,"nac"],
@@ -3664,6 +3665,8 @@ $("fra-bajar").onclick=()=>{ const a=document.createElement("a"); a.href=URL.cre
 
 // ===== Ahorcado rockero: adiviná el título del tema letra por letra =====
 // Solo el NOMBRE del tema (nunca la letra de la canción). Los temas salen de los más escuchados de cada banda en iTunes.
+// Bandas que se suman a la lista desde una fecha (al final, así no cambian los desafíos del día en curso)
+[["Las Pelotas","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
 const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros");
 const AHO_VIDAS=6, AHO_DIA=3;
 const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};

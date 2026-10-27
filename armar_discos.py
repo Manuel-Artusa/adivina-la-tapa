@@ -64,14 +64,14 @@ def mismo_artista(nombre, art):
     return False
 
 
-def leer_catalogo():
+def leer_catalogo(todos=False):
     s = open("index.html", encoding="utf-8").read()
     a = s.index("const DISCOS = [")
     b = s.index("\n];", a) + 3
     txt = s[a + len("const DISCOS = "):b - 1]
     txt = re.sub(r"//[^\n]*", "", txt)
     txt = re.sub(r",\s*\]", "]", txt)
-    return [d for d in json.loads(txt) if d[1]]
+    return [d for d in json.loads(txt) if d[1] or todos]
 
 
 ultima = 0.0
@@ -427,7 +427,9 @@ def main():
             por_banda.setdefault(k.split("|", 1)[0], []).append(v["mbid"])
     # bandas del catálogo sin ningún disco encontrado en MusicBrainz: se buscan por nombre
     nacionales = {d[0] for d in catalogo if len(d) > 3 and d[3] == "nac"}
-    for art in sorted({k.split("|", 1)[0] for k in discos} - set(por_banda)):
+    # también las que figuran en el catálogo solo con el nombre (sin discos): así queda su discografía para sumarla
+    solo_nombre = {d[0] for d in leer_catalogo(todos=True) if not d[1]}
+    for art in sorted(({k.split("|", 1)[0] for k in discos} | solo_nombre) - set(por_banda)):
         previa = bandas_previas.get(art)
         mbid = previa.get("mbid") if previa else mb_buscar_artista(art, art in nacionales)
         print(f"   {art}: buscada por nombre → {mbid or 'no está'}", flush=True)
