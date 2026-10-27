@@ -11,7 +11,7 @@ on:
     - cron: "0 7 1 * *"   # el día 1 de cada mes, para refrescar tapas y audios
   push:
     branches: [main]
-    paths: ["armar_discos.py", "index.html"]   # si cambia el catálogo o el script, busca lo nuevo
+    paths: ["armar_discos.py", "index.html", "discos_manual.json"]   # si cambia el catálogo, el script o un link a mano, busca lo nuevo
 
 permissions:
   contents: write
