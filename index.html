@@ -4654,7 +4654,7 @@ function compPanel(j,el,p){
   sec.querySelectorAll(".comp-panel").forEach(x=>x.remove());
   const txt=compTexto(j,p), d=document.createElement("div"); d.className="comp-panel";
   d.innerHTML=`<b>Desafiá a tus amigos</b><div class="fila"><a class="btn wa" target="_blank" rel="noopener">WhatsApp</a><button class="btn sec" type="button" data-c="img">Imagen para historias</button><button class="btn sec" type="button" data-c="txt">Copiar</button></div><small>Mañana hay un desafío nuevo.</small>`;
-  const wa=d.querySelector(".wa"); wa.href="https://wa.me/?text="+encodeURIComponent(txt); wa.onclick=()=>contar("compartir-wa-"+j);
+  const wa=d.querySelector(".wa"); wa.href="https://api.whatsapp.com/send?text="+encodeURIComponent(txt); // wa.me rompe los emojis al redirigir wa.onclick=()=>contar("compartir-wa-"+j);
   d.querySelector('[data-c="img"]').onclick=e=>compCompartirImagen(j,p,e.currentTarget);
   d.querySelector('[data-c="txt"]').onclick=async e=>{ const b=e.currentTarget; try{ await navigator.clipboard.writeText(txt); b.textContent="¡Copiado!" }catch(er){ b.textContent="No se pudo copiar" } setTimeout(()=>b.textContent="Copiar",2000) };
   ancla.after(d);
