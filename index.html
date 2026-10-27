@@ -1181,6 +1181,9 @@ const DISCOS = [
  ["Babasónicos","Miami",1999,"nac"],["Babasónicos","Anoche",2005,"nac"],["Babasónicos","Mucho",2008,"nac"],
  ["Babasónicos","Romantisísmico",2013,"nac"],["Bersuit Vergarabat","Hijos del Culo",2000,"nac"],["Bersuit Vergarabat","La Argentinidad al Palo",2004,"nac"],
  ["Catupecu Machu","A Morir!!!",1997,"nac"],["Catupecu Machu","Dale!",2000,"nac"],["Las Pelotas","Esperando el Milagro",2003,"nac"],
+ ["Turf","Una Pila de Vida",1997,"nac","2026-10-28"],["Turf","Siempre Libre",1999,"nac","2026-10-28"],["Turf","Turfshow",2001,"nac","2026-10-28"],["Turf","Para Mí, Para Vos",2004,"nac","2026-10-28"],["Turf","Odisea",2017,"nac","2026-10-28"],["Turf","Renacimiento",2023,"nac","2026-10-28"],["Turf","Polvo de Estrellas",2025,"nac","2026-10-28"],
+ ["Kapanga","A 15 cm de la Realidad",1998,"nac","2026-10-28"],["Kapanga","Un Asado en Abbey Road",1999,"nac","2026-10-28"],["Kapanga","Operación Rebenque",2000,"nac","2026-10-28"],["Kapanga","Botanika",2002,"nac","2026-10-28"],["Kapanga","¡Esta!",2004,"nac","2026-10-28"],["Kapanga","Crece",2007,"nac","2026-10-28"],["Kapanga","Todoterreno",2009,"nac","2026-10-28"],["Kapanga","Lima",2012,"nac","2026-10-28"],["Kapanga","Motormúsica",2015,"nac","2026-10-28"],
+ ["Los Gardelitos","Rock Sudaka",1996,"nac","2026-10-28"],["Los Gardelitos","Gardeliando",1998,"nac","2026-10-28"],["Los Gardelitos","Fiesta Sudaka, Parte 1",1999,"nac","2026-10-28"],["Los Gardelitos","En Tierra de Sueños, Parte 2",2004,"nac","2026-10-28"],["Los Gardelitos","Oxígeno",2008,"nac","2026-10-28"],["Los Gardelitos","Ciudad Oculta",2014,"nac","2026-10-28"],
  ["Las Pelotas","Corderos en la Noche",1991,"nac","2026-10-28"],["Las Pelotas","Máscaras de Sal",1994,"nac","2026-10-28"],["Las Pelotas","Amor Seco",1995,"nac","2026-10-28"],["Las Pelotas","¿Para Qué?",1998,"nac","2026-10-28"],["Las Pelotas","Todo por un Polvo",1999,"nac","2026-10-28"],["Las Pelotas","Basta",2007,"nac","2026-10-28"],["Las Pelotas","Despierta",2009,"nac","2026-10-28"],["Las Pelotas","Cerca de las Nubes",2012,"nac","2026-10-28"],["Las Pelotas","Brindando por Nada",2016,"nac","2026-10-28"],["Las Pelotas","Es Así",2020,"nac","2026-10-28"],["Las Pelotas","Sin la Piel",2026,"nac","2026-10-28"],
  ["No Te Va Gustar","Solo de Noche",2000,"nac"],["No Te Va Gustar","Aunque Cueste Ver el Sol",2004,"nac"],["No Te Va Gustar","Por Lo Menos Hoy",2012,"nac"],
  ["No Te Va Gustar","El Tiempo Otra Vez Avanza",2014,"nac"],["La Vela Puerca","Deskarado",1998,"nac"],["El Cuarteto de Nos","Raro",2006,"nac"],
@@ -3666,7 +3669,9 @@ $("fra-bajar").onclick=()=>{ const a=document.createElement("a"); a.href=URL.cre
 // ===== Ahorcado rockero: adiviná el título del tema letra por letra =====
 // Solo el NOMBRE del tema (nunca la letra de la canción). Los temas salen de los más escuchados de cada banda en iTunes.
 // Bandas que se suman a la lista desde una fecha (al final, así no cambian los desafíos del día en curso)
-[["Las Pelotas","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
+[["Las Pelotas","2026-10-28"],["Turf","2026-10-28"],["Kapanga","2026-10-28"],["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
+// también a Adiviná el tema (rock barrial)
+[["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!TEMA_BANDAS.includes(b)) TEMA_BANDAS.push(b) });
 const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros");
 const AHO_VIDAS=6, AHO_DIA=3;
 const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};
