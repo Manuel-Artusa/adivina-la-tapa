@@ -123,6 +123,9 @@ for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }
 
+// Logos de las bandas (los baja la tarea "Armar discos.json"; los usa el Bingo rockero)
+if (fs.existsSync("logos")) fs.cpSync("logos", "public/logos", { recursive: true });
+
 // Archivos de verificación (TikTok, Google, etc.): todo lo de la carpeta "verificacion" va a la raíz del sitio
 if (fs.existsSync("verificacion")) for (const f of fs.readdirSync("verificacion")) {
   if (fs.statSync(path.join("verificacion", f)).isFile()) fs.copyFileSync(path.join("verificacion", f), path.join("public", f));

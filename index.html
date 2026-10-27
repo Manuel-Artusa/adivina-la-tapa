@@ -513,6 +513,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
   font:400 clamp(.62rem,2.6vw,.9rem)/1.05 var(--display);color:var(--tinta);text-align:center;overflow:hidden;overflow-wrap:break-word;hyphens:auto;cursor:pointer;transition:translate .14s var(--rebote),background .18s}
 .bin-c:not(:disabled):hover{translate:-1px -2px}
 .bin-c:disabled{cursor:default}
+.bin-c.logo{background:var(--tinta);padding:6px}
+.bin-c.logo img{width:100%;height:100%;object-fit:contain;display:block}
 .bin-c.ok{background:var(--papel);border-color:var(--ok);box-shadow:3px 3px 0 var(--ok);padding:0}
 .bin-c.ok img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
 .bin-c.ok span{position:absolute;left:0;right:0;bottom:0;padding:2px 3px;background:var(--ok);color:var(--crema);font:700 .58rem/1.1 var(--body)}
@@ -2944,6 +2946,8 @@ function binGuardar(){ if(BIN.modo==="diario") ls.set(binClave(),{i:BIN.i,celdas
 // nombres cortos para que entren en el casillero
 const BIN_CORTO={"Patricio Rey y sus Redonditos de Ricota":"Los Redondos","Los Fabulosos Cadillacs":"Fabulosos Cadillacs","Luis Alberto Spinetta":"Spinetta","Los Abuelos de la Nada":"Abuelos de la Nada","Las Pastillas del Abuelo":"Pastillas del Abuelo"};
 const binNombre=b=>BIN_CORTO[b]||b;
+// logo de la banda (logos/, lo baja la tarea de GitHub desde TheAudioDB); si no hay, va el nombre
+const binLogo=b=>{ const d=CACHE&&CACHE.bandas&&CACHE.bandas[b]; return d&&d.logo||"" };
 const binTapa=k=>{ const v=CACHE&&CACHE.disc[k]; return v&&v.url?v.url.replace("600x600bb","300x300bb"):"" };
 // 12 bandas conocidas con 2 discos o más (con tapa). El mazo: una tapa de cada banda, otra más de 6 de ellas
 // (que ya no entran si su casillero se llenó) y 8 de bandas que no están en la grilla
@@ -2993,6 +2997,8 @@ function binPintar(mal){
   BIN.bandas.forEach((b,idx)=>{
     const x=document.createElement("button"); x.type="button"; x.className="bin-c"; x.disabled=!binJugando()||!!BIN.celdas[idx];
     if(BIN.celdas[idx]){ x.classList.add("ok"); x.innerHTML=`<img alt=""><span></span>`; x.querySelector("img").src=binTapa(BIN.celdas[idx]); x.querySelector("span").textContent=binNombre(b) }
+    else if(!tapada&&binLogo(b)){ x.classList.add("logo"); x.innerHTML=`<img alt="">`; const im=x.querySelector("img"); im.src=binLogo(b); im.alt=b; x.title=b;
+      im.onerror=()=>{ x.classList.remove("logo"); x.textContent=binNombre(b) } } // si el logo no carga, va el nombre
     else x.textContent=tapada?"?????":binNombre(b);
     if(idx===mal) x.classList.add("mal");
     x.onclick=()=>binElegir(idx); g.appendChild(x);

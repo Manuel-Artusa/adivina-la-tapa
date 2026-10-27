@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 
 PAUSA = 3.2          # segundos entre consultas (iTunes permite ~20 por minuto)
 SALIDA = "discos.json"
+LOGOS = "logos"      # carpeta con los logos de las bandas (para el Bingo rockero)
 
 FUERA = re.compile(r"vivo|live|grandes|lo mejor|exitos|single|\bep\b|acustico|unplugged|antologia|coleccion|collection|greatest|hits|best of|karaoke|tributo|tribute|remix")
 NO_ROCK = re.compile(r"cumbia|tropical|salsa|reggaeton|urban|regional|mexican|bachata|merengue|cuarteto|folklor|christian|cristian|gospel|infantil|children|nino|ranchera|bolero|tango|vallenato|banda|electronica|dance|hip hop|rap|jazz|clasica|classical|soundtrack|comedia")
@@ -282,6 +283,51 @@ def mb_buscar_artista(art, nacional=False):
     return cands[0][3] if cands else None
 
 
+def audiodb(ruta):
+    """Consulta a TheAudioDB (clave pública de prueba). Si falla, devuelve {} y sigue."""
+    time.sleep(1.2)
+    req = urllib.request.Request("https://www.theaudiodb.com/api/v1/json/123/" + ruta, headers={"User-Agent": "JuegosRock/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.loads(r.read().decode("utf-8") or "{}") or {}
+    except Exception as e:
+        print(f"   TheAudioDB {ruta}: {e}", flush=True)
+        return {}
+
+
+def buscar_logo(art, mbid):
+    """Logo de la banda (PNG con fondo transparente) de TheAudioDB, guardado en logos/. Devuelve la ruta o ""."""
+    nombre = re.sub(r"[^a-z0-9]+", "-", norm(art)).strip("-")
+    archivo = f"{LOGOS}/{nombre}.png"
+    if os.path.exists(archivo):
+        return "/" + archivo
+    url = ""
+    rutas = ([f"artist-mb.php?i={mbid}"] if mbid else []) + [f"search.php?s={urllib.parse.quote(art)}"]
+    for ruta in rutas:
+        for a in audiodb(ruta).get("artists") or []:
+            # por nombre solo si coincide exacto (hay muchas bandas homónimas)
+            if a.get("strArtistLogo") and (ruta.startswith("artist-mb") or norm(a.get("strArtist", "")) == norm(art)):
+                url = a["strArtistLogo"]
+                break
+        if url:
+            break
+    if not url:
+        return ""
+    for u in (url + "/preview", url):   # primero la versión chica
+        try:
+            req = urllib.request.Request(u, headers={"User-Agent": "JuegosRock/1.0"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                datos = r.read()
+            if datos[:8] == b"\x89PNG\r\n\x1a\n":
+                os.makedirs(LOGOS, exist_ok=True)
+                with open(archivo, "wb") as f:
+                    f.write(datos)
+                return "/" + archivo
+        except Exception as e:
+            print(f"   logo {art}: {e}", flush=True)
+    return ""
+
+
 def mb_banda(mbid):
     """Datos de la banda para el juego La banda del día: país, banda o solista, año en que arrancó y si sigue."""
     a = mb_get(f"artist/{mbid}?fmt=json")
@@ -396,6 +442,14 @@ def main():
             print(f"   {art}: {b}", flush=True)
         if b:
             bandas[art] = b
+    # Logos (para el Bingo rockero): solo se buscan los que todavía no se buscaron
+    for art, b in sorted(bandas.items()):
+        previa = bandas_previas.get(art) or {}
+        if "logo" in previa and (not previa["logo"] or os.path.exists(previa["logo"].lstrip("/"))):
+            b["logo"] = previa["logo"]
+            continue
+        b["logo"] = buscar_logo(art, b.get("mbid"))
+        print(f"   logo de {art}: {b['logo'] or 'no hay'}", flush=True)
     faltan = [k for k in claves if k not in discos]
     salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "bandas": bandas, "faltan": faltan}
     with open(SALIDA, "w", encoding="utf-8") as f:
