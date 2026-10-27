@@ -4567,11 +4567,22 @@ const REDES_VIDEOS=[ // rotan en la tarde de martes, jueves y sábado
   {archivo:"grilla-rockera.mp4",caption:`#️⃣ Grilla rockera: 9 casilleros, cada uno cruza dos condiciones. Elegí 90, 60 o 45 segundos y sumá más puntos cuanto más rápido. Gratis en juegosrock.com.ar\n\n${CONT_TAGS} #grillarockera`},
   {archivo:"arma-la-tapa.mp4",caption:`🧩 Armá la tapa: a la tapa le falta algo. Ponelo en su lugar y con su tamaño. ¿Sos fan de verdad? Probalo en juegosrock.com.ar\n\n${CONT_TAGS} #armalatapa`},
 ];
-async function redesPlan(dia,turno){
+async function redesPlan(dia,turno,disco){
   try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
   await esperarCache();
   const out=[], ayer=sumarDias(dia,-1), ds=diaSemana(dia), err=[];
   const intentar=async(nombre,fn)=>{ try{ await fn() }catch(e){ err.push(nombre+": "+(e&&e.message||e)); console.error(nombre,e) } };
+  // A mano: el post de aniversario de un disco puntual ("Banda|Disco"), aparte del post del día
+  if(turno==="aniversario"){
+    await intentar("aniversario",async()=>{
+      const a=aniversarios(dia).find(x=>norm(x.art+"|"+x.r.t)===norm(disco||""));
+      if(!a) throw new Error(`no hay aniversario de "${disco}" el ${dia}`);
+      const p={tipo:"aniv",dia,r:a.r,art:a.art,anios:a.anios,fecha:a.fecha};
+      await datoDe(p);
+      out.push({id:"aniv-"+norm(a.art+" "+a.r.t).replace(/\s+/g,"-"),tipo:"carrusel",caption:textoAuto(p),imgs:await placasPost(p)});
+    });
+    return {pubs:out,errores:err};
+  }
   if(turno!=="tarde"){
     // 1) post del feed: el aniversario más lindo del día, o la primera tapa del día
     await intentar("post",async()=>{
@@ -4627,8 +4638,8 @@ async function redesPlan(dia,turno){
   return {pubs:out,errores:err};
 }
 // Para la tarea de GitHub: devuelve todo listo para guardar (imágenes en JPG)
-window.redesExportar=async(dia,turno)=>{
-  const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo");
+window.redesExportar=async(dia,turno,disco)=>{
+  const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo",disco);
   return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,caption:p.caption,video:p.video||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
 };
 
