@@ -496,6 +496,14 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 #fra-google{text-decoration:none}
 .fra-ayuda code{font:500 .8rem var(--mono);background:var(--crema);padding:1px 4px}
 
+/* ---- Compartir el resultado del día ---- */
+.comp-panel{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px auto 0;padding:14px;max-width:460px;width:100%;border:3px dashed var(--tinta);background:rgba(255,246,220,.6);text-align:center;animation:tarjeta-fin .45s var(--rebote) both}
+.comp-panel b{font-family:var(--display);font-weight:400;font-size:1.15rem}
+.comp-panel .fila{gap:8px}
+.comp-panel .btn{font-size:.95rem;padding:8px 14px;text-decoration:none}
+.comp-panel .btn.wa{background:#1f9d55}
+.comp-panel small{font-size:.75rem;color:var(--sombra)}
+
 /* ---- Movimiento y toques de diseño: todo suma encima del afiche, sin cambiar los juegos ---- */
 :root{--rebote:cubic-bezier(.34,1.56,.64,1);--suave:cubic-bezier(.22,1,.36,1)}
 html{-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}
@@ -1532,7 +1540,7 @@ function mostrarFin(){
   if(TOP_ON&&!yaSubido&&g.modo==="diario"&&!g.pasado) subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
   $("b-compartir").onclick=compartir;
   const bo=$("b-otra"); if(bo) bo.onclick=()=>nuevaPartida("normal");
-  if(g.modo==="diario") arrancarReloj();
+  if(g.modo==="diario"){ arrancarReloj(); compPanel("diario",f.querySelector(".cuadros"),g.puntos*xDia(g)) }
 }
 
 function arrancarReloj(){
@@ -1692,6 +1700,7 @@ async function topGeneral(rango){
 
 // Sube un puntaje de los minijuegos con el nombre guardado y avisa en "el"
 async function topAuto(modo,genero,puntos,el){
+  if(genero==="diario") compPanel(modo,el,puntos);
   if(esPasado()){ if(el){const sp=document.createElement("span");sp.className="nota-top";sp.textContent=" · día anterior, no suma al ranking";el.appendChild(sp)} return }
   if(!TOP_ON) return;
   const nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20);
@@ -2159,7 +2168,7 @@ function pintarChipsModo(j){
 }
 function chipsModo(j,iniciar){
   document.querySelectorAll(`.modo-dia[data-juego="${j}"] button`).forEach(b=>b.onclick=()=>{
-    MODO[j]=b.dataset.m; MODO_ELEGIDO.add(j); pintarChipsModo(j); iniciar();
+    MODO[j]=b.dataset.m; MODO_ELEGIDO.add(j); pintarChipsModo(j); document.querySelectorAll(".comp-panel").forEach(x=>x.remove()); iniciar();
   });
 }
 const yaJugado=h=>`Ya jugaste el de hoy: ${h.detalle}. Volvé mañana o probá el modo Libre.`;
@@ -3328,7 +3337,7 @@ function letTerminar(){
   if(d.url){ r.querySelector("img").src=chico200(d.url); r.querySelector("img").alt="Tapa de "+d.disco }
   r.querySelector("b").textContent=d.t;
   r.querySelector("span").textContent=[LET_BANDAS[d.banda],d.disco,d.anio].filter(Boolean).join(" · ");
-  $("let-msg").textContent=j.gano?`¡Bien! Con ${j.vistas===1?"la primera frase":`${j.vistas} frases`}.${LET.modo==="diario"?` +${p}`:""}`:`Era "${d.t}".`;
+  $("let-msg").textContent=j.gano?`¡Bien! Con ${j.vistas===1?"la primera frase":`${j.vistas} frases`}.${LET.modo==="diario"?` +${p}.`:""}`:`Era "${d.t}".`;
   if(LET.modo==="diario"){
     LET.pts.push(p); LET.ronda++;
     if(LET.ronda>=Math.min(LET_DIA,LET.lista.length)){
@@ -4557,6 +4566,53 @@ function elegirDia(dia){
   document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.m==="diario"));
   $("t-diario-n").textContent="Diario #"+nDia();
   hubMarcar();
+}
+
+// ---- Compartir el resultado de un desafío del día: WhatsApp, imagen para historias o copiar ----
+function compTexto(j,p){
+  const v=Math.floor(Math.min(100,p)/20);
+  return `${EMOJI[j]} ${NOMBRES[j]} · Juegos Rock #${nDia()}\n${"🟩".repeat(v)}${"⬛".repeat(5-v)} ${p} puntos\n¿Me ganás? ${location.origin}${RUTAS[j]||"/"}`;
+}
+const compFrase=p=>p>=100?"¡Perfecto!":p>=80?"Rockero de ley":p>=50?"Nada mal":p>0?"Hay que escuchar más":"Mañana va la revancha";
+async function compImagen(j,p){
+  try{ await Promise.all([document.fonts.load('150px "Bowlby One"'),document.fonts.load("600 40px Archivo"),document.fonts.load('500 40px "JetBrains Mono"')]) }catch(e){}
+  const [c,x]=lienzo(1080,1920);
+  texto(x,"JUEGOS",90,260,{s:170,w:900}); texto(x,"ROCK",90,430,{s:170,c:CC.rojo,w:900});
+  etiqueta(x,`DESAFÍO DEL DÍA #${nDia()}`,96,500,36);
+  // tarjeta con el resultado
+  x.fillStyle=CC.tinta; x.fillRect(114,724,880,820); x.fillStyle=CC.crema; x.fillRect(90,700,880,820);
+  x.lineWidth=10; x.strokeStyle=CC.tinta; x.strokeRect(90,700,880,820);
+  texto(x,`${EMOJI[j]||""} ${NOMBRES[j]}`.trim(),530,795,{s:68,al:"center",w:780,max:2});
+  texto(x,String(p),530,1170,{s:250,al:"center",c:CC.rojo,w:780});
+  texto(x,"PUNTOS",530,1245,{f:FM,peso:"500",s:42,al:"center",w:780});
+  const v=Math.floor(Math.min(100,p)/20), S=100, G=22, X0=530-(5*S+4*G)/2;
+  for(let i=0;i<5;i++){ const X=X0+i*(S+G); x.fillStyle=CC.tinta; x.fillRect(X+8,1298,S,S); x.fillStyle=i<v?CC.ok:"#3a352c"; x.fillRect(X,1290,S,S) }
+  texto(x,compFrase(p),530,1470,{f:FB,peso:"800",s:52,al:"center",w:780});
+  texto(x,"¿Me ganás?",540,1690,{s:100,al:"center",w:900});
+  marca(x,540,1740,56);
+  return c;
+}
+async function compCompartirImagen(j,p,b){
+  const orig=b.textContent; b.disabled=true; b.textContent="Armando la imagen…";
+  try{
+    const c=await compImagen(j,p), blob=await new Promise(r=>c.toBlob(r,"image/png"));
+    const file=new File([blob],`juegosrock-${j}-${nDia()}.png`,{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],text:compTexto(j,p)}) }catch(e){} }
+    else { const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=file.name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); b.textContent="¡Descargada!" }
+    contar("compartir-imagen-"+j);
+  }catch(e){ b.textContent="No se pudo armar" }
+  b.disabled=false; setTimeout(()=>b.textContent=orig,2500);
+}
+function compPanel(j,el,p){
+  if(!el||!NOMBRES[j]||p==null) return;
+  const ancla=el.matches("span,b,small,em")&&el.parentElement?el.parentElement:el, sec=ancla.closest("section")||ancla.parentElement;
+  sec.querySelectorAll(".comp-panel").forEach(x=>x.remove());
+  const txt=compTexto(j,p), d=document.createElement("div"); d.className="comp-panel";
+  d.innerHTML=`<b>Desafiá a tus amigos</b><div class="fila"><a class="btn wa" target="_blank" rel="noopener">WhatsApp</a><button class="btn sec" type="button" data-c="img">Imagen para historias</button><button class="btn sec" type="button" data-c="txt">Copiar</button></div><small>Mañana hay un desafío nuevo.</small>`;
+  const wa=d.querySelector(".wa"); wa.href="https://wa.me/?text="+encodeURIComponent(txt); wa.onclick=()=>contar("compartir-wa-"+j);
+  d.querySelector('[data-c="img"]').onclick=e=>compCompartirImagen(j,p,e.currentTarget);
+  d.querySelector('[data-c="txt"]').onclick=async e=>{ const b=e.currentTarget; try{ await navigator.clipboard.writeText(txt); b.textContent="¡Copiado!" }catch(er){ b.textContent="No se pudo copiar" } setTimeout(()=>b.textContent="Copiar",2000) };
+  ancla.after(d);
 }
 
 // ---- Resumen del día para compartir ----
