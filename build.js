@@ -44,7 +44,9 @@ base = base.split("__SITE_URL__").join(sitio);
 let nFrases = 0;
 try {
   const d = JSON.parse(fs.readFileSync("frases.json", "utf8"));
-  nFrases = (d.temas || d.frases || []).filter(x => x && x.tema && ((Array.isArray(x.frases) && x.frases.length) || x.frase)).length;
+  // no cuentan los instrumentales (los que tienen como única frase "Instrumental")
+  const instr = x => (Array.isArray(x.frases) ? x.frases : [x.frase]).every(f => String(f || "").toLowerCase().replace(/[^a-z]/g, "") === "instrumental");
+  nFrases = (d.temas || d.frases || []).filter(x => x && x.tema && ((Array.isArray(x.frases) && x.frases.length) || x.frase) && !instr(x)).length;
 } catch {}
 const letraOn = nFrases >= 10;
 base = base.replace("__LETRA_ON__", letraOn ? "1" : "0");
