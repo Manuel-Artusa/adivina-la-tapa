@@ -1635,6 +1635,9 @@ const TOPS=[
   {id:"ahorcado",n:"Ahorcado rockero",modo:"ahorcado",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas; cada uno vale 100 menos 10 por error (la pista cuenta como error). Se promedia."},
   {id:"letra",n:"¿De qué tema es?",modo:"letra",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas. Cada uno vale 100 con la primera frase, 70 con la segunda, 40 con la tercera y 20 con la cuarta. Se promedia."},
 ].filter(t=>t.id!=="letra"||LETRA_ON);
+// Mismo orden que las tarjetas del inicio (el General queda primero)
+{ const orden=[...document.querySelectorAll(".hub [data-ir]")].map(b=>b.dataset.ir), pos=t=>t.general?-1:orden.indexOf(t.id)<0?99:orden.indexOf(t.id);
+  TOPS.sort((a,b)=>pos(a)-pos(b)) }
 function topChips(){
   const cfg=TOPS.find(t=>t.id===topTab.t)||TOPS[0];
   $("top-juegos").innerHTML=""; $("top-vars").innerHTML="";
