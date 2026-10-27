@@ -13,7 +13,7 @@ on:
       turno:
         description: "Qué publicar"
         type: choice
-        options: [manana, tarde, todo]
+        options: [manana, tarde, todo, aniversario]
         default: manana
       prueba:
         description: "Modo prueba: solo arma las imágenes para revisar, no publica"
@@ -21,6 +21,9 @@ on:
         default: true
       dia:
         description: "Día (AAAA-MM-DD). Vacío = hoy"
+        required: false
+      disco:
+        description: "Para \"aniversario\": el disco, como Banda|Disco (ej. Los Piojos|Verde Paisaje del Infierno)"
         required: false
 
 concurrency: redes
@@ -51,6 +54,7 @@ jobs:
           TURNO: ${{ github.event_name == 'schedule' && ((github.event.schedule == '7 11 * * *' || github.event.schedule == '37 13 * * *') && 'manana' || 'tarde') || inputs.turno }}
           PRUEBA: ${{ github.event_name == 'workflow_dispatch' && inputs.prueba && 'true' || 'false' }}
           DIA: ${{ inputs.dia }}
+          DISCO: ${{ inputs.disco }}
           SUPA_URL: ${{ secrets.SUPA_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           IG_TOKEN: ${{ secrets.IG_TOKEN }}

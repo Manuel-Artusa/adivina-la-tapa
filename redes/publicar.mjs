@@ -12,7 +12,8 @@ const PUBLIC = path.join(RAIZ, "public");
 const env = process.env;
 const hoyAR = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
 const DIA = env.DIA && /^\d{4}-\d{2}-\d{2}$/.test(env.DIA) ? env.DIA : hoyAR();
-const TURNO = ["manana", "tarde", "todo"].includes(env.TURNO) ? env.TURNO : "manana";
+const TURNO = ["manana", "tarde", "todo", "aniversario"].includes(env.TURNO) ? env.TURNO : "manana";
+const DISCO = (env.DISCO || "").trim(); // para "aniversario": "Banda|Disco"
 const SUPA = (env.SUPA_URL || "").replace(/\/+$/, "");
 const SERVICIO = env.SUPABASE_SERVICE_KEY || "";
 const PRUEBA = env.PRUEBA === "true" || !SUPA || !SERVICIO;
@@ -46,7 +47,7 @@ async function armar() {
   await pg.addInitScript(() => { try { localStorage.setItem("tapa-nombre", JSON.stringify("Juegos Rock")) } catch (e) {} });
   await pg.goto("http://localhost:8099/", { waitUntil: "load" });
   await pg.waitForTimeout(3000);
-  const r = await pg.evaluate(([d, t]) => window.redesExportar(d, t), [DIA, TURNO]);
+  const r = await pg.evaluate(([d, t, x]) => window.redesExportar(d, t, x), [DIA, TURNO, DISCO]);
   await b.close(); srv.close();
   fs.mkdirSync(SALIDA, { recursive: true });
   for (const p of r.pubs) {
