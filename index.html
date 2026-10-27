@@ -1027,6 +1027,9 @@ const SUPA_KEY = "__SUPA_KEY__";
 const TOP_ON = !!(SUPA_URL && SUPA_KEY && !SUPA_URL.startsWith("__") && !SUPA_KEY.startsWith("__"));
 
 // ---- Catálogo: [artista, disco, año, categoría]. Disco null = el juego elige uno real de iTunes ----
+// Cada disco: [banda, disco, año, "nac"|"int", desde, hasta]. "desde" (opcional, AAAA-MM-DD): el disco entra al
+// juego recién ese día, así sumar discos no cambia los desafíos del día en curso. "hasta": deja de usarse ese día
+// (sirve para corregir un dato sin tocar el día en curso: el viejo con "hasta" y el nuevo con "desde").
 const DISCOS = [
  ["The Beatles","Abbey Road",1969,"int"],["The Beatles","Sgt. Pepper's Lonely Hearts Club Band",1967,"int"],
  ["Pink Floyd","The Dark Side of the Moon",1973,"int"],["Pink Floyd","Wish You Were Here",1975,"int"],["Pink Floyd","The Wall",1979,"int"],
@@ -1060,8 +1063,8 @@ const DISCOS = [
  ["Los Piojos","Azul",1998,"nac"],["La Renga","Despedazado por Mil Partes",1996,"nac"],
  ["Andrés Calamaro","Alta Suciedad",1997,"nac"],["Los Abuelos de la Nada","Vasos y Besos",1983,"nac"],
  ["Gustavo Cerati","Bocanada",1999,"nac"],["Fito Páez","El Amor Después del Amor",1992,"nac"],
- ["Callejeros","Sed",2001,"nac"],["Callejeros","Presión",2003,"nac"],["Callejeros","Rocanroles sin Destino",2004,"nac"],["Callejeros","Disco Escultura",2008,"nac"],
- ["Don Osvaldo","Casi Justicia Social",2015,"nac"],["Don Osvaldo","Casi Justicia Social II",2019,"nac"],["Don Osvaldo","Flor de Ceibo",2022,"nac"],
+ ["Callejeros","Sed",2001,"nac","2026-10-28"],["Callejeros","Presión",2003,"nac","2026-10-28"],["Callejeros","Rocanroles sin Destino",2004,"nac"],["Callejeros","Disco Escultura",2008,"nac","2026-10-28"],
+ ["Don Osvaldo","Casi Justicia Social",2015,"nac","2026-10-28"],["Don Osvaldo","Casi Justicia Social II",2019,"nac","2026-10-28"],["Don Osvaldo","Flor de Ceibo",2022,"nac","2026-10-28"],
  ["Los Enanitos Verdes","Igual Que Ayer",1992,"nac"],["Catupecu Machu","Cuentos Decapitados",2004,"nac"],
  ["Bersuit Vergarabat","Libertinaje",1998,"nac"],
  ["Sui Generis","Pequeñas Anécdotas Sobre las Instituciones",1974,"nac"],["Sui Generis","Vida",1972,"nac"],
@@ -1108,7 +1111,7 @@ const DISCOS = [
  ["Pescado Rabioso","Pescado 2",1973,"nac"],["Almendra","Almendra II",1970,"nac"],["Invisible","Durazno Sangrando",1975,"nac"],
  ["Patricio Rey y sus Redonditos de Ricota","Un Baión para el Ojo Idiota",1988,"nac"],["Patricio Rey y sus Redonditos de Ricota","Lobo Suelto, Cordero Atado",1993,"nac"],["Patricio Rey y sus Redonditos de Ricota","Luzbelito",1996,"nac"],
  ["Patricio Rey y sus Redonditos de Ricota","Último Bondi a Finisterre",1998,"nac"],["Patricio Rey y sus Redonditos de Ricota","Momo Sampler",2000,"nac"],["Indio Solari","El Tesoro de los Inocentes",2004,"nac"],
- ["Indio Solari","Porco Rex",2007,"nac"],["Indio Solari","El Perfume de la Tempestad",2010,"nac"],["Indio Solari","Pajaritos, Bravos Muchachitos",2013,"nac"],["Indio Solari","El Ruiseñor, el Amor y la Muerte",2018,"nac"],
+ ["Indio Solari","Porco Rex",2010,"nac",null,"2026-10-28"],["Indio Solari","Porco Rex",2007,"nac","2026-10-28"],["Indio Solari","El Perfume de la Tempestad",2010,"nac","2026-10-28"],["Indio Solari","Pajaritos, Bravos Muchachitos",2013,"nac"],["Indio Solari","El Ruiseñor, el Amor y la Muerte",2018,"nac"],
  ["Skay Beilinson","A Través del Mar de los Sargazos",2002,"nac"],["Sumo","Divididos por la Felicidad",1985,"nac"],["Sumo","Llegando los Monos",1986,"nac"],
  ["Divididos","40 Dibujos Ahí en el Piso",1989,"nac"],["Divididos","Gol de Mujer",1998,"nac"],
  ["Divididos","Narigón del Siglo",2000,"nac"],["Divididos","Vengo del Placard de Otro",2002,"nac"],["Divididos","Amapola del 66",2010,"nac"],
@@ -1213,6 +1216,14 @@ function semillaRng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 const mezclar=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const hoyAR=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date());
+// Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
+const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set();
+{ const hoy=hoyAR(), bandas=new Set(DISCOS.map(d=>d[0]));
+  for(let i=DISCOS.length-1;i>=0;i--){ const d=DISCOS[i];
+    if((d[4]&&hoy<d[4])||(d[5]&&hoy>=d[5])){ if(d[1]&&d[4]&&hoy<d[4]) CATALOGO_FUTURO.add(d[0]+"|"+d[1]); DISCOS.splice(i,1) } }
+  DISCOS.forEach(d=>{ CATALOGO_FUTURO.delete(d[0]+"|"+d[1]); d.length=4 }); // el resto del juego ve [banda, disco, año, tipo]
+  const vigentes=new Set(DISCOS.map(d=>d[0])); bandas.forEach(b=>{ if(!vigentes.has(b)) BANDAS_FUTURAS.add(b) }) }
+const sinFuturas=lista=>{ for(let i=lista.length-1;i>=0;i--) if(BANDAS_FUTURAS.has(lista[i])) lista.splice(i,1); return lista };
 const numDiario=dia=>Math.round((Date.parse(dia)-Date.parse(INICIO_DIARIO))/864e5)+1;
 
 // ---- iTunes ----
@@ -1275,6 +1286,9 @@ const cacheListo=(async()=>{
     const j=await r.json(), porId=new Map();
     for(const v of Object.values(j.discos||{})) porId.set(v.id,v);
     CACHE={disc:j.discos||{},bandas:j.bandas||null,faltan:new Set(j.faltan||[]),porId};
+    // lo que todavía no entró al catálogo tampoco se usa desde discos.json
+    CATALOGO_FUTURO.forEach(k=>{ const v=CACHE.disc[k]; if(v){ delete CACHE.disc[k]; porId.delete(v.id) } });
+    if(CACHE.bandas) BANDAS_FUTURAS.forEach(b=>delete CACHE.bandas[b]);
   }catch(e){ CACHE=null }
 })();
 const esperarCache=()=>Promise.race([cacheListo,new Promise(r=>setTimeout(r,4000))]);
@@ -1909,11 +1923,11 @@ async function temasDe(id){
 
 // Elige qué discos pedir según el nivel (en orden de preferencia, con repuestos)
 // Solo rock nacional y bandas bien conocidas
-const CON_BANDAS=["Soda Stereo","Gustavo Cerati","Charly García","Serú Girán","Sui Generis","Luis Alberto Spinetta","Pescado Rabioso","Almendra",
+const CON_BANDAS=sinFuturas(["Soda Stereo","Gustavo Cerati","Charly García","Serú Girán","Sui Generis","Luis Alberto Spinetta","Pescado Rabioso","Almendra",
   "Patricio Rey y sus Redonditos de Ricota","Indio Solari","Sumo","Divididos","Virus","Los Abuelos de la Nada","Fito Páez","Andrés Calamaro",
   "Los Rodríguez","Los Fabulosos Cadillacs","Los Piojos","La Renga","Babasónicos","Bersuit Vergarabat","Callejeros","Don Osvaldo","Guasones","Catupecu Machu",
   "Attaque 77","Rata Blanca","Los Enanitos Verdes","Los Auténticos Decadentes","Los Pericos","Viejas Locas","Las Pastillas del Abuelo",
-  "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"];
+  "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"]);
 function conCandidatos(rng){
   const mez=a=>mezR(a,rng);
   const base=DISCOS.filter(d=>d[1]&&d[3]==="nac"&&CON_BANDAS.includes(d[0]));
@@ -2184,10 +2198,10 @@ const PASOS=[1,2,4,7,11,16];
 const TEMA_PTS=[100,80,60,40,20,10]; // puntos según en qué intento lo sacás
 const TEMA={modo:"diario",j:null,audio:null,timer:null};
 // Solo rock (barrial, pesado y afines). Sin pop, ska ni folk.
-const TEMA_BANDAS=["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
+const TEMA_BANDAS=sinFuturas(["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
   "La Renga","Los Piojos","Callejeros","Don Osvaldo","Guasones","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
   "No Te Va Gustar","El Plan de la Mariposa","Sueño de Pescado","Farolitos","Bersuit Vergarabat","Catupecu Machu",
-  "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"];
+  "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"]);
 const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0]));
 const numTema=dia=>numDiario(dia);
 
