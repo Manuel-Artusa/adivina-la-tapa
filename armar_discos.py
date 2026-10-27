@@ -4,6 +4,9 @@ guarda su id de iTunes, la tapa y la lista de temas con el fragmento de audio.
 Así el juego no tiene que buscar en iTunes cada vez: carga más rápido, no se traba
 por el límite de consultas de iTunes y el desafío del día es igual para todos.
 
+Fechas exactas a mano (para los aniversarios), también en discos_manual.json:
+  {"fechas": {"Los Piojos|Verde Paisaje del Infierno": "2000-10-27"}}
+
 Uso:
   python armar_discos.py          -> busca solo los discos nuevos (los que no están en discos.json)
   python armar_discos.py --todo   -> vuelve a buscar todo (tarda unos 30-60 minutos)
@@ -418,6 +421,10 @@ def main():
         discos[k]["mbid"] = mbid or ""
         print(f"[{n}/{len(sin_fecha)}] {art} — {alb}: {f or 'sin fecha'}", flush=True)
 
+    # Fechas cargadas a mano en discos_manual.json ("fechas": {"Banda|Disco": "AAAA-MM-DD"}), cuando MusicBrainz no tiene el día
+    for k, f in (manual.get("fechas") or {}).items():
+        if k in discos:
+            discos[k]["fecha"] = f
     # Datos de cada banda (para La banda del día). El artista sale de sus discos en MusicBrainz.
     bandas_previas = {} if todo else previo.get("bandas", {})
     bandas = {}
