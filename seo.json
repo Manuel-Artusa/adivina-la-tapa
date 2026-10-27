@@ -91,6 +91,16 @@
       "Elegí 90, 60 o 45 segundos para llenar los 9 casilleros: cuanto menos tiempo, más multiplicador de puntos. No podés repetir bandas. Hay una grilla del día igual para todos, con ranking, y un modo libre para seguir jugando."
     ]
   },
+  "bingo": {
+    "ruta": "/bingo-rockero/",
+    "titulo": "Bingo rockero · Uní cada tapa con su banda | Juegos Rock",
+    "descripcion": "Aparece la tapa de un disco y tenés que tocar la banda que lo grabó entre 12. Completá el bingo contra reloj: 90, 60 o 45 segundos. Desafío diario y modo libre.",
+    "h": "Bingo rockero: uní cada tapa con su banda",
+    "texto": [
+      "Arriba aparece la tapa de un disco de rock nacional y abajo hay una grilla con 12 bandas. Tocá la banda que lo grabó; si su casillero ya está lleno o la banda no está, salteala.",
+      "Elegí 90, 60 o 45 segundos: cuanto menos tiempo, más puntos podés sacar. El desafío del día es igual para todos y en el modo libre jugás las veces que quieras."
+    ]
+  },
   "antes": {
     "ruta": "/antes-o-despues/",
     "titulo": "¿Antes o después? · Años de discos de rock | Juegos Rock",

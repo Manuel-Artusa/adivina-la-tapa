@@ -32,6 +32,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add discos.json
+          [ -d logos ] && git add logos
           if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
           git commit -m "Actualizar discos.json"
           # Mientras buscaba (tarda un rato) pueden haber subido otros cambios: los trae y reintenta
