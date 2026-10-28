@@ -4580,111 +4580,192 @@ const VID_INFO={
   impostor:["🕵️","¿Qué tema no está?","¿Cuáles temas no son de este disco?","quetemanoesta"],
   armar:["🧩","Armá la tapa","¿De qué tapa es este pedacito?","armalatapa"],
 };
+// Cómo se juega: 3 pasos, lo que se explica durante la jugada de ejemplo y al mostrar la respuesta
+// franja de texto abajo (lo que pasa en la jugada)
+function vidFranja(x,txt,fondo=CC.tinta){ x.fillStyle=fondo; x.fillRect(0,1450,1080,150); texto(x,txt,540,1542,{f:FB,peso:"800",s:50,al:"center",w:1000,max:1,min:30,c:CC.crema}) }
+const vidPortada=j=>({dur:1.8,dibujar:(x,t)=>{ etiqueta(x,"JUEGOS ROCK",90,110,30); const a=vidEase(t*2); x.save(); x.globalAlpha=a;
+  texto(x,VID_INFO[j][0],540,720,{s:220,al:"center",w:600}); texto(x,VID_INFO[j][1].toUpperCase(),540,980,{s:110,al:"center",w:960,max:2}); x.restore(); marca(x,540,1700,50) }});
+const vidCierre=j=>({dur:2.6,dibujar:(x,t)=>{ texto(x,"¿TE ANIMÁS?",540,560,{s:120,al:"center",w:960});
+  ["Un desafío nuevo cada día","Igual para todos, con ranking","Gratis y sin descargar nada"].forEach((p,i)=>{ const a=vidEase((t*3-i*.4)/.4); if(a<=0) return; x.save(); x.globalAlpha=a; texto(x,"✔ "+p,540,760+i*120,{f:FB,peso:"800",s:52,al:"center",w:960}); x.restore() });
+  marca(x,540,1240,70) }});
 const vidFondo=x=>{ x.fillStyle=CC.papel; x.fillRect(0,0,1080,1920); x.fillStyle="rgba(0,0,0,.035)"; for(let y=0;y<1920;y+=8) x.fillRect(0,y,1080,3) };
 const vidEase=t=>1-Math.pow(1-Math.min(1,Math.max(0,t)),3);
 function vidCaja(x,X,Y,W,H,fondo=CC.crema,borde=CC.tinta,sombra=8){ x.fillStyle=borde; x.fillRect(X+sombra,Y+sombra,W,H); x.fillStyle=fondo; x.fillRect(X,Y,W,H); x.lineWidth=6; x.strokeStyle=borde; x.strokeRect(X,Y,W,H) }
-function vidCab(x,j){ etiqueta(x,"JUEGOS ROCK",90,110,30); texto(x,VID_INFO[j][1].toUpperCase(),90,290,{s:92,w:720,max:1,min:40}) }
-function vidPie(x,txt){ texto(x,txt,540,1640,{f:FB,peso:"800",s:44,al:"center",w:900}); marca(x,540,1700,50) }
-// cuenta regresiva grande en la esquina (3, 2, 1)
-function vidCuenta(x,t){ const n=3-Math.min(2,Math.floor(t*3)), k=(t*3)%1; x.save(); x.globalAlpha=1-k*.6; x.fillStyle=CC.rojo; x.beginPath(); x.arc(930,240,80+k*16,0,7); x.fill(); x.restore(); texto(x,String(n),930,282,{s:110,c:CC.crema,al:"center",w:200}) }
-const vidIntro=(j,dur=1.6)=>({dur,dibujar:(x,t)=>{ vidCab(x,j); x.save(); x.globalAlpha=vidEase(t*1.5); texto(x,VID_INFO[j][2],540,900,{f:FB,peso:"800",s:66,al:"center",w:900,max:4,lh:1.2}); x.restore(); vidPie(x,"¿Lo sacás antes del final?") }});
-const vidOutro=j=>({dur:2.2,dibujar:(x,t)=>{ texto(x,"¿LO SACASTE?",540,700,{s:120,al:"center",w:960}); texto(x,`Jugá ${VID_INFO[j][1]} y muchos juegos más, gratis y con desafío nuevo todos los días`,540,880,{f:FB,peso:"800",s:52,al:"center",w:900,max:4,lh:1.25}); marca(x,540,1240,70) }});
+function vidCab(x,j){ etiqueta(x,"JUEGOS ROCK",90,110,30); texto(x,VID_INFO[j][1].toUpperCase(),90,290,{s:84,w:680,max:1,min:40}) }
+// puntos arriba a la derecha (salta cuando suma)
+function vidPuntos(x,n,salto=0){ const s=1+.25*Math.sin(Math.PI*Math.min(1,salto)); x.save(); x.translate(915,215); x.scale(s,s); vidCaja(x,-105,-75,210,150,CC.tinta,CC.tinta,0);
+  texto(x,"PUNTOS",0,-30,{f:FM,peso:"500",s:26,al:"center",w:200,c:CC.papel}); texto(x,String(n),0,55,{s:72,al:"center",w:200,c:CC.crema}); x.restore() }
+// el "dedo": un círculo que baja y una onda donde toca
+function vidToque(x,cx,cy,t){ const e=vidEase(t/.6), y=cy+(1-e)*120; x.save(); x.globalAlpha=.9; x.fillStyle="#fff"; x.strokeStyle=CC.tinta; x.lineWidth=6; x.beginPath(); x.arc(cx+20,y+20,34,0,7); x.fill(); x.stroke();
+  if(t>.6){ const k=(t-.6)/.4; x.globalAlpha=1-k; x.lineWidth=8; x.strokeStyle=CC.rojo; x.beginPath(); x.arc(cx+20,y+20,34+k*70,0,7); x.stroke() } x.restore() }
+const vidTiembla=(t)=>Math.sin(t*60)*16*Math.max(0,1-t*2.5);
+// Motor de la jugada: cada paso es un toque (acierto o error) con su resultado; dibujar(x,{k,marcas,fase,ultimo,t})
+function vidJugar(j,pasos,dibujar,pos){
+  const esc=[]; let pts=0; const marcas=[];
+  pasos.forEach((p,k)=>{ const antes=pts, previas=marcas.slice(); if(p.ok) pts+=p.pts||0; const despues=pts; marcas.push(p); const ahora=marcas.slice();
+    if(p.preg!==0) esc.push({dur:p.preg||1.2,dibujar:(x,t)=>{ vidCab(x,j); vidPuntos(x,antes); dibujar(x,{k,marcas:previas,fase:"pregunta",t}) }});
+    esc.push({dur:.7,dibujar:(x,t)=>{ vidCab(x,j); vidPuntos(x,antes); dibujar(x,{k,marcas:previas,fase:"pregunta",t:1}); const [cx,cy]=pos(p.i,k); vidToque(x,cx,cy,t) }});
+    esc.push({dur:p.dur||1.5,dibujar:(x,t)=>{ vidCab(x,j); vidPuntos(x,despues,p.ok&&p.pts?t*3:0); dibujar(x,{k,marcas:ahora,fase:"resultado",ultimo:p,t}); if(p.franja) vidFranja(x,p.franja,p.ok?CC.ok:CC.rojo) }});
+  });
+  return esc;
+}
 async function vidImg(k){ const v=CACHE.disc[k]; return v&&v.url?await contImg(v.url):null }
 const vidDiscos=(f=()=>true)=>DISCOS.filter(d=>d[1]&&CACHE.disc[d[0]+"|"+d[1]]&&CACHE.disc[d[0]+"|"+d[1]].url&&f(d));
 const vidTemas=d=>{ const v=CACHE.disc[d[0]+"|"+d[1]]; return v&&v.temas?v.temas.map(t=>t[0]):[] };
 const vidAnio=d=>{ const v=CACHE.disc[d[0]+"|"+d[1]]; return v&&v.fecha?+v.fecha.slice(0,4):d[2] };
-// --- un armador por juego: devuelve las escenas (o null si no hay datos) ---
+const vidOtro=(lista,ok,rng)=>mezR(lista.filter((v,i)=>i!==ok),rng)[0];
+// --- una jugada simulada por juego (aciertos y errores); devuelve escenas o null si faltan datos ---
 const VID_ARMAR={
-  async tapa(rng){
-    const d=mezR(vidDiscos(d=>d[3]==="nac"),rng)[0]; if(!d) return null; const img=await vidImg(d[0]+"|"+d[1]); if(!img) return null;
-    const pasos=[5,7,10,14,20,28];
-    return [vidIntro("tapa"), ...pasos.map((n,i)=>({dur:.9,dibujar:(x,t)=>{ vidCab(x,"tapa"); tapa(x,img,190,440,700,n); vidCuenta(x,(i+t)/pasos.length); vidPie(x,"Se va aclarando…") }})),
-      {dur:3,dibujar:(x,t)=>{ vidCab(x,"tapa"); tapa(x,img,190,440,700,0); x.save(); x.globalAlpha=vidEase(t*2); texto(x,d[1],540,1290,{s:72,al:"center",w:960,max:2}); texto(x,`${d[0]} · ${vidAnio(d)}`,540,1440,{f:FB,peso:"800",s:44,al:"center",w:960,max:2}); x.restore() }}, vidOutro("tapa")];
+  async tapa(rng){ // 4 tapas, 4 opciones cada una
+    const pool=mezR(vidDiscos(d=>d[3]==="nac"),rng), rondas=[];
+    for(const d of pool){ if(rondas.length===4) break; const otros=mezR(pool.filter(e=>e[0]!==d[0]),rng).slice(0,3); if(otros.length<3) return null; rondas.push({d,ops:mezR([d,...otros],rng)}) }
+    if(rondas.length<4) return null;
+    for(const r of rondas) r.img=await vidImg(r.d[0]+"|"+r.d[1]);
+    const patron=[1,0,1,1], pos=(i)=>[90+(i%2)*460+210,1010+Math.floor(i/2)*190+75];
+    const pasos=rondas.map((r,k)=>{ const ok=r.ops.indexOf(r.d), i=patron[k]?ok:r.ops.indexOf(vidOtro(r.ops,ok,rng)); return {i,ok:!!patron[k],pts:10,franja:patron[k]?"¡Bien! +10":`No… era ${r.d[1]}`} });
+    return vidJugar("tapa",pasos,(x,{k,fase,ultimo,t})=>{ const r=rondas[k];
+      tapa(x,r.img,240,400,600,fase==="pregunta"?9:0); texto(x,`Tapa ${k+1} de 10`,540,370,{f:FM,peso:"500",s:30,al:"center",w:600});
+      r.ops.forEach((o,i)=>{ const [cx,cy]=pos(i), es=o===r.d, eleg=ultimo&&ultimo.i===i, dx=eleg&&!ultimo.ok?vidTiembla(t):0;
+        const fondo=fase==="resultado"&&es?CC.ok:fase==="resultado"&&eleg?CC.rojo:CC.crema;
+        vidCaja(x,cx-210+dx,cy-75,420,150,fondo); texto(x,o[1],cx+dx,cy-6,{f:FB,peso:"800",s:34,al:"center",w:390,max:1,c:fondo===CC.crema?CC.tinta:CC.crema}); texto(x,o[0],cx+dx,cy+40,{f:FB,peso:"600",s:26,al:"center",w:390,max:1,c:fondo===CC.crema?CC.sombra:CC.crema}) }) },pos);
   },
-  async antes(rng){
-    const ds=mezR(vidDiscos(d=>d[3]==="nac"),rng); let a=null,b=null;
-    for(const d of ds){ if(!a) a=d; else if(Math.abs(vidAnio(d)-vidAnio(a))>=3&&d[0]!==a[0]){ b=d; break } } if(!b) return null;
-    const ia=await vidImg(a[0]+"|"+a[1]), ib=await vidImg(b[0]+"|"+b[1]); const viejo=vidAnio(a)<vidAnio(b)?0:1;
-    const base=(x,rev,t)=>{ vidCab(x,"antes"); [[a,ia],[b,ib]].forEach(([d,im],i)=>{ const X=90+i*480; tapa(x,im,X,520,420,0); texto(x,d[1],X+210,1040,{f:FB,peso:"800",s:36,al:"center",w:420,max:2,lh:1.15}); texto(x,d[0],X+210,1140,{f:FB,peso:"600",s:30,al:"center",w:420,max:2,c:CC.sombra});
-      if(rev){ vidCaja(x,X+60,1200,300,130,i===viejo?CC.ok:CC.crema); texto(x,String(vidAnio(d)),X+210,1295,{s:84,al:"center",w:300,c:i===viejo?CC.crema:CC.tinta}) } }) };
-    return [vidIntro("antes"),{dur:3.2,dibujar:(x,t)=>{ base(x,false); vidCuenta(x,t); vidPie(x,"¿Cuál salió primero?") }},{dur:3,dibujar:(x,t)=>{ base(x,true); vidPie(x,`Primero salió ${[a,b][viejo][1]}`) }},vidOutro("antes")];
+  async antes(rng){ // cadena: ¿el de la derecha salió antes o después?
+    const pool=mezR(vidDiscos(d=>d[3]==="nac"),rng), cad=[pool[0]];
+    for(const d of pool){ if(cad.length===5) break; if(d[0]!==cad[cad.length-1][0]&&vidAnio(d)!==vidAnio(cad[cad.length-1])) cad.push(d) }
+    if(cad.length<5) return null; const imgs=await Promise.all(cad.map(d=>vidImg(d[0]+"|"+d[1])));
+    const patron=[1,1,1,0], pos=i=>[i?740:340,1290];
+    const pasos=patron.map((g,k)=>{ const antes=vidAnio(cad[k+1])<vidAnio(cad[k]), bien=antes?0:1; return {i:g?bien:1-bien,ok:!!g,pts:10,franja:g?"¡Bien! +10":`No: salió en ${vidAnio(cad[k+1])}. Racha de ${k}`} });
+    return vidJugar("antes",pasos,(x,{k,fase,ultimo,t})=>{ [k,k+1].forEach((n,s)=>{ const X=90+s*480; tapa(x,imgs[n],X,420,420,0); texto(x,cad[n][1],X+210,920,{f:FB,peso:"800",s:34,al:"center",w:420,max:2,lh:1.1});
+        const ver=s===0||fase==="resultado"; vidCaja(x,X+90,1010,240,110,ver?CC.tinta:"#3a352c"); texto(x,ver?String(vidAnio(cad[n])):"?",X+210,1092,{s:70,al:"center",w:240,c:CC.papel}) });
+      ["ANTES","DESPUÉS"].forEach((b,i)=>{ const [cx,cy]=pos(i), eleg=ultimo&&ultimo.i===i, dx=eleg&&!ultimo.ok?vidTiembla(t):0, fondo=fase==="resultado"&&eleg?(ultimo.ok?CC.ok:CC.rojo):CC.crema;
+        vidCaja(x,cx-180+dx,cy-65,360,130,fondo); texto(x,b,cx+dx,cy+24,{s:58,al:"center",w:340,c:fondo===CC.crema?CC.tinta:CC.crema}) }) },pos);
   },
-  async orden(rng){
+  async bingo(rng){ // 6 bandas; van pasando tapas
+    const bandas=mezR(CON_BANDAS.filter(b=>vidDiscos(d=>d[0]===b).length),rng).slice(0,6); if(bandas.length<6) return null;
+    const orden=mezR([0,1,2,3,4],rng), mazo=[];
+    for(const [k,g] of [1,1,0,1,1].entries()){ const b=bandas[orden[k]], d=mezR(vidDiscos(e=>e[0]===b),rng)[0]; mazo.push({b,d,img:await vidImg(d[0]+"|"+d[1]),ok:!!g}) }
+    const pos=i=>[130+(i%3)*285+120,900+Math.floor(i/3)*270+120];
+    const llenas=new Set(), pasos=mazo.map(m=>{ const bien=bandas.indexOf(m.b), libres=bandas.filter((b,i)=>i!==bien&&!llenas.has(i)); if(m.ok) llenas.add(bien);
+      return {i:m.ok?bien:bandas.indexOf(mezR(libres,rng)[0]),ok:m.ok,pts:10,mazo:m,franja:m.ok?`¡Bingo! ${BIN_CORTO[m.b]||m.b}`:`No… era de ${BIN_CORTO[m.b]||m.b}`} });
+    return vidJugar("bingo",pasos,(x,{k,marcas,fase,ultimo,t})=>{ tapa(x,mazo[k].img,350,380,380,0);
+      bandas.forEach((b,i)=>{ const [cx,cy]=pos(i), lleno=marcas.find(m=>m.ok&&m.i===i), eleg=ultimo&&ultimo.i===i&&!ultimo.ok, dx=eleg?vidTiembla(t):0;
+        vidCaja(x,cx-120+dx,cy-120,240,240,lleno?CC.ok:eleg?CC.rojo:CC.crema);
+        if(lleno&&lleno.mazo.img){ x.globalAlpha=.85; x.drawImage(lleno.mazo.img,cx-114,cy-114,228,228); x.globalAlpha=1; x.fillStyle=CC.ok; x.fillRect(cx-114,cy+60,228,54); texto(x,BIN_CORTO[b]||b,cx,cy+98,{f:FB,peso:"800",s:24,al:"center",w:220,c:CC.crema}) }
+        else texto(x,BIN_CORTO[b]||b,cx+dx,cy+15,{s:38,al:"center",w:210,max:3,lh:1.05,c:eleg?CC.crema:CC.tinta}) }) },pos);
+  },
+  async abre(rng){ // 3 discos: ¿qué tema abre?
+    const pool=mezR(vidDiscos(d=>vidTemas(d).length>=6),rng).slice(0,3); if(pool.length<3) return null;
+    const rondas=await Promise.all(pool.map(async d=>{ const ts=vidTemas(d); return {d,ts,ops:mezR([ts[0],...mezR(ts.slice(1),rng).slice(0,3)],rng),img:await vidImg(d[0]+"|"+d[1])} }));
+    const patron=[1,0,1], pos=i=>[540,960+i*125+52];
+    const pasos=rondas.map((r,k)=>{ const ok=r.ops.indexOf(r.ts[0]); return {i:patron[k]?ok:r.ops.indexOf(vidOtro(r.ops,ok,rng)),ok:!!patron[k],pts:20,franja:patron[k]?"¡Bien! +20":`No… abre con ${r.ts[0]}`} });
+    return vidJugar("abre",pasos,(x,{k,fase,ultimo,t})=>{ const r=rondas[k]; tapa(x,r.img,340,400,400,0); texto(x,`${r.d[1]} · ${r.d[0]}`,540,890,{f:FB,peso:"800",s:36,al:"center",w:960,max:1});
+      r.ops.forEach((o,i)=>{ const [cx,cy]=pos(i), es=o===r.ts[0], eleg=ultimo&&ultimo.i===i, dx=eleg&&!ultimo.ok?vidTiembla(t):0, fondo=fase==="resultado"&&es?CC.ok:fase==="resultado"&&eleg?CC.rojo:CC.crema;
+        vidCaja(x,110+dx,cy-52,860,105,fondo); texto(x,o,cx+dx,cy+16,{f:FB,peso:"800",s:40,al:"center",w:820,max:1,c:fondo===CC.crema?CC.tinta:CC.crema}) }) },pos);
+  },
+  async impostor(rng){ // marcar a los temas que no son del disco
+    const ds=mezR(vidDiscos(d=>d[0]==="La Vela Puerca"&&vidTemas(d).length>=6),rng); const a=ds[0], b=ds[1]; if(!a||!b) return null;
+    const ta=vidTemas(a), imp=mezR(vidTemas(b).filter(t=>!ta.some(y=>norm(y)===norm(t))),rng).slice(0,2); if(imp.length<2) return null;
+    const lista=mezR([...mezR(ta,rng).slice(0,4),...imp],rng), img=await vidImg(a[0]+"|"+a[1]), pos=i=>[540,740+i*115+49];
+    const inoc=lista.findIndex(t=>!imp.includes(t));
+    const pasos=[{i:lista.indexOf(imp[0]),ok:true,pts:10,franja:"¡Atrapado! No es de este disco"},{i:inoc,ok:false,franja:"No… ese sí es del disco"},{i:lista.indexOf(imp[1]),ok:true,pts:10,franja:"¡Otro impostor! +10"}];
+    return vidJugar("impostor",pasos,(x,{marcas,ultimo,t})=>{ tapa(x,img,90,400,300,0); texto(x,a[1],430,520,{s:52,w:560,max:3,lh:1.05}); texto(x,"¿Qué temas no son de este disco?",430,640,{f:FB,peso:"800",s:30,w:560,max:2});
+      lista.forEach((s,i)=>{ const [cx,cy]=pos(i), m=marcas.find(z=>z.i===i), dx=ultimo&&ultimo.i===i&&!ultimo.ok?vidTiembla(t):0, fondo=m?(m.ok?CC.rojo:"#3a352c"):CC.crema;
+        vidCaja(x,110+dx,cy-49,860,98,fondo); texto(x,s,cx+dx,cy+15,{f:FB,peso:"800",s:38,al:"center",w:820,c:m?CC.crema:CC.tinta}) }) },pos);
+  },
+  async grilla(rng){ // completar casilleros: uno mal
+    const g=griArmar(rng); if(!g) return null; const X0=330,Y0=560,S=230,G=14, usadas=new Set(), todas=griBandas().map(b=>b.a);
+    const elegidas=g.resp.map(r=>{ const b=mezR(r,rng).find(n=>!usadas.has(n))||r[0]; usadas.add(b); return b });
+    const celdas=mezR([0,1,2,3,4,5,6,7,8],rng).slice(0,5), pos=k=>[X0+(k%3)*(S+G)+S/2,Y0+Math.floor(k/3)*(S+G)+S/2];
+    const pasos=celdas.map((c,n)=>{ if(n===2){ const mal=mezR(todas.filter(b=>!g.resp[c].includes(b)),rng)[0]; return {i:c,ok:false,banda:mal,franja:`✘ ${mal} no cumple las dos`} } return {i:c,ok:true,pts:10,banda:elegidas[c],franja:`✔ ${elegidas[c]}`} });
+    return vidJugar("grilla",pasos,(x,{marcas,ultimo,t})=>{
+      g.cols.forEach((cc,j)=>texto(x,cc.t,X0+j*(S+G)+S/2,Y0-40,{f:FB,peso:"800",s:28,al:"center",w:S,max:3,lh:1.1,min:18}));
+      g.filas.forEach((f,i)=>texto(x,f.t,90,Y0+i*(S+G)+S/2-10,{f:FB,peso:"800",s:28,w:220,max:3,lh:1.1,min:18}));
+      for(let k=0;k<9;k++){ const [cx,cy]=pos(k), m=marcas.filter(z=>z.i===k).pop(), malAhora=ultimo&&ultimo.i===k&&!ultimo.ok, dx=malAhora?vidTiembla(t):0, lleno=m&&m.ok;
+        vidCaja(x,cx-S/2+dx,cy-S/2,S,S,lleno?CC.ok:malAhora?CC.rojo:CC.crema,CC.tinta,6); if(lleno||malAhora) texto(x,m.banda,cx+dx,cy+12,{s:32,al:"center",w:S-20,max:3,lh:1.05,c:CC.crema}) } },pos);
+  },
+  async conexiones(rng){ // dos discos mezclados: un envío con uno de más, después los grupos
+    const ds=mezR(vidDiscos(d=>d[3]==="nac"&&vidTemas(d).length>=6),rng); const a=ds[0], b=ds.find(d=>d[0]!==a[0]); if(!a||!b) return null;
+    const ga=mezR(vidTemas(a),rng).slice(0,4), gb=mezR(vidTemas(b),rng).slice(0,4), fichas=mezR([...ga.map(t=>[t,0]),...gb.map(t=>[t,1])],rng);
+    const ims=[await vidImg(a[0]+"|"+a[1]),await vidImg(b[0]+"|"+b[1])], col=["#86c06c","#6fb3d9"], pos=()=>[540,1300];
+    const sel0=[...fichas.map((f,i)=>f[1]===0?i:-1).filter(i=>i>=0).slice(0,3),fichas.findIndex(f=>f[1]===1)];
+    const pasos=[{i:0,ok:false,sel:sel0,franja:"¡Casi! Hay uno que no va"},{i:0,ok:true,pts:50,grupo:0,sel:fichas.map((f,i)=>f[1]===0?i:-1).filter(i=>i>=0),franja:`¡Grupo! ${a[1]}`},{i:0,ok:true,pts:50,grupo:1,sel:fichas.map((f,i)=>f[1]===1?i:-1).filter(i=>i>=0),franja:`¡Grupo! ${b[1]}`}];
+    pasos.forEach(p=>p.preg=1.4);
+    return vidJugar("conexiones",pasos,(x,{k,marcas,fase,ultimo,t})=>{ const hechos=marcas.filter(m=>m.ok).map(m=>m.grupo), sel=fase==="pregunta"?pasos[k].sel:[];
+      // primero los grupos ya armados, después las fichas sueltas
+      let fila=0; hechos.forEach(gp=>{ const Y=420+fila*170; vidCaja(x,110,Y,860,140,col[gp]); tapa(x,ims[gp],130,Y+15,110,0); texto(x,[a,b][gp][1],600,Y+86,{f:FB,peso:"800",s:38,al:"center",w:680,max:1}); fila++ });
+      fichas.map((f,i)=>[f,i]).filter(([f])=>!hechos.includes(f[1])).forEach(([f,i],n)=>{ const X=110+(n%2)*440, Y=420+fila*170+Math.floor(n/2)*170, s=sel.includes(i), malF=ultimo&&!ultimo.ok&&ultimo.sel.includes(i), dx=malF?vidTiembla(t):0;
+        vidCaja(x,X+dx,Y,400,140,s?CC.tinta:CC.crema); texto(x,f[0],X+200+dx,Y+84,{f:FB,peso:"800",s:34,al:"center",w:370,max:2,lh:1.1,c:s?CC.crema:CC.tinta}) });
+      vidCaja(x,390,1300-55,300,110,CC.rojo); texto(x,"ENVIAR",540,1300+22,{s:52,al:"center",w:280,c:CC.crema}) },pos);
+  },
+  async orden(rng){ // un intento con dos discos al revés y otro bien
     const por={}; vidDiscos(d=>d[3]==="nac").forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
     const banda=mezR(Object.keys(por).filter(b=>new Set(por[b].map(vidAnio)).size>=4),rng)[0]; if(!banda) return null;
     const ds=[]; for(const d of mezR(por[banda],rng)) if(!ds.some(e=>vidAnio(e)===vidAnio(d))&&ds.length<4) ds.push(d);
-    const imgs=await Promise.all(ds.map(d=>vidImg(d[0]+"|"+d[1]))), orden=ds.map((d,i)=>i).sort((i,k)=>vidAnio(ds[i])-vidAnio(ds[k]));
-    const grilla=(x,lista,rev)=>lista.forEach((i,p)=>{ const X=150+(p%2)*420, Y=470+Math.floor(p/2)*540; tapa(x,imgs[i],X,Y,360,0); texto(x,rev?`${p+1}. ${vidAnio(ds[i])}`:"?",X+180,Y+450,{s:58,al:"center",w:380,c:rev?CC.rojo:CC.tinta}) });
-    return [vidIntro("orden"),{dur:3.2,dibujar:(x,t)=>{ vidCab(x,"orden"); texto(x,banda,540,410,{f:FB,peso:"800",s:44,al:"center",w:960}); grilla(x,ds.map((d,i)=>i),false); vidCuenta(x,t) }},
-      {dur:3.4,dibujar:(x,t)=>{ vidCab(x,"orden"); texto(x,banda,540,410,{f:FB,peso:"800",s:44,al:"center",w:960}); grilla(x,orden,true) }},vidOutro("orden")];
+    const bien=ds.slice().sort((p,q)=>vidAnio(p)-vidAnio(q)), mal=[bien[1],bien[0],bien[2],bien[3]], imgs=new Map(await Promise.all(ds.map(async d=>[d,await vidImg(d[0]+"|"+d[1])])));
+    const pos=()=>[540,1340];
+    const pasos=[{i:0,ok:false,lista:mal,preg:1.6,franja:"Dos están al revés: queda un intento menos"},{i:0,ok:true,pts:60,lista:bien,preg:1.6,franja:"¡Perfecto! +60"}];
+    return vidJugar("orden",pasos,(x,{k,fase,ultimo,t})=>{ const lista=pasos[k].lista; texto(x,banda,540,400,{f:FB,peso:"800",s:44,al:"center",w:960});
+      lista.forEach((d,n)=>{ const Y=450+n*200, okP=d===bien[n], fondo=fase==="resultado"?(okP?CC.ok:CC.rojo):CC.crema, dx=fase==="resultado"&&!okP?vidTiembla(t):0;
+        vidCaja(x,110+dx,Y,860,175,fondo); tapa(x,imgs.get(d),130+dx,Y+18,140,0); texto(x,d[1],300+dx,Y+80,{f:FB,peso:"800",s:38,w:640,max:1,c:fondo===CC.crema?CC.tinta:CC.crema}); texto(x,fase==="resultado"?String(vidAnio(d)):"¿?",300+dx,Y+138,{f:FM,peso:"500",s:34,w:300,c:fondo===CC.crema?CC.sombra:CC.crema}) });
+      vidCaja(x,330,1340-55,420,110,CC.rojo); texto(x,"COMPROBAR",540,1340+22,{s:50,al:"center",w:400,c:CC.crema}) },pos);
   },
-  async abre(rng){
-    const d=mezR(vidDiscos(d=>vidTemas(d).length>=6),rng)[0]; if(!d) return null; const img=await vidImg(d[0]+"|"+d[1]);
-    const ts=vidTemas(d), ops=mezR([ts[0],...mezR(ts.slice(1),rng).slice(0,3)],rng);
-    const base=(x,rev)=>{ vidCab(x,"abre"); tapa(x,img,340,400,400,0); texto(x,`${d[1]} · ${d[0]}`,540,900,{f:FB,peso:"800",s:38,al:"center",w:960,max:2});
-      ops.forEach((o,i)=>{ const Y=980+i*140, ok=rev&&o===ts[0]; vidCaja(x,110,Y,860,110,ok?CC.ok:CC.crema); texto(x,o,540,Y+72,{f:FB,peso:"800",s:40,al:"center",w:820,c:ok?CC.crema:CC.tinta}) }) };
-    return [vidIntro("abre"),{dur:3.2,dibujar:(x,t)=>{ base(x,false); vidCuenta(x,t) }},{dur:3,dibujar:(x,t)=>{ base(x,true) }},vidOutro("abre")];
+  async ahorcado(rng){ // letras: algunas están, otras no
+    const d=mezR(vidDiscos(d=>d[3]==="nac"),rng).find(d=>vidTemas(d).some(t=>t.length>=6&&t.length<=18)); if(!d) return null;
+    const tema=mezR(vidTemas(d).filter(t=>t.length>=6&&t.length<=18),rng)[0], img=await vidImg(d[0]+"|"+d[1]);
+    const tiene=[...new Set([...norm(tema).replace(/[^a-z]/g,"")])].map(c=>c.toUpperCase()), no=mezR([..."AEIOUSRNTLCDMP"].filter(c=>!tiene.includes(c)),rng);
+    const sec=[], si=mezR(tiene,rng); let s=0,n=0; for(const g of [1,1,0,1,1,0,1,1,1,1,1,1]){ if(g&&s<si.length) sec.push({c:si[s++],ok:true}); else if(!g&&n<no.length) sec.push({c:no[n++],ok:false}) }
+    while(s<si.length) sec.push({c:si[s++],ok:true});
+    const teclas=["QWERTYUIOP","ASDFGHJKLÑ","ZXCVBNM"], pos=c=>{ for(const [f,fila] of teclas.entries()){ const i=fila.indexOf(c); if(i>=0){ const w=90, X0=540-fila.length*w/2; return [X0+i*w+w/2,1110+f*105] } } return [540,1200] };
+    const pasos=sec.map(z=>({i:z.c,ok:z.ok,pts:z.ok?5:0,preg:.35,dur:.8}));
+    pasos[pasos.length-1].dur=2.2; pasos[pasos.length-1].franja="¡Tema adivinado!";
+    return vidJugar("ahorcado",pasos,(x,{marcas,fase,ultimo,t})=>{ const vistas=new Set(marcas.filter(m=>m.ok).map(m=>m.i)), errores=marcas.filter(m=>!m.ok).length, fin=vistas.size===tiene.length;
+      texto(x,d[0],540,420,{f:FB,peso:"800",s:44,al:"center",w:960});
+      const txt=tema.split(/\s+/).map(w=>[...w].map(c=>{ const b=norm(c).toUpperCase(); return !b?c:vistas.has(b)?c.toUpperCase():"_" }).join(" ")).join("  ·  ");
+      texto(x,txt,540,640,{f:FM,peso:"500",s:66,al:"center",w:960,max:1,min:18}); texto(x,`Errores: ${errores} de 6`,540,760,{f:FB,peso:"800",s:40,al:"center",w:600,c:errores?CC.rojo:CC.sombra});
+      if(fin&&fase==="resultado") tapa(x,img,450,830,180,0);
+      teclas.forEach((fila,f)=>[...fila].forEach((c,i)=>{ const w=90, X0=540-fila.length*w/2, X=X0+i*w, Y=1110+f*105-45, m=marcas.find(z=>z.i===c), dx=ultimo&&ultimo.i===c&&!ultimo.ok?vidTiembla(t):0;
+        vidCaja(x,X+5+dx,Y,80,90,m?(m.ok?CC.ok:"#3a352c"):CC.crema,CC.tinta,4); texto(x,c,X+45+dx,Y+64,{f:FB,peso:"800",s:40,al:"center",w:70,c:m?CC.crema:CC.tinta}) })) },pos);
   },
-  async bingo(rng){
-    const bandas=mezR(CON_BANDAS.filter(b=>vidDiscos(d=>d[0]===b).length),rng).slice(0,6); if(bandas.length<6) return null;
-    const ob=bandas[Math.floor(rng()*6)], d=mezR(vidDiscos(e=>e[0]===ob),rng)[0], img=await vidImg(d[0]+"|"+d[1]);
-    const base=(x,rev)=>{ vidCab(x,"bingo"); tapa(x,img,330,380,420,0); bandas.forEach((b,i)=>{ const X=110+(i%3)*290, Y=920+Math.floor(i/3)*290, ok=rev&&b===ob; vidCaja(x,X,Y,250,250,ok?CC.ok:CC.crema); texto(x,BIN_CORTO[b]||b,X+125,Y+140,{s:40,al:"center",w:220,max:3,lh:1.05,c:ok?CC.crema:CC.tinta}) }) };
-    return [vidIntro("bingo"),{dur:3.2,dibujar:(x,t)=>{ base(x,false); vidCuenta(x,t) }},{dur:3,dibujar:(x,t)=>{ base(x,true); vidPie(x,`${d[1]} · ${vidAnio(d)}`) }},vidOutro("bingo")];
+  async letra(rng){ // escribe un tema mal, aparece otra frase y lo saca
+    if(!LETRA_ON) return null; await frasesListas; const f=mezR(FRASES.filter(x=>letFrasesDe(x).length>=2),rng)[0]; if(!f) return null;
+    const fs=letFrasesDe(f).slice(0,2), temas=letTemas(), dt=temas.find(y=>y.k===norm(f.tema)), otro=mezR(temas.filter(y=>y.banda===(f.banda||"redondos")&&y.k!==norm(f.tema)),rng)[0];
+    if(!otro) return null; const img=dt&&dt.url?await contImg(dt.url):null, pos=()=>[860,1290];
+    const pasos=[{i:0,ok:false,txt:otro.t,preg:1.8,franja:"No es ese: aparece otra frase"},{i:0,ok:true,pts:70,txt:f.tema,preg:1.8,franja:`¡Bien! Era ${f.tema}`}];
+    return vidJugar("letra",pasos,(x,{k,marcas,fase,ultimo,t})=>{ const n=Math.min(fs.length,k+1);
+      fs.slice(0,n).forEach((z,i)=>{ const Y=420+i*270, act=i===n-1; vidCaja(x,90,Y,900,230,act?CC.tinta:CC.crema); texto(x,`“${z}”`,540,Y+130,{f:FB,peso:"800",s:42,al:"center",w:840,max:3,lh:1.2,c:act?CC.crema:CC.tinta}) });
+      const p=pasos[k], escrito=fase==="pregunta"?p.txt.slice(0,Math.ceil(p.txt.length*vidEase(t*1.3))):p.txt, dx=ultimo&&!ultimo.ok?vidTiembla(t):0;
+      vidCaja(x,90+dx,1240,640,110,fase==="resultado"?(ultimo.ok?CC.ok:CC.rojo):"#fff"); texto(x,escrito,120+dx,1312,{f:FB,peso:"800",s:38,w:590,max:1,c:fase==="resultado"?CC.crema:CC.tinta});
+      vidCaja(x,760,1240,230,110,CC.rojo); texto(x,"ADIVINAR",875,1312,{s:36,al:"center",w:210,c:CC.crema});
+      if(fase==="resultado"&&ultimo.ok&&img) tapa(x,img,430,960,220,0) },pos);
   },
-  async banda(rng){
-    const o=banElegir(rng); if(!o||!o.datos) return null; const d=mezR(o.ds,rng)[0], img=await vidImg(d[0]+"|"+d[1]), D=o.datos;
-    const pistas=[["País",PAIS_CORTO[D.pais]||paisNombre(D.pais)],["Tipo",D.tipo==="solista"?"Solista":"Banda"],["Arrancó",String(D.inicio)],["¿Sigue?",D.sigue?"Sí":"No"]];
-    const base=(x,n)=>{ vidCab(x,"banda"); pistas.forEach(([k,v],i)=>{ const Y=430+i*170; vidCaja(x,110,Y,860,140,i<n?CC.crema:"#3a352c"); texto(x,k,150,Y+88,{f:FB,peso:"800",s:40,w:300,c:i<n?CC.sombra:CC.crema}); if(i<n) texto(x,v,930,Y+92,{s:58,al:"right",w:520}) }) };
-    return [vidIntro("banda"),...pistas.map((p,i)=>({dur:1.1,dibujar:(x,t)=>{ base(x,i+1); vidCuenta(x,(i+t)/pistas.length) }})),
-      {dur:3.2,dibujar:(x,t)=>{ base(x,4); tapa(x,img,390,1130,300,0); texto(x,o.a,540,1540,{s:66,al:"center",w:960,max:2}) }},vidOutro("banda")];
+  async banda(rng){ // dos intentos con pistas y el tercero la saca
+    const o=banElegir(rng); if(!o||!o.datos) return null; const D=o.datos;
+    const otras=mezR(banPool().map(([a])=>a).filter(a=>a!==o.a&&banDatos(a)),rng).slice(0,2); if(otras.length<2) return null;
+    const comp=a=>{ const g=banDatos(a); return [[PAIS_CORTO[g.pais]||paisNombre(g.pais),g.pais===D.pais?"ok":"mal"],[g.tipo==="solista"?"Solista":"Banda",g.tipo===D.tipo?"ok":"mal"],
+      [String(g.inicio)+(g.inicio===D.inicio?"":g.inicio<D.inicio?" ↑":" ↓"),g.inicio===D.inicio?"ok":Math.abs(g.inicio-D.inicio)<=5?"cerca":"mal"],[g.sigue?"Sí":"No",!!g.sigue===!!D.sigue?"ok":"mal"]] };
+    const intentos=[...otras,o.a], pos=()=>[860,1330], col={ok:CC.ok,cerca:"#e0b12e",mal:"#3a352c"};
+    const pasos=intentos.map((a,k)=>({i:0,ok:k===2,pts:k===2?80:0,a,preg:.9,franja:k===2?`¡Es ${o.a}! +80`:"Mirá las pistas: verde coincide, amarillo cerca"}));
+    return vidJugar("banda",pasos,(x,{k,marcas,fase,ultimo,t})=>{
+      ["País","Tipo","Arrancó","Sigue"].forEach((c,i)=>texto(x,c,445+i*150,400,{f:FM,peso:"500",s:24,al:"center",w:150,c:CC.sombra}));
+      marcas.forEach((m,n)=>{ const Y=430+n*150; vidCaja(x,90,Y,280,120,m.ok?CC.ok:CC.crema,CC.tinta,4); texto(x,m.a,230,Y+72,{f:FB,peso:"800",s:28,al:"center",w:260,max:2,lh:1.05,c:m.ok?CC.crema:CC.tinta});
+        comp(m.a).forEach(([v,e],i)=>{ vidCaja(x,375+i*150,Y,140,120,col[e],CC.tinta,4); texto(x,v,445+i*150,Y+72,{f:FB,peso:"800",s:26,al:"center",w:130,max:1,c:e==="cerca"?CC.tinta:CC.crema}) }) });
+      const escrito=fase==="pregunta"?intentos[k].slice(0,Math.ceil(intentos[k].length*vidEase(t*1.4))):"";
+      vidCaja(x,90,1280,640,110,"#fff"); texto(x,escrito||"Escribí una banda",120,1352,{f:FB,peso:"800",s:36,w:590,max:1,c:escrito?CC.tinta:CC.sombra}); vidCaja(x,760,1280,230,110,CC.rojo); texto(x,"PROBAR",875,1352,{s:40,al:"center",w:210,c:CC.crema}) },pos);
   },
-  async conexiones(rng){
-    const ds=mezR(vidDiscos(d=>d[3]==="nac"&&vidTemas(d).length>=6),rng); const a=ds[0], b=ds.find(d=>d[0]!==a[0]); if(!a||!b) return null;
-    const ga=mezR(vidTemas(a),rng).slice(0,4), gb=mezR(vidTemas(b),rng).slice(0,4), todos=mezR([...ga.map(t=>[t,0]),...gb.map(t=>[t,1])],rng);
-    const ims=[await vidImg(a[0]+"|"+a[1]),await vidImg(b[0]+"|"+b[1])], col=["#86c06c","#6fb3d9"];
-    const fichas=(x,lista,rev)=>lista.forEach(([t,g],i)=>{ const X=110+(i%2)*440, Y=420+Math.floor(i/2)*200; vidCaja(x,X,Y,400,170,rev?col[g]:CC.crema); texto(x,t,X+200,Y+98,{f:FB,peso:"800",s:36,al:"center",w:370,max:2,lh:1.1}) });
-    const agrupado=[...ga.map(t=>[t,0]),...gb.map(t=>[t,1])];
-    return [vidIntro("conexiones"),{dur:3.4,dibujar:(x,t)=>{ vidCab(x,"conexiones"); fichas(x,todos,false); vidCuenta(x,t); vidPie(x,"Hay dos discos mezclados") }},
-      {dur:3.4,dibujar:(x,t)=>{ vidCab(x,"conexiones"); fichas(x,agrupado,true); [a,b].forEach((d,i)=>{ tapa(x,ims[i],110+i*480,1250,150,0); texto(x,d[1],300+i*480,1320,{f:FB,peso:"800",s:30,w:250,max:3,lh:1.1}) }) }},vidOutro("conexiones")];
-  },
-  async ahorcado(rng){
-    const d=mezR(vidDiscos(d=>d[3]==="nac"&&vidTemas(d).length),rng).find(d=>vidTemas(d).some(t=>t.length>=6&&t.length<=20)); if(!d) return null;
-    const tema=mezR(vidTemas(d).filter(t=>t.length>=6&&t.length<=20),rng)[0], img=await vidImg(d[0]+"|"+d[1]);
-    const letras=[...new Set([...norm(tema).replace(/ /g,"")])], orden=mezR(letras,rng);
-    const palabra=(x,n)=>{ const vistas=new Set(orden.slice(0,n)); const txt=tema.split(/\s+/).map(w=>[...w].map(c=>{ const b=norm(c); return !b?c:vistas.has(b)?c.toUpperCase():"_" }).join(" ")).join("  ·  "); texto(x,txt,540,900,{f:FM,peso:"500",s:70,al:"center",w:980,max:1,min:28}) };
-    const pasos=Math.max(1,orden.length-2);
-    return [vidIntro("ahorcado"),{dur:4.5,dibujar:(x,t)=>{ vidCab(x,"ahorcado"); texto(x,d[0],540,520,{f:FB,peso:"800",s:46,al:"center",w:960}); palabra(x,Math.floor(t*pasos)); vidCuenta(x,t) }},
-      {dur:3,dibujar:(x,t)=>{ vidCab(x,"ahorcado"); texto(x,d[0],540,520,{f:FB,peso:"800",s:46,al:"center",w:960}); palabra(x,orden.length); tapa(x,img,390,1080,300,0) }},vidOutro("ahorcado")];
-  },
-  async letra(rng){
-    if(!LETRA_ON) return null; await frasesListas; const f=mezR(FRASES.filter(x=>letFrasesDe(x).length>=3),rng)[0]; if(!f) return null;
-    const fs=letFrasesDe(f).slice(0,3), dt=letTemas().find(y=>y.k===norm(f.tema)), img=dt&&dt.url?await contImg(dt.url):null;
-    const frase=(x,s,Y,activa)=>{ vidCaja(x,90,Y,900,250,activa?CC.tinta:CC.crema); texto(x,`“${s}”`,540,Y+140,{f:FB,peso:"800",s:44,al:"center",w:840,max:3,lh:1.2,c:activa?CC.crema:CC.tinta}) };
-    return [vidIntro("letra"),...fs.map((s,i)=>({dur:2,dibujar:(x,t)=>{ vidCab(x,"letra"); fs.slice(0,i+1).forEach((z,k)=>frase(x,z,430+k*300,k===i)); vidCuenta(x,(i+t)/fs.length) }})),
-      {dur:3,dibujar:(x,t)=>{ vidCab(x,"letra"); if(img) tapa(x,img,340,450,400,0); texto(x,f.tema,540,1000,{s:76,al:"center",w:960,max:2}); texto(x,`${LET_NOMBRE[f.banda]||""} · ${f.disco||""}`,540,1150,{f:FB,peso:"800",s:38,al:"center",w:960,max:2}) }},vidOutro("letra")];
-  },
-  async impostor(rng){
-    const ds=mezR(vidDiscos(d=>d[0]==="La Vela Puerca"&&vidTemas(d).length>=6),rng); const a=ds[0], b=ds[1]; if(!a||!b) return null;
-    const ta=vidTemas(a), imp=mezR(vidTemas(b).filter(t=>!ta.some(y=>norm(y)===norm(t))),rng).slice(0,2); if(imp.length<2) return null;
-    const lista=mezR([...mezR(ta,rng).slice(0,4),...imp],rng), img=await vidImg(a[0]+"|"+a[1]);
-    const base=(x,rev)=>{ vidCab(x,"impostor"); tapa(x,img,90,400,300,0); texto(x,a[1],430,520,{s:52,w:560,max:3,lh:1.05}); lista.forEach((t,i)=>{ const Y=780+i*130, mal=rev&&imp.includes(t); vidCaja(x,110,Y,860,105,mal?CC.rojo:CC.crema); texto(x,t,540,Y+68,{f:FB,peso:"800",s:38,al:"center",w:820,c:mal?CC.crema:CC.tinta}) }) };
-    return [vidIntro("impostor"),{dur:3.4,dibujar:(x,t)=>{ base(x,false); vidCuenta(x,t) }},{dur:3,dibujar:(x,t)=>{ base(x,true); vidPie(x,`Los de rojo son de ${b[1]}`) }},vidOutro("impostor")];
-  },
-  async grilla(rng){
-    const g=griArmar(rng); if(!g) return null; const X0=330,Y0=560,S=230,G=14, usadas=new Set();
-    const elegidas=g.resp.map(r=>{ const b=mezR(r,rng).find(n=>!usadas.has(n))||r[0]; usadas.add(b); return b });
-    const base=(x,n)=>{ vidCab(x,"grilla");
-      g.cols.forEach((cc,j)=>texto(x,cc.t,X0+j*(S+G)+S/2,Y0-40,{f:FB,peso:"800",s:28,al:"center",w:S,max:3,lh:1.1,min:18}));
-      g.filas.forEach((f,i)=>{ texto(x,f.t,90,Y0+i*(S+G)+S/2-10,{f:FB,peso:"800",s:28,w:220,max:3,lh:1.1,min:18});
-        g.cols.forEach((cc,j)=>{ const k=i*3+j, X=X0+j*(S+G), Y=Y0+i*(S+G); vidCaja(x,X,Y,S,S,k<n?CC.ok:CC.crema,CC.tinta,6); if(k<n) texto(x,elegidas[k],X+S/2,Y+S/2+12,{s:34,al:"center",w:S-20,max:3,lh:1.05,c:CC.crema}) }) }) };
-    return [vidIntro("grilla"),{dur:3,dibujar:(x,t)=>{ base(x,0); vidCuenta(x,t) }},{dur:3.6,dibujar:(x,t)=>{ base(x,Math.ceil(t*9)) }},vidOutro("grilla")];
-  },
-  async armar(rng){
+  async armar(rng){ // la pieza va a su lugar: un primer intento corrido y el segundo justo
     const d=mezR(vidDiscos(d=>d[3]==="nac"),rng)[0]; if(!d) return null; const img=await vidImg(d[0]+"|"+d[1]); if(!img) return null;
-    const cx=.2+rng()*.6, cy=.2+rng()*.6;
-    const zoom=(x,z)=>{ const S=760, X=160, Y=440, w=img.naturalWidth||600, h=img.naturalHeight||600, sw=w/z, sh=h/z; x.fillStyle=CC.tinta; x.fillRect(X+10,Y+10,S,S); x.drawImage(img,Math.min(w-sw,Math.max(0,cx*w-sw/2)),Math.min(h-sh,Math.max(0,cy*h-sh/2)),sw,sh,X,Y,S,S); x.lineWidth=8; x.strokeStyle=CC.tinta; x.strokeRect(X,Y,S,S) };
-    return [vidIntro("armar"),{dur:5,dibujar:(x,t)=>{ vidCab(x,"armar"); zoom(x,6-5*vidEase(t*.85)); vidCuenta(x,t) }},
-      {dur:3,dibujar:(x,t)=>{ vidCab(x,"armar"); zoom(x,1); texto(x,d[1],540,1340,{s:66,al:"center",w:960,max:2}); texto(x,`${d[0]} · ${vidAnio(d)}`,540,1470,{f:FB,peso:"800",s:42,al:"center",w:960}) }},vidOutro("armar")];
+    const S=640, X=220, Y=430, ps=S*.32, px=X+S*(.15+rng()*.5), py=Y+S*(.15+rng()*.5), w=img.naturalWidth||600, k=w/S, ini=[X+S-ps*.6,Y+S+40];
+    const dibujar=(x,qx,qy,z,lista)=>{ x.fillStyle=CC.tinta; x.fillRect(X+10,Y+10,S,S); x.drawImage(img,X,Y,S,S);
+      if(!lista){ x.fillStyle="#3a352c"; x.fillRect(px,py,ps,ps); x.setLineDash([14,10]); x.lineWidth=5; x.strokeStyle=CC.crema; x.strokeRect(px,py,ps,ps); x.setLineDash([]);
+        x.save(); x.shadowColor="rgba(0,0,0,.45)"; x.shadowBlur=24; x.drawImage(img,(px-X)*k,(py-Y)*k,ps*k,ps*k,qx,qy,ps*z,ps*z); x.restore(); x.lineWidth=4; x.strokeStyle=CC.crema; x.strokeRect(qx,qy,ps*z,ps*z) }
+      x.lineWidth=8; x.strokeStyle=CC.tinta; x.strokeRect(X,Y,S,S) };
+    const mover=(a,b,za,zb)=>(x,t)=>{ const e=vidEase(t); vidCab(x,"armar"); vidPuntos(x,0); dibujar(x,a[0]+(b[0]-a[0])*e,a[1]+(b[1]-a[1])*e,za+(zb-za)*e) };
+    const corrido=[px+38,py-30];
+    return [{dur:1.2,dibujar:(x,t)=>{ vidCab(x,"armar"); vidPuntos(x,0); dibujar(x,ini[0],ini[1],1.45); vidFranja(x,"A la tapa le falta un pedazo") }},
+      {dur:1.4,dibujar:mover(ini,corrido,1.45,1.15)},
+      {dur:1.3,dibujar:(x,t)=>{ mover(ini,corrido,1.45,1.15)(x,1); vidFranja(x,"Corrido y grande: 61%",CC.rojo) }},
+      {dur:1.3,dibujar:mover(corrido,[px,py],1.15,1)},
+      {dur:2.2,dibujar:(x,t)=>{ vidCab(x,"armar"); vidPuntos(x,98,t*3); dibujar(x,px,py,1,true); texto(x,d[1],540,1210,{s:60,al:"center",w:960,max:1}); texto(x,`${d[0]} · ${vidAnio(d)}`,540,1300,{f:FB,peso:"800",s:40,al:"center",w:960}); vidFranja(x,"¡Justo en su lugar! 98%",CC.ok) }}];
   },
 };
 // Dibuja las escenas y devuelve los cuadros (JPG 720x1280; ffmpeg los lleva a 1080x1920)
@@ -4701,6 +4782,7 @@ async function redesVideo(dia,turnoVideo){
     const j=VID_JUEGOS[(turnoVideo+k)%VID_JUEGOS.length], rng=semillaRng(hashStr(`video-${j}-${dia}`));
     let escenas=null; try{ escenas=await VID_ARMAR[j](rng) }catch(e){ console.error("video",j,e) }
     if(!escenas) continue;
+    escenas=[vidPortada(j),...escenas,vidCierre(j)]; // el nombre del juego, la jugada simulada y el cierre
     const [em,nom,preg,tag]=VID_INFO[j];
     return {juego:j,frames:await vidCuadros(escenas),caption:`${em} ${nom}: ${preg} ¿Lo sacaste antes del final? Contalo en los comentarios 👇\n\nJugalo gratis, con desafío nuevo todos los días, en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} #${tag}`};
   }
