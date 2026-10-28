@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       turno:
-        description: "Qué publicar"
+        description: "Qué publicar (promo = video que muestra la página, solo para descargar)"
         type: choice
-        options: [manana, tarde, todo, aniversario]
+        options: [manana, tarde, todo, aniversario, promo]
         default: manana
       prueba:
         description: "Modo prueba: solo arma las imágenes para revisar, no publica"
@@ -49,7 +49,11 @@ jobs:
           SUPA_KEY: ${{ secrets.SUPA_KEY }}
           SITE_URL: https://juegosrock.com.ar
         run: node build.js
+      - name: Video promocional de la página
+        if: ${{ inputs.turno == 'promo' }}
+        run: node redes/promo.mjs
       - name: Armar y publicar
+        if: ${{ inputs.turno != 'promo' }}
         env:
           TURNO: ${{ github.event_name == 'schedule' && ((github.event.schedule == '7 11 * * *' || github.event.schedule == '37 13 * * *') && 'manana' || 'tarde') || inputs.turno }}
           PRUEBA: ${{ github.event_name == 'workflow_dispatch' && inputs.prueba && 'true' || 'false' }}
