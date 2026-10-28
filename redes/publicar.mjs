@@ -39,6 +39,12 @@ function servir() {
   });
 }
 
+// ffmpeg: el de npm (ffmpeg-static, lo instala la tarea) o, si no está, el del sistema
+async function rutaFfmpeg() {
+  try { const m = await import("ffmpeg-static"); if (m.default && fs.existsSync(m.default)) return m.default } catch (e) {}
+  return "ffmpeg";
+}
+
 // ---------- 2) armar las piezas ----------
 async function armar() {
   const srv = await servir();
@@ -58,11 +64,13 @@ async function armar() {
       fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
       p.frames.forEach((u, i) => fs.writeFileSync(path.join(dir, String(i + 1).padStart(4, "0") + ".jpg"), Buffer.from(u.split(",")[1], "base64")));
       const mp4 = path.join(SALIDA, `${TURNO}-${p.id}.mp4`);
-      execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(p.fps || 12), "-i", path.join(dir, "%04d.jpg"),
+      try {
+      execFileSync(await rutaFfmpeg(), ["-y", "-loglevel", "error", "-framerate", String(p.fps || 12), "-i", path.join(dir, "%04d.jpg"),
         "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-shortest", "-vf", "scale=1080:1920:flags=lanczos,format=yuv420p", "-r", "30",
         "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-c:a", "aac", "-b:a", "64k", "-movflags", "+faststart", mp4]);
-      fs.rmSync(dir, { recursive: true, force: true });
       p.videoArchivo = mp4; log(`🎬 Video de ${p.juego || p.id}: ${p.frames.length} cuadros → ${path.basename(mp4)}`);
+      } catch (e) { r.errores.push(`video: ${e.message}`) } // si el video falla, lo demás se publica igual
+      fs.rmSync(dir, { recursive: true, force: true });
     }
     delete p.frames;
     p.archivos = p.imgs.map((u, i) => {
@@ -352,8 +360,8 @@ try {
       let urls, archivoVideo;
       try {
         if (p.tipo === "reel") {
-          archivoVideo = p.videoArchivo || path.join(RAIZ, "redes", "videos", p.video || "");
-          if (!fs.existsSync(archivoVideo)) { log(`⏭️ ${p.id}: no hay video`); continue }
+          archivoVideo = p.videoArchivo || (p.video ? path.join(RAIZ, "redes", "videos", p.video) : "");
+          if (!archivoVideo || !fs.existsSync(archivoVideo)) { log(`⏭️ ${p.id}: no hay video`); continue }
           urls = [await subir(archivoVideo, `${DIA}/${path.basename(archivoVideo)}`, "video/mp4")];
         } else urls = await Promise.all(p.archivos.map(f => subir(f, `${DIA}/${path.basename(f)}`, "image/jpeg")));
       } catch (e) { fallas++; log(`❌ ${p.id}: ${e.message}`); continue }
