@@ -51,6 +51,9 @@ jobs:
         run: node build.js
       - name: Video promocional de la página
         if: ${{ inputs.turno == 'promo' }}
+        env:
+          SUPA_URL: ${{ secrets.SUPA_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: node redes/promo.mjs
       - name: Armar y publicar
         if: ${{ inputs.turno != 'promo' }}

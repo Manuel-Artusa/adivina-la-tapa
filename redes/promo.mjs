@@ -160,6 +160,16 @@ async function main() {
     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart", mp4], { stdio: "inherit" });
   fs.rmSync(CUADROS, { recursive: true, force: true }); fs.rmSync(listaF);
   console.log(`🎬 Video promocional: ${cuadros.length} cuadros → ${mp4}`);
+
+  // si están las claves, lo sube a Supabase Storage (bucket público "redes") para verlo con un link directo
+  const SUPA = (process.env.SUPA_URL || "").replace(/\/+$/, ""), CLAVE = process.env.SUPABASE_SERVICE_KEY || "";
+  if (SUPA && CLAVE) {
+    const destino = `promo/juegosrock-promo-${new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "")}.mp4`;
+    const r = await fetch(`${SUPA}/storage/v1/object/redes/${destino}`, { method: "POST",
+      headers: { apikey: CLAVE, Authorization: `Bearer ${CLAVE}`, "Content-Type": "video/mp4", "x-upsert": "true" }, body: fs.readFileSync(mp4) });
+    if (r.ok) console.log(`🔗 Link para ver o bajar el video: ${SUPA}/storage/v1/object/public/redes/${destino}`);
+    else console.log(`(no pude subir el video a Supabase: ${r.status} ${await r.text()})`);
+  }
 }
 
 main().catch(e => { console.error(e); process.exit(1) });
