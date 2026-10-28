@@ -149,7 +149,8 @@ h1 span{color:var(--rojo)}
 .tries i.on{background:var(--tinta)}
 .hint{min-height:1.4em;font-weight:600;text-align:center}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:440px){.opts{grid-template-columns:1fr}}
+@media (max-width:440px){.opts{gap:8px}.opts button{padding:7px 10px;line-height:1.2}.opts .a{font-size:.84rem}.opts .t{font-size:.74rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .juego{gap:9px}.juego .hint{min-height:0}#generos{gap:6px}#generos button{font-size:.66rem;padding:5px 7px;min-height:32px}}
 .opts button{min-width:0;text-align:left;padding:12px 14px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);font:inherit;cursor:pointer;box-shadow:3px 3px 0 var(--tinta);transition:transform .08s,box-shadow .08s}
 .opts button:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--tinta)}
 .opts button:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
@@ -637,6 +638,31 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
 .modal:not([hidden]){animation:fundido .25s ease-out;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .modal:not([hidden]) .card{animation:tarjeta-fin .45s var(--rebote) both}
 @keyframes fundido{from{opacity:0}}
+/* Celular: que nada se salga de la pantalla, que nada se pise y que todo se pueda tocar con el dedo */
+@media (max-width:640px){
+  html,body{overflow-x:hidden}
+  header{flex-wrap:nowrap;gap:10px}
+  header h1{flex:1 1 auto;min-width:0}
+  .stats{flex:0 0 auto;max-width:34%;font-size:.64rem;letter-spacing:.03em}
+  .stats b{font-size:1.25rem;white-space:nowrap;transform-origin:right bottom}
+  .stats b.salta{animation-name:salta-chico}
+  @keyframes salta-chico{0%{scale:1}35%{scale:1.15;color:var(--rojo)}100%{scale:1}}
+  .stats span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chips button{min-height:38px}
+  .link{min-height:36px;padding:6px 0}
+  .quien{align-items:center}
+  .seo-texto a{display:inline-block;padding:7px 0}
+  .orden .mov button{width:42px;height:36px}
+  .gri-tabla{grid-template-columns:minmax(0,1.1fr) repeat(3,minmax(0,1fr));gap:5px}
+  .gri-cab{font-size:.7rem;padding:2px;hyphens:auto;overflow-wrap:anywhere}
+  .yo-tabla{display:block;overflow-x:auto;font-size:.82rem}
+  .yo-tabla th,.yo-tabla td{padding:7px 6px}
+}
+@media (max-width:360px){
+  h1{font-size:1.75rem}
+  .stats b{font-size:1.1rem}
+}
+
 /* Papelitos al ganar */
 #festejo{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
 
@@ -1395,6 +1421,21 @@ function nuevaPartida(modo){
   siguiente();
 }
 
+// Celular: que la tapa y las opciones entren juntas en la pantalla, sin tener que bajar.
+// La página arranca en el título del juego y la tapa toma el tamaño que queda libre arriba de la barra de abajo
+function tapaEncajar(subir){
+  const st=$("stage"), tit=$("tapa-tit"), ops=$("opts"), barra=document.querySelector(".tabs");
+  if(!matchMedia("(max-width:640px)").matches||$("v-juego").hidden||!barra){ st.style.maxWidth=""; return }
+  const arriba=y=>y.getBoundingClientRect().top+scrollY;
+  if(subir){ const y=arriba(tit)-24; if(y>0) scrollTo(0,y) }
+  const abajo=innerHeight-barra.getBoundingClientRect().top+10;                 // lo que tapa la barra de pestañas
+  const entre=arriba(ops)-(arriba(st)+st.offsetHeight);                         // puntos, pista y márgenes
+  const libre=innerHeight-abajo-(arriba(st)-arriba(tit)+24)-entre-(ops.children.length?ops.offsetHeight:120);
+  st.style.maxWidth=Math.round(Math.max(150,Math.min(420,libre)))+"px";
+}
+addEventListener("resize",()=>tapaEncajar());
+if(document.fonts) document.fonts.ready.then(()=>tapaEncajar());
+
 // Desde el 15/10/2026 la primera tapa del día es siempre de rock nacional (y que esté en discos.json)
 const DESDE_NAC1="2026-10-15";
 async function primeraNacional(cola,dia){
@@ -1446,7 +1487,7 @@ async function siguiente(){
     b.onclick=()=>elegir(b,o);
     c.appendChild(b);
   });
-  $("msg").hidden=true; pintar(); $("cover").style.opacity=1;
+  $("msg").hidden=true; pintar(); $("cover").style.opacity=1; tapaEncajar(); setTimeout(tapaEncajar,450); // otra vez cuando terminan de entrar las opciones y las letras
   if(g.intento>0) mostrarPista();
   actualizar(); guardarDiario();
 }
@@ -3681,13 +3722,25 @@ const ahoBase=c=>{ const u=c.toUpperCase(); if(u==="Ñ") return "Ñ"; return u.n
 const ahoEsLetra=c=>/^[A-ZÑ]$/.test(ahoBase(c));
 const ahoLimpio=t=>limpiarTema(t).replace(/\s*[\(\[][^\)\]]*(feat|ft\.|con |with )[^\)\]]*[\)\]]/gi,"").replace(/\s+(feat\.?|ft\.)\s.*$/i,"").trim();
 // Los temas más escuchados de una banda (orden de iTunes), sin repetir
+// La misma búsqueda de iTunes, ya guardada por la tarea "Armar discos.json" en temas/<banda>.json (así anda en el celular).
+// Cada archivo vale desde su "desde"; antes de esa fecha se usa "antes" o, si no hay, iTunes en vivo (el desafío del día no cambia)
+const ahoArch=new Map();
+function ahoGuardado(banda){
+  if(!ahoArch.has(banda)) ahoArch.set(banda,fetch(`/temas/${norm(banda).replace(/ /g,"-")}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():null).catch(()=>null));
+  return ahoArch.get(banda);
+}
 async function ahoTemas(banda){
-  if(ahoTop.has(banda)) return ahoTop.get(banda);
-  const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
-  let r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
-  if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base);
+  const g=await ahoGuardado(banda), dia=AHO.modo==="diario"?AHO.dia:hoyAR(), lista=g?(dia>=g.desde?g.r:g.antes):null, clave=banda+(lista?(lista===g.r?"|n":"|a"):"");
+  if(ahoTop.has(clave)) return ahoTop.get(clave);
+  let r=null;
+  if(lista) r={results:lista.map(([trackName,collectionName,releaseDate,artworkUrl100])=>({wrapperType:"track",artistName:banda,trackName,collectionName,releaseDate,artworkUrl100}))};
+  else{
+    const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
+    r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
+    if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base).catch(()=>null);
+  }
   const vistos=new Set(), out=[];
-  for(const x of r.results||[]){
+  for(const x of (r&&r.results)||[]){
     if(x.wrapperType!=="track"||!x.trackName||norm(x.artistName||"")!==norm(banda)) continue;
     if(FUERA.test(norm(x.collectionName||""))&&out.length) continue;
     const t=ahoLimpio(x.trackName), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
@@ -3695,7 +3748,15 @@ async function ahoTemas(banda){
     vistos.add(k);
     out.push({t,banda,disco:limpiarTitulo(x.collectionName||""),anio:(x.releaseDate||"").slice(0,4),tapa:(x.artworkUrl100||"").replace("100x100bb","200x200bb")});
   }
-  ahoTop.set(banda,out); return out;
+  if(out.length){ ahoTop.set(clave,out); return out } // un fallo de red no queda guardado: "Probar de nuevo" vuelve a buscar
+  // solo en Libre: si iTunes no responde (pasa en algunos celulares), los temas de discos.json (el del día no cambia nunca)
+  if(AHO.modo==="libre"&&typeof CACHE!=="undefined"&&CACHE) for(const d of DISCOS){
+    const v=d[0]===banda&&d[1]&&CACHE.disc[d[0]+"|"+d[1]]; if(!v||!v.temas) continue;
+    for(const [n] of v.temas){ const t=ahoLimpio(n), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
+      if(!k||vistos.has(k)||letras<4||letras>26||/intro|interludio|bonus|demo/i.test(t)) continue;
+      vistos.add(k); out.push({t,banda,disco:d[1],anio:v.fecha?v.fecha.slice(0,4):String(d[2]||""),tapa:v.url||""}) }
+  }
+  return out;
 }
 // Un tema conocido de la banda: de los 12 más escuchados (ordenados por nombre, así a todos les toca el mismo)
 async function ahoElegir(banda,rng){
@@ -3729,7 +3790,7 @@ function ahoLimpiar(){
 }
 async function ahoNuevo(prog){
   const modo=AHO.modo, dia=AHO.dia;
-  ahoLimpiar(); $("aho-banda").textContent="Cargando…";
+  ahoLimpiar(); ahoCab(); $("aho-banda").textContent="Cargando…";
   let t=null;
   if(modo==="diario"){
     // cada tema del día sale de una banda distinta, siempre en el mismo orden
@@ -4925,7 +4986,7 @@ function irA(v,como){
   if(v==="marcar"){ $("v-marcar").hidden=false; window.scrollTo(0,0); marIniciar(); return }
   if(v==="contenido"){ $("v-cont").hidden=false; window.scrollTo(0,0); contIniciar(); return }
   if(v==="frases"){ $("v-frases").hidden=false; window.scrollTo(0,0); fraIniciar(); return }
-  $("v-juego").hidden=false; window.scrollTo(0,0);
+  $("v-juego").hidden=false; window.scrollTo(0,0); requestAnimationFrame(()=>tapaEncajar(true));
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";
   if(G) actualizar();
   $("generos").hidden=v!=="normal";
@@ -5211,7 +5272,8 @@ new MutationObserver(ms=>{
     const el=m.target;
     if(m.type==="characterData"||m.type==="childList"){
       const b=m.type==="characterData"?el.parentElement:el;
-      if(b&&b.matches(".stats b")){ b.classList.remove("salta"); void b.offsetWidth; b.classList.add("salta") }
+      if(b&&b.matches(".stats b")&&!/\d:\d\d/.test(b.textContent)){ // el reloj no salta cada segundo
+         b.classList.remove("salta"); void b.offsetWidth; b.classList.add("salta") }
       continue;
     }
     if(m.attributeName==="hidden"){
