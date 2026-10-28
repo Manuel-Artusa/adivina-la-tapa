@@ -125,6 +125,8 @@ for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "
 
 // Logos de las bandas (los baja la tarea "Armar discos.json"; los usa el Bingo rockero)
 if (fs.existsSync("logos")) fs.cpSync("logos", "public/logos", { recursive: true });
+// Temas de cada banda para el Ahorcado (los arma la misma tarea; así no depende de iTunes en el celular)
+if (fs.existsSync("temas")) fs.cpSync("temas", "public/temas", { recursive: true });
 
 // Archivos de verificación (TikTok, Google, etc.): todo lo de la carpeta "verificacion" va a la raíz del sitio
 if (fs.existsSync("verificacion")) for (const f of fs.readdirSync("verificacion")) {

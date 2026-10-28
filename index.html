@@ -3681,11 +3681,23 @@ const ahoBase=c=>{ const u=c.toUpperCase(); if(u==="Ñ") return "Ñ"; return u.n
 const ahoEsLetra=c=>/^[A-ZÑ]$/.test(ahoBase(c));
 const ahoLimpio=t=>limpiarTema(t).replace(/\s*[\(\[][^\)\]]*(feat|ft\.|con |with )[^\)\]]*[\)\]]/gi,"").replace(/\s+(feat\.?|ft\.)\s.*$/i,"").trim();
 // Los temas más escuchados de una banda (orden de iTunes), sin repetir
+// La misma búsqueda de iTunes, ya guardada por la tarea "Armar discos.json" en temas/<banda>.json (así anda en el celular).
+// Cada archivo vale desde su "desde"; antes de esa fecha se usa "antes" o, si no hay, iTunes en vivo (el desafío del día no cambia)
+const ahoArch=new Map();
+function ahoGuardado(banda){
+  if(!ahoArch.has(banda)) ahoArch.set(banda,fetch(`/temas/${norm(banda).replace(/ /g,"-")}.json`,{cache:"no-cache"}).then(r=>r.ok?r.json():null).catch(()=>null));
+  return ahoArch.get(banda);
+}
 async function ahoTemas(banda){
-  if(ahoTop.has(banda)) return ahoTop.get(banda);
-  const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
-  let r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
-  if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base).catch(()=>null);
+  const g=await ahoGuardado(banda), dia=AHO.modo==="diario"?AHO.dia:hoyAR(), lista=g?(dia>=g.desde?g.r:g.antes):null, clave=banda+(lista?(lista===g.r?"|n":"|a"):"");
+  if(ahoTop.has(clave)) return ahoTop.get(clave);
+  let r=null;
+  if(lista) r={results:lista.map(([trackName,collectionName,releaseDate,artworkUrl100])=>({wrapperType:"track",artistName:banda,trackName,collectionName,releaseDate,artworkUrl100}))};
+  else{
+    const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
+    r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
+    if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base).catch(()=>null);
+  }
   const vistos=new Set(), out=[];
   for(const x of (r&&r.results)||[]){
     if(x.wrapperType!=="track"||!x.trackName||norm(x.artistName||"")!==norm(banda)) continue;
@@ -3695,14 +3707,14 @@ async function ahoTemas(banda){
     vistos.add(k);
     out.push({t,banda,disco:limpiarTitulo(x.collectionName||""),anio:(x.releaseDate||"").slice(0,4),tapa:(x.artworkUrl100||"").replace("100x100bb","200x200bb")});
   }
-  // si iTunes no responde (pasa en algunos celulares), los temas de los discos de discos.json
-  if(!out.length&&typeof CACHE!=="undefined"&&CACHE) for(const d of DISCOS){
+  if(out.length){ ahoTop.set(clave,out); return out } // un fallo de red no queda guardado: "Probar de nuevo" vuelve a buscar
+  // solo en Libre: si iTunes no responde (pasa en algunos celulares), los temas de discos.json (el del día no cambia nunca)
+  if(AHO.modo==="libre"&&typeof CACHE!=="undefined"&&CACHE) for(const d of DISCOS){
     const v=d[0]===banda&&d[1]&&CACHE.disc[d[0]+"|"+d[1]]; if(!v||!v.temas) continue;
     for(const [n] of v.temas){ const t=ahoLimpio(n), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
       if(!k||vistos.has(k)||letras<4||letras>26||/intro|interludio|bonus|demo/i.test(t)) continue;
       vistos.add(k); out.push({t,banda,disco:d[1],anio:v.fecha?v.fecha.slice(0,4):String(d[2]||""),tapa:v.url||""}) }
   }
-  if(out.length) ahoTop.set(banda,out); // un fallo de red no queda guardado: "Probar de nuevo" vuelve a buscar
   return out;
 }
 // Un tema conocido de la banda: de los 12 más escuchados (ordenados por nombre, así a todos les toca el mismo)
