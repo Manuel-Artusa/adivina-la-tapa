@@ -3685,9 +3685,9 @@ async function ahoTemas(banda){
   if(ahoTop.has(banda)) return ahoTop.get(banda);
   const base=`https://itunes.apple.com/search?term=${encodeURIComponent(banda)}&media=music&entity=song&country=ar&limit=60`;
   let r=await jsonp(base+"&attribute=artistTerm").catch(()=>null);
-  if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base);
+  if(!r||!(r.results||[]).some(x=>norm(x.artistName||"")===norm(banda))) r=await jsonp(base).catch(()=>null);
   const vistos=new Set(), out=[];
-  for(const x of r.results||[]){
+  for(const x of (r&&r.results)||[]){
     if(x.wrapperType!=="track"||!x.trackName||norm(x.artistName||"")!==norm(banda)) continue;
     if(FUERA.test(norm(x.collectionName||""))&&out.length) continue;
     const t=ahoLimpio(x.trackName), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
@@ -3695,7 +3695,15 @@ async function ahoTemas(banda){
     vistos.add(k);
     out.push({t,banda,disco:limpiarTitulo(x.collectionName||""),anio:(x.releaseDate||"").slice(0,4),tapa:(x.artworkUrl100||"").replace("100x100bb","200x200bb")});
   }
-  ahoTop.set(banda,out); return out;
+  // si iTunes no responde (pasa en algunos celulares), los temas de los discos de discos.json
+  if(!out.length&&typeof CACHE!=="undefined"&&CACHE) for(const d of DISCOS){
+    const v=d[0]===banda&&d[1]&&CACHE.disc[d[0]+"|"+d[1]]; if(!v||!v.temas) continue;
+    for(const [n] of v.temas){ const t=ahoLimpio(n), k=norm(t), letras=[...t].filter(ahoEsLetra).length;
+      if(!k||vistos.has(k)||letras<4||letras>26||/intro|interludio|bonus|demo/i.test(t)) continue;
+      vistos.add(k); out.push({t,banda,disco:d[1],anio:v.fecha?v.fecha.slice(0,4):String(d[2]||""),tapa:v.url||""}) }
+  }
+  if(out.length) ahoTop.set(banda,out); // un fallo de red no queda guardado: "Probar de nuevo" vuelve a buscar
+  return out;
 }
 // Un tema conocido de la banda: de los 12 más escuchados (ordenados por nombre, así a todos les toca el mismo)
 async function ahoElegir(banda,rng){
@@ -3729,7 +3737,7 @@ function ahoLimpiar(){
 }
 async function ahoNuevo(prog){
   const modo=AHO.modo, dia=AHO.dia;
-  ahoLimpiar(); $("aho-banda").textContent="Cargando…";
+  ahoLimpiar(); ahoCab(); $("aho-banda").textContent="Cargando…";
   let t=null;
   if(modo==="diario"){
     // cada tema del día sale de una banda distinta, siempre en el mismo orden
