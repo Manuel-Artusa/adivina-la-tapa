@@ -149,7 +149,8 @@ h1 span{color:var(--rojo)}
 .tries i.on{background:var(--tinta)}
 .hint{min-height:1.4em;font-weight:600;text-align:center}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media (max-width:440px){.opts{grid-template-columns:1fr}}
+@media (max-width:440px){.opts{gap:8px}.opts button{padding:7px 10px;line-height:1.2}.opts .a{font-size:.84rem}.opts .t{font-size:.74rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .juego{gap:9px}.juego .hint{min-height:0}#generos{gap:6px}#generos button{font-size:.66rem;padding:5px 7px}}
 .opts button{min-width:0;text-align:left;padding:12px 14px;background:var(--crema);color:var(--tinta);border:2px solid var(--tinta);font:inherit;cursor:pointer;box-shadow:3px 3px 0 var(--tinta);transition:transform .08s,box-shadow .08s}
 .opts button:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--tinta)}
 .opts button:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tinta)}
@@ -1395,6 +1396,21 @@ function nuevaPartida(modo){
   siguiente();
 }
 
+// Celular: que la tapa y las opciones entren juntas en la pantalla, sin tener que bajar.
+// La página arranca en el título del juego y la tapa toma el tamaño que queda libre arriba de la barra de abajo
+function tapaEncajar(subir){
+  const st=$("stage"), tit=$("tapa-tit"), ops=$("opts"), barra=document.querySelector(".tabs");
+  if(!matchMedia("(max-width:640px)").matches||$("v-juego").hidden||!barra){ st.style.maxWidth=""; return }
+  const arriba=y=>y.getBoundingClientRect().top+scrollY;
+  if(subir){ const y=arriba(tit)-24; if(y>0) scrollTo(0,y) }
+  const abajo=innerHeight-barra.getBoundingClientRect().top+10;                 // lo que tapa la barra de pestañas
+  const entre=arriba(ops)-(arriba(st)+st.offsetHeight);                         // puntos, pista y márgenes
+  const libre=innerHeight-abajo-(arriba(st)-arriba(tit)+24)-entre-(ops.children.length?ops.offsetHeight:120);
+  st.style.maxWidth=Math.round(Math.max(150,Math.min(420,libre)))+"px";
+}
+addEventListener("resize",()=>tapaEncajar());
+if(document.fonts) document.fonts.ready.then(()=>tapaEncajar());
+
 // Desde el 15/10/2026 la primera tapa del día es siempre de rock nacional (y que esté en discos.json)
 const DESDE_NAC1="2026-10-15";
 async function primeraNacional(cola,dia){
@@ -1446,7 +1462,7 @@ async function siguiente(){
     b.onclick=()=>elegir(b,o);
     c.appendChild(b);
   });
-  $("msg").hidden=true; pintar(); $("cover").style.opacity=1;
+  $("msg").hidden=true; pintar(); $("cover").style.opacity=1; tapaEncajar(); setTimeout(tapaEncajar,450); // otra vez cuando terminan de entrar las opciones y las letras
   if(g.intento>0) mostrarPista();
   actualizar(); guardarDiario();
 }
@@ -4945,7 +4961,7 @@ function irA(v,como){
   if(v==="marcar"){ $("v-marcar").hidden=false; window.scrollTo(0,0); marIniciar(); return }
   if(v==="contenido"){ $("v-cont").hidden=false; window.scrollTo(0,0); contIniciar(); return }
   if(v==="frases"){ $("v-frases").hidden=false; window.scrollTo(0,0); fraIniciar(); return }
-  $("v-juego").hidden=false; window.scrollTo(0,0);
+  $("v-juego").hidden=false; window.scrollTo(0,0); requestAnimationFrame(()=>tapaEncajar(true));
   $("tapa-tit").textContent=v==="diario"?"Tapa del día":"Adiviná la tapa";
   if(G) actualizar();
   $("generos").hidden=v!=="normal";

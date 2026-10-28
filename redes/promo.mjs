@@ -46,7 +46,7 @@ const CAPA = () => {
   #promo-tel p{font:700 19px/1.5 var(--texto,sans-serif);color:var(--tinta,#141210);margin:0}
   #promo-tel .url{background:var(--rojo,#d7262b);color:#fff;font:400 26px var(--display,sans-serif);padding:10px 18px;box-shadow:6px 6px 0 var(--tinta,#141210)}
   #promo-tel .chip{background:var(--tinta,#141210);color:var(--papel,#f2c230);font:500 13px monospace;letter-spacing:2px;padding:6px 10px}
-  #promo-dedo{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(255,255,255,.8);border:3px solid var(--tinta,#141210);z-index:99998;pointer-events:none;transition:transform .55s cubic-bezier(.3,.7,.3,1),opacity .3s;opacity:0}
+  #promo-dedo{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(255,255,255,.8);border:3px solid var(--tinta,#141210);z-index:99998;pointer-events:none;transition:transform .8s cubic-bezier(.3,.7,.3,1),opacity .3s;opacity:0}
   #promo-dedo.toca{animation:promoToca .35s}
   @keyframes promoToca{50%{width:24px;height:24px;margin:-12px 0 0 -12px;background:var(--rojo,#d7262b)}}`;
   document.head.appendChild(st);
@@ -70,24 +70,28 @@ async function main() {
     e.innerHTML = `<b>${t}</b>`; e.classList.add("ver") }, t);
   const tel = async html => pg.evaluate(h => { const e = document.getElementById("promo-tel"); if (!h) { e.classList.remove("ver"); return }
     e.innerHTML = h; e.classList.add("ver") }, html);
-  const tocar = async (sel, pausa = 700) => {
+  const tocar = async (sel, pausa = 1800) => {
     const el = typeof sel === "string" ? pg.locator(sel).first() : sel;
     try { await el.scrollIntoViewIfNeeded({ timeout: 3000 }) } catch (e) { return false }
     const bx = await el.boundingBox(); if (!bx) return false;
     const x = bx.x + bx.width / 2, y = bx.y + bx.height / 2;
     await pg.evaluate(([x, y]) => { const d = document.getElementById("promo-dedo"); d.style.opacity = 1; d.style.transform = `translate(${x}px,${y}px)` }, [x, y]);
-    await espera(450);
+    await espera(900);
     await pg.evaluate(() => { const d = document.getElementById("promo-dedo"); d.classList.remove("toca"); void d.offsetWidth; d.classList.add("toca") });
     try { await el.click({ timeout: 2000 }) } catch (e) {}
     await espera(pausa); return true;
   };
   const sinDedo = () => pg.evaluate(() => { document.getElementById("promo-dedo").style.opacity = 0 });
-  const inicio = async () => { await sinDedo(); await pg.evaluate(() => irA("inicio")); await espera(500) };
+  const inicio = async () => { await sinDedo(); await pg.evaluate(() => irA("inicio")); await espera(800) };
+  // desplazamiento suave, que se llegue a leer
+  const bajar = async (px, ms) => { const n = Math.round(ms / 40); for (let i = 0; i < n; i++) { await pg.evaluate(d => scrollBy(0, d), px / n); await espera(40) } };
+  let primero = true;
   const juego = async (ir, titulo) => {
-    await inicio(); await txt(titulo);
-    await tocar(`#v-hub [data-ir="${ir}"]`, 900);
+    // el primero se abre tocando en el inicio; los demás, directo (así no se va el tiempo en ir y venir)
+    if (primero) { primero = false; await inicio(); await txt(titulo); await espera(1200); await tocar(`#v-hub [data-ir="${ir}"]`, 1200) }
+    else { await sinDedo(); await pg.evaluate(ir => irA(ir), ir); await txt(titulo) }
     const libre = pg.locator(`.modo-dia[data-juego="${ir}"] [data-m="libre"]:visible, #tapa-modo [data-m="libre"]:visible`).first();
-    if (await libre.count()) await tocar(libre, 1200);
+    if (await libre.count()) { await libre.click().catch(() => {}); await espera(1000) }
   };
   const paso = async (nombre, f) => { try { await f() } catch (e) { console.log(`  (salteo ${nombre}: ${e.message.split("\n")[0]})`) } };
 
@@ -101,50 +105,39 @@ async function main() {
   await tel(`<span class="chip">JUEGOS ROCK</span><h1>¿Cuánto sabés<br>de rock?</h1><p>12 juegos · un desafío nuevo cada día</p>`);
   await espera(300);
   await cdp.send("Page.startScreencast", { format: "jpeg", quality: 88, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
-  await espera(2200);
+  await espera(3500);
 
   await paso("inicio", async () => {
-    await tel(""); await txt("12 juegos de rock en una sola página"); await espera(1000);
-    for (let i = 0; i < 24; i++) { await pg.mouse.wheel(0, 80); await espera(50) }
-    await txt("Un desafío nuevo cada día, igual para todos");
-    for (let i = 0; i < 24; i++) { await pg.mouse.wheel(0, 80); await espera(50) }
-    await espera(500);
+    await tel(""); await txt("12 juegos de rock en una sola página"); await espera(2500);
+    await bajar(700, 3500);
+    await txt("Un desafío nuevo cada día, igual para todos"); await espera(2500);
   });
   await paso("tapa", async () => {
     await juego("diario", "Adiviná el disco por su tapa");
-    await pg.locator("#opts button").first().waitFor({ timeout: 8000 }); await espera(900);
-    await tocar(pg.locator("#opts button").nth(1), 1400);
+    await pg.locator("#opts button").first().waitFor({ timeout: 8000 }); await espera(2500);
+    await tocar(pg.locator("#opts button").nth(1), 3000);
   });
   await paso("antes", async () => {
     await juego("antes", "¿Salió antes o después?");
-    await espera(500);
-    for (let i = 0; i < 2; i++) { const bt = pg.locator("#antes-der button:visible"); if (!(await bt.count())) break; await tocar(bt.nth(i % 2), 1700) }
+    await espera(2000);
+    for (let i = 0; i < 2; i++) { const bt = pg.locator("#antes-der button:visible"); if (!(await bt.count())) break; await tocar(bt.nth(i % 2), 2800) }
   });
   await paso("ahorcado", async () => {
     await juego("ahorcado", "Ahorcado rockero: letra por letra");
-    await espera(800);
-    for (const l of ["A", "E", "O", "S"]) await tocar(pg.locator("#aho-teclado button", { hasText: new RegExp(`^${l}$`) }), 300);
-    await espera(600);
+    await espera(2000);
+    for (const l of ["A", "E", "O", "S"]) await tocar(pg.locator("#aho-teclado button", { hasText: new RegExp(`^${l}$`) }), 1000);
+    await espera(2000);
   });
   await paso("bingo", async () => {
     await juego("bingo", "Bingo rockero contra reloj");
-    await espera(600);
-    if (await pg.locator("#bingo-empezar:visible").count()) await tocar("#bingo-empezar", 1300);
-    for (let i = 0; i < 3; i++) { const c = pg.locator("#bingo-grilla button:visible"); if (!(await c.count())) break; await tocar(c.nth((i * 5) % (await c.count())), 900) }
-  });
-  await paso("conexiones", async () => {
-    await juego("conexiones", "Conexiones: juntá los temas del mismo disco");
-    await espera(500);
-    if (await pg.locator("#con-empezar:visible").count()) await tocar("#con-empezar", 600);
-    await pg.evaluate(() => scrollTo(0, 0)); await espera(400);
-    const t = pg.locator("#con-grilla > *:visible");
-    for (let i = 0; i < 4 && i < await t.count(); i++) await tocar(t.nth(i), 350);
-    await espera(800);
+    await espera(1200);
+    if (await pg.locator("#bingo-empezar:visible").count()) await tocar("#bingo-empezar", 2500);
+    for (let i = 0; i < 3; i++) { const c = pg.locator("#bingo-grilla button:visible"); if (!(await c.count())) break; await tocar(c.nth((i * 5) % (await c.count())), 1800) }
   });
 
   await sinDedo(); await txt("");
   await tel(`<h1>¿Te animás?</h1><p>✔ Gratis y sin descargar nada<br>✔ Ranking diario<br>✔ Rock nacional e internacional</p><span class="url">juegosrock.com.ar</span>`);
-  await espera(3200);
+  await espera(5000);
   await cdp.send("Page.stopScreencast");
   await b.close(); srv.close();
 
@@ -156,7 +149,7 @@ async function main() {
   const mp4 = path.join(SALIDA, "juegosrock-promo.mp4");
   execFileSync(await rutaFfmpeg(), ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listaF,
     "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
-    "-vf", "setpts=PTS/1.2,scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
+    "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart", mp4], { stdio: "inherit" });
   fs.rmSync(CUADROS, { recursive: true, force: true }); fs.rmSync(listaF);
   console.log(`🎬 Video promocional: ${cuadros.length} cuadros → ${mp4}`);
