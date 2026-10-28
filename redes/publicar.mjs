@@ -6,6 +6,7 @@ import { chromium } from "playwright";
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 
 const RAIZ = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const PUBLIC = path.join(RAIZ, "public");
@@ -51,6 +52,19 @@ async function armar() {
   await b.close(); srv.close();
   fs.mkdirSync(SALIDA, { recursive: true });
   for (const p of r.pubs) {
+    // video armado en la página: los cuadros se unen con ffmpeg (1080x1920, H.264, con pista de audio muda)
+    if (p.frames && p.frames.length) {
+      const dir = path.join(SALIDA, `${TURNO}-${p.id}-cuadros`);
+      fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
+      p.frames.forEach((u, i) => fs.writeFileSync(path.join(dir, String(i + 1).padStart(4, "0") + ".jpg"), Buffer.from(u.split(",")[1], "base64")));
+      const mp4 = path.join(SALIDA, `${TURNO}-${p.id}.mp4`);
+      execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(p.fps || 12), "-i", path.join(dir, "%04d.jpg"),
+        "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-shortest", "-vf", "scale=1080:1920:flags=lanczos,format=yuv420p", "-r", "30",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-c:a", "aac", "-b:a", "64k", "-movflags", "+faststart", mp4]);
+      fs.rmSync(dir, { recursive: true, force: true });
+      p.videoArchivo = mp4; log(`🎬 Video de ${p.juego || p.id}: ${p.frames.length} cuadros → ${path.basename(mp4)}`);
+    }
+    delete p.frames;
     p.archivos = p.imgs.map((u, i) => {
       const f = path.join(SALIDA, `${TURNO}-${p.id}${p.imgs.length > 1 ? "-" + (i + 1) : ""}.jpg`);
       fs.writeFileSync(f, Buffer.from(u.split(",")[1], "base64")); return f;
@@ -338,9 +352,9 @@ try {
       let urls, archivoVideo;
       try {
         if (p.tipo === "reel") {
-          archivoVideo = path.join(RAIZ, "redes", "videos", p.video);
-          if (!fs.existsSync(archivoVideo)) { log(`⏭️ ${p.id}: falta el video redes/videos/${p.video}`); continue }
-          urls = [await subir(archivoVideo, `${DIA}/${p.video}`, "video/mp4")];
+          archivoVideo = p.videoArchivo || path.join(RAIZ, "redes", "videos", p.video || "");
+          if (!fs.existsSync(archivoVideo)) { log(`⏭️ ${p.id}: no hay video`); continue }
+          urls = [await subir(archivoVideo, `${DIA}/${path.basename(archivoVideo)}`, "video/mp4")];
         } else urls = await Promise.all(p.archivos.map(f => subir(f, `${DIA}/${path.basename(f)}`, "image/jpeg")));
       } catch (e) { fallas++; log(`❌ ${p.id}: ${e.message}`); continue }
       // qué va a cada red: historias solo a Instagram; videos también a TikTok

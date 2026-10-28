@@ -8,7 +8,7 @@ Las que no estén configuradas se saltean, así que podés conectarlas de a una.
 | Instagram | todo: posts, historias y videos |
 | Threads | posts y videos (las historias no existen en Threads) |
 | Facebook | posts y videos en la página |
-| TikTok | los videos de los juegos (martes, jueves y sábado). **Te llegan a la bandeja de TikTok**: abrís la notificación, le ponés música y publicás |
+| TikTok | los videos de los juegos (martes, jueves y sábado; se arma uno nuevo cada vez, rotando por 12 juegos, con discos y bandas distintos). **Te llegan a la bandeja de TikTok**: abrís la notificación, le ponés música y publicás |
 
 Todos los secretos se cargan en GitHub → el repo → **Settings → Secrets and variables → Actions → New repository secret**.
 
