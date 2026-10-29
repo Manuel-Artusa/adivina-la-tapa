@@ -119,6 +119,18 @@ fs.writeFileSync("public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n
 fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sitio}/sitemap.xml\n`);
 
 for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json", "frases.json", "coronita.png"]) {
+  if (f === "discos.json" && fs.existsSync(f)) {
+    // Más liviano para el celular: los audios de 30 s solo los usa "Adiviná el tema", que es de bandas nacionales.
+    // A los discos de bandas de afuera se les saca el link del audio (el nombre del tema queda)
+    const d = JSON.parse(fs.readFileSync(f, "utf8")), bandas = d.bandas || {};
+    for (const [k, v] of Object.entries(d.discos || {})) {
+      const b = bandas[k.split("|")[0]];
+      if (b && b.pais && !["AR", "UY"].includes(b.pais) && v.temas) v.temas = v.temas.map(t => t.slice(0, 3));
+    }
+    delete d.no_encontrados;
+    fs.writeFileSync("public/" + f, JSON.stringify(d));
+    continue;
+  }
   if (fs.existsSync(f)) fs.copyFileSync(f, "public/" + f);
   else if (f === "discos.json") console.warn("Aviso: todavía no hay discos.json; el juego busca en iTunes en vivo.");
 }
