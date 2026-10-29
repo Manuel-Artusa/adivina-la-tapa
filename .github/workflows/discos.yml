@@ -4,17 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       todo:
-        description: "Volver a buscar TODOS los discos (tarda ~1 hora). Si no, solo los nuevos."
+        description: "Volver a buscar TODOS los discos (con más de 2000 discos puede pasar el límite de 3 horas). Si no, solo los nuevos, de a tandas."
         type: boolean
         default: false
   schedule:
-    - cron: "0 7 1 * *"   # el día 1 de cada mes, para refrescar tapas y audios
+    - cron: "0 7 1 * *"   # el día 1 de cada mes: busca lo que falte y refresca los temas del Ahorcado
   push:
     branches: [main]
     paths: ["armar_discos.py", "armar_temas.py", "index.html", "discos_manual.json"]   # si cambia el catálogo, el script o un link a mano, busca lo nuevo
 
 permissions:
   contents: write
+  actions: write   # para volver a correrse sola si quedan discos por buscar
+
+concurrency: discos
 
 jobs:
   armar:
@@ -26,8 +29,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Buscar discos en iTunes
-        run: python armar_discos.py ${{ (github.event_name == 'schedule' || inputs.todo) && '--todo' || '' }}
+        run: python armar_discos.py ${{ inputs.todo && '--todo' || '--max=400' }}   # de a 400 discos por tanda (cada tanda, menos de 3 horas)
       - name: Guardar los temas de cada banda (Ahorcado)
+        if: ${{ hashFiles('quedan.txt') == '' }}   # recién en la última tanda
         run: python armar_temas.py
       - name: Guardar discos.json en el repo
         run: |
@@ -44,3 +48,10 @@ jobs:
             sleep 10
           done
           exit 1
+      - name: Si quedan discos por buscar, otra tanda
+        if: ${{ hashFiles('quedan.txt') != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Quedan $(cat quedan.txt) discos: arranco otra tanda"
+          gh workflow run discos.yml --ref main

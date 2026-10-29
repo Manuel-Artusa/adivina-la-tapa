@@ -365,8 +365,19 @@ def main():
     discos = {} if todo else dict(previo.get("discos", {}))
     catalogo = leer_catalogo()
     claves = [f"{d[0]}|{d[1]}" for d in catalogo]
+    # primero los que nunca se buscaron; al final, los que ya se buscaron y no estaban (por si aparecieron)
+    probados = set(previo.get("no_encontrados", []))
     pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos]
-    print(f"Catálogo: {len(catalogo)} discos. A buscar: {len(pendientes)}.", flush=True)
+    pendientes.sort(key=lambda d: f"{d[0]}|{d[1]}" in probados)
+    # De a tandas (--max N): con muchos discos nuevos, cada corrida busca una parte y la guarda; la tarea se vuelve a correr sola
+    tope = next((int(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--max=")), 0)
+    quedan = 0
+    if tope and len(pendientes) > tope:
+        quedan = len(pendientes) - tope
+        pendientes = pendientes[:tope]
+    print(f"Catálogo: {len(catalogo)} discos. A buscar: {len(pendientes)}" + (f" (quedan {quedan} para la próxima tanda)" if quedan else "") + ".", flush=True)
+    if quedan:
+        open("quedan.txt", "w").write(str(quedan))
 
     try:
         manual = json.load(open(MANUAL, encoding="utf-8"))
@@ -462,7 +473,10 @@ def main():
         b["logo"] = buscar_logo(art, b.get("mbid"))
         print(f"   logo de {art}: {b['logo'] or 'no hay'}", flush=True)
     faltan = [k for k in claves if k not in discos]
-    salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "bandas": bandas, "faltan": faltan}
+    probados |= {f"{d[0]}|{d[1]}" for d in pendientes}
+    no_encontrados = sorted(k for k in probados if k in claves and k not in discos)
+    salida = {"generado": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "discos": discos, "bandas": bandas, "faltan": faltan,
+              "no_encontrados": no_encontrados}
     with open(SALIDA, "w", encoding="utf-8") as f:
         json.dump(salida, f, ensure_ascii=False, separators=(",", ":"))
     print(f"Listo: {len(discos)} discos guardados, {len(faltan)} no están en iTunes.")
