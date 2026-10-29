@@ -2218,7 +2218,7 @@ const CON_BANDAS=sinFuturas(["Soda Stereo","Gustavo Cerati","Charly García","Se
   "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"]);
 function conCandidatos(rng){
   const mez=a=>mezR(a,rng);
-  const base=DISCOS.filter(d=>d[1]&&(d[3]==="nac"||TODAS_BANDAS)&&CON_BANDAS.includes(d[0]));
+  const base=DISCOS.filter(d=>d[1]&&d[3]==="nac"&&CON_BANDAS.includes(d[0])); // Conexiones: solo rock nacional y uruguayo
   const porArt={}; base.forEach(d=>(porArt[d[0]]=porArt[d[0]]||[]).push(d));
   const artistas=Object.keys(porArt);
   if(CON.dif==="dificil"){
@@ -3906,10 +3906,11 @@ $("fra-bajar").onclick=()=>{ const a=document.createElement("a"); a.href=URL.cre
 [["Las Pelotas","2026-10-28"],["Turf","2026-10-28"],["Kapanga","2026-10-28"],["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!CON_BANDAS.includes(b)) CON_BANDAS.push(b) });
 // también a Adiviná el tema (rock barrial)
 [["Los Gardelitos","2026-10-28"]].forEach(([b,f])=>{ if(hoyAR()>=f&&!TEMA_BANDAS.includes(b)) TEMA_BANDAS.push(b) });
-// Desde el 30/10 todas las bandas del catálogo (nacionales y de afuera) entran a todos los juegos; a Adiviná el tema, solo las nacionales
+// Desde el 30/10 todas las bandas del catálogo (nacionales y de afuera) entran a los juegos; a Adiviná el tema, Conexiones y Ahorcado, solo las nacionales
 const NAC_BANDAS=new Set(DISCOS.filter(d=>d[1]&&d[3]==="nac").map(d=>d[0]));
 if(TODAS_BANDAS) for(const b of new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))){ if(!CON_BANDAS.includes(b)) CON_BANDAS.push(b); if(NAC_BANDAS.has(b)&&!TEMA_BANDAS.includes(b)) TEMA_BANDAS.push(b) }
-const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros");
+// Ahorcado: solo bandas nacionales y uruguayas (desde el 30/10 son todas las del catálogo)
+const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros"&&(!TODAS_BANDAS||NAC_BANDAS.has(b)));
 const AHO_VIDAS=6, AHO_DIA=3;
 const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};
 const ahoTop=new Map();
