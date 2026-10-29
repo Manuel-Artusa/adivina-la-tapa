@@ -1570,8 +1570,11 @@ async function resolver(d,azar,usados){
       const v=CACHE.disc[d[0]+"|"+d[1]];
       if(v&&!usados.has(v.id)) return {id:v.id,a:v.a,t:d[1],y:d[2],url:v.url,cat:d[3]};
       if(!azar&&(v||CACHE.faltan.has(d[0]+"|"+d[1]))) throw new Error("no está");
+      // con discos.json, un disco sin datos guardados se saltea al toque: buscarlo en vivo en iTunes
+      // en el celular queda colgado (y en Libre la tapa tardaba casi un minuto en aparecer)
+      throw new Error(v?"repetido":"sin datos");
     }
-  }
+  }else if(azar){ await esperarCache(); if(CACHE) throw new Error("sin disco") } // las bandas sin disco tampoco se buscan en vivo
   if(d[1]){
     const alb=norm(d[1]);
     pick=(await buscar(d[0]+" "+d[1])).filter(x=>mismoArtista(x,d[0])&&!NO_ROCK.test(norm(x.primaryGenreName||""))).sort(porId)
@@ -1829,7 +1832,7 @@ function mostrarFin(){
       :`<div class="aviso">El modo libre no suma al ranking. Jugá la Tapa del día para entrar al top.</div>`}
     <div class="fila">
       <button class="btn sec" id="b-compartir" type="button">Compartir</button>
-      ${g.modo==="normal"?`<button class="btn" id="b-otra" type="button">Jugar de nuevo</button>`:""}
+      ${g.modo==="normal"?`<button class="btn" id="b-otra" type="button">Jugar de nuevo</button>`:`<button class="btn" id="b-libre" type="button">Seguir en modo Libre</button>`}
     </div>
     ${g.modo==="diario"?`<div class="reloj" id="reloj"></div>`:""}`;
   const bs=$("b-subir"); if(bs) bs.onclick=subirPuntaje;
@@ -1837,6 +1840,7 @@ function mostrarFin(){
   if(TOP_ON&&!yaSubido&&g.modo==="diario"&&!g.pasado) subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
   $("b-compartir").onclick=compartir;
   const bo=$("b-otra"); if(bo) bo.onclick=()=>nuevaPartida("normal");
+  const bl=$("b-libre"); if(bl) bl.onclick=()=>irA("normal"); // al terminar el del día, seguir jugando sin límite
   if(g.modo==="diario"){ arrancarReloj(); compPanel("diario",f.querySelector(".cuadros"),g.puntos*xDia(g)) }
 }
 
@@ -3133,7 +3137,7 @@ function griPuntos(){ return Math.min(120,Math.round(griBase()*griMult()/10)*10)
 function griTexto(){
   const n=GRI.celdas.filter(Boolean).length, filas=[0,1,2].map(i=>GRI.celdas.slice(i*3,i*3+3).map(v=>v?"🟩":"⬛").join(""));
   const t=n===9&&GRI.usado!=null?` en ${Math.max(1,Math.round(GRI.usado))} s`:"";
-  return `Grilla rockera ${GRI.modo==="diario"?"#"+nDia():""} — ${n}/9${t} · ⏱ ${GRI.seg} s ${multTxt(griMult())} = ${griPuntos()} pts\n${filas.join("\n")}\n${location.origin}/grilla-rockera/`;
+  return `Grilla rockera ${GRI.modo==="diario"?"#"+nDia():""} — ${n}/9${t} · ⏱ ${GRI.seg} s ${multTxt(griMult())} = ${griPuntos()} pts\n${filas.join("\n")}\n${location.origin}/grilla-rockera${marcaLink("grilla")}/`;
 }
 function griTerminar(restaurado){
   const n=GRI.celdas.filter(Boolean).length, p=griPuntos(), fin=$("grilla-fin"); fin.hidden=false;
@@ -3524,10 +3528,10 @@ $("armar-ok").onclick=()=>{
 };
 $("armar-otra").onclick=()=>armJugar(ARM.cur.k);
 $("armar-volver").onclick=$("armar-otras").onclick=()=>armIniciar();
-$("armar-comp").onclick=async()=>{ const c=ARM.cur, t=`🧩 Armá la tapa: ${c.t} (${c.a})\nPrecisión: ${ARM.ultimo.toFixed(2).replace(".",",")}%\n¿Lo superás? ${location.origin}/arma-la-tapa/`, b=$("armar-comp");
+$("armar-comp").onclick=async()=>{ const c=ARM.cur, t=`🧩 Armá la tapa: ${c.t} (${c.a})\nPrecisión: ${ARM.ultimo.toFixed(2).replace(".",",")}%\n¿Lo superás? ${location.origin}/arma-la-tapa/${marcaLink("armar")}`, b=$("armar-comp");
   try{ if(navigator.share&&matchMedia("(pointer:coarse)").matches){ await navigator.share({text:t}); return } await navigator.clipboard.writeText(t); b.textContent="¡Copiado!" }catch(e){} };
 $("armar-x").onclick=()=>{ const c=ARM.cur, t=`🧩 Saqué ${ARM.ultimo.toFixed(2).replace(".",",")}% armando la tapa de ${c.t} (${c.a}). ¿Lo superás?`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(location.origin+"/arma-la-tapa/")}`,"_blank","noopener") };
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(location.origin+"/arma-la-tapa/"+marcaLink("armar"))}`,"_blank","noopener") };
 
 // ===== Marcar tapas (/marcar-tapas/): dibujar el contorno del elemento que se saca de cada tapa =====
 const MAR={sel:null,pts:[],img:null,marcas:{},filtro:""};
@@ -5297,9 +5301,11 @@ function compBarra(p){
   const v=Math.min(100,p), llenos=Math.floor(v/20), medio=llenos<5&&v%20>=10?1:0;
   return "🟩".repeat(llenos)+"🟨".repeat(medio)+"⬛".repeat(5-llenos-medio);
 }
+// Marca en los links compartidos (GoatCounter → Campaigns): se ve cuántos entran por resultados compartidos y de qué juego
+const marcaLink=j=>`?utm_source=compartido&utm_campaign=${encodeURIComponent(j)}`;
 function compTexto(j,p){
   let g=null; try{ g=COMP_GRILLA[j]&&COMP_GRILLA[j]() }catch(e){}
-  return `${EMOJI[j]} ${NOMBRES[j]} · Juegos Rock #${nDia()}\n${g||compBarra(p)}${g&&g.includes("\n")?"\n":" "}${p} puntos\n¿Me ganás? ${location.origin}${RUTAS[j]||"/"}`;
+  return `${EMOJI[j]} ${NOMBRES[j]} · Juegos Rock #${nDia()}\n${g||compBarra(p)}${g&&g.includes("\n")?"\n":" "}${p} puntos\n¿Me ganás? ${location.origin}${RUTAS[j]||"/"}${marcaLink(j)}`;
 }
 const compFrase=p=>p>=100?"¡Perfecto!":p>=80?"Rockero de ley":p>=50?"Nada mal":p>0?"Hay que escuchar más":"Mañana va la revancha";
 async function compImagen(j,p){
@@ -5354,7 +5360,7 @@ function resumenTexto(){
     return `${EMOJI[j]} ${"🟩".repeat(v)}${"⬛".repeat(5-v)} ${p}`;
   });
   const r=rachas(), extra=!esPasado()&&r.actual>=2?`\n🔥 ${r.actual} días seguidos`:"";
-  return `Juegos Rock #${numDiario(dia)} — ${total}/${DIARIOS.length*100}${extra}\n${filas.join("\n")}\n${location.origin}`;
+  return `Juegos Rock #${numDiario(dia)} — ${total}/${DIARIOS.length*100}${extra}\n${filas.join("\n")}\n${location.origin}/${marcaLink("resumen")}`;
 }
 $("b-resumen").onclick=async()=>{
   const txt=resumenTexto(), b=$("b-resumen"), orig=b.textContent;
