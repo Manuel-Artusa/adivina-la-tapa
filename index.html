@@ -1570,8 +1570,11 @@ async function resolver(d,azar,usados){
       const v=CACHE.disc[d[0]+"|"+d[1]];
       if(v&&!usados.has(v.id)) return {id:v.id,a:v.a,t:d[1],y:d[2],url:v.url,cat:d[3]};
       if(!azar&&(v||CACHE.faltan.has(d[0]+"|"+d[1]))) throw new Error("no está");
+      // con discos.json, un disco sin datos guardados se saltea al toque: buscarlo en vivo en iTunes
+      // en el celular queda colgado (y en Libre la tapa tardaba casi un minuto en aparecer)
+      throw new Error(v?"repetido":"sin datos");
     }
-  }
+  }else if(azar){ await esperarCache(); if(CACHE) throw new Error("sin disco") } // las bandas sin disco tampoco se buscan en vivo
   if(d[1]){
     const alb=norm(d[1]);
     pick=(await buscar(d[0]+" "+d[1])).filter(x=>mismoArtista(x,d[0])&&!NO_ROCK.test(norm(x.primaryGenreName||""))).sort(porId)
@@ -1829,7 +1832,7 @@ function mostrarFin(){
       :`<div class="aviso">El modo libre no suma al ranking. Jugá la Tapa del día para entrar al top.</div>`}
     <div class="fila">
       <button class="btn sec" id="b-compartir" type="button">Compartir</button>
-      ${g.modo==="normal"?`<button class="btn" id="b-otra" type="button">Jugar de nuevo</button>`:""}
+      ${g.modo==="normal"?`<button class="btn" id="b-otra" type="button">Jugar de nuevo</button>`:`<button class="btn" id="b-libre" type="button">Seguir en modo Libre</button>`}
     </div>
     ${g.modo==="diario"?`<div class="reloj" id="reloj"></div>`:""}`;
   const bs=$("b-subir"); if(bs) bs.onclick=subirPuntaje;
@@ -1837,6 +1840,7 @@ function mostrarFin(){
   if(TOP_ON&&!yaSubido&&g.modo==="diario"&&!g.pasado) subirPuntaje(); // el diario se sube solo con el nombre de la bienvenida
   $("b-compartir").onclick=compartir;
   const bo=$("b-otra"); if(bo) bo.onclick=()=>nuevaPartida("normal");
+  const bl=$("b-libre"); if(bl) bl.onclick=()=>irA("normal"); // al terminar el del día, seguir jugando sin límite
   if(g.modo==="diario"){ arrancarReloj(); compPanel("diario",f.querySelector(".cuadros"),g.puntos*xDia(g)) }
 }
 
