@@ -120,13 +120,18 @@ fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sit
 
 for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json", "frases.json", "coronita.png"]) {
   if (f === "discos.json" && fs.existsSync(f)) {
-    // Más liviano para el celular: los audios de 30 s solo los usa "Adiviná el tema", que es de bandas nacionales.
-    // A los discos de bandas de afuera se les saca el link del audio (el nombre del tema queda)
-    const d = JSON.parse(fs.readFileSync(f, "utf8")), bandas = d.bandas || {};
+    // Más liviano para el celular: los links de los audios de 30 s (solo los usa "Adiviná el tema") van aparte,
+    // un archivo por banda en audios/<banda>.json ({id del disco: [audio de cada tema]}); la página lo pide cuando lo necesita
+    const d = JSON.parse(fs.readFileSync(f, "utf8")), audios = {};
+    const slug = b => String(b).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim().replace(/ /g, "-");
     for (const [k, v] of Object.entries(d.discos || {})) {
-      const b = bandas[k.split("|")[0]];
-      if (b && b.pais && !["AR", "UY"].includes(b.pais) && v.temas) v.temas = v.temas.map(t => t.slice(0, 3));
+      if (!v.temas || !v.temas.some(t => t[3])) continue;
+      const s = slug(k.split("|")[0]);
+      (audios[s] = audios[s] || {})[v.id] = v.temas.map(t => t[3] || "");
+      v.temas = v.temas.map(t => t.slice(0, 3));
     }
+    fs.mkdirSync("public/audios", { recursive: true });
+    for (const [s, a] of Object.entries(audios)) fs.writeFileSync(`public/audios/${s}.json`, JSON.stringify(a));
     delete d.no_encontrados;
     fs.writeFileSync("public/" + f, JSON.stringify(d));
     continue;
