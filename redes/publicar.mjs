@@ -226,10 +226,17 @@ async function thToken() {
   }
   return token;
 }
+// Link con marca (GoatCounter → Campaigns): en Facebook y Threads el link se puede tocar, así se ve qué red y qué
+// publicación trae gente. En Instagram no (los links del texto no andan): ahí cuenta el link de la bio
+const linkMarcado = (red, id) => `https://juegosrock.com.ar/?utm_source=${red}&utm_campaign=${encodeURIComponent(id || "post")}`;
+function conLink(c, red, id) {
+  const url = linkMarcado(red, id), t = (c || "").replace(/juegosrock\.com\.ar \(link en la bio\)/, url);
+  return t.includes(url) ? t : t.replace(/juegosrock\.com\.ar(?![\w/?])/, url);
+}
 // Threads deja 500 caracteres: sin hashtags y cortado prolijo
-function textoThreads(c) {
-  let t = (c || "").replace(/(^|\s)#[^\s#]+/g, "").replace(/\n{3,}/g, "\n\n").trim();
-  if (t.length > 480) { t = t.slice(0, 440); t = t.slice(0, Math.max(t.lastIndexOf(". "), t.lastIndexOf("\n"), 200) + 1).trim() + "\n\njuegosrock.com.ar" }
+function textoThreads(c, id) {
+  let t = conLink((c || "").replace(/(^|\s)#[^\s#]+/g, "").replace(/\n{3,}/g, "\n\n").trim(), "threads", id);
+  if (t.length > 480) { t = t.slice(0, 380); t = t.slice(0, Math.max(t.lastIndexOf(". "), t.lastIndexOf("\n"), 200) + 1).trim() + "\n\n" + linkMarcado("threads", id) }
   return t;
 }
 async function thListo(token, id) {
@@ -246,7 +253,7 @@ async function thYaEsta(token, uid, text) {
   return x ? x.id : null;
 }
 async function publicarThreads(token, uid, p, urls) {
-  const text = textoThreads(p.caption);
+  const text = textoThreads(p.caption, p.id);
   const ya = await thYaEsta(token, uid, text); if (ya) { log(`   ℹ️ ${p.id}: ya estaba publicado en Threads`); return ya }
   let id;
   if (p.tipo === "reel") id = (await th(token, `${uid}/threads`, { media_type: "VIDEO", video_url: urls[0], text })).id;
@@ -305,11 +312,11 @@ async function fbPagina() {
   return pag;
 }
 async function publicarFacebook(pag, p, urls) {
-  if (p.tipo === "reel") return (await fb(pag.token, `${pag.id}/videos`, { file_url: urls[0], description: p.caption }, "POST", "https://graph-video.facebook.com/v23.0")).id;
-  if (urls.length === 1) return (await fb(pag.token, `${pag.id}/photos`, { url: urls[0], message: p.caption })).post_id;
+  if (p.tipo === "reel") return (await fb(pag.token, `${pag.id}/videos`, { file_url: urls[0], description: conLink(p.caption, "facebook", p.id) }, "POST", "https://graph-video.facebook.com/v23.0")).id;
+  if (urls.length === 1) return (await fb(pag.token, `${pag.id}/photos`, { url: urls[0], message: conLink(p.caption, "facebook", p.id) })).post_id;
   const fotos = [];
   for (const u of urls.slice(0, 10)) fotos.push((await fb(pag.token, `${pag.id}/photos`, { url: u, published: "false" })).id);
-  const params = { message: p.caption };
+  const params = { message: conLink(p.caption, "facebook", p.id) };
   fotos.forEach((id, i) => params[`attached_media[${i}]`] = JSON.stringify({ media_fbid: id }));
   return (await fb(pag.token, `${pag.id}/feed`, params)).id;
 }
