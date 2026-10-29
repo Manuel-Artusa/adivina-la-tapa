@@ -1474,13 +1474,16 @@ const hoyAR=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Bue
 // El Bingo rockero entra a los desafíos el 28/10 (así no cambia el total del día en curso)
 const BINGO_ON=hoyAR()>="2026-10-28";
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
-const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set(), DISCOS_FUTUROS=[], CACHE_FUTURO={};
+const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set(), DISCOS_FUTUROS=[], CACHE_FUTURO={}, DISCOGRAFIAS_30_10=new Set();
 { const hoy=hoyAR(), bandas=new Set(DISCOS.map(d=>d[0]));
   for(let i=DISCOS.length-1;i>=0;i--){ const d=DISCOS[i];
     if((d[4]&&hoy<d[4])||(d[5]&&hoy>=d[5])){ if(d[1]&&d[4]&&hoy<d[4]){ CATALOGO_FUTURO.add(d[0]+"|"+d[1]); DISCOS_FUTUROS.push(d.slice(0,4)) } DISCOS.splice(i,1) } }
-  DISCOS.forEach(d=>{ CATALOGO_FUTURO.delete(d[0]+"|"+d[1]); d.length=4 }); // el resto del juego ve [banda, disco, año, tipo]
+  DISCOS.forEach(d=>{ CATALOGO_FUTURO.delete(d[0]+"|"+d[1]); if(d[4]==="2026-10-30") DISCOGRAFIAS_30_10.add(d[0]+"|"+d[1]); d.length=4 }); // el resto del juego ve [banda, disco, año, tipo]
   const vigentes=new Set(DISCOS.map(d=>d[0])); bandas.forEach(b=>{ if(!vigentes.has(b)) BANDAS_FUTURAS.add(b) }) }
 const TODAS_BANDAS=hoyAR()>="2026-10-30";
+// Tapa del día: desde el 30/10 solo el catálogo de siempre (sin las discografías completas que entran ese día) y sin Farolitos
+const TAPA_FUERA=["Farolitos"];
+const tapaDia=()=>DISCOS.filter(d=>d[1]&&(!TODAS_BANDAS||(!DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])&&!TAPA_FUERA.includes(d[0]))));
 const sinFuturas=lista=>{ for(let i=lista.length-1;i>=0;i--) if(BANDAS_FUTURAS.has(lista[i])) lista.splice(i,1); return lista };
 const numDiario=dia=>Math.round((Date.parse(dia)-Date.parse(INICIO_DIARIO))/864e5)+1;
 
@@ -1593,7 +1596,7 @@ function nuevaPartida(modo){
   G={modo,genero,dia,pasado:modo==="diario"&&dia!==hoyAR(),token:{},ronda:0,puntos:0,intento:0,actual:null,log:[],malos:[],usados:new Set(),proximo:null,terminado:false,saltar:0,restaurar:null,subido:false};
   if(modo==="diario"){
     G.seed=hashStr("tapa-"+dia); rnd=semillaRng(G.seed);
-    G.cola=mezclar(DISCOS.filter(d=>d[1])); G.nac1=true;
+    G.cola=mezclar(tapaDia()); G.nac1=true;
     const guardado=leerDia("tapa-d",dia);
     if(guardado){G.log=guardado.log||[];G.puntos=guardado.puntos||0;G.ronda=G.log.length;G.saltar=G.log.length;G.restaurar=guardado.cur||null;G.subido=!!guardado.subido}
   }else{
@@ -1706,7 +1709,7 @@ async function distractores(r,g){
   const forma=formas[rnd()*formas.length|0];
   if(forma==="misma") return propios;
 
-  const base=g.modo==="diario"?DISCOS.filter(d=>d[1]):DISCOS;
+  const base=g.modo==="diario"?tapaDia():DISCOS;
   const yo=norm(r.a), cerca=x=>!r.y||!x[2]||Math.abs(x[2]-r.y)<=12;
   const misma=base.filter(x=>x[3]===r.cat&&norm(x[0])!==yo);
   const cands=mezclar(misma.filter(cerca)).concat(mezclar(misma.filter(x=>!cerca(x))),mezclar(base.filter(x=>x[3]!==r.cat&&norm(x[0])!==yo)));
