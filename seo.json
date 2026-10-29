@@ -37,7 +37,7 @@
     "descripcion": "Desafío diario de rock: 10 tapas de discos pixeladas, las mismas para todos. Adiviná cada disco con la menor cantidad de errores y compartí tu resultado.",
     "h": "Tapa del día: adiviná el disco por su tapa",
     "texto": [
-      "Cada día hay 10 tapas de discos de rock, iguales para todos los jugadores. La tapa arranca pixelada y se aclara con cada error: cuanto antes la reconozcas, más puntos sumás (hasta 50 por día).",
+      "Cada día hay 10 tapas de discos de rock, iguales para todos los jugadores. La tapa arranca pixelada y se aclara con cada error: cuanto antes la reconozcas, más puntos sumás: hasta 10 por tapa, 100 por día.",
       "Al terminar podés compartir tu resultado con cuadritos de colores, como en Wordle, y ver tu posición en el ranking del día."
     ]
   },
@@ -97,7 +97,7 @@
     "descripcion": "Aparece la tapa de un disco y tenés que tocar la banda que lo grabó entre 12. Completá el bingo contra reloj: 90, 60 o 45 segundos. Desafío diario y modo libre.",
     "h": "Bingo rockero: uní cada tapa con su banda",
     "texto": [
-      "Arriba aparece la tapa de un disco de rock nacional y abajo hay una grilla con 12 bandas. Tocá la banda que lo grabó; si su casillero ya está lleno o la banda no está, salteala.",
+      "Arriba aparece la tapa de un disco de rock y abajo hay una grilla con 12 bandas. Tocá la banda que lo grabó; si su casillero ya está lleno o la banda no está, salteala.",
       "Elegí 90, 60 o 45 segundos: cuanto menos tiempo, más puntos podés sacar. El desafío del día es igual para todos y en el modo libre jugás las veces que quieras."
     ]
   },
@@ -107,7 +107,7 @@
     "descripcion": "¿Este disco salió antes o después que el otro? Juego de rachas con discos de rock nacional e internacional. Desafío diario de 10 comparaciones.",
     "h": "¿Antes o después?: ¿qué disco salió primero?",
     "texto": [
-      "Te mostramos dos discos: uno con su año y otro sin. Elegí si el segundo salió antes o después. Si acertás, seguís; al primer error se corta la racha.",
+      "Te mostramos dos discos: uno con su año y otro sin. Elegí si el segundo salió antes o después. Si acertás, seguís; al primer error se corta la racha. Cada acierto vale 10 puntos.",
       "El desafío del día son 10 comparaciones iguales para todos, y en el modo libre podés buscar tu mejor racha."
     ]
   },
@@ -128,7 +128,7 @@
     "h": "Tema número 1: ¿qué canción abre el disco?",
     "texto": [
       "Te mostramos un disco y cuatro de sus canciones. Elegí cuál es el primer tema. Al responder ves en qué número de tema está cada una.",
-      "El desafío del día son 5 discos, y en el modo libre jugás por rachas."
+      "El desafío del día son 5 discos (20 puntos cada uno), y en el modo libre jugás por rachas."
     ]
   },
   "conexiones": {
@@ -158,7 +158,7 @@
     "h": "Ahorcado rockero: adiviná el nombre del tema",
     "texto": [
       "Te decimos la banda y cuántas letras tiene el nombre del tema. Andá probando letras: con 6 errores se completa el dibujo y perdés.",
-      "Si te trabás, la pista te muestra de qué disco es, pero cuenta como un error. El desafío del día son 3 temas y en el modo libre jugás por rachas."
+      "Si te trabás, la pista te muestra de qué disco es, pero cuenta como un error. El desafío del día son 3 temas: cada uno vale 100 menos 10 por error y se promedia. En el modo libre jugás por rachas."
     ]
   },
   "letra": {
@@ -168,7 +168,7 @@
     "h": "¿De qué tema es?: frases de los Redondos y el Indio Solari",
     "texto": [
       "Te mostramos una frase de una canción de los Redondos o del Indio Solari y tenés que escribir de qué tema es. Si errás o pasás, aparece otra frase del mismo tema, cada vez más fácil.",
-      "El desafío del día son 3 temas, iguales para todos: cada uno vale 100 puntos si lo sacás con la primera frase. En el modo libre jugás por rachas."
+      "El desafío del día son 3 temas, iguales para todos: cada uno vale 100 puntos con la primera frase, 70 con la segunda, 40 con la tercera y 20 con la cuarta, y se promedia. En el modo libre jugás por rachas."
     ]
   },
   "top": {
@@ -177,7 +177,7 @@
     "descripcion": "Ranking general y por juego de los desafíos diarios de Juegos Rock. Mirá quién sacó más puntos hoy y en los últimos 7 días.",
     "h": "Ranking",
     "texto": [
-      "El ranking general suma los desafíos del día: cada uno vale hasta 100 puntos. También hay un ranking de cada desafío y uno de los últimos 7 días."
+      "El ranking general suma los desafíos del día: cada uno vale hasta 100 puntos (la Grilla rockera, hasta 120 si la hacés en 45 segundos). También hay un ranking de cada desafío y uno de los últimos 7 días."
     ]
   },
   "yo": {
