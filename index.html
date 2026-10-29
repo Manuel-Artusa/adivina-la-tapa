@@ -5046,11 +5046,80 @@ async function redesVideo(dia,turnoVideo){
   }
   return null;
 }
+// ===== Novedad: discos nuevos (turno "novedad" de Publicar en redes) =====
+// Los discos que entraron el 30/10 (discografías completas). Antes de esa fecha se toman de los que todavía no entraron.
+function novedadDatos(){
+  const lista=DISCOGRAFIAS_30_10.size?DISCOS.filter(d=>d[1]&&DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])):DISCOS_FUTUROS.filter(d=>d[1]);
+  const nuevos=lista.map(d=>({d,v:CACHE&&(CACHE.disc[d[0]+"|"+d[1]]||CACHE_FUTURO[d[0]+"|"+d[1]])})).filter(x=>x.v&&x.v.url);
+  const antes={}; DISCOS.forEach(d=>{ if(d[1]&&!DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])) antes[d[0]]=(antes[d[0]]||0)+1 });
+  const por={}; nuevos.forEach(x=>(por[x.d[0]]=por[x.d[0]]||[]).push(x));
+  const bandas=Object.keys(por), esNac=b=>por[b][0].d[3]==="nac";
+  const nuevas=bandas.filter(b=>!antes[b]).sort((a,b)=>esNac(b)-esNac(a)||por[b].length-por[a].length);
+  const completas=bandas.filter(b=>antes[b]).sort((a,b)=>esNac(b)-esNac(a)||por[b].length-por[a].length);
+  return {nuevos,antes,por,bandas,nuevas,completas,cuantos:Math.max(100,Math.floor(nuevos.length/100)*100)};
+}
+async function placasNovedad(){
+  const D=novedadDatos(); if(D.nuevos.length<50) throw new Error("todavía no hay discos nuevos con tapa");
+  const out=[], rng=semillaRng(hashStr("novedad-discos"));
+  // 1) portada: el número y un mosaico de tapas (una por banda, nacionales)
+  let [c,x]=lienzo(1080,1350);
+  etiqueta(x,"NOVEDAD EN JUEGOS ROCK",80,60,30);
+  texto(x,`+${D.cuantos} DISCOS`,80,250,{s:150,c:CC.rojo,w:920,min:80});
+  texto(x,`Discografías completas de ${D.bandas.length} bandas`,80,325,{f:FB,peso:"800",s:44,w:920});
+  const muestra=mezR(D.bandas.filter(b=>D.por[b][0].d[3]==="nac"),rng).slice(0,12).map(b=>mezR(D.por[b],rng)[0]);
+  const imgs=await Promise.all(muestra.map(m=>contImg(m.v.url)));
+  imgs.forEach((im,i)=>tapa(x,im,80+(i%4)*235,385+Math.floor(i/4)*235,205,0,6));
+  texto(x,"Deslizá para ver qué bandas se suman →",540,1300,{f:FM,peso:"500",s:27,al:"center",w:960});
+  out.push(c);
+  // 2) bandas nuevas en la página
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"SE SUMAN",80,60,30);
+  texto(x,"Bandas nuevas",80,215,{s:92,w:920});
+  const nuevas=D.nuevas.slice(0,8), imN=await Promise.all(nuevas.map(b=>contImg(D.por[b][0].v.url)));
+  nuevas.forEach((b,i)=>{ const X=80+(i%2)*470, Y=280+Math.floor(i/2)*245;
+    tapa(x,imN[i],X,Y,190,0,6);
+    texto(x,b,X+215,Y+80,{f:FB,peso:"800",s:36,w:240,max:2,lh:1.1,min:22});
+    texto(x,`${D.por[b].length} discos`,X+215,Y+170,{f:FM,peso:"500",s:28,c:CC.rojo,w:240}) });
+  out.push(c);
+  // 3) discografías completas: las que más crecieron
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"DISCOGRAFÍAS COMPLETAS",80,60,30);
+  texto(x,"Ahora están todas",80,215,{s:88,w:920});
+  const comp=D.completas.slice(0,6), imC=await Promise.all(comp.map(b=>contImg(D.por[b][0].v.url)));
+  comp.forEach((b,i)=>{ const Y=270+i*168;
+    tapa(x,imC[i],80,Y,140,0,6);
+    texto(x,b,260,Y+60,{f:FB,peso:"800",s:40,w:740,max:1,min:24});
+    texto(x,`de ${D.antes[b]} a ${D.antes[b]+D.por[b].length} discos`,260,Y+118,{f:FM,peso:"500",s:32,c:CC.rojo,w:740}) });
+  out.push(c);
+  // 4) cierre
+  [c,x]=lienzo(1080,1350,CC.tinta);
+  texto(x,"YA ESTÁN EN LOS JUEGOS",540,250,{s:76,c:CC.papel,al:"center",w:960,max:2,lh:1.05});
+  ["Conexiones","Ahorcado rockero","Bingo rockero","Ordená la discografía","Tema número 1","Adiviná la tapa (Libre)"].forEach((j,i)=>
+    texto(x,"✔ "+j,540,470+i*82,{f:FB,peso:"800",s:46,c:CC.crema,al:"center",w:960}));
+  texto(x,"¿Qué banda falta? Contanos 👇",540,1040,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:960});
+  marca(x,540,1190,56);
+  out.push(c);
+  return out;
+}
+function textoNovedad(){
+  const D=novedadDatos(), nom=l=>l.length>1?l.slice(0,-1).join(", ")+" y "+l[l.length-1]:l[0]||"";
+  const nac=b=>D.por[b][0].d[3]==="nac";
+  return `🎸 ¡Llegaron más de ${D.cuantos} discos nuevos a Juegos Rock!\n\n`+
+    `Sumamos las discografías completas de ${D.bandas.length} bandas: ${nom(D.completas.filter(nac).slice(0,6))}… `+
+    `Y se suman ${nom(D.nuevas.filter(nac).slice(0,7))}.\n\n`+
+    `Ya están en Conexiones, Ahorcado, Bingo, Ordená la discografía, Tema número 1 y más. ¿Qué banda falta? Dejala en los comentarios 👇\n\n`+
+    `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`;
+}
 async function redesPlan(dia,turno,disco){
   try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
   await esperarCache();
   const out=[], ayer=sumarDias(dia,-1), ds=diaSemana(dia), err=[];
   const intentar=async(nombre,fn)=>{ try{ await fn() }catch(e){ err.push(nombre+": "+(e&&e.message||e)); console.error(nombre,e) } };
+  // A mano: el anuncio de los discos nuevos
+  if(turno==="novedad"){
+    await intentar("novedad",async()=>{ out.push({id:"novedad-discos",tipo:"carrusel",caption:textoNovedad(),imgs:await placasNovedad()}) });
+    return {pubs:out,errores:err};
+  }
   // A mano: el post de aniversario de un disco puntual ("Banda|Disco"), aparte del post del día
   if(turno==="aniversario"){
     await intentar("aniversario",async()=>{
