@@ -1,6 +1,314 @@
 {
  "temas": [
   {
+   "tema": "Black Russian",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "La mordida no es",
+    "Grave como ladrar",
+    "Cuando es fácil cazar (sobra la daga)",
+    "De cara de animal"
+   ]
+  },
+  {
+   "tema": "Ceremonia Durante la Tormenta",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Y hay también un topacio en Brasil",
+    "Que quita los dolores",
+    "Y un abundante buffet del hotel",
+    "Esperando en tu suite por la cita"
+   ]
+  },
+  {
+   "tema": "Chante Noire",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "No olvidás, te vengás",
+    "La piedad siempre te cae tan mal",
+    "Caridad, compasión",
+    "Mortifican por tu falsedad"
+   ]
+  },
+  {
+   "tema": "El Tabano en la Oreja",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Así estaba escrito el guión",
+    "Vos debías ser feliz",
+    "Todo un Simón Le Bon, Bon, Bon",
+    "Chispeante, un poco burlón"
+   ]
+  },
+  {
+   "tema": "No Es Dios Todo lo que Reluce",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Y al pie estás vos, tan ciego, jugando al mercader",
+    "Que ríe en esa estafa sin pestañear",
+    "Al borde del camino te parás",
+    "A rebuznar feliz, jodiendo sin flaquear, ay"
+   ]
+  },
+  {
+   "tema": "Satelital",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Van a atentar, Dios lo permite",
+    "Van a explotar, uno tras otro",
+    "No hay corazón, sólo hay un hueco allí",
+    "Donde antes latía encantado"
+   ]
+  },
+  {
+   "tema": "Submarino Soluble",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "No me obedece más la nave donde estoy",
+    "Me pregunto porque no me obedece más",
+    "Planetaria es mi fortuna",
+    "Pero hundida en un océano"
+   ]
+  },
+  {
+   "tema": "Todos a los Botes!",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "¡Vamos! Y no se empujen, ni pisoteen",
+    "Que este temblor ya va a parar",
+    "¡No tengan miedo!",
+    "¡Todos! ¡Pronto, a los botes!"
+   ]
+  },
+  {
+   "tema": "Torito Es Muerto",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Si Dios no existe, ¿cómo es posible",
+    "Toda esta vida de más que tenés?",
+    "La última teca fue para el fierro",
+    "Para las balas ya no te alcanzó"
+   ]
+  },
+  {
+   "tema": "Una Rata Muerta Entre los Geranios",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Con un soplo vacio mi boca",
+    "es tarde en la noche",
+    "y no puedo dormir",
+    "silenciosa mi risa esta oscura"
+   ]
+  },
+  {
+   "tema": "Vino Mariani",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Vas a invitar a los notables",
+    "Y a las celebridades underground",
+    "Van a sonar aplausos para todos hoy",
+    "Oh-oh-oh, oh-oh-oh, oh-oh-oh"
+   ]
+  },
+  {
+   "tema": "Zzzzzzz...",
+   "disco": "El Perfume de la Tempestad",
+   "banda": "indio",
+   "frases": [
+    "Tecno-humano y proto-humano",
+    "(y el mono extraviado que sos!)",
+    "Tecnobios que son de frontera",
+    "y que un hueso de pollo atascó"
+   ]
+  },
+  {
+   "tema": "A Bailar Que No Hay Infierno",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Ríe, ronronea y bosteza",
+    "Puede hacer eso todo el día",
+    "¿Qué no? ¿No ves",
+    "Que te está hundiendo?"
+   ]
+  },
+  {
+   "tema": "Canción para un Terrorista Bonito",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Sabe dónde ha nacido",
+    "y dónde aguarda su muerte",
+    "amanece en el día del que",
+    "no podrá ver el fin"
+   ]
+  },
+  {
+   "tema": "El Callejón de los Milagros",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Mi callejón con todos sus milagros",
+    "Tu callejón, ay, bang, bang, bang",
+    "Jardines con sus manzanitas de oro",
+    "Y en tu jardín, ay, bang, bang, bang"
+   ]
+  },
+  {
+   "tema": "El Martillo de las Brujas (Malleus Maleficarum)",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Muere hoy, la vida, en falsedad",
+    "De cuna a tumba, siempre en falsedad",
+    "Y te dejas llevar así, oh",
+    "Con tus tonterías, vos te entregás"
+   ]
+  },
+  {
+   "tema": "El Que la Seca la Llena",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Lo que inquieta esta vez",
+    "No durará más de un mes",
+    "Los amores se cruzan, siempre",
+    "Con la alegría"
+   ]
+  },
+  {
+   "tema": "El Ruiseñor, el Amor y la Muerte",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "En mi corazón embocaste tus sueños",
+    "la amistad dejó sin cuidado al amor",
+    "vos no deseas que yo te quiera así",
+    "que te prefiera nomás"
+   ]
+  },
+  {
+   "tema": "El Tío Alberto en el Día de la Bicicleta",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Cambio la luz y él pedaleo",
+    "la callecitas de Basilea seguían igual",
+    "mundo exterior y mundo interior",
+    "fueron lo mismo por el sendero que recorrió"
+   ]
+  },
+  {
+   "tema": "La Ciudad de los Encandilados",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Esta oscura ciudad inmensa ciudad",
+    "es para héroes solitarios",
+    "esta fría ciudad ventosa ciudad",
+    "es para los encandilados"
+   ]
+  },
+  {
+   "tema": "La Moda No Es Vanguardia",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Me invento plegarias vacías sin sed de fe",
+    "Demasiado ciertas para ser verdad... ya sé",
+    "¿Seré yo acaso un espía",
+    "Allí entre los muertos sin alma?"
+   ]
+  },
+  {
+   "tema": "La Oscuridad",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Me acerco a vos…",
+    "Pedís que no mire hacia atrás",
+    "El equipaje pesará menos que",
+    "la última vez"
+   ]
+  },
+  {
+   "tema": "La Pequeña Mamba",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Nos criamos juntos y te engañé",
+    "Y todo el tiempo oculté lo que siento",
+    "No hiciste nada por seducir",
+    "Pero entre mi deseo y mis dudas"
+   ]
+  },
+  {
+   "tema": "Ostende Hotel",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Se suelta el pelo",
+    "y se la ve reinar",
+    "allí en el mar",
+    "como en el bar"
+   ]
+  },
+  {
+   "tema": "Panasonic y el Mundo a Sus Pies",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "En un muy viejo camión de Juncadella",
+    "vive su fiel picho Enfisema y el",
+    "cualquier fulana que llegue a su bragueta",
+    "puede pasar la noche allí"
+   ]
+  },
+  {
+   "tema": "Pinturas de Guerra",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Cuando ya abandoné",
+    "Mi nombre a merced",
+    "De miserables, ay-ay",
+    "Tal será mi vergüenza"
+   ]
+  },
+  {
+   "tema": "Strangerdanger",
+   "disco": "El Ruiseñor, el Amor y la Muerte",
+   "banda": "indio",
+   "frases": [
+    "Divertido sos como un toque de queda sos",
+    "todo lo valioso vos te llevás",
+    "mis enemigos me van a asustar",
+    "cuándo comiencen a tener razón"
+   ]
+  },
+  {
+   "tema": "Adieu! Bye Bye! Aufwiedersehen!",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Llegando al final, él cree que la línea se cortó",
+    "(¡Sexy bomba! ¡Y el Chulo Cheche!)",
+    "Las cuentas, las deudas que entretenía ya pagó",
+    "Se siente en paz"
+   ]
+  },
+  {
    "tema": "Amnesia",
    "disco": "El Tesoro de los Inocentes",
    "banda": "indio",
@@ -9,6 +317,39 @@
     "Y un agujero allí de un año",
     "Ningún recuerdo, nada, nada",
     "No actúa por amor ni por esplendor"
+   ]
+  },
+  {
+   "tema": "Canción para un Goldfish",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Check in-out!",
+    "así, siempre, como entrás...salís",
+    "Check in- check out!",
+    "con portazos en la habitación"
+   ]
+  },
+  {
+   "tema": "Ciudad Baigón",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Y jamás va a alcanzar para vos",
+    "No va a ser nunca tu paraíso",
+    "Mirá las almas a tu alrededor",
+    "Mirá el amor que está a tu costado"
+   ]
+  },
+  {
+   "tema": "El Charro Chino",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Conociste un par de estrellas y su ombligo…",
+    "Gargarita y el Cadete del Espacio también.",
+    "Te derretías por sus vidas, querías disfrutar",
+    "de su química milagrosa que te invitaba a bailar…"
    ]
   },
   {
@@ -23,6 +364,17 @@
    ]
   },
   {
+   "tema": "La Muerte y Yo",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Cosa difícil de hacer",
+    "Como volver, a la vida, peces",
+    "Y que así puedan nadar otra vez",
+    "En mi sopa de pescado"
+   ]
+  },
+  {
    "tema": "La Piba de Blockbuster",
    "disco": "El Tesoro de los Inocentes",
    "banda": "indio",
@@ -31,6 +383,17 @@
     "Con él la atrapé y ya no pudo salir",
     "Silenciosos o muy sonoros",
     "Sus besos son suaves bendiciones"
+   ]
+  },
+  {
+   "tema": "Mi Caramel Machiato",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Soy \"el monsieur\", un héroe en Berisso",
+    "yo soy el swami que noo caga jamás",
+    "soy el temible \"peditos de zorro\"",
+    "y sin embargo causo siempre adicción"
    ]
   },
   {
@@ -45,6 +408,28 @@
    ]
   },
   {
+   "tema": "Pabellón Séptimo (Relato de Horacio)",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Quiero salir, quiero escapar, las puertas siguen encerrojadas.",
+    "El pabellón… en un segundo se nubló todo y ya no vemos nada más…",
+    "Pruebo trepar hasta un ventanal buscando el aire y me balean fiero.",
+    "Viejita, amor, hijas y amigas, buscan noticias en la puerta, ahí fuera…"
+   ]
+  },
+  {
+   "tema": "To Beef Or Not To Beef",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "A San la Mierda yo recé y rajé",
+    "me fui a llenar de frititos mi estorage.",
+    "Y allá fui por mi grincar",
+    "me fui dejando todo pending… mi beibi."
+   ]
+  },
+  {
    "tema": "Tomasito Podés Oírme? Tomasito Podés Verme?",
    "disco": "El Tesoro de los Inocentes",
    "banda": "indio",
@@ -53,6 +438,292 @@
     "que son una turmita gay",
     "y “el monsieur” va a relojear tanto",
     "que se van a flipar"
+   ]
+  },
+  {
+   "tema": "Tsunami",
+   "disco": "El Tesoro de los Inocentes",
+   "banda": "indio",
+   "frases": [
+    "Sospecho que esta vez me toca a mí",
+    "pagar toda la puta fiesta.",
+    "Un gato me cruzó, negro y puntual",
+    "y no lo pude esquivar."
+   ]
+  },
+  {
+   "tema": "A la Luz de la Luna",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Juega intacta, es un diamante",
+    "Vuelve a casa arrastrando sus tesoros",
+    "Ella sabe mostrarme el mundo",
+    "Y eso no la hace una creída"
+   ]
+  },
+  {
+   "tema": "A los Pájaros que Cantan Sobre las Selvas de Internet",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Del cielo bajan ya",
+    "Se vienen a posar",
+    "En las ramas de mi árbol",
+    "¿Qué potencia infernal"
+   ]
+  },
+  {
+   "tema": "Amok! Amok!",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Llegó el \"Telejuego con Chamanes\"",
+    "Que puede curar todos tus males",
+    "Pata de palo, parche en el ojo que nos ve",
+    "Si vas apaleado o muy asexuado, sanarás"
+   ]
+  },
+  {
+   "tema": "Arca Monster",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Van con su ilusión",
+    "Con la inocencia de un huevo recién puesto",
+    "Basta ya! Se acabó!",
+    "Lluvia negra y un viento que traerá calores de Hiroshima"
+   ]
+  },
+  {
+   "tema": "Babas del Diablo",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Jesús, el Zumba, el rey destello",
+    "No tuvo primavera con más fruta",
+    "Sus ilusiones enloquecidas",
+    "Por los rumores que escucha en cuarto contiguo"
+   ]
+  },
+  {
+   "tema": "Beemedobleve",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Han clausurado las puertas del cielo",
+    "Y esas cosas no se pueden ocultar",
+    "Una crecida arrasa la rivera",
+    "El barro se hace cruel, nos viene a sepultar"
+   ]
+  },
+  {
+   "tema": "Cada Pequeña Muerte",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Se va, se apaga tu dolor",
+    "Ya no te protege ahora",
+    "Al final, tu herida sanó",
+    "Me siento indefenso"
+   ]
+  },
+  {
+   "tema": "Chau Mohicano",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Mi furia antigua se licuó y me silenció",
+    "Media sonrisa y poco más, ningún secreto que cuidar",
+    "La cacería terminó, presas no hay",
+    "Hay pajaritos"
+   ]
+  },
+  {
+   "tema": "Había una Vez...",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Seré heraldo de buenas noticias",
+    "Solo si te quedás un rato más",
+    "Los espíritus soplan si quieren y vos que recién te enterás",
+    "Tarde, otra vez, mi amor"
+   ]
+  },
+  {
+   "tema": "La Pajarita Pechiblanca (scherzo)",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Yo le prometí mi amor a la bella Mandolina",
+    "Mendigando como un perro roto y llorón",
+    "Y no cumplí, nunca cumplí, jamás",
+    "Con mi bella heroína, con la honesta Mandolina"
+   ]
+  },
+  {
+   "tema": "Las Supersticiones Traen Mala Suerte",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Mi rebelión ya no aclara mi mente",
+    "Mi sueño está muy bien así y estuvo siempre",
+    "¡Oh, no! No me voy a correr",
+    "De ese sendero cruel mil veces más"
+   ]
+  },
+  {
+   "tema": "Un Par de Fantasmas",
+   "disco": "Pajaritos, Bravos Muchachitos",
+   "banda": "indio",
+   "frases": [
+    "Sangra tu famoso y sexy corazón",
+    "Todo lo van a saber por la TV",
+    "Tu secreto se derrama",
+    "Dios, todo el mundo se va a enterar así"
+   ]
+  },
+  {
+   "tema": "¿Por Qué Será Que Dios No Me Quiere?",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Con todos tus lindos dientes te vas a burlar",
+    "No me ves como un palomo y me atendés",
+    "A un perro muerto, con un palito molestas",
+    "Qué precio tiene mis sueños, vos ya sabés"
+   ]
+  },
+  {
+   "tema": "Bebamos de las Copas Lindas",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Donde hay dolor habrá canciones…",
+    "(acabo de perderlo todo)",
+    "Bebamos de las copas más lindas que tenemos hoy.",
+    "No sé que pudo haber pasado…"
+   ]
+  },
+  {
+   "tema": "Flight 956",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Parece que, en el final",
+    "No me saldré con la mía, mi amor",
+    "Debería chequear mi contestador",
+    "Flight 956, voy a extrañar"
+   ]
+  },
+  {
+   "tema": "Martinis y Tafiroles",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Necesito dormir mucho y bien",
+    "y no hablar así como toda la mierda",
+    "que se habla hoy por la TV que come mis ojos.",
+    "Un viajero frecuente que"
+   ]
+  },
+  {
+   "tema": "Pedía Siempre Temas en la Radio...",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "¡No, no! Ciego en la bruma",
+    "Bellamente sangra su nariz",
+    "Van a tragarlo arenas movedizas",
+    "Pagará caro lo tonto que fue"
+   ]
+  },
+  {
+   "tema": "Porco Rex",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Un precio muy alto pago",
+    "Quiso resucitar un muerto",
+    "En lo profundo, acepto",
+    "Las aguas ya no están serenas"
+   ]
+  },
+  {
+   "tema": "Ramas Desnudas",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Mientras miro el mal tiempo",
+    "que muestra el ventanal...",
+    "caen las ramas desnudas",
+    "que no tiemblan como vos"
+   ]
+  },
+  {
+   "tema": "Sopa de Lágrimas (Para el Pibe Delete)",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "No es el momento ni es el lugar",
+    "Todos nos miran mal, muy mal",
+    "Para hacer nuestra escena, esa que trae problemas",
+    "Cuando no sirve llorar, oh, no"
+   ]
+  },
+  {
+   "tema": "Tatuaje",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "En tu sueño hay un sitio",
+    "donde yo no soy imposible",
+    "allí fríes tu cerebro y llorás",
+    "porque no mirás y sos mirado"
+   ]
+  },
+  {
+   "tema": "Te Estás Quedando Sin Balas de Plata...",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Jurás que te criaste en un balde de gusanos",
+    "tonteras de ayer que no te dejan ser feliz",
+    "No te están quedando más de tus balas de plata",
+    "(no debí decirlo, tu esclavo ahora soy…)"
+   ]
+  },
+  {
+   "tema": "Veneno Paciente",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Me cansa tener gente alrededor",
+    "si no meto un trago llega el malhumor…",
+    "Mentiras amables, veneno paciente",
+    "y nada de lo que supimos desear…"
+   ]
+  },
+  {
+   "tema": "Vuelo a Sidney",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Triste y con malas intenciones",
+    "(¡ya no sé que me dicen tus ojos!)",
+    "de moscona tibia en oferta",
+    "que se ríe y pide volver… ¡temblando! ¡temblando!"
+   ]
+  },
+  {
+   "tema": "Y Mientras Tanto el Sol Se Muere...",
+   "disco": "Porco Rex",
+   "banda": "indio",
+   "frases": [
+    "Todavía no usé mi milagro",
+    "De cortarse la vida, mi amor",
+    "No voy a buscar más consuelos tontos, no",
+    "Si pasa algo malo esta vez"
    ]
   },
   {
@@ -106,7 +777,6 @@
    "frases": [
     "Le hizo ¡crack! ¡crack! el hueso al final,",
     "¡qué ruido! ¡crack! ¡crack! ¡crack! (hasta astillar…)",
-    "Le hizo ¡crack! ¡crack! el hueso al final,",
     "¡nunca nada especial!"
    ]
   },
@@ -170,9 +840,6 @@
    "disco": "Gulp!",
    "banda": "redondos",
    "frases": [
-    "Es un criminal mambo",
-    "Es un criminal mambo",
-    "Es un criminal mambo",
     "Es un criminal mambo"
    ]
   },
@@ -238,7 +905,6 @@
    "frases": [
     "Ahí van los machos para consumar",
     "una hermosa dotación vital.",
-    "¡Superlógico! ¡si!",
     "¡Superlógico! ¡si!"
    ]
   },
@@ -304,7 +970,6 @@
    "frases": [
     "Vas apartando a golpes tus dolores, nene,",
     "así, vas a ser el más premiado de la morgue.",
-    "¡Porque estás hundido en tu propia herida!",
     "¡Porque estás hundido en tu propia herida!"
    ]
   },
@@ -381,8 +1046,7 @@
    "frases": [
     "Quiere, si quiere más",
     "(ya no la engatuzás)",
-    "es una copa de lo mejor cuando se ríe.",
-    "Quiere, si quiere más"
+    "es una copa de lo mejor cuando se ríe."
    ]
   },
   {
@@ -394,14 +1058,6 @@
     "brujas de alma sencilla, patéticos viajantes.",
     "Pobres tontos, pobres diablos, lunáticos diamantes",
     "prometidos de carne, lánguidos, impalpables"
-   ]
-  },
-  {
-   "tema": "Capricho Magyar",
-   "disco": "Lobo Suelto, Cordero Atado",
-   "banda": "redondos",
-   "frases": [
-    "Instrumental"
    ]
   },
   {
@@ -442,9 +1098,6 @@
    "disco": "Lobo Suelto, Cordero Atado",
    "banda": "redondos",
    "frases": [
-    "¡Lobo!…",
-    "¡Lobo!…",
-    "¡Lobo!…",
     "¡Lobo!…"
    ]
   },
@@ -501,14 +1154,6 @@
     "(y a nadie le amarga un dulce)",
     "vino un gato y festejó lo dulce",
     "que tu padre trajo."
-   ]
-  },
-  {
-   "tema": "Sushi",
-   "disco": "Lobo Suelto, Cordero Atado",
-   "banda": "redondos",
-   "frases": [
-    "[Instrumental]"
    ]
   },
   {
@@ -604,8 +1249,6 @@
    "disco": "Luzbelito",
    "banda": "redondos",
    "frases": [
-    "Ven a mi casa suburbana",
-    "Me obsesiona tu prisión",
     "Ven a mi casa suburbana",
     "Me obsesiona tu prisión"
    ]
@@ -881,7 +1524,6 @@
    "frases": [
     "Juicio fantasma de los muertos queridos",
     "Y una muy larga botella de gin",
-    "Drogocop, oh",
     "Drogocop, oh"
    ]
   },
@@ -979,7 +1621,6 @@
    "banda": "redondos",
    "frases": [
     "Miraba el cielo justo a tiempo,",
-    "miraba el cielo justo a tiempo…",
     "Salvada del motor eterno,",
     "salvada del motor eterno y justo a tiempo."
    ]
@@ -1060,6 +1701,18 @@
     "Den la alarma",
     "Ensayo general para la farsa actual"
    ]
+  }
+ ],
+ "instrumentales": [
+  {
+   "tema": "Capricho Magyar",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos"
+  },
+  {
+   "tema": "Sushi",
+   "disco": "Lobo Suelto, Cordero Atado",
+   "banda": "redondos"
   }
  ]
 }
