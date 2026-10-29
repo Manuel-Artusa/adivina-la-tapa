@@ -1168,7 +1168,7 @@ const DISCOS = [
  ["Árbol",null,null,"nac"],["Airbag",null,null,"nac"],["Eruca Sativa",null,null,"nac"],
  ["El Mató a un Policía Motorizado",null,null,"nac"],["Usted Señalemelo",null,null,"nac"],
  ["Conociendo Rusia",null,null,"nac"],["Bandalos Chinos",null,null,"nac"],["Turf",null,null,"nac"],
- ["La Beriso",null,null,"nac"],["Skay Beilinson",null,null,"nac"],["Indio Solari",null,null,"nac"],
+ ["Skay Beilinson",null,null,"nac"],["Indio Solari",null,null,"nac"],
  ["Intoxicados",null,null,"nac"],["Viejas Locas",null,null,"nac"],["Kapanga",null,null,"nac"],
  ["Los Gardelitos",null,null,"nac"],["Almafuerte",null,null,"nac"],["Cadena Perpetua",null,null,"nac"],
  ["Los Tipitos",null,null,"nac"],["2 Minutos",null,null,"nac"],["Estelares",null,null,"nac"],
@@ -1352,7 +1352,6 @@ const DISCOS = [
  ["Kings of Leon", "Youth & Young Manhood", 2003, "int", "2026-10-30"],["Kings of Leon", "Aha Shake Heartbreak", 2004, "int", "2026-10-30"],["Kings of Leon", "Because of the Times", 2007, "int", "2026-10-30"],["Kings of Leon", "Come Around Sundown", 2010, "int", "2026-10-30"],["Kings of Leon", "Mechanical Bull", 2013, "int", "2026-10-30"],["Kings of Leon", "WALLS", 2016, "int", "2026-10-30"],["Kings of Leon", "When You See Yourself", 2021, "int", "2026-10-30"],["Kings of Leon", "Can We Please Have Fun", 2024, "int", "2026-10-30"],["Kings of Leon", "O My Beloved", 2026, "int", "2026-10-30"],
  ["Kiss", "Hotter Than Hell", 1974, "int", "2026-10-30"],["Kiss", "KISS", 1974, "int", "2026-10-30"],["Kiss", "Dressed to Kill", 1975, "int", "2026-10-30"],["Kiss", "Rock and Roll Over", 1976, "int", "2026-10-30"],["Kiss", "Love Gun", 1977, "int", "2026-10-30"],["Kiss", "Dynasty", 1979, "int", "2026-10-30"],["Kiss", "Unmasked", 1980, "int", "2026-10-30"],["Kiss", "Music From “The Elder”", 1981, "int", "2026-10-30"],["Kiss", "Creatures of the Night", 1982, "int", "2026-10-30"],["Kiss", "Lick It Up", 1983, "int", "2026-10-30"],["Kiss", "Animalize", 1984, "int", "2026-10-30"],["Kiss", "Asylum", 1985, "int", "2026-10-30"],["Kiss", "Crazy Nights", 1987, "int", "2026-10-30"],["Kiss", "Hot in the Shade", 1989, "int", "2026-10-30"],["Kiss", "Revenge", 1992, "int", "2026-10-30"],["Kiss", "Unchained & Unmasked", 1993, "int", "2026-10-30"],["Kiss", "Blood Fire and Glory", 1996, "int", "2026-10-30"],["Kiss", "From Outher Space", 1996, "int", "2026-10-30"],["Kiss", "Psycho Circus", 1998, "int", "2026-10-30"],["Kiss", "Sonic Boom", 2009, "int", "2026-10-30"],["Kiss", "Monster", 2012, "int", "2026-10-30"],["Kiss", "An Alternative Dynasty", 2024, "int", "2026-10-30"],
  ["La 25", "Rock and Roll", 2001, "nac", "2026-10-30"],["La 25", "Así es el rock and roll", 2002, "nac", "2026-10-30"],["La 25", "Con el rock en las venas", 2004, "nac", "2026-10-30"],["La 25", "Mundo perfecto", 2006, "nac", "2026-10-30"],["La 25", "Mundo imperfecto", 2008, "nac", "2026-10-30"],["La 25", "El origen", 2013, "nac", "2026-10-30"],["La 25", "Entre cuervos y chacales", 2018, "nac", "2026-10-30"],
- ["La Beriso", "Sólo canciones", 2003, "nac", "2026-10-30"],["La Beriso", "Descartando miserias", 2007, "nac", "2026-10-30"],["La Beriso", "Culpable", 2009, "nac", "2026-10-30"],["La Beriso", "Atrapando sueños", 2011, "nac", "2026-10-30"],["La Beriso", "Historias", 2014, "nac", "2026-10-30"],["La Beriso", "Pecado capital", 2016, "nac", "2026-10-30"],["La Beriso", "Giras y madrugadas", 2019, "nac", "2026-10-30"],["La Beriso", "Mienten", 2023, "nac", "2026-10-30"],
  ["La Renga", "La Renga", 1998, "nac", "2026-10-30"],["La Renga", "Alejado de la red", 2022, "nac", "2026-10-30"],
  ["La Vela Puerca", "Que no se apague", 2006, "nac", "2026-10-30"],
  ["Las Pastillas del Abuelo", "Por colectora", 2005, "nac", "2026-10-30"],["Las Pastillas del Abuelo", "Las pastillas del abuelo", 2006, "nac", "2026-10-30"],["Las Pastillas del Abuelo", "El barrio en sus puños", 2014, "nac", "2026-10-30"],["Las Pastillas del Abuelo", "Paradojas", 2015, "nac", "2026-10-30"],["Las Pastillas del Abuelo", "2020", 2020, "nac", "2026-10-30"],
@@ -5061,15 +5060,22 @@ function novedadDatos(){
 async function placasNovedad(){
   const D=novedadDatos(); if(D.nuevos.length<50) throw new Error("todavía no hay discos nuevos con tapa");
   const out=[], rng=semillaRng(hashStr("novedad-discos"));
-  // 1) portada: el número y un mosaico de tapas (una por banda, nacionales)
+  // 1) portada: el número y un mosaico de 100 tapas nuevas, cada una de un artista distinto (primero los nacionales)
   let [c,x]=lienzo(1080,1350);
-  etiqueta(x,"NOVEDAD EN JUEGOS ROCK",80,60,30);
-  texto(x,`+${D.cuantos} DISCOS`,80,250,{s:150,c:CC.rojo,w:920,min:80});
-  texto(x,`Discografías completas de ${D.bandas.length} bandas`,80,325,{f:FB,peso:"800",s:44,w:920});
-  const muestra=mezR(D.bandas.filter(b=>D.por[b][0].d[3]==="nac"),rng).slice(0,12).map(b=>mezR(D.por[b],rng)[0]);
+  etiqueta(x,"NOVEDAD EN JUEGOS ROCK",60,40,28);
+  texto(x,`+${D.cuantos} DISCOS NUEVOS`,60,195,{s:110,c:CC.rojo,w:960,min:60});
+  texto(x,`Discografías completas de ${D.bandas.length} bandas`,60,255,{f:FB,peso:"800",s:38,w:960});
+  const orden=[...mezR(D.bandas.filter(b=>D.por[b][0].d[3]==="nac"),rng),...mezR(D.bandas.filter(b=>D.por[b][0].d[3]!=="nac"),rng)];
+  const elegidos=orden.slice(0,100).map(b=>mezR(D.por[b],rng)[0]);
+  // si todavía no hay 100 artistas con discos nuevos, se completa con otro disco nuevo de los mismos
+  for(const x2 of mezR(D.nuevos,rng)){ if(elegidos.length>=100) break; if(!elegidos.includes(x2)) elegidos.push(x2) }
+  const muestra=mezR(elegidos,rng);
   const imgs=await Promise.all(muestra.map(m=>contImg(m.v.url)));
-  imgs.forEach((im,i)=>tapa(x,im,80+(i%4)*235,385+Math.floor(i/4)*235,205,0,6));
-  texto(x,"Deslizá para ver qué bandas se suman →",540,1300,{f:FM,peso:"500",s:27,al:"center",w:960});
+  const T=94, G=2, X0=(1080-(10*T+9*G))/2, Y0=290;
+  x.fillStyle=CC.tinta; x.fillRect(X0-8,Y0-8,10*T+9*G+16,10*T+9*G+16);
+  imgs.forEach((im,i)=>{ const X=X0+(i%10)*(T+G), Y=Y0+Math.floor(i/10)*(T+G);
+    if(im){ x.imageSmoothingQuality="high"; x.drawImage(im,X,Y,T,T) } else { x.fillStyle="#3a352c"; x.fillRect(X,Y,T,T) } });
+  texto(x,"Deslizá para ver qué bandas se suman →",540,1320,{f:FM,peso:"500",s:26,al:"center",w:960});
   out.push(c);
   // 2) bandas nuevas en la página
   [c,x]=lienzo(1080,1350);
