@@ -2906,7 +2906,8 @@ const PAIS_CORTO={GB:"Reino Unido",US:"EE.UU."};
 const PAIS_COD={AR:"ARG",UY:"URU",US:"EE.UU.",GB:"UK",AU:"AUS",CL:"CHI",MX:"MÉX",ES:"ESP",CA:"CAN",IE:"IRL",SE:"SUE",DE:"ALE",FR:"FRA",BR:"BRA",CO:"COL",IT:"ITA",NZ:"NZ",JP:"JAP",PE:"PER"};
 const banDatos=a=>CACHE&&CACHE.bandas&&CACHE.bandas[a]||null;
 // Todas las bandas del catálogo (para el buscador)
-const banLista=()=>[...new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
+// solo las que tienen sus datos completos (país, año en que arrancó): si no, al elegirlas la fila salía toda con "?"
+const banLista=()=>[...new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))].filter(a=>{ const x=banDatos(a); return x&&x.pais&&x.inicio }).sort((a,b)=>a.localeCompare(b,"es"));
 // Bandas que pueden salir: con 3 discos o más en el juego y datos completos
 function banPool(){
   const por={};
