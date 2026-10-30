@@ -365,9 +365,11 @@ def main():
     discos = {} if todo else dict(previo.get("discos", {}))
     catalogo = leer_catalogo()
     claves = [f"{d[0]}|{d[1]}" for d in catalogo]
-    # primero los que nunca se buscaron; al final, los que ya se buscaron y no estaban (por si aparecieron)
+    # Los que ya se buscaron y no estaban se vuelven a probar solo con --reintentar (la corrida mensual, por si
+    # aparecieron); si no, cada corrida tardaba horas reprobando cientos de discos que iTunes no tiene
     probados = set(previo.get("no_encontrados", []))
-    pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos]
+    reintentar = "--reintentar" in sys.argv or todo
+    pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados)]
     pendientes.sort(key=lambda d: f"{d[0]}|{d[1]}" in probados)
     # De a tandas (--max N): con muchos discos nuevos, cada corrida busca una parte y la guarda; la tarea se vuelve a correr sola
     tope = next((int(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--max=")), 0)
