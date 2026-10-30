@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Buscar discos en iTunes
-        run: python armar_discos.py ${{ inputs.todo && '--todo' || '--max=400' }}   # de a 400 discos por tanda (cada tanda, menos de 3 horas)
+        run: python armar_discos.py ${{ inputs.todo && '--todo' || '--max=400' }} ${{ github.event_name == 'schedule' && '--reintentar' || '' }}   # de a 400 por tanda; los no encontrados se reprueban solo en la corrida mensual
       - name: Guardar los temas de cada banda (Ahorcado)
         if: ${{ hashFiles('quedan.txt') == '' }}   # recién en la última tanda
         run: python armar_temas.py
