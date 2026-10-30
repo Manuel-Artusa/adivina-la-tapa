@@ -2526,9 +2526,21 @@ const numTema=dia=>numDiario(dia);
 
 // Los 25 temas más escuchados de la banda (la lista guardada para el Ahorcado), para que el tema sea conocido.
 // Si la lista es muy corta (iTunes trajo poco o algo equivocado), no se filtra: puede salir cualquier tema de sus discos
+// Bandas sin una lista confiable en iTunes: sus temas conocidos, elegidos a mano
+const TEMAS_CONOCIDOS_MANUAL={
+  "Riff":["Ruedas de Metal","Mucho por Hacer","Necesitamos Más Acción","No Detenga Su Motor","Boff No Puedo Soportarlo Más","Macadam 3...2...1...0...",
+    "Días Buenos y Malos","Susy Cadillac","Pantalla del Mundo Nuevo","Héroes del Asfalto","Que Sea Rock","Lo Tuyo Es Vicio"],
+  "Turf":["Pasos Al Costado","Loco un Poco","Magia Blanca","Yo No Me Quiero Casar, y Ud?","Cuatro Personalidades","Casanova","Siempre Libre",
+    "Me Hace Sentir","Contacto","No Se Llama Amor","La Emoción","Chicas Malas","Valeria del Mal"],
+  "V8":["Destrucción","Parcas Sangrientas","Si Puedes Vencer al Temor","Ángel de las Tinieblas","Tiempos Metálicos","Muy Cansado Estoy",
+    "Brigadas Metálicas","Torturador","Hiena de Metal","Lanzado al Mundo Hoy","Deseando Destruir y Matar","La Gran Ramera"]};
+// Bandas con más temas: los 60 más escuchados (en vez de 25), o todos los temas de sus discos
+const TEMAS_CANTIDAD={"Los Piojos":60,"La Vela Puerca":60,"Don Osvaldo":60}, TEMAS_TODOS=["Callejeros"];
 async function temasConocidos(banda,dia){
+  if(TEMAS_CONOCIDOS_MANUAL[banda]) return new Set(TEMAS_CONOCIDOS_MANUAL[banda].map(t=>norm(limpiarTema(t))));
+  if(TEMAS_TODOS.includes(banda)) return null;
   const g=await ahoGuardado(banda), lista=g?(dia>=g.desde?g.r:g.antes):null;
-  return lista&&lista.length>=5?new Set(lista.slice(0,25).map(x=>norm(limpiarTema(x[0])))):null;
+  return lista&&lista.length>=5?new Set(lista.slice(0,TEMAS_CANTIDAD[banda]||25).map(x=>norm(limpiarTema(x[0])))):null;
 }
 async function temaNuevo(){
   temaParar();
