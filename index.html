@@ -1504,6 +1504,7 @@ const TODO_ROCK=ESQUEMA_31&&new URLSearchParams(location.search).has("todo");
 const PRINCIPAL_FUERA=["Los Pericos","Sig Ragga","Bandalos Chinos","Conociendo Rusia","A.N.I.M.A.L.","Arbolito","Arco Iris","Cadena Perpetua","Carajo",
   "Celeste Carballo","Cielo Razzo","Color Humano","Fabiana Cantilo","Farolitos","Invisible","Jauría","Juana la Loca","Peligrosos Gorriones","Salta La Banca","Vetamadre"];
 const PRINCIPAL_SOLO={"Fito Páez":["Giros","Ciudad de Pobres Corazones","Tercer Mundo","El Amor Después del Amor","Circo Beat","Abre"]}; // de estas bandas, solo los discos más conocidos
+const DISCOS_TODOS=DISCOS.map(d=>d.slice()); // el catálogo completo (Todo el rock), antes de recortar la principal
 if(ESQUEMA_31&&!TODO_ROCK) for(let i=DISCOS.length-1;i>=0;i--){ const d=DISCOS[i];
   if(d[3]!=="nac"||PRINCIPAL_FUERA.includes(d[0])||(d[1]&&PRINCIPAL_SOLO[d[0]]&&!PRINCIPAL_SOLO[d[0]].includes(d[1]))) DISCOS.splice(i,1) }
 // Tapa del día: desde el 30/10 solo el catálogo de siempre (sin las discografías completas que entran ese día) y sin Farolitos
@@ -5085,9 +5086,10 @@ async function redesVideo(dia,turnoVideo){
 // ===== Novedad: discos nuevos (turno "novedad" de Publicar en redes) =====
 // Los discos que entraron el 30/10 (discografías completas). Antes de esa fecha se toman de los que todavía no entraron.
 function novedadDatos(){
-  const lista=DISCOGRAFIAS_30_10.size?DISCOS.filter(d=>d[1]&&DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])):DISCOS_FUTUROS.filter(d=>d[1]);
+  const TODOS=DISCOS_TODOS.filter(d=>d[1]); // con todo el catálogo, aunque la página sea la principal
+  const lista=DISCOGRAFIAS_30_10.size?TODOS.filter(d=>DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])):DISCOS_FUTUROS.filter(d=>d[1]);
   const nuevos=lista.map(d=>({d,v:CACHE&&(CACHE.disc[d[0]+"|"+d[1]]||CACHE_FUTURO[d[0]+"|"+d[1]])})).filter(x=>x.v&&x.v.url);
-  const antes={}; DISCOS.forEach(d=>{ if(d[1]&&!DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])) antes[d[0]]=(antes[d[0]]||0)+1 });
+  const antes={}; TODOS.forEach(d=>{ if(!DISCOGRAFIAS_30_10.has(d[0]+"|"+d[1])) antes[d[0]]=(antes[d[0]]||0)+1 });
   const por={}; nuevos.forEach(x=>(por[x.d[0]]=por[x.d[0]]||[]).push(x));
   const bandas=Object.keys(por), esNac=b=>por[b][0].d[3]==="nac";
   const nuevas=bandas.filter(b=>!antes[b]).sort((a,b)=>esNac(b)-esNac(a)||por[b].length-por[a].length);
@@ -5101,7 +5103,7 @@ async function placasNovedad(){
   let [c,x]=lienzo(1080,1350);
   etiqueta(x,"NOVEDAD EN JUEGOS ROCK",60,40,28);
   texto(x,`+${D.cuantos} DISCOS NUEVOS`,60,195,{s:110,c:CC.rojo,w:960,min:60});
-  texto(x,`Discografías completas de ${D.bandas.length} bandas`,60,255,{f:FB,peso:"800",s:38,w:960});
+  texto(x,`Pestaña nueva «Todo el rock»: discografías completas de ${D.bandas.length} bandas`,60,255,{f:FB,peso:"800",s:34,w:960,min:24});
   const orden=[...mezR(D.bandas.filter(b=>D.por[b][0].d[3]==="nac"),rng),...mezR(D.bandas.filter(b=>D.por[b][0].d[3]!=="nac"),rng)];
   const elegidos=orden.slice(0,100).map(b=>mezR(D.por[b],rng)[0]);
   // si todavía no hay 100 artistas con discos nuevos, se completa con otro disco nuevo de los mismos
@@ -5136,21 +5138,25 @@ async function placasNovedad(){
   out.push(c);
   // 4) cierre
   [c,x]=lienzo(1080,1350,CC.tinta);
-  texto(x,"YA ESTÁN EN LOS JUEGOS",540,250,{s:76,c:CC.papel,al:"center",w:960,max:2,lh:1.05});
-  ["Conexiones","Ahorcado rockero","Bingo rockero","Ordená la discografía","Tema número 1","Adiviná la tapa (Libre)"].forEach((j,i)=>
-    texto(x,"✔ "+j,540,470+i*82,{f:FB,peso:"800",s:46,c:CC.crema,al:"center",w:960}));
-  texto(x,"¿Qué banda falta? Contanos 👇",540,1040,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:960});
-  marca(x,540,1190,56);
+  texto(x,"DOS FORMAS DE JUGAR",540,190,{s:80,c:CC.papel,al:"center",w:960,max:1,min:40});
+  const caja=(Y,tit,lineas)=>{ x.fillStyle=CC.rojo; x.fillRect(90,Y,900,330); x.fillStyle=CC.crema; x.fillRect(80,Y-10,900,330);
+    texto(x,tit,120,Y+75,{s:58,w:820,min:30});
+    lineas.forEach((l,i)=>texto(x,"✔ "+l,120,Y+150+i*62,{f:FB,peso:"800",s:38,w:820,min:24})) };
+  caja(290,"Rock nacional",["Los desafíos del día, con ranking","Bandas argentinas y uruguayas","13 juegos, todos los días"]);
+  caja(700,"Todo el rock (nuevo)",["Todos los discos, también de afuera","Discografías completas","Libre: jugá todo lo que quieras"]);
+  texto(x,"¿Qué banda falta? Contanos 👇",540,1150,{f:FB,peso:"800",s:42,c:CC.papel,al:"center",w:960});
+  marca(x,540,1250,56);
   out.push(c);
   return out;
 }
 function textoNovedad(){
   const D=novedadDatos(), nom=l=>l.length>1?l.slice(0,-1).join(", ")+" y "+l[l.length-1]:l[0]||"";
   const nac=b=>D.por[b][0].d[3]==="nac";
-  return `🎸 ¡Llegaron más de ${D.cuantos} discos nuevos a Juegos Rock!\n\n`+
-    `Sumamos las discografías completas de ${D.bandas.length} bandas: ${nom(D.completas.filter(nac).slice(0,6))}… `+
-    `Y se suman ${nom(D.nuevas.filter(nac).slice(0,7))}.\n\n`+
-    `Ya están en Conexiones, Ahorcado, Bingo, Ordená la discografía, Tema número 1 y más. ¿Qué banda falta? Dejala en los comentarios 👇\n\n`+
+  const enPrincipal=b=>nac(b)&&!PRINCIPAL_FUERA.includes(b);
+  return `🎸 ¡Novedades en Juegos Rock: más de ${D.cuantos} discos nuevos y una pestaña nueva!\n\n`+
+    `🔥 Todo el rock: jugá libre con todos los discos, también los de afuera, con las discografías completas de ${D.bandas.length} bandas: ${D.completas.filter(nac).slice(0,6).join(", ")} y muchas más.\n\n`+
+    `🏆 Rock nacional: los desafíos del día siguen siendo de bandas argentinas y uruguayas, con ranking. Se suman ${nom(D.nuevas.filter(enPrincipal).slice(0,7))}.\n\n`+
+    `¿Qué banda falta? Dejala en los comentarios 👇\n\n`+
     `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`;
 }
 async function redesPlan(dia,turno,disco){
