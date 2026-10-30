@@ -663,6 +663,10 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
   .stats b{font-size:1.1rem}
 }
 
+/* Vista previa de otro día */
+.previa-cartel{position:sticky;top:0;z-index:40;background:var(--rojo);color:#fff;padding:8px 14px;font-size:.85rem;text-align:center}
+.previa-cartel a{color:#fff;font-weight:800}
+
 /* Todo el rock: pestaña de juego libre con todo el catálogo */
 .tabs.con4{grid-template-columns:repeat(4,1fr)}
 .tabs.con4 button{font-size:.92em}
@@ -796,7 +800,7 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
     <div class="todo-banda" id="todo-banda" hidden>
       <b>Todo el rock</b>
       <span>Jugá libre con todos los discos: rock nacional, uruguayo y de afuera, con las discografías completas. Acá no hay desafío del día y no suma al ranking.</span>
-      <a class="btn sec" href="/">Volver al rock nacional</a>
+      <a class="btn sec" href="/" id="todo-volver">Volver al rock nacional</a>
     </div>
     <div class="hub-barra">
       <div class="dias" id="dias" role="group" aria-label="Elegí el día"></div>
@@ -1114,7 +1118,13 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
 const LETRA_ON="__LETRA_ON__"==="1";
 const SUPA_URL = "__SUPA_URL__";
 const SUPA_KEY = "__SUPA_KEY__";
-const TOP_ON = !!(SUPA_URL && SUPA_KEY && !SUPA_URL.startsWith("__") && !SUPA_KEY.startsWith("__"));
+// Vista previa (?previa=AAAA-MM-DD, de 1 a 3 días adelante): la página como va a estar ese día, para revisarla antes.
+// No guarda nada en el navegador ni sube puntajes al top
+const PREVIA=(()=>{ const f=(new URLSearchParams(location.search).get("previa")||"").trim(); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)) return null;
+  const hoy=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date()), dias=(Date.parse(f)-Date.parse(hoy))/864e5;
+  return dias>=1&&dias<=3?f:null })();
+const conPrevia=url=>PREVIA?url+(url.includes("?")?"&":"?")+"previa="+PREVIA:url;
+const TOP_ON = !PREVIA && !!(SUPA_URL && SUPA_KEY && !SUPA_URL.startsWith("__") && !SUPA_KEY.startsWith("__"));
 
 // ---- Catálogo: [artista, disco, año, categoría]. Disco null = el juego elige uno real de iTunes ----
 // Cada disco: [banda, disco, año, "nac"|"int", desde, hasta]. "desde" (opcional, AAAA-MM-DD): el disco entra al
@@ -1478,14 +1488,14 @@ const CUADRO={5:"🟩",4:"🟨",3:"🟧",2:"🟥",0:"⬛"};
 const $=id=>document.getElementById(id);
 const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(PREVIA) return; try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}}; // en la vista previa no se guarda nada
 
 // ---- Azar: normal usa Math.random; el diario usa una semilla del día para que todos vean lo mismo ----
 let rnd=Math.random;
 function semillaRng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 const mezclar=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-const hoyAR=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date());
+const hoyAR=()=>PREVIA||new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date());
 // El Bingo rockero entra a los desafíos el 28/10 (así no cambia el total del día en curso)
 const BINGO_ON=hoyAR()>="2026-10-28";
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
@@ -5283,7 +5293,7 @@ const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar","v-frases",...Object.values(SUBJUEGOS)];
 function irA(v,como){
   if(TODO_ROCK&&v==="diario") v="normal";
-  if(TODO_ROCK&&(v==="top"||v==="yo")){ location.href=RUTAS[v]; return }
+  if(TODO_ROCK&&(v==="top"||v==="yo")){ location.href=conPrevia(RUTAS[v]); return }
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
   if(location.protocol!=="file:"&&RUTAS[v]){
     const url=RUTAS[v]+location.search;
@@ -5560,6 +5570,12 @@ function yoPintar(){
 document.querySelectorAll(".volver").forEach(b=>b.onclick=()=>irA("inicio"));
 
 $("next").onclick=()=>siguiente();
+// Vista previa: un cartel arriba para que quede claro que no es el día de hoy
+if(PREVIA){
+  const [,m,d]=PREVIA.split("-").map(Number), c=document.createElement("div"); c.className="previa-cartel";
+  c.innerHTML=`<b>Vista previa del ${d}/${m}</b> · así va a estar la página ese día. No se guarda nada ni suma al top. <a href="/">Salir</a>`;
+  document.body.prepend(c); $("todo-volver").href=conPrevia("/");
+}
 // Desde el 31/10: la pestaña "Todo el rock" y lo que cambia en cada versión
 if(ESQUEMA_31){
   $("t-todo").hidden=false; document.querySelector(".tabs").classList.add("con4");
@@ -5570,8 +5586,8 @@ if(ESQUEMA_31){
   }
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
-  if(b.dataset.v==="todo"){ if(TODO_ROCK) irA("inicio"); else location.href="/?todo=1"; return }
-  if(TODO_ROCK&&b.dataset.v==="inicio"){ location.href="/"; return } // volver al rock nacional
+  if(b.dataset.v==="todo"){ if(TODO_ROCK) irA("inicio"); else location.href=conPrevia("/?todo=1"); return }
+  if(TODO_ROCK&&b.dataset.v==="inicio"){ location.href=conPrevia("/"); return } // volver al rock nacional
   irA(b.dataset.v);
 });
 document.querySelectorAll("#generos button").forEach(b=>b.onclick=()=>{
