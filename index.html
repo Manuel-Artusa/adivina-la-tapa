@@ -1500,6 +1500,7 @@ const TODAS_BANDAS=hoyAR()>="2026-10-30";
 //  - la principal (Rock nacional y uruguayo): desafíos del día y ranking, solo con las bandas nacionales elegidas
 //  - "Todo el rock" (?todo=1): todos los discos del catálogo, solo en modo Libre, no suma al ranking
 const ESQUEMA_31=hoyAR()>="2026-10-31";
+const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:"2004",sigue:true}};
 const TODO_ROCK=ESQUEMA_31&&new URLSearchParams(location.search).has("todo");
 const PRINCIPAL_FUERA=["Los Pericos","Sig Ragga","Bandalos Chinos","Conociendo Rusia","A.N.I.M.A.L.","Arbolito","Arco Iris","Cadena Perpetua","Carajo",
   "Celeste Carballo","Cielo Razzo","Color Humano","Fabiana Cantilo","Farolitos","Invisible","Jauría","Juana la Loca","Peligrosos Gorriones","Salta La Banca","Vetamadre"];
@@ -1576,6 +1577,8 @@ const cacheListo=(async()=>{
     // lo que todavía no entró al catálogo tampoco se usa desde discos.json
     CATALOGO_FUTURO.forEach(k=>{ const v=CACHE.disc[k]; if(v){ CACHE_FUTURO[k]=v; delete CACHE.disc[k]; porId.delete(v.id) } });
     if(CACHE.bandas) BANDAS_FUTURAS.forEach(b=>delete CACHE.bandas[b]);
+    // datos de banda que faltan o están mal en MusicBrainz, cargados a mano (desde el 31/10, así no cambian los desafíos de antes)
+    if(CACHE.bandas&&ESQUEMA_31) for(const [b,x] of Object.entries(BANDAS_MANUAL)) CACHE.bandas[b]=Object.assign({},CACHE.bandas[b]||{},x);
   }catch(e){ CACHE=null }
 })();
 const esperarCache=()=>Promise.race([cacheListo,new Promise(r=>setTimeout(r,4000))]);
@@ -2521,10 +2524,11 @@ const TEMA_BANDAS=sinFuturas(["Patricio Rey y sus Redonditos de Ricota","Indio S
 const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0]));
 const numTema=dia=>numDiario(dia);
 
-// Los 15 temas más escuchados de la banda (la lista guardada para el Ahorcado), para que el tema sea conocido
+// Los 25 temas más escuchados de la banda (la lista guardada para el Ahorcado), para que el tema sea conocido.
+// Si la lista es muy corta (iTunes trajo poco o algo equivocado), no se filtra: puede salir cualquier tema de sus discos
 async function temasConocidos(banda,dia){
   const g=await ahoGuardado(banda), lista=g?(dia>=g.desde?g.r:g.antes):null;
-  return lista&&lista.length?new Set(lista.slice(0,15).map(x=>norm(limpiarTema(x[0])))):null;
+  return lista&&lista.length>=5?new Set(lista.slice(0,25).map(x=>norm(limpiarTema(x[0])))):null;
 }
 async function temaNuevo(){
   temaParar();
@@ -3947,7 +3951,7 @@ if(TODAS_BANDAS) for(const b of new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))){ i
 const TEMA_SACAR=["2 Minutos","A.N.I.M.A.L.","Almafuerte","Almendra","Andrés Calamaro","Árbol","Arbolito","Arco Iris","Attaque 77","Cadena Perpetua","Carajo","Celeste Carballo","Cielo Razzo","Color Humano","Eruca Sativa","Estelares","Fabiana Cantilo","Fito Páez","Invisible","Jauría","Juana la Loca","Kapanga","La Máquina de Hacer Pájaros","León Gieco","Los Abuelos de la Nada","Los Auténticos Decadentes","Los Brujos","Los Caligaris","Los Enanitos Verdes","Los Fabulosos Cadillacs","Los Gatos","Los Pericos","Los Rodríguez","Los Tipitos","Los Twist","Los Violadores","Luis Alberto Spinetta","Manal","Marilina Bertoldi","Massacre","Once Tiros","Peces Raros","Pedro Aznar","Peligrosos Gorriones","Pescado Rabioso","Salta La Banca","Serú Girán","Sig Ragga","Silvestre y la Naranja","Spinetta Jade","Sui Generis","Usted Señalemelo","Vetamadre","Virus","Vox Dei","Hermética"];
 if(TODAS_BANDAS&&!TODO_ROCK) for(let i=TEMA_BANDAS.length-1;i>=0;i--) if(TEMA_SACAR.includes(TEMA_BANDAS[i])) TEMA_BANDAS.splice(i,1);
 // Ahorcado: solo bandas nacionales y uruguayas (desde el 30/10 son todas las del catálogo)
-const AHO_BANDAS=CON_BANDAS.filter(b=>b!=="Callejeros"&&(!TODAS_BANDAS||TODO_ROCK||NAC_BANDAS.has(b)));
+const AHO_BANDAS=CON_BANDAS.filter(b=>(b!=="Callejeros"||ESQUEMA_31)&&(!TODAS_BANDAS||TODO_ROCK||NAC_BANDAS.has(b)));
 const AHO_VIDAS=6, AHO_DIA=3;
 const AHO={modo:"diario",j:null,ronda:0,res:[],racha:0,cand:[],ci:0,dia:null};
 const ahoTop=new Map();
