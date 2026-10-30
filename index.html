@@ -1254,7 +1254,9 @@ const DISCOS = [
  ["Los Auténticos Decadentes","Cualquiera Puede Cantar",1997,"nac"],["Attaque 77","Ángeles Caídos",1992,"nac"],["Attaque 77","Amén!",1995,"nac"],
  ["Rata Blanca","Rata Blanca",1988,"nac"],["Rata Blanca","Guerrero del Arco Iris",1991,"nac"],
  ["V8","Luchando por el Metal",1983,"nac"],["Los Brujos","Fin de Semana Salvaje",1991,"nac"],["Massacre","Juguetes para Olvidar",1996,"nac"],
- ["Los Twist","La Dieta del Lagarto",1983,"nac"],["Los Enanitos Verdes","Contrarreloj",1986,"nac"],["Los Enanitos Verdes","Big Bang",1994,"nac"],
+ ["Los Twist","La Dieta del Lagarto",1983,"nac",null,"2026-10-31"], // es un tema, no un disco: desde el 31/10 van sus discos de estudio
+ ["Los Twist","La Dicha en Movimiento",1983,"nac","2026-10-31"],["Los Twist","Cachetazo al Vicio",1984,"nac","2026-10-31"],["Los Twist","La Máquina del Tiempo",1985,"nac","2026-10-31"],
+ ["Los Twist","Cataratas Musicales",1991,"nac","2026-10-31"],["Los Twist","El Cinco en la Espalda",1994,"nac","2026-10-31"],["Los Twist","Explosivo '96",1996,"nac","2026-10-31"],["Los Enanitos Verdes","Contrarreloj",1986,"nac"],["Los Enanitos Verdes","Big Bang",1994,"nac"],
  ["Bandalos Chinos","BACH",2018,"nac"],["The Beatles","Revolver",1966,"int"],["The Beatles","Rubber Soul",1965,"int"],
  ["The Beatles","Let It Be",1970,"int"],["The Beatles","Help!",1965,"int"],["The Beatles","A Hard Day's Night",1964,"int"],
  ["Pink Floyd","Animals",1977,"int"],["Pink Floyd","Meddle",1971,"int"],["Pink Floyd","The Piper at the Gates of Dawn",1967,"int"],
@@ -1520,7 +1522,10 @@ const TODAS_BANDAS=hoyAR()>="2026-10-30";
 const ESQUEMA_31=hoyAR()>="2026-10-31";
 const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:"2004",sigue:true},
   // Buenos Aires, 1983; separados en 2011, volvieron en 2017 y siguen con la gira despedida (2024-2025)
-  "Los Ratones Paranoicos":{pais:"AR",tipo:"banda",inicio:1983,desde:"1983",sigue:true}};
+  "Los Ratones Paranoicos":{pais:"AR",tipo:"banda",inicio:1983,desde:"1983",sigue:true},
+  "Peces Raros":{pais:"AR",tipo:"banda",inicio:2014,desde:"2014",sigue:true},          // La Plata, 2014
+  "Farolitos":{pais:"AR",tipo:"banda",inicio:2001,desde:"2001",sigue:true},            // Rosario (barrio La República), 2001
+  "Los Twist":{pais:"AR",tipo:"banda",inicio:1982,desde:"1982-04-30",sigue:false,hasta:"2012-04-30"}}; // de Pipo Cipolatti, 1982-2012
 const TODO_ROCK=ESQUEMA_31&&new URLSearchParams(location.search).has("todo");
 const PRINCIPAL_FUERA=["Los Pericos","Sig Ragga","Bandalos Chinos","Conociendo Rusia","A.N.I.M.A.L.","Arbolito","Arco Iris","Cadena Perpetua","Carajo",
   "Celeste Carballo","Cielo Razzo","Color Humano","Fabiana Cantilo","Farolitos","Invisible","Jauría","Juana la Loca","Peligrosos Gorriones","Salta La Banca","Vetamadre"];
