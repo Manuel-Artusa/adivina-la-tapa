@@ -1181,7 +1181,7 @@ const DISCOS = [
  ["Patricio Rey y sus Redonditos de Ricota","Gulp!",1985,"nac"],["Patricio Rey y sus Redonditos de Ricota","Bang! Bang!! Estás Liquidado",1989,"nac"],
  ["La Renga","Detonador de Sueños",2003,"nac"],["Los Piojos","Ritual",1999,"nac"],
  ["Los Fabulosos Cadillacs","El León",1992,"nac"],["Andrés Calamaro","Honestidad Brutal",1999,"nac"],
- ["Los Ratones Paranoicos","Furtivos",1988,"nac"],["Los Pericos","Big Yuyo",1994,"nac"],
+ ["Los Ratones Paranoicos","Furtivos",1988,"nac",null,"2026-10-31"],["Los Ratones Paranoicos","Furtivos",1989,"nac","2026-10-31"],["Los Pericos","Big Yuyo",1994,"nac"],
  ["Los Auténticos Decadentes","Mi Vida Loca",1995,"nac"],["Fito Páez","Giros",1985,"nac"],
  ["El Plan de la Mariposa","Brote",2011,"nac"],["El Plan de la Mariposa","Danza de Antalgia",2014,"nac"],
  ["El Plan de la Mariposa","Devorando Intensidad",2017,"nac"],["El Plan de la Mariposa","Estado de Enlace",2020,"nac"],
@@ -1245,7 +1245,12 @@ const DISCOS = [
  ["Las Pastillas del Abuelo","Versiones",2006,"nac"],["Las Pastillas del Abuelo","Crisis",2008,"nac"],["Las Pastillas del Abuelo","Desafíos",2010,"nac"],
  ["Ciro y los Persas","Espejos",2010,"nac"],["Ciro y los Persas","27",2012,"nac"],["Viejas Locas","Viejas Locas",1995,"nac"],
  ["Viejas Locas","Hermanos de Sangre",1997,"nac"],["El Mató a un Policía Motorizado","La Dinastía Scorpio",2012,"nac"],["El Mató a un Policía Motorizado","La Síntesis O'Konor",2017,"nac"],
- ["El Plan de la Mariposa","Trance Habitante",2013,"nac"],["Los Ratones Paranoicos","Fieras Lunáticas",1991,"nac"],["Los Pericos","El Ritual de la Banana",1987,"nac"],
+ ["El Plan de la Mariposa","Trance Habitante",2013,"nac"],["Los Ratones Paranoicos","Fieras Lunáticas",1991,"nac"],
+ // Los Ratones Paranoicos: sus discos de estudio (Wikipedia), desde el 31/10. El de 2009 se llama igual que el de 1986 y queda afuera
+ ["Los Ratones Paranoicos","Ratones Paranoicos",1986,"nac","2026-10-31"],["Los Ratones Paranoicos","Los Chicos Quieren Rock",1988,"nac","2026-10-31"],
+ ["Los Ratones Paranoicos","Tómalo o Déjalo",1990,"nac","2026-10-31"],["Los Ratones Paranoicos","Hecho en Memphis",1993,"nac","2026-10-31"],
+ ["Los Ratones Paranoicos","Planeta Paranoico",1996,"nac","2026-10-31"],["Los Ratones Paranoicos","Electroshock",1999,"nac","2026-10-31"],
+ ["Los Ratones Paranoicos","Los Chicos Quieren Más",2001,"nac","2026-10-31"],["Los Ratones Paranoicos","Girando",2003,"nac","2026-10-31"],["Los Pericos","El Ritual de la Banana",1987,"nac"],
  ["Los Auténticos Decadentes","Cualquiera Puede Cantar",1997,"nac"],["Attaque 77","Ángeles Caídos",1992,"nac"],["Attaque 77","Amén!",1995,"nac"],
  ["Rata Blanca","Rata Blanca",1988,"nac"],["Rata Blanca","Guerrero del Arco Iris",1991,"nac"],
  ["V8","Luchando por el Metal",1983,"nac"],["Los Brujos","Fin de Semana Salvaje",1991,"nac"],["Massacre","Juguetes para Olvidar",1996,"nac"],
@@ -1513,7 +1518,9 @@ const TODAS_BANDAS=hoyAR()>="2026-10-30";
 //  - la principal (Rock nacional y uruguayo): desafíos del día y ranking, solo con las bandas nacionales elegidas
 //  - "Todo el rock" (?todo=1): todos los discos del catálogo, solo en modo Libre, no suma al ranking
 const ESQUEMA_31=hoyAR()>="2026-10-31";
-const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:"2004",sigue:true}};
+const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:"2004",sigue:true},
+  // Buenos Aires, 1983; separados en 2011, volvieron en 2017 y siguen con la gira despedida (2024-2025)
+  "Los Ratones Paranoicos":{pais:"AR",tipo:"banda",inicio:1983,desde:"1983",sigue:true}};
 const TODO_ROCK=ESQUEMA_31&&new URLSearchParams(location.search).has("todo");
 const PRINCIPAL_FUERA=["Los Pericos","Sig Ragga","Bandalos Chinos","Conociendo Rusia","A.N.I.M.A.L.","Arbolito","Arco Iris","Cadena Perpetua","Carajo",
   "Celeste Carballo","Cielo Razzo","Color Humano","Fabiana Cantilo","Farolitos","Invisible","Jauría","Juana la Loca","Peligrosos Gorriones","Salta La Banca","Vetamadre"];
