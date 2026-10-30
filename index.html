@@ -2,6 +2,8 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
+<!-- Seguridad: la página solo puede cargar código y datos de ella misma y de los servicios que usa (iTunes, Supabase, Google Fonts, GoatCounter, Wikipedia) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://itunes.apple.com https://*.apple.com https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co https://*.goatcounter.com https://itunes.apple.com https://es.wikipedia.org https://www.wikidata.org; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
 // Dirección oficial: si alguien entra por la de Render, lo manda a la oficial y se lleva sus datos
@@ -17,7 +19,8 @@
       var txt=JSON.stringify(datos);
       if(txt.length>2) h="#migrar="+encodeURIComponent(btoa(unescape(encodeURIComponent(txt))));
       location.replace(OFICIAL+location.pathname+location.search+h);
-    }else if(location.hash.indexOf("#migrar=")===0){
+    }else if(location.hash.indexOf("#migrar=")===0&&/\.onrender\.com$/.test((function(){ try{ return new URL(document.referrer).hostname }catch(e){ return "" } })())){
+      // los datos solo se aceptan si vienen de la dirección vieja (onrender.com): así nadie puede armar un link que cargue datos falsos
       var d=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(location.hash.slice(8))))));
       for(var k2 in d){ if(k2.indexOf("tapa-")===0&&localStorage.getItem(k2)===null) localStorage.setItem(k2,d[k2]) }
       history.replaceState(null,"",location.pathname+location.search);
@@ -5291,7 +5294,23 @@ addEventListener("popstate",()=>irA(vistaDeRuta(location.pathname),"pop"));
 
 const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:"v-tema",antes:"v-antes",orden:"v-orden",abre:"v-abre",banda:"v-banda",grilla:"v-grilla",armar:"v-armar",letra:"v-letra",bingo:"v-bingo"};
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar","v-frases",...Object.values(SUBJUEGOS)];
+// Páginas internas (contenido para redes, marcar tapas, cargar frases): solo se abren en el navegador donde el dueño
+// entró una vez con su link secreto (?llave=...). En el código solo está la huella (SHA-256) de la llave, no la llave.
+const INTERNAS=["contenido","marcar","frases"], LLAVE_HUELLA="9dcbc9e5f3f7d97da69897d0ccd53dc39ebbd604b22e0d2a6c7509bed10d7054";
+const llaveOk=()=>{ try{ return localStorage.getItem("tapa-llave")===LLAVE_HUELLA }catch(e){ return false } };
+let llaveRevisando=null;
+async function llaveProbar(){
+  const q=new URLSearchParams(location.search), k=q.get("llave"); if(!k) return false;
+  q.delete("llave"); try{ history.replaceState(history.state,"",location.pathname+(q.toString()?"?"+q:"")) }catch(e){}
+  try{ const h=[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(k)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+    if(h===LLAVE_HUELLA){ localStorage.setItem("tapa-llave",h); return true } }catch(e){}
+  return false;
+}
 function irA(v,como){
+  if(INTERNAS.includes(v)&&!llaveOk()){
+    if(new URLSearchParams(location.search).has("llave")&&!llaveRevisando){ llaveRevisando=llaveProbar().then(ok=>{ llaveRevisando=null; irA(ok?v:"inicio","inicial") }); return }
+    v="inicio"; como="inicial"; // sin llave, se va al inicio (y la dirección también)
+  }
   if(TODO_ROCK&&v==="diario") v="normal";
   if(TODO_ROCK&&(v==="top"||v==="yo")){ location.href=conPrevia(RUTAS[v]); return }
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
