@@ -1237,7 +1237,7 @@ const DISCOS = [
  ["Catupecu Machu","A Morir!!!",1997,"nac"],["Catupecu Machu","Dale!",2000,"nac"],["Las Pelotas","Esperando el Milagro",2003,"nac"],
  ["Turf","Una Pila de Vida",1997,"nac","2026-10-28"],["Turf","Siempre Libre",1999,"nac","2026-10-28"],["Turf","Turfshow",2001,"nac","2026-10-28"],["Turf","Para Mí, Para Vos",2004,"nac","2026-10-28"],["Turf","Odisea",2017,"nac","2026-10-28"],["Turf","Renacimiento",2023,"nac","2026-10-28"],["Turf","Polvo de Estrellas",2025,"nac","2026-10-28"],
  ["Kapanga","A 15 cm de la Realidad",1998,"nac","2026-10-28"],["Kapanga","Un Asado en Abbey Road",1999,"nac","2026-10-28"],["Kapanga","Operación Rebenque",2000,"nac","2026-10-28"],["Kapanga","Botanika",2002,"nac","2026-10-28"],["Kapanga","¡Esta!",2004,"nac","2026-10-28"],["Kapanga","Crece",2007,"nac","2026-10-28"],["Kapanga","Todoterreno",2009,"nac","2026-10-28"],["Kapanga","Lima",2012,"nac","2026-10-28"],["Kapanga","Motormúsica",2015,"nac","2026-10-28"],
- ["Los Gardelitos","Rock Sudaka",1996,"nac","2026-10-28"],["Los Gardelitos","Gardeliando",1998,"nac","2026-10-28"],["Los Gardelitos","Fiesta Sudaka",1999,"nac","2026-10-28"],["Los Gardelitos","La Calle Es un Espejo",2002,"nac"],["Los Gardelitos","En Tierra de Sueños, Parte 2",2004,"nac","2026-10-28"],["Los Gardelitos","Sortilegio de Arrabal",2019,"nac"],["Los Gardelitos","Oxígeno",2008,"nac","2026-10-28"],["Los Gardelitos","Ciudad Oculta",2014,"nac","2026-10-28"],
+ ["Los Gardelitos","Rock Sudaka",1996,"nac","2026-10-28"],["Los Gardelitos","Gardeliando",1998,"nac","2026-10-28"],["Los Gardelitos","Fiesta Sudaka",1999,"nac","2026-10-28"],["Los Gardelitos","La Calle Es un Espejo",2002,"nac","2026-10-30"],["Los Gardelitos","En Tierra de Sueños, Parte 2",2004,"nac","2026-10-28"],["Los Gardelitos","Sortilegio de Arrabal",2019,"nac","2026-10-30"],["Los Gardelitos","Oxígeno",2008,"nac","2026-10-28"],["Los Gardelitos","Ciudad Oculta",2014,"nac","2026-10-28"],
  ["Las Pelotas","Corderos en la Noche",1991,"nac","2026-10-28"],["Las Pelotas","Máscaras de Sal",1994,"nac","2026-10-28"],["Las Pelotas","Amor Seco",1995,"nac","2026-10-28"],["Las Pelotas","¿Para Qué?",1998,"nac","2026-10-28"],["Las Pelotas","Todo por un Polvo",1999,"nac","2026-10-28"],["Las Pelotas","Basta",2007,"nac","2026-10-28"],["Las Pelotas","Despierta",2009,"nac","2026-10-28"],["Las Pelotas","Cerca de las Nubes",2012,"nac","2026-10-28"],["Las Pelotas","Brindando por Nada",2016,"nac","2026-10-28"],["Las Pelotas","Es Así",2020,"nac","2026-10-28"],["Las Pelotas","Sin la Piel",2026,"nac","2026-10-28"],
  ["No Te Va Gustar","Solo de Noche",2000,"nac"],["No Te Va Gustar","Aunque Cueste Ver el Sol",2004,"nac"],["No Te Va Gustar","Por Lo Menos Hoy",2012,"nac"],
  ["No Te Va Gustar","El Tiempo Otra Vez Avanza",2014,"nac"],["La Vela Puerca","Deskarado",1998,"nac"],["El Cuarteto de Nos","Raro",2006,"nac"],
@@ -1508,6 +1508,8 @@ const mezclar=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd()*(i+1)|
 const hoyAR=()=>PREVIA||new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date());
 // El Bingo rockero entra a los desafíos el 28/10 (así no cambia el total del día en curso)
 const BINGO_ON=hoyAR()>="2026-10-28";
+// Copia del catálogo tal cual está escrito (con "desde" y "hasta"): sirve para rearmar el de un día anterior
+const DISCOS_CRUDO=DISCOS.map(d=>d.slice());
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
 const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set(), DISCOS_FUTUROS=[], CACHE_FUTURO={}, DISCOGRAFIAS_30_10=new Set();
 { const hoy=hoyAR(), bandas=new Set(DISCOS.map(d=>d[0]));
@@ -3992,7 +3994,7 @@ if(TODAS_BANDAS) for(const b of new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]))){ i
 const TEMA_SACAR=["2 Minutos","A.N.I.M.A.L.","Almafuerte","Almendra","Andrés Calamaro","Árbol","Arbolito","Arco Iris","Attaque 77","Cadena Perpetua","Carajo","Celeste Carballo","Cielo Razzo","Color Humano","Eruca Sativa","Estelares","Fabiana Cantilo","Fito Páez","Invisible","Jauría","Juana la Loca","Kapanga","La Máquina de Hacer Pájaros","León Gieco","Los Abuelos de la Nada","Los Auténticos Decadentes","Los Brujos","Los Caligaris","Los Enanitos Verdes","Los Fabulosos Cadillacs","Los Gatos","Los Pericos","Los Rodríguez","Los Tipitos","Los Twist","Los Violadores","Luis Alberto Spinetta","Manal","Marilina Bertoldi","Massacre","Once Tiros","Peces Raros","Pedro Aznar","Peligrosos Gorriones","Pescado Rabioso","Salta La Banca","Serú Girán","Sig Ragga","Silvestre y la Naranja","Spinetta Jade","Sui Generis","Usted Señalemelo","Vetamadre","Virus","Vox Dei","Hermética"];
 if(TODAS_BANDAS&&!TODO_ROCK) for(let i=TEMA_BANDAS.length-1;i>=0;i--) if(TEMA_SACAR.includes(TEMA_BANDAS[i])) TEMA_BANDAS.splice(i,1);
 // Desde el 31/10, en Adiviná el tema y en el Ahorcado tampoco van estas (las eligió el dueño del sitio)
-const SACAR_31=["Los Pericos","Fabiana Cantilo","Los Fabulosos Cadillacs","Los Auténticos Decadentes","Sig Ragga","V8","Catupecu Machu","Jauría","Rata Blanca","Silvestre y la Naranja","Peces Raros"];
+const SACAR_31=["Los Pericos","Fabiana Cantilo","Los Fabulosos Cadillacs","Los Auténticos Decadentes","Sig Ragga","V8","Catupecu Machu","Jauría","Rata Blanca","Silvestre y la Naranja","Peces Raros","Fito Páez"];
 if(ESQUEMA_31&&!TODO_ROCK) for(let i=TEMA_BANDAS.length-1;i>=0;i--) if(SACAR_31.includes(TEMA_BANDAS[i])) TEMA_BANDAS.splice(i,1);
 // Ahorcado: solo bandas nacionales y uruguayas (desde el 30/10 son todas las del catálogo)
 const AHO_BANDAS=CON_BANDAS.filter(b=>(b!=="Callejeros"||ESQUEMA_31)&&(!TODAS_BANDAS||TODO_ROCK||NAC_BANDAS.has(b))&&!(ESQUEMA_31&&!TODO_ROCK&&SACAR_31.includes(b)));
@@ -4248,7 +4250,19 @@ const hashtag=t=>"#"+norm(t).replace(/\s+/g,"");
 const titulo_igual=(a,b)=>{ const f=t=>norm(limpiarTitulo(String(t))).replace(/^(the|el|la|los|las) /,""); const x=f(a), y=f(b); return !!x&&!!y&&(x===y||x.startsWith(y+" ")||y.startsWith(x+" ")) };
 
 // Ronda 1 de la Tapa del día: mismo disco y mismas opciones que ve el jugador
+// El catálogo como era un día dado (para las historias de "respuesta" y los desafíos de días anteriores):
+// los discos vigentes ese día y, desde el 30/10, solo los de la página principal
+function catalogoDe(dia){
+  return DISCOS_CRUDO.filter(d=>!((d[4]&&dia<d[4])||(d[5]&&dia>=d[5])))
+    .filter(d=>!(dia>="2026-10-30"&&!TODO_ROCK&&(d[3]!=="nac"||PRINCIPAL_FUERA.includes(d[0])||(d[1]&&PRINCIPAL_SOLO[d[0]]&&!PRINCIPAL_SOLO[d[0]].includes(d[1])))))
+    .map(d=>d.slice(0,4));
+}
 async function contTapa(dia){
+  // la tapa de ese día se arma con el catálogo de ese día (si no, la "respuesta" de ayer salía con el catálogo de hoy)
+  const viejos=DISCOS.splice(0,DISCOS.length,...catalogoDe(dia));
+  try{ return await contTapaCon(dia) }finally{ DISCOS.splice(0,DISCOS.length,...viejos) }
+}
+async function contTapaCon(dia){
   const viejoG=G, viejoR=rnd;
   try{
     const seed=hashStr("tapa-"+dia); rnd=semillaRng(seed);
