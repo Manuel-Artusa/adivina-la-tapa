@@ -5221,7 +5221,7 @@ function textoNovedad(){
     `¿Qué banda falta? Dejala en los comentarios 👇\n\n`+
     `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`;
 }
-async function redesPlan(dia,turno,disco){
+async function redesPlan(dia,turno,disco,extra={}){
   try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
   await esperarCache();
   const out=[], ayer=sumarDias(dia,-1), ds=diaSemana(dia), err=[];
@@ -5254,8 +5254,10 @@ async function redesPlan(dia,turno,disco){
       out.push({id:"post",tipo:"carrusel",caption:textoAuto(p),imgs:await placasPost(p)});
     });
     // 2) historias: respuesta de ayer, tapa de hoy, banda del día, grilla del día, ranking de ayer
-    await intentar("respuesta",async()=>{ const t=await contTapa(ayer); if(t) out.push({id:"h-respuesta",tipo:"historia",caption:"",imgs:[await placaRespuesta(ayer,t)]}) });
-    await intentar("pregunta",async()=>{ const t=await contTapa(dia); if(t) out.push({id:"h-pregunta",tipo:"historia",caption:"",imgs:[await placaPregunta(dia,t)]}) });
+    // La respuesta de ayer es la que se guardó al publicar la pregunta de ayer (extra.tapaAyer, de Supabase):
+    // así coincide siempre con la historia "¿Qué disco es?" aunque el catálogo haya cambiado en el medio
+    await intentar("respuesta",async()=>{ const t=extra&&extra.tapaAyer&&extra.tapaAyer.t?{r:extra.tapaAyer}:await contTapa(ayer); if(t) out.push({id:"h-respuesta",tipo:"historia",caption:"",imgs:[await placaRespuesta(ayer,t)]}) });
+    await intentar("pregunta",async()=>{ const t=await contTapa(dia); if(t) out.push({id:"h-pregunta",tipo:"historia",caption:"",imgs:[await placaPregunta(dia,t)],dato:{a:t.r.a,t:t.r.t,y:t.r.y||null,url:t.r.url}}) });
     await intentar("banda",async()=>{ const c=await placaBandaDia(dia); if(c) out.push({id:"h-banda",tipo:"historia",caption:"",imgs:[c]}) });
     await intentar("grilla",async()=>{ const c=placaGrillaDia(dia); if(c) out.push({id:"h-grilla",tipo:"historia",caption:"",imgs:[c]}) });
     if(TOP_ON) await intentar("top",async()=>{
@@ -5300,9 +5302,9 @@ async function redesPlan(dia,turno,disco){
   return {pubs:out,errores:err};
 }
 // Para la tarea de GitHub: devuelve todo listo para guardar (imágenes en JPG)
-window.redesExportar=async(dia,turno,disco)=>{
-  const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo",disco);
-  return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,caption:p.caption,video:p.video||null,frames:p.frames||null,fps:p.fps||null,juego:p.juego||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
+window.redesExportar=async(dia,turno,disco,extra)=>{
+  const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo",disco,extra);
+  return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,dato:p.dato||null,caption:p.caption,video:p.video||null,frames:p.frames||null,fps:p.fps||null,juego:p.juego||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
 };
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
