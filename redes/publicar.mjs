@@ -54,7 +54,12 @@ async function armar() {
   await pg.addInitScript(() => { try { localStorage.setItem("tapa-nombre", JSON.stringify("Juegos Rock")) } catch (e) {} });
   await pg.goto("http://localhost:8099/", { waitUntil: "load" });
   await pg.waitForTimeout(3000);
-  const r = await pg.evaluate(([d, t, x]) => window.redesExportar(d, t, x), [DIA, TURNO, DISCO]);
+  // la respuesta de ayer: la tapa que se guardó al publicar la pregunta de ayer (si no hay, la página la calcula)
+  const ayer = new Date(Date.parse(DIA + "T12:00:00Z") - 864e5).toISOString().slice(0, 10);
+  let tapaAyer = null;
+  if (SUPA && SERVICIO) { try { const g = await leerClave(`tapa:${ayer}`); if (g && g.valor) tapaAyer = JSON.parse(g.valor) } catch (e) {} }
+  if (tapaAyer) log(`🗂️ Respuesta de ayer guardada: ${tapaAyer.a} — ${tapaAyer.t}`);
+  const r = await pg.evaluate(([d, t, x, e]) => window.redesExportar(d, t, x, e), [DIA, TURNO, DISCO, { tapaAyer }]);
   await b.close(); srv.close();
   fs.mkdirSync(SALIDA, { recursive: true });
   for (const p of r.pubs) {
@@ -79,6 +84,9 @@ async function armar() {
     });
     delete p.imgs;
   }
+  // se guarda la tapa de la pregunta de hoy (la primera vez que se arma de verdad), para la respuesta de mañana
+  const preg = r.pubs.find(p => p.id === "h-pregunta" && p.dato);
+  if (preg && !PRUEBA) { try { if (!(await leerClave(`tapa:${DIA}`))) { await guardarClave(`tapa:${DIA}`, JSON.stringify(preg.dato)); log(`🗂️ Guardé la tapa de hoy para la respuesta de mañana: ${preg.dato.a} — ${preg.dato.t}`) } } catch (e) { log("⚠️ No pude guardar la tapa de hoy:", e.message) } }
   fs.writeFileSync(path.join(SALIDA, `${TURNO}-textos.json`), JSON.stringify(r.pubs, null, 2));
   r.errores.forEach(e => log("⚠️ No se pudo armar", e));
   return r.pubs;
