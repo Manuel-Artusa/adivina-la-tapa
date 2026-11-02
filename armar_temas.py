@@ -11,7 +11,7 @@ import unicodedata
 import urllib.parse
 from datetime import datetime, timedelta, timezone
 
-from armar_discos import itunes, leer_catalogo
+from armar_discos import itunes, leer_catalogo, limpiar_tema
 
 CARPETA = "temas"
 
@@ -38,37 +38,56 @@ def de_la_banda(r, banda):
             if x.get("wrapperType") == "track" and x.get("trackName") and norm_js(x.get("artistName", "")) == norm_js(banda)]
 
 
-def temas_del_artista(banda):
-    """Los temas más escuchados desde el perfil del artista en iTunes (lookup por id): sirve cuando la búsqueda
-    de canciones trae temas de otros (Sumo, Virus, Metallica…)."""
-    for pais in ["ar", "us"]:
-        arts = itunes(f"search?term={urllib.parse.quote(banda)}&entity=musicArtist&limit=10&country={pais}").get("results", [])
-        ids = [a["artistId"] for a in arts if a.get("artistId") and norm_js(a.get("artistName", "")) == norm_js(banda)][:1]
-        for i in ids:
-            r = de_la_banda(itunes(f"lookup?id={i}&entity=song&limit=60&country={pais}"), banda)
-            if len(r) >= 10:
-                return r
-    return []
+# Discos de cada banda ya encontrados (discos.json): de ahí sale qué artista de iTunes es la banda, así la lista
+# no trae a otro con el mismo nombre (Manal, Massacre, V8 y Riff traían a artistas de afuera)
+DISCOS_BANDA = {}
+try:
+    for k, v in json.load(open("discos.json", encoding="utf-8")).get("discos", {}).items():
+        if v.get("id"):
+            DISCOS_BANDA.setdefault(k.split("|")[0], []).append((v["id"], v.get("pais") or "us"))
+except (OSError, ValueError):
+    pass
+
+
+def artista_real(banda):
+    """El id de artista de iTunes de la banda: el que más se repite entre (hasta) 4 de sus discos."""
+    cuenta = {}
+    for cid, pais in DISCOS_BANDA.get(banda, [])[:4]:
+        r = itunes(f"lookup?id={cid}&country={pais}").get("results", [])
+        if r and r[0].get("artistId"):
+            cuenta[r[0]["artistId"]] = cuenta.get(r[0]["artistId"], 0) + 1
+    return max(cuenta, key=cuenta.get) if cuenta else None
+
+
+def sin_repetir(ts):
+    vistos, out = set(), []
+    for x in ts:
+        k = norm_js(limpiar_tema(x["trackName"]))
+        if k not in vistos:
+            vistos.add(k); out.append(x)
+    return out
 
 
 def temas(banda):
+    try:
+        aid = artista_real(banda)
+    except RuntimeError:
+        aid = None
+    # con el id de artista se aceptan solo sus temas; sin él (banda sin discos encontrados), por el nombre
+    de_ella = (lambda r: [x for x in de_la_banda(r, banda) if x.get("artistId") == aid]) if aid else (lambda r: de_la_banda(r, banda))
     base = f"search?term={urllib.parse.quote(banda)}&media=music&entity=song&country=ar&limit=60"
     r = itunes(base + "&attribute=artistTerm")
-    if not any(norm_js(x.get("artistName", "")) == norm_js(banda) for x in r.get("results", [])):
+    if not de_ella(r):
         r = itunes(base)
-    ts = de_la_banda(r, banda)
-    # si la búsqueda trae pocos temas de la banda, se piden al perfil del artista
-    if len(ts) < 10:
-        try:
-            otros = temas_del_artista(banda)
-        except RuntimeError:
-            otros = []
-        if len(otros) > len(ts):
-            # sin repetir el mismo tema (en el orden de iTunes)
-            vistos, ts = set(), []
-            for x in otros:
-                if norm_js(x["trackName"]) not in vistos:
-                    vistos.add(norm_js(x["trackName"])); ts.append(x)
+    ts = de_ella(r)
+    # si la búsqueda trae pocos temas de la banda, se piden al perfil del artista (los más escuchados)
+    if len(ts) < 10 and aid:
+        for pais in ["ar", "us"]:
+            otros = de_ella(itunes(f"lookup?id={aid}&entity=song&limit=60&country={pais}"))
+            if len(otros) > len(ts):
+                ts = sin_repetir(otros)
+            if len(ts) >= 10:
+                break
     return [fila(x) for x in ts]
 
 
