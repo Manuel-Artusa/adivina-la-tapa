@@ -5337,6 +5337,56 @@ function textoNovedad(){
     `¿Qué banda falta? Dejala en los comentarios 👇\n\n`+
     `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`;
 }
+// ===== Anuncio: entrar con Google (turno "cuenta" de Publicar en redes) =====
+async function placasCuenta(){
+  const out=[];
+  // dibujitos: un celular y una compu con el mismo puntaje
+  const pantalla=(x,X,Y,W,H,t)=>{ x.fillStyle=CC.crema; x.fillRect(X,Y,W,H); x.fillStyle=CC.rojo; x.fillRect(X,Y,W,H*.22);
+    texto(x,"JUEGOS ROCK",X+W/2,Y+H*.15,{s:W*.09,c:CC.crema,al:"center",w:W*.9,min:10});
+    texto(x,t,X+W/2,Y+H*.55,{s:W*.2,al:"center",w:W*.9,min:12}); texto(x,"PUNTOS",X+W/2,Y+H*.75,{f:FM,peso:"500",s:W*.08,al:"center",w:W*.9,min:10}) };
+  const celu=(x,X,Y,t)=>{ x.fillStyle=CC.tinta; x.fillRect(X+10,Y+10,230,420); x.fillRect(X,Y,230,420); pantalla(x,X+16,Y+40,198,340,t) };
+  const compu=(x,X,Y,t)=>{ x.fillStyle=CC.tinta; x.fillRect(X+10,Y+10,440,290); x.fillRect(X,Y,440,290); pantalla(x,X+18,Y+18,404,254,t);
+    x.fillStyle=CC.tinta; x.fillRect(X-50,Y+300,540,34) };
+  // 1) portada
+  let [c,x]=lienzo(1080,1350);
+  etiqueta(x,"NOVEDAD EN JUEGOS ROCK",60,40,28);
+  texto(x,"GUARDÁ TU PROGRESO",60,215,{s:96,c:CC.rojo,w:960,min:50});
+  texto(x,"Entrá con Google y jugá en el celu o en la compu sin perder nada",60,290,{f:FB,peso:"800",s:40,w:960,max:2,min:24});
+  celu(x,110,470,"1250"); compu(x,500,560,"1250");
+  x.fillStyle=CC.tinta; x.font=`90px ${FD}`; x.textAlign="center"; x.fillText("⇄",430,700);
+  texto(x,"Tus puntos, rachas y récords, en todos tus dispositivos",540,1080,{f:FB,peso:"800",s:40,al:"center",w:940,max:2,min:24});
+  texto(x,"Deslizá para ver cómo →",540,1300,{f:FM,peso:"500",s:28,al:"center",w:960});
+  out.push(c);
+  // 2) cómo se hace
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"CÓMO SE HACE",80,60,30);
+  texto(x,"En 3 pasos",80,215,{s:92,w:920});
+  [["1","Entrá a juegosrock.com.ar y andá a «Yo» (Mis estadísticas)"],["2","Tocá «Continuar con Google» y elegí tu cuenta"],["3","Listo: lo que jugaste se guarda solo en tu cuenta"]].forEach(([n,t],i)=>{
+    const Y=300+i*270;
+    x.fillStyle=CC.tinta; x.fillRect(92,Y+12,150,150); x.fillStyle=CC.rojo; x.fillRect(80,Y,150,150);
+    texto(x,n,155,Y+115,{s:100,c:CC.crema,al:"center",w:140});
+    texto(x,t,270,Y+60,{f:FB,peso:"800",s:44,w:730,max:3,lh:1.15,min:26}) });
+  // el botón, como se ve en la página
+  x.fillStyle=CC.tinta; x.fillRect(240,1150,600,90); x.fillStyle=CC.crema; x.beginPath(); x.arc(300,1195,28,0,7); x.fill();
+  texto(x,"G",300,1210,{f:FB,peso:"800",s:40,c:"#4285f4",al:"center",w:60}); texto(x,"Continuar con Google",360,1210,{f:FB,peso:"800",s:38,c:CC.crema,w:460,min:24});
+  out.push(c);
+  // 3) cierre
+  [c,x]=lienzo(1080,1350,CC.tinta);
+  texto(x,"JUGÁ DONDE QUIERAS",540,200,{s:80,c:CC.papel,al:"center",w:960,max:1,min:40});
+  x.fillStyle=CC.rojo; x.fillRect(90,310,900,560); x.fillStyle=CC.crema; x.fillRect(80,300,900,560);
+  ["Es opcional y gratis","Si ya jugaste en otro dispositivo, se juntan tus récords","Seguís con tu nombre y tu lugar en el ranking","Solo usamos tu mail para guardar tu progreso"].forEach((l,i)=>texto(x,"✔ "+l,120,400+i*125,{f:FB,peso:"800",s:40,w:820,max:2,lh:1.1,min:24}));
+  texto(x,"¿Ya lo probaste? Contanos 👇",540,1030,{f:FB,peso:"800",s:42,c:CC.papel,al:"center",w:960});
+  marca(x,540,1150,56);
+  out.push(c);
+  return out;
+}
+function textoCuenta(){
+  return `🎸 ¡Novedad en Juegos Rock: ahora podés guardar tu progreso con Google!\n\n`+
+    `📱💻 Jugá en el celu o en la compu sin perder tus puntos, rachas, récords ni tu lugar en el ranking.\n\n`+
+    `👉 Entrá a juegosrock.com.ar, andá a «Yo» y tocá «Continuar con Google». Si ya jugaste en otro dispositivo, se juntan tus récords.\n\n`+
+    `Es opcional y gratis: solo usamos tu mail para guardar tu progreso.\n\n`+
+    `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS}`;
+}
 async function redesPlan(dia,turno,disco,extra={}){
   try{ await Promise.all([document.fonts.load(`60px ${FD}`),document.fonts.load(`800 30px ${FB}`),document.fonts.load(`600 30px ${FB}`),document.fonts.load(`500 30px ${FM}`)]) }catch(e){}
   await esperarCache();
@@ -5345,6 +5395,11 @@ async function redesPlan(dia,turno,disco,extra={}){
   // A mano: el anuncio de los discos nuevos
   if(turno==="novedad"){
     await intentar("novedad",async()=>{ out.push({id:"novedad-discos",tipo:"carrusel",caption:textoNovedad(),imgs:await placasNovedad()}) });
+    return {pubs:out,errores:err};
+  }
+  // A mano: el anuncio de entrar con Google
+  if(turno==="cuenta"){
+    await intentar("cuenta",async()=>{ out.push({id:"cuenta-google",tipo:"carrusel",caption:textoCuenta(),imgs:await placasCuenta()}) });
     return {pubs:out,errores:err};
   }
   // A mano: el post de aniversario de un disco puntual ("Banda|Disco"), aparte del post del día
