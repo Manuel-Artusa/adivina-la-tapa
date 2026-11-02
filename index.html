@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <!-- Seguridad: la página solo puede cargar código y datos de ella misma y de los servicios que usa (iTunes, Supabase, Google Fonts, GoatCounter, Wikipedia) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://itunes.apple.com https://*.apple.com https://gc.zgo.at; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co https://*.goatcounter.com https://itunes.apple.com https://es.wikipedia.org https://www.wikidata.org; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://itunes.apple.com https://*.apple.com https://gc.zgo.at https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com/gsi/style; frame-src https://accounts.google.com/gsi/; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://*.supabase.co https://*.goatcounter.com https://itunes.apple.com https://es.wikipedia.org https://www.wikidata.org https://accounts.google.com/gsi/; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
 // Dirección oficial: si alguien entra por la de Render, lo manda a la oficial y se lleva sus datos
@@ -670,6 +670,10 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
 .cuenta{display:flex;flex-direction:column;gap:6px;align-items:flex-start;border:3px solid var(--tinta);background:var(--crema);padding:14px 16px;box-shadow:4px 4px 0 var(--tinta);margin:6px 0 16px}
 .cuenta b{font-family:var(--display);font-weight:400;font-size:1.25rem}
 .cuenta span{font-size:.92rem}
+.g-boton{min-height:44px}
+.g-modal{position:fixed;inset:0;z-index:300;background:rgba(20,18,16,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.g-caja{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;background:var(--crema);border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta);padding:20px;max-width:340px;width:100%}
+.g-caja b{font-family:var(--display);font-weight:400;font-size:1.4rem}
 
 /* Vista previa de otro día */
 .previa-cartel{position:sticky;top:0;z-index:40;background:var(--rojo);color:#fff;padding:8px 14px;font-size:.85rem;text-align:center}
@@ -1128,6 +1132,8 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
 const LETRA_ON="__LETRA_ON__"==="1";
 const SUPA_URL = "__SUPA_URL__";
 const SUPA_KEY = "__SUPA_KEY__";
+// ID de cliente de Google (variable GOOGLE_ID de Render): con él, el botón de Google se abre en la página y Google muestra juegosrock.com.ar
+const GOOGLE_ID = "__GOOGLE_ID__";
 // Vista previa (?previa=AAAA-MM-DD, de 1 a 3 días adelante): la página como va a estar ese día, para revisarla antes.
 // No guarda nada en el navegador ni sube puntajes al top
 const PREVIA=(()=>{ const f=(new URLSearchParams(location.search).get("previa")||"").trim(); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)) return null;
@@ -1947,7 +1953,39 @@ function jugadorId(){
 const CUENTA_FUERA=/^tapa-(sesion|llave|marcas|frases-)/;
 const cuentaSesion=()=>{ try{ return JSON.parse(localStorage.getItem("tapa-sesion")) }catch(e){ return null } };
 const cuentaGuardarSesion=x=>{ try{ x?localStorage.setItem("tapa-sesion",JSON.stringify(x)):localStorage.removeItem("tapa-sesion") }catch(e){} };
-function cuentaEntrar(){ location.href=`${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.origin+"/mis-estadisticas/")}` }
+function cuentaRedirigir(){ location.href=`${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.origin+"/mis-estadisticas/")}` }
+const GOOGLE_ON=!!GOOGLE_ID&&!GOOGLE_ID.startsWith("__");
+let gsiCarga=null;
+const gsiCargar=()=>gsiCarga||(gsiCarga=new Promise((ok,mal)=>{ const s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client"; s.async=true;
+  s.onload=()=>window.google&&google.accounts?ok():mal(); s.onerror=()=>{ gsiCarga=null; mal() }; document.head.appendChild(s) }));
+// Botón oficial de Google dentro de la página (Google muestra "Ir a juegosrock.com.ar"); la cuenta la arma Supabase con el token que da Google.
+// Si no hay GOOGLE_ID o Google no carga, entra por la página de Supabase como antes
+async function cuentaBotonGoogle(el,alTerminar){
+  if(!GOOGLE_ON) return false;
+  try{
+    await gsiCargar();
+    const crudo=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,"0")).join("");
+    const hash=[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(crudo)))].map(b=>b.toString(16).padStart(2,"0")).join("");
+    google.accounts.id.initialize({client_id:GOOGLE_ID,nonce:hash,use_fedcm_for_prompt:true,callback:async res=>{
+      try{
+        const r=await fetch(`${SUPA_URL}/auth/v1/token?grant_type=id_token`,{method:"POST",headers:supaHeaders,body:JSON.stringify({provider:"google",id_token:res.credential,nonce:crudo})});
+        const j=await r.json(); if(!r.ok||!j.access_token) throw 0;
+        cuentaGuardarSesion({access_token:j.access_token,refresh_token:j.refresh_token,vence:Date.now()+(+j.expires_in||3600)*1000});
+        await cuentaIniciar(); if(alTerminar) alTerminar();
+      }catch(e){ alert("No se pudo entrar con Google. Probá de nuevo.") }
+    }});
+    el.innerHTML=""; google.accounts.id.renderButton(el,{type:"standard",theme:"filled_black",size:"large",text:"continue_with",shape:"rectangular",locale:"es-419"});
+    return true;
+  }catch(e){ return false }
+}
+// desde la bienvenida (u otro lugar sin el recuadro de la cuenta): una ventanita con el botón de Google
+async function cuentaEntrar(){
+  if(!GOOGLE_ON) return cuentaRedirigir();
+  const m=document.createElement("div"); m.className="g-modal"; m.innerHTML=`<div class="g-caja"><b>Entrá con Google</b><span>Tu progreso queda guardado en tu cuenta.</span><div class="g-boton">Cargando…</div><button class="link" type="button">Cancelar</button></div>`;
+  const cerrar=()=>m.remove(); m.querySelector("button.link").onclick=cerrar; m.onclick=e=>{ if(e.target===m) cerrar() };
+  document.body.appendChild(m);
+  if(!await cuentaBotonGoogle(m.querySelector(".g-boton"),()=>{ cerrar(); const bv=$("bienvenida"), n=ls.get("tapa-nombre"); if(bv&&!bv.hidden&&n){ $("in-bienv").value=n; $("f-bienv").requestSubmit() } })){ cerrar(); cuentaRedirigir() }
+}
 async function cuentaToken(){
   const x=cuentaSesion(); if(!x) return null;
   if(Date.now()<x.vence-60e3) return x.access_token;
@@ -1976,7 +2014,7 @@ async function cuentaSubir(){
 }
 function cuentaCambio(k){ if(!cuentaEstado.listo||!k||!k.startsWith("tapa-")||CUENTA_FUERA.test(k)) return; clearTimeout(cuentaTimer); cuentaTimer=setTimeout(cuentaSubir,1500) }
 // la vuelta del login trae la sesión en #access_token=...; se guarda acá antes de que irA() reescriba la dirección
-const CUENTA_HASH=location.hash;
+let CUENTA_HASH=location.hash;
 async function cuentaIniciar(){
   if(!TOP_ON||PREVIA) return;
   // vuelta del login de Google: la sesión viene en la dirección (#access_token=...)
@@ -1984,6 +2022,7 @@ async function cuentaIniciar(){
     const h=new URLSearchParams(CUENTA_HASH.slice(1));
     cuentaGuardarSesion({access_token:h.get("access_token"),refresh_token:h.get("refresh_token"),vence:Date.now()+(+h.get("expires_in")||3600)*1000});
     try{ history.replaceState(history.state,"",location.pathname+location.search) }catch(e){}
+    CUENTA_HASH="";
   }
   const t=await cuentaToken(); if(!t){ cuentaGuardarSesion(null); cuentaPintar(); return }
   try{
@@ -2005,8 +2044,9 @@ async function cuentaSalir(){
 function cuentaPintar(){
   const c=$("cuenta"); if(!c) return; c.hidden=!TOP_ON||!!PREVIA;
   if(cuentaEstado.listo) c.innerHTML=`<b>✓ Conectado con Google</b><span>${esc(cuentaEstado.email||"")} · Tu progreso se guarda en tu cuenta y lo ves en cualquier dispositivo.</span><button class="link" type="button" id="cuenta-salir">Cerrar sesión</button>`;
-  else c.innerHTML=`<b>Guardá tu progreso</b><span>Entrá con Google y jugá desde el celular o la compu sin perder tus puntos, rachas ni tu lugar en el ranking.</span><button class="btn" type="button" id="cuenta-entrar">Entrar con Google</button>`;
-  const a=$("cuenta-entrar"), b=$("cuenta-salir"); if(a) a.onclick=cuentaEntrar; if(b) b.onclick=cuentaSalir;
+  else c.innerHTML=`<b>Guardá tu progreso</b><span>Entrá con Google y jugá desde el celular o la compu sin perder tus puntos, rachas ni tu lugar en el ranking.</span><div class="g-boton" id="cuenta-g"></div><button class="btn" type="button" id="cuenta-entrar"${GOOGLE_ON?" hidden":""}>Entrar con Google</button>`;
+  const a=$("cuenta-entrar"), b=$("cuenta-salir"); if(a) a.onclick=cuentaRedirigir; if(b) b.onclick=cuentaSalir;
+  if(!cuentaEstado.listo&&GOOGLE_ON&&!c.hidden) cuentaBotonGoogle($("cuenta-g")).then(ok=>{ if(!ok&&a) a.hidden=false });
   const av=$("yo-aviso-guardado"); if(av) av.textContent=cuentaEstado.listo?"Se guarda en tu cuenta de Google.":"Se guarda en este navegador. Entrá con Google para tenerlo en todos tus dispositivos.";
 }
 function verTopPropio(){ topTab={t:"diario",v:"todos"}; irA("top") }

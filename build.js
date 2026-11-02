@@ -8,6 +8,7 @@
 //   SUPA_URL     URL del proyecto de Supabase
 //   SUPA_KEY     clave pública (anon / publishable). Nunca la secret / service_role
 //   SITE_URL     dirección del sitio, ej. https://juegosrock.com.ar (para Google y para compartir)
+//   GOOGLE_ID    ID de cliente de Google (…apps.googleusercontent.com), para el botón de Google en la página (opcional)
 //   GOATCOUNTER  código de GoatCounter, ej. juegosrock (opcional, para contar visitas)
 const fs = require("fs");
 const path = require("path");
@@ -15,6 +16,7 @@ const path = require("path");
 const url = (process.env.SUPA_URL || "").trim();
 const key = (process.env.SUPA_KEY || "").trim();
 const sitio = (process.env.SITE_URL || process.env.RENDER_EXTERNAL_URL || "").trim().replace(/\/+$/, "");
+const googleId = (process.env.GOOGLE_ID || "").trim().replace(/[^a-z0-9.\-]/gi, "");
 const goat = (process.env.GOATCOUNTER || "").trim().replace(/[^a-z0-9-]/gi, "");
 
 if (!url || !key) console.warn("Aviso: faltan SUPA_URL o SUPA_KEY. El sitio se publica igual, pero sin top.");
@@ -38,7 +40,7 @@ fs.rmSync("public", { recursive: true, force: true });
 fs.mkdirSync("public");
 
 let base = fs.readFileSync("index.html", "utf8");
-base = base.replace("__SUPA_URL__", url).replace("__SUPA_KEY__", key);
+base = base.replace("__SUPA_URL__", url).replace("__SUPA_KEY__", key).replace("__GOOGLE_ID__", googleId);
 base = base.split("__SITE_URL__").join(sitio);
 // ¿De qué tema es?: el juego aparece (y suma al día) recién con 10 temas con frases en frases.json
 let nFrases = 0;
