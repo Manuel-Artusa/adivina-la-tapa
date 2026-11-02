@@ -666,6 +666,11 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
   .stats b{font-size:1.1rem}
 }
 
+/* Cuenta con Google */
+.cuenta{display:flex;flex-direction:column;gap:6px;align-items:flex-start;border:3px solid var(--tinta);background:var(--crema);padding:14px 16px;box-shadow:4px 4px 0 var(--tinta);margin:6px 0 16px}
+.cuenta b{font-family:var(--display);font-weight:400;font-size:1.25rem}
+.cuenta span{font-size:.92rem}
+
 /* Vista previa de otro día */
 .previa-cartel{position:sticky;top:0;z-index:40;background:var(--rojo);color:#fff;padding:8px 14px;font-size:.85rem;text-align:center}
 .previa-cartel a{color:#fff;font-weight:800}
@@ -1036,6 +1041,7 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
 
   <section id="v-yo" class="sub" hidden>
     <h2>Tus números</h2>
+    <div class="cuenta" id="cuenta" hidden></div>
     <div class="yo-grandes">
       <div><b id="yo-racha">0</b><span>días de racha</span></div>
       <div><b id="yo-mejor">0</b><span>mejor racha</span></div>
@@ -1046,7 +1052,7 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
     <div class="cal-ref"><span>Menos</span><i style="opacity:.15"></i><i style="opacity:.4"></i><i style="opacity:.7"></i><i></i><span id="cal-max">Todos</span></div>
     <h3 class="yo-tit">Por desafío</h3>
     <div class="tabla-env"><table class="yo-tabla" id="yo-tabla"></table></div>
-    <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). Se guarda en este navegador.</p>
+    <p class="aviso">La racha suma cada día que jugás al menos un desafío del día (los días anteriores no cuentan). <span id="yo-aviso-guardado">Se guarda en este navegador.</span></p>
   </section>
 
   <section id="v-letra" class="sub" hidden>
@@ -1106,6 +1112,7 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
       <p>Tu nombre va a aparecer en el top diario. Todos juegan los mismos 10 discos por día.</p>
       <div class="nombre"><input id="in-bienv" maxlength="20" placeholder="Tu nombre o apodo" autocomplete="nickname"><button class="btn" type="submit">Jugar</button></div>
       <div class="err" id="bv-err"></div>
+      <p class="bv-google" id="bv-google" hidden>¿Ya jugaste en otro dispositivo? <button class="link" type="button" id="bv-google-b">Entrá con Google</button> y seguí con tus puntos.</p>
     </form>
   </div>
 
@@ -1498,7 +1505,7 @@ const CUADRO={5:"🟩",4:"🟨",3:"🟧",2:"🟥",0:"⬛"};
 const $=id=>document.getElementById(id);
 const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(PREVIA) return; try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}}; // en la vista previa no se guarda nada
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){if(PREVIA) return; try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} if(typeof cuentaCambio==="function") cuentaCambio(k)}}; // en la vista previa no se guarda nada
 
 // ---- Azar: normal usa Math.random; el diario usa una semilla del día para que todos vean lo mismo ----
 let rnd=Math.random;
@@ -1934,6 +1941,74 @@ function jugadorId(){
   }
   return id;
 }
+// ---- Cuenta con Google (Supabase Auth): el progreso se guarda en la cuenta y se usa en cualquier dispositivo ----
+// Se sincroniza todo lo que la página guarda con "tapa-" (nombre, id del ranking, rachas, récords, desafíos jugados),
+// menos lo de las herramientas internas y la sesión. Tabla "cuentas" (ver supabase.sql), cada uno ve solo la suya.
+const CUENTA_FUERA=/^tapa-(sesion|llave|marcas|frases-)/;
+const cuentaSesion=()=>{ try{ return JSON.parse(localStorage.getItem("tapa-sesion")) }catch(e){ return null } };
+const cuentaGuardarSesion=x=>{ try{ x?localStorage.setItem("tapa-sesion",JSON.stringify(x)):localStorage.removeItem("tapa-sesion") }catch(e){} };
+function cuentaEntrar(){ location.href=`${SUPA_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.origin+"/mis-estadisticas/")}` }
+async function cuentaToken(){
+  const x=cuentaSesion(); if(!x) return null;
+  if(Date.now()<x.vence-60e3) return x.access_token;
+  try{ const r=await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`,{method:"POST",headers:supaHeaders,body:JSON.stringify({refresh_token:x.refresh_token})});
+    if(!r.ok) throw 0; const j=await r.json(); cuentaGuardarSesion({...x,access_token:j.access_token,refresh_token:j.refresh_token,vence:Date.now()+j.expires_in*1000}); return j.access_token }
+  catch(e){ return null }
+}
+const cuentaDatosLocales=()=>{ const d={}; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith("tapa-")&&!CUENTA_FUERA.test(k)) d[k]=localStorage.getItem(k) } }catch(e){} return d };
+// Junta lo del dispositivo con lo de la cuenta: el nombre y el id del ranking son los de la cuenta; los números, el más alto;
+// un desafío terminado le gana a uno a medias; lo que está en un solo lado, se suma
+function cuentaJuntar(local,nube){
+  const out={...local};
+  for(const [k,v] of Object.entries(nube||{})){
+    if(!(k in out)||k==="tapa-nombre"||k==="tapa-jugador"){ out[k]=v; continue }
+    let a,b; try{ a=JSON.parse(out[k]); b=JSON.parse(v) }catch(e){ continue }
+    if(typeof a==="number"&&typeof b==="number") out[k]=JSON.stringify(Math.max(a,b));
+    else if(a&&b&&typeof a==="object"&&typeof b==="object"&&(b.fin||b.terminado)&&!(a.fin||a.terminado)) out[k]=v;
+  }
+  return out;
+}
+let cuentaTimer=null, cuentaEstado={email:null,listo:false};
+async function cuentaSubir(){
+  const t=await cuentaToken(), x=cuentaSesion(); if(!t||!x) return;
+  try{ await fetch(`${SUPA_URL}/rest/v1/cuentas`,{method:"POST",headers:{...supaHeaders,Authorization:`Bearer ${t}`,Prefer:"resolution=merge-duplicates,return=minimal"},
+    body:JSON.stringify({user_id:x.user_id,datos:cuentaDatosLocales(),actualizado:new Date().toISOString()})}) }catch(e){}
+}
+function cuentaCambio(k){ if(!cuentaEstado.listo||!k||!k.startsWith("tapa-")||CUENTA_FUERA.test(k)) return; clearTimeout(cuentaTimer); cuentaTimer=setTimeout(cuentaSubir,1500) }
+// la vuelta del login trae la sesión en #access_token=...; se guarda acá antes de que irA() reescriba la dirección
+const CUENTA_HASH=location.hash;
+async function cuentaIniciar(){
+  if(!TOP_ON||PREVIA) return;
+  // vuelta del login de Google: la sesión viene en la dirección (#access_token=...)
+  if(CUENTA_HASH.includes("access_token=")){
+    const h=new URLSearchParams(CUENTA_HASH.slice(1));
+    cuentaGuardarSesion({access_token:h.get("access_token"),refresh_token:h.get("refresh_token"),vence:Date.now()+(+h.get("expires_in")||3600)*1000});
+    try{ history.replaceState(history.state,"",location.pathname+location.search) }catch(e){}
+  }
+  const t=await cuentaToken(); if(!t){ cuentaGuardarSesion(null); cuentaPintar(); return }
+  try{
+    const u=await (await fetch(`${SUPA_URL}/auth/v1/user`,{headers:{...supaHeaders,Authorization:`Bearer ${t}`}})).json();
+    if(!u||!u.id) throw 0;
+    cuentaGuardarSesion({...cuentaSesion(),user_id:u.id,email:u.email}); cuentaEstado.email=u.email;
+    const r=await fetch(`${SUPA_URL}/rest/v1/cuentas?user_id=eq.${u.id}&select=datos`,{headers:{...supaHeaders,Authorization:`Bearer ${t}`}});
+    const fila=r.ok?(await r.json())[0]:null, junto=cuentaJuntar(cuentaDatosLocales(),fila&&fila.datos);
+    for(const [k,v] of Object.entries(junto)) try{ localStorage.setItem(k,v) }catch(e){}
+    cuentaEstado.listo=true; await cuentaSubir();
+    if(typeof mostrarQuien==="function") mostrarQuien(); if(vista==="inicio") hubMarcar(); if(vista==="yo") yoPintar();
+  }catch(e){ cuentaEstado.listo=false }
+  cuentaPintar();
+}
+async function cuentaSalir(){
+  const t=await cuentaToken(); try{ if(t) await fetch(`${SUPA_URL}/auth/v1/logout`,{method:"POST",headers:{...supaHeaders,Authorization:`Bearer ${t}`}}) }catch(e){}
+  cuentaGuardarSesion(null); cuentaEstado={email:null,listo:false}; cuentaPintar();
+}
+function cuentaPintar(){
+  const c=$("cuenta"); if(!c) return; c.hidden=!TOP_ON||!!PREVIA;
+  if(cuentaEstado.listo) c.innerHTML=`<b>✓ Conectado con Google</b><span>${esc(cuentaEstado.email||"")} · Tu progreso se guarda en tu cuenta y lo ves en cualquier dispositivo.</span><button class="link" type="button" id="cuenta-salir">Cerrar sesión</button>`;
+  else c.innerHTML=`<b>Guardá tu progreso</b><span>Entrá con Google y jugá desde el celular o la compu sin perder tus puntos, rachas ni tu lugar en el ranking.</span><button class="btn" type="button" id="cuenta-entrar">Entrar con Google</button>`;
+  const a=$("cuenta-entrar"), b=$("cuenta-salir"); if(a) a.onclick=cuentaEntrar; if(b) b.onclick=cuentaSalir;
+  const av=$("yo-aviso-guardado"); if(av) av.textContent=cuentaEstado.listo?"Se guarda en tu cuenta de Google.":"Se guarda en este navegador. Entrá con Google para tenerlo en todos tus dispositivos.";
+}
 function verTopPropio(){ topTab={t:"diario",v:"todos"}; irA("top") }
 async function subirPuntaje(){
   const g=G, nombre=(ls.get("tapa-nombre")||"").trim().slice(0,20), est=$("top-estado"), b=$("b-subir");
@@ -1958,6 +2033,7 @@ function pedirNombre(despues){
   trasNombre=despues||null;
   $("in-bienv").value=ls.get("tapa-nombre")||""; $("bv-err").textContent="";
   $("bienvenida").hidden=false; setTimeout(()=>$("in-bienv").focus(),50);
+  $("bv-google").hidden=!TOP_ON||!!PREVIA||cuentaEstado.listo; $("bv-google-b").onclick=cuentaEntrar;
 }
 $("f-bienv").onsubmit=e=>{
   e.preventDefault();
@@ -5602,6 +5678,7 @@ function rachas(){
 }
 const NOMBRES={diario:"Tapa del día",tema:"Tema del día",banda:"La banda del día",grilla:"Grilla rockera",armar:"Armá la tapa",antes:"¿Antes o después?",orden:"Ordená la discografía",abre:"Tema número 1",conexiones:"Conexiones",impostor:"¿Qué tema no está?",ahorcado:"Ahorcado rockero",letra:"¿De qué tema es?",bingo:"Bingo rockero"};
 function yoPintar(){
+  cuentaPintar();
   const r=rachas(), hoy=hoyAR();
   $("yo-racha").textContent=r.actual; $("yo-mejor").textContent=r.mejor; $("yo-dias").textContent=r.dias;
   const cal=$("yo-cal"); cal.innerHTML="";
@@ -5710,6 +5787,7 @@ new MutationObserver(ms=>{
   }
 }).observe(document.body,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:["class","hidden"],characterData:true,childList:true});
 irA(vistaDeRuta(location.pathname),"inicial");
+cuentaIniciar(); // si entró con Google, trae y junta su progreso
 mostrarQuien();
 if(!ls.get("tapa-nombre")&&vista!=="contenido"&&vista!=="frases") pedirNombre();
 </script>
