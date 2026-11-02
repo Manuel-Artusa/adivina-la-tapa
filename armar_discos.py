@@ -369,7 +369,12 @@ def main():
     # aparecieron); si no, cada corrida tardaba horas reprobando cientos de discos que iTunes no tiene
     probados = set(previo.get("no_encontrados", []))
     reintentar = "--reintentar" in sys.argv or todo
-    pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados)]
+    try:
+        manual = json.load(open(MANUAL, encoding="utf-8"))
+    except (OSError, ValueError):
+        manual = {}
+    # los cargados a mano en discos_manual.json se buscan siempre (aunque antes no se hayan encontrado)
+    pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados or manual.get(f"{d[0]}|{d[1]}"))]
     pendientes.sort(key=lambda d: f"{d[0]}|{d[1]}" in probados)
     # De a tandas (--max N): con muchos discos nuevos, cada corrida busca una parte y la guarda; la tarea se vuelve a correr sola
     tope = next((int(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--max=")), 0)
@@ -380,11 +385,6 @@ def main():
     print(f"Catálogo: {len(catalogo)} discos. A buscar: {len(pendientes)}" + (f" (quedan {quedan} para la próxima tanda)" if quedan else "") + ".", flush=True)
     if quedan:
         open("quedan.txt", "w").write(str(quedan))
-
-    try:
-        manual = json.load(open(MANUAL, encoding="utf-8"))
-    except (OSError, ValueError):
-        manual = {}
 
     nuevos = {}
     for n, (art, alb, *_ ) in enumerate(pendientes, 1):
