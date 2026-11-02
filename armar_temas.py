@@ -28,15 +28,48 @@ def archivo(banda):
     return os.path.join(CARPETA, norm_js(banda).replace(" ", "-") + ".json")
 
 
+def fila(x):
+    # solo lo que usa la página: tema, disco, fecha y tapa
+    return [x["trackName"], x.get("collectionName", ""), x.get("releaseDate", "")[:10], x.get("artworkUrl100", "")]
+
+
+def de_la_banda(r, banda):
+    return [x for x in r.get("results", [])
+            if x.get("wrapperType") == "track" and x.get("trackName") and norm_js(x.get("artistName", "")) == norm_js(banda)]
+
+
+def temas_del_artista(banda):
+    """Los temas más escuchados desde el perfil del artista en iTunes (lookup por id): sirve cuando la búsqueda
+    de canciones trae temas de otros (Sumo, Virus, Metallica…)."""
+    for pais in ["ar", "us"]:
+        arts = itunes(f"search?term={urllib.parse.quote(banda)}&entity=musicArtist&limit=10&country={pais}").get("results", [])
+        ids = [a["artistId"] for a in arts if a.get("artistId") and norm_js(a.get("artistName", "")) == norm_js(banda)][:1]
+        for i in ids:
+            r = de_la_banda(itunes(f"lookup?id={i}&entity=song&limit=60&country={pais}"), banda)
+            if len(r) >= 10:
+                return r
+    return []
+
+
 def temas(banda):
     base = f"search?term={urllib.parse.quote(banda)}&media=music&entity=song&country=ar&limit=60"
     r = itunes(base + "&attribute=artistTerm")
     if not any(norm_js(x.get("artistName", "")) == norm_js(banda) for x in r.get("results", [])):
         r = itunes(base)
-    # solo lo que usa la página: tema, disco, fecha y tapa, de los temas de esa banda (en el orden de iTunes)
-    return [[x["trackName"], x.get("collectionName", ""), x.get("releaseDate", "")[:10], x.get("artworkUrl100", "")]
-            for x in r.get("results", [])
-            if x.get("wrapperType") == "track" and x.get("trackName") and norm_js(x.get("artistName", "")) == norm_js(banda)]
+    ts = de_la_banda(r, banda)
+    # si la búsqueda trae pocos temas de la banda, se piden al perfil del artista
+    if len(ts) < 10:
+        try:
+            otros = temas_del_artista(banda)
+        except RuntimeError:
+            otros = []
+        if len(otros) > len(ts):
+            # sin repetir el mismo tema (en el orden de iTunes)
+            vistos, ts = set(), []
+            for x in otros:
+                if norm_js(x["trackName"]) not in vistos:
+                    vistos.add(norm_js(x["trackName"])); ts.append(x)
+    return [fila(x) for x in ts]
 
 
 def main():

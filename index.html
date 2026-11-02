@@ -686,7 +686,7 @@ h1 .logo span{display:inline-block;animation:logo-late 3.2s ease-in-out infinite
 .todo-banda b{font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1}
 .todo-banda span{color:var(--crema);font-size:.95rem}
 body.todo .modo-dia,body.todo #tema-modo,body.todo .hub-barra,body.todo #armar-dia{display:none!important}
-body.principal #generos{display:none!important} /* en la principal todo es rock nacional: no hay filtro por género */
+body.principal #generos,body.principal #tema-gen{display:none!important} /* en la principal todo es rock nacional: no hay filtro por género */
 
 /* Papelitos al ganar */
 #festejo{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
@@ -848,6 +848,11 @@ body.principal #generos{display:none!important} /* en la principal todo es rock 
     <div class="chips" id="tema-modo" role="group" aria-label="Modo">
       <button id="tm-diario" data-m="diario" aria-pressed="true">Tema del día</button>
       <button id="tm-libre" data-m="libre" aria-pressed="false">Libre</button>
+    </div>
+    <div class="chips" id="tema-gen" role="group" aria-label="Qué bandas">
+      <button data-g="todos" aria-pressed="true">General</button>
+      <button data-g="nac" aria-pressed="false">Nacional</button>
+      <button data-g="int" aria-pressed="false">Internacional</button>
     </div>
     <div class="reproductor">
       <div class="barra" id="tema-barra"><div class="tope" id="tema-tope"></div><div class="lleno" id="tema-lleno"></div></div>
@@ -2659,14 +2664,16 @@ function cabecera(a,b,c,d){ $("lbl-modo").textContent=a; $("ronda").textContent=
 // ===== 1. Adiviná el tema =====
 const PASOS=[1,2,4,7,11,16];
 const TEMA_PTS=[100,80,60,40,20,10]; // puntos según en qué intento lo sacás
-const TEMA={modo:"diario",j:null,audio:null,timer:null};
-if(TODO_ROCK) TEMA.modo="libre";
+const TEMA={modo:"diario",j:null,audio:null,timer:null,gen:"todos"};
+if(TODO_ROCK){ TEMA.modo="libre"; const g=ls.get("tapa-tema-gen"); if(["todos","nac","int"].includes(g)) TEMA.gen=g;
+  const bj=document.querySelector("#v-tema .bajada"); if(bj) bj.textContent="Rock de acá y de afuera, con los temas más escuchados de cada banda. Elegí General, Nacional o Internacional, tocá Escuchar y escribí el nombre del tema. Si errás o saltás, escuchás más." }
 // Solo rock (barrial, pesado y afines). Sin pop, ska ni folk.
 const TEMA_BANDAS=sinFuturas(["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
   "La Renga","Los Piojos","Callejeros","Don Osvaldo","Guasones","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
   "No Te Va Gustar","El Plan de la Mariposa","Sueño de Pescado","Farolitos","Bersuit Vergarabat","Catupecu Machu",
   "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"]);
-const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0]));
+// en Todo el rock se elige: todas las bandas, solo rock nacional/uruguayo o solo internacional
+const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0])&&(!TODO_ROCK||TEMA.gen==="todos"||d[3]===TEMA.gen));
 const numTema=dia=>numDiario(dia);
 
 // Los 25 temas más escuchados de la banda (la lista guardada para el Ahorcado), para que el tema sea conocido.
@@ -2681,15 +2688,29 @@ const TEMAS_CONOCIDOS_MANUAL={
     "Brigadas Metálicas","Torturador","Hiena de Metal","Lanzado al Mundo Hoy","Deseando Destruir y Matar","La Gran Ramera"]};
 // Bandas con más temas: los 60 más escuchados (en vez de 25), o todos los temas de sus discos
 const TEMAS_CANTIDAD={"Los Piojos":60,"La Vela Puerca":60,"Don Osvaldo":60}, TEMAS_TODOS=["Callejeros"];
-async function temasConocidos(banda,dia){
+// max: cuántos de los más escuchados (en Todo el rock, los 15 más escuchados de cada banda, así no es imposible)
+async function temasConocidos(banda,dia,max){
   if(TEMAS_CONOCIDOS_MANUAL[banda]) return new Set(TEMAS_CONOCIDOS_MANUAL[banda].map(t=>norm(limpiarTema(t))));
-  if(TEMAS_TODOS.includes(banda)) return null;
+  if(TEMAS_TODOS.includes(banda)&&!max) return null;
   const g=await ahoGuardado(banda), lista=g?(dia>=g.desde?g.r:g.antes):null;
-  return lista&&lista.length>=5?new Set(lista.slice(0,TEMAS_CANTIDAD[banda]||25).map(x=>norm(limpiarTema(x[0])))):null;
+  return lista&&lista.length>=5?new Set(lista.slice(0,max||TEMAS_CANTIDAD[banda]||25).map(x=>norm(limpiarTema(x[0])))):null;
+}
+const TEMA_TOP_TODO=15;
+// Todo el rock: se sortea la banda, y de sus discos uno que tenga alguno de sus temas más escuchados
+async function temaTodoRock(pool,bandas,rng,dia,modo){
+  const banda=bandas[rng()*bandas.length|0], pop=await temasConocidos(banda,dia,TEMA_TOP_TODO);
+  if(!pop) return null; // sin lista de temas más escuchados: se prueba otra banda
+  for(const d of mezR(pool.filter(d=>d[0]===banda),rng).slice(0,8)){
+    try{
+      const r=await resolver(d,false,new Set()), buenos=(await pistasDe(r.id)).filter(p=>p.prev&&pop.has(norm(limpiarTema(p.t))));
+      if(buenos.length) return {d,r,p:buenos[rng()*buenos.length|0],paso:0,log:[],fin:false,gano:false,modo,dia};
+    }catch(e){}
+  }
+  return null;
 }
 async function temaNuevo(){
   temaParar();
-  const modo=TEMA.modo, dia=modo==="diario"?diaSel():hoyAR();
+  const modo=TEMA.modo, gen=TEMA.gen, dia=modo==="diario"?diaSel():hoyAR();
   $("tema-fin").hidden=true; $("tema-form").hidden=false; $("tema-acc").hidden=false;
   $("tema-play").disabled=true; $("tema-estado").textContent="Cargando tema…";
   $("tema-in").value=""; TEMA.sug=[]; temaSugCerrar();
@@ -2700,6 +2721,7 @@ async function temaNuevo(){
     // desde el 31/10 primero se sortea la banda y después el disco: así todas las bandas tienen la misma chance
     // (antes se sorteaba entre todos los discos y las bandas con pocos discos, como La Vela Puerca, casi nunca salían)
     const pool=temaPool(), bandas=[...new Set(pool.map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
+    if(TODO_ROCK){ j=await temaTodoRock(pool,bandas,rng,dia,modo); continue }
     const x=ESQUEMA_31?await discoDe(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng):await discoDe(pool,rng); if(!x){ if(ESQUEMA_31) continue; break }
     try{
       let buenos=(await pistasDe(x.r.id)).filter(p=>p.prev);
@@ -2708,7 +2730,7 @@ async function temaNuevo(){
       j={d:x.d,r:x.r,p:buenos[rng()*buenos.length|0],paso:0,log:[],fin:false,gano:false,modo,dia};
     }catch(e){}
   }
-  if(TEMA.modo!==modo) return;
+  if(TEMA.modo!==modo||TEMA.gen!==gen) return;
   if(!j){$("tema-estado").textContent="No pude cargar el tema. Revisá la conexión y recargá.";return}
   if(guardado){j.paso=guardado.paso;j.log=guardado.log;j.fin=guardado.fin;j.gano=guardado.gano}
   TEMA.j=j; TEMA.audio=new Audio(j.p.prev); TEMA.audio.preload="auto";
@@ -2841,6 +2863,8 @@ function temaFin(){
 $("tema-play").onclick=temaPlay;
 $("tema-form").onsubmit=e=>{e.preventDefault();temaSugCerrar();temaIntento($("tema-in").value,false)};
 $("tema-saltar").onclick=()=>temaIntento("",true);
+document.querySelectorAll("#tema-gen button").forEach(b=>{ b.setAttribute("aria-pressed",b.dataset.g===TEMA.gen); b.onclick=()=>{
+  TEMA.gen=b.dataset.g; ls.set("tapa-tema-gen",TEMA.gen); document.querySelectorAll("#tema-gen button").forEach(x=>x.setAttribute("aria-pressed",x===b)); temaNuevo() } });
 document.querySelectorAll("#tema-modo button").forEach(b=>b.onclick=()=>{
   TEMA.modo=b.dataset.m; document.querySelectorAll("#tema-modo button").forEach(x=>x.setAttribute("aria-pressed",x===b)); temaNuevo();
 });
