@@ -67,3 +67,19 @@ alter table redes enable row level security;
 insert into storage.buckets (id, name, public)
 values ('redes', 'redes', true)
 on conflict (id) do update set public = true;
+
+
+-- ===== Cuentas con Google: el progreso de cada jugador (nombre, rachas, récords, desafíos jugados) =====
+-- Cada uno puede leer y guardar solo su propia fila. Antes de usarlo: activar Google en Authentication → Providers.
+create table if not exists cuentas (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  datos jsonb not null default '{}'::jsonb check (octet_length(datos::text) < 300000),
+  actualizado timestamptz not null default now()
+);
+alter table cuentas enable row level security;
+drop policy if exists "ver mi cuenta" on cuentas;
+drop policy if exists "crear mi cuenta" on cuentas;
+drop policy if exists "guardar mi cuenta" on cuentas;
+create policy "ver mi cuenta" on cuentas for select using (auth.uid() = user_id);
+create policy "crear mi cuenta" on cuentas for insert with check (auth.uid() = user_id);
+create policy "guardar mi cuenta" on cuentas for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
