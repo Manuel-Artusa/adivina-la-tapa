@@ -2692,7 +2692,8 @@ const TEMAS_CANTIDAD={"Los Piojos":60,"La Vela Puerca":60,"Don Osvaldo":60}, TEM
 async function temasConocidos(banda,dia,max){
   if(TEMAS_CONOCIDOS_MANUAL[banda]) return new Set(TEMAS_CONOCIDOS_MANUAL[banda].map(t=>norm(limpiarTema(t))));
   if(TEMAS_TODOS.includes(banda)&&!max) return null;
-  const g=await ahoGuardado(banda), lista=g?(dia>=g.desde?g.r:g.antes):null;
+  // Todo el rock (max) no tiene desafío del día: usa la lista más nueva desde ya. La principal espera a que valga ("desde")
+  const g=await ahoGuardado(banda), lista=g?((max||dia>=g.desde)?g.r:g.antes):null;
   return lista&&lista.length>=5?new Set(lista.slice(0,max||TEMAS_CANTIDAD[banda]||25).map(x=>norm(limpiarTema(x[0])))):null;
 }
 const TEMA_TOP_TODO=15;
