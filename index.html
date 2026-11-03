@@ -5608,6 +5608,59 @@ async function placasCuenta(){
   out.push(c);
   return out;
 }
+// ===== Anuncio: juego nuevo ¿De qué disco es? (turno "pato" de Publicar en redes) =====
+function vinilo(x,cx,cy,r){
+  x.save(); x.beginPath(); x.arc(cx,cy,r,0,7); x.fillStyle="#141210"; x.fill();
+  x.strokeStyle="rgba(255,255,255,.06)"; x.lineWidth=2; for(let k=r*.3;k<r*.97;k+=r*.035){ x.beginPath(); x.arc(cx,cy,k,0,7); x.stroke() }
+  const g=x.createLinearGradient(cx-r,cy-r,cx+r,cy+r); g.addColorStop(0,"rgba(255,255,255,0)"); g.addColorStop(.45,"rgba(255,255,255,.14)"); g.addColorStop(.55,"rgba(255,255,255,0)");
+  x.beginPath(); x.arc(cx,cy,r,0,7); x.fillStyle=g; x.fill();
+  x.beginPath(); x.arc(cx,cy,r*.3,0,7); x.fillStyle=CC.rojo; x.fill();
+  x.beginPath(); x.arc(cx,cy,r*.04,0,7); x.fillStyle=CC.papel; x.fill(); x.restore();
+}
+function tapaGirada(x,img,cx,cy,S,ang){ x.save(); x.translate(cx,cy); x.rotate(ang*Math.PI/180); tapa(x,img,-S/2,-S/2,S,0,6); x.restore() }
+async function placasPato(){
+  const ds=(typeof patoDiscos==="function"&&patoDiscos().length?patoDiscos():DISCOS.filter(d=>d[1]&&["Callejeros","Don Osvaldo"].includes(d[0])&&CACHE.disc[d[0]+"|"+d[1]]).sort((a,b)=>a[2]-b[2]));
+  const imgs=await Promise.all(ds.map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url))), out=[];
+  const de=n=>imgs[ds.findIndex(d=>d[1]===n)]||imgs[0];
+  // 1) portada: la funda con el vinilo asomando
+  let [c,x]=lienzo(1080,1350);
+  etiqueta(x,"JUEGO NUEVO EN JUEGOS ROCK",60,40,28);
+  texto(x,"¿DE QUÉ DISCO ES?",60,215,{s:104,c:CC.rojo,w:960,min:56});
+  texto(x,"Temática: Callejeros · Don Osvaldo",60,285,{f:FB,peso:"800",s:44,w:960,min:26});
+  vinilo(x,700,760,300); tapaGirada(x,de("Señales"),420,760,540,-5);
+  texto(x,"Escuchá 10 segundos del tema y adiviná de qué disco es",540,1170,{f:FB,peso:"800",s:42,al:"center",w:940,max:2,min:26});
+  texto(x,"Deslizá para ver cómo se juega →",540,1305,{f:FM,peso:"500",s:28,al:"center",w:960});
+  out.push(c);
+  // 2) cómo se juega
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"CÓMO SE JUEGA",80,60,30);
+  texto(x,"Escuchá y elegí",80,215,{s:92,w:920});
+  [["🎧","Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo"],["💿","Elegí su disco entre 4 tapas"],["🔎","¿Erraste? Te damos el nombre del tema, y después el año. A la tercera, perdiste"]].forEach(([e,t],i)=>{
+    const Y=300+i*265;
+    x.beginPath(); x.arc(160,Y+75,75,0,7); x.fillStyle=CC.tinta; x.fill(); x.beginPath(); x.arc(152,Y+67,75,0,7); x.fillStyle=CC.rojo; x.fill();
+    x.font="70px sans-serif"; x.textAlign="center"; x.fillText(e,152,Y+92);
+    texto(x,t,270,Y+50,{f:FB,peso:"800",s:44,w:730,max:3,lh:1.15,min:26}) });
+  x.fillStyle=CC.tinta; x.beginPath(); x.roundRect(140,1130,800,110,55); x.fill();
+  texto(x,"5 temas por día · con ranking",540,1204,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:740});
+  out.push(c);
+  // 3) cierre: los discos
+  [c,x]=lienzo(1080,1350,CC.tinta);
+  texto(x,`LOS ${ds.length} DISCOS`,540,170,{s:84,c:CC.papel,al:"center",w:960,max:1,min:40});
+  const col=4, S=200, gap=36, X0=(1080-(col*S+(col-1)*gap))/2;
+  ds.forEach((d,i)=>{ const cx=X0+S/2+(i%col)*(S+gap), cy=380+Math.floor(i/col)*330; tapaGirada(x,imgs[i],cx,cy,S,[-4,3,-2,4][i%4]);
+    texto(x,d[1],cx,cy+150,{f:FB,peso:"800",s:26,c:CC.crema,al:"center",w:S+30,max:2,lh:1.1,min:16}) });
+  texto(x,"¿Cuántos sacás de 5? Contanos 👇",540,1100,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:960});
+  marca(x,540,1180,56);
+  out.push(c);
+  return out;
+}
+function textoPato(){
+  return `🎸 ¡Juego nuevo en Juegos Rock: ¿De qué disco es? Temática Callejeros y Don Osvaldo!\n\n`+
+    `🎧 Escuchás 10 segundos de un tema y elegís de qué disco es entre 4 tapas: Sed, Presión, Rocanroles sin destino, Señales, Disco Escultura, Casi Justicia Social I y II y Flor de Ceibo.\n\n`+
+    `🔎 Si errás, te damos pistas: primero el nombre del tema y después el año. A la tercera, perdiste.\n\n`+
+    `🏆 5 temas por día, iguales para todos, con ranking. ¿Cuántos sacás? Contalo en los comentarios 👇\n\n`+
+    `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n#callejeros #donosvaldo #rocknacional #rockargentino #juegosrock`;
+}
 function textoCuenta(){
   return `🎸 ¡Novedad en Juegos Rock: ahora podés guardar tu progreso con Google!\n\n`+
     `📱💻 Jugá en el celu o en la compu sin perder tus puntos, rachas, récords ni tu lugar en el ranking.\n\n`+
@@ -5623,6 +5676,11 @@ async function redesPlan(dia,turno,disco,extra={}){
   // A mano: el anuncio de los discos nuevos
   if(turno==="novedad"){
     await intentar("novedad",async()=>{ out.push({id:"novedad-discos",tipo:"carrusel",caption:textoNovedad(),imgs:await placasNovedad()}) });
+    return {pubs:out,errores:err};
+  }
+  // A mano: el anuncio del juego nuevo ¿De qué disco es?
+  if(turno==="pato"){
+    await intentar("pato",async()=>{ out.push({id:"juego-pato",tipo:"carrusel",caption:textoPato(),imgs:await placasPato()}) });
     return {pubs:out,errores:err};
   }
   // A mano: el anuncio de entrar con Google
