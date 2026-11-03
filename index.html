@@ -1170,7 +1170,11 @@ const SUPA_KEY = "__SUPA_KEY__";
 const GOOGLE_ID = "__GOOGLE_ID__";
 // Vista previa (?previa=AAAA-MM-DD, de 1 a 3 días adelante): la página como va a estar ese día, para revisarla antes.
 // No guarda nada en el navegador ni sube puntajes al top
+// Huella SHA-256 de la llave de las páginas internas (la llave no está en el código)
+const LLAVE_HUELLA="8d22474a469d935ee6d5bf267f934390b9a0fb11e22ef22b187beb9f89777148";
+// La vista previa es solo para el admin: anda en el navegador donde se entró con la llave; para el resto, el link abre la página de hoy
 const PREVIA=(()=>{ const f=(new URLSearchParams(location.search).get("previa")||"").trim(); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)) return null;
+  try{ if(localStorage.getItem("tapa-llave")!==LLAVE_HUELLA) return null }catch(e){ return null }
   const hoy=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Argentina/Buenos_Aires"}).format(new Date()), dias=(Date.parse(f)-Date.parse(hoy))/864e5;
   return dias>=1&&dias<=3?f:null })();
 const conPrevia=url=>PREVIA?url+(url.includes("?")?"&":"?")+"previa="+PREVIA:url;
@@ -5683,7 +5687,7 @@ const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar","v-frases",...Object.values(SUBJUEGOS)];
 // Páginas internas (contenido para redes, marcar tapas, cargar frases): solo se abren en el navegador donde el dueño
 // entró una vez con su link secreto (?llave=...). En el código solo está la huella (SHA-256) de la llave, no la llave.
-const INTERNAS=["contenido","marcar","frases"], LLAVE_HUELLA="8d22474a469d935ee6d5bf267f934390b9a0fb11e22ef22b187beb9f89777148";
+const INTERNAS=["contenido","marcar","frases"];
 const llaveOk=()=>{ try{ return localStorage.getItem("tapa-llave")===LLAVE_HUELLA }catch(e){ return false } };
 let llaveRevisando=null;
 async function llaveProbar(){
@@ -5699,6 +5703,7 @@ function irA(v,como){
     if(new URLSearchParams(location.search).has("llave")&&!llaveRevisando){ llaveRevisando=llaveProbar().then(ok=>{ llaveRevisando=null; irA(ok?v:"inicio","inicial") }); return }
     v="inicio"; como="inicial"; // sin llave, se va al inicio (y la dirección también)
   }
+  if(v==="pato"&&!PATO_ON){ v="inicio"; como="inicial" } // el juego entra el 4/11: antes, su dirección lleva al inicio
   if(TODO_ROCK&&v==="diario") v="normal";
   if(TODO_ROCK&&(v==="top"||v==="yo")){ location.href=conPrevia(RUTAS[v]); return }
   // actualiza la dirección del navegador (salvo al ir atrás/adelante) y los datos para Google
