@@ -315,7 +315,8 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .mar-prev{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mar-prev div{display:flex;flex-direction:column;gap:4px;font-size:.75rem}
 .mar-prev canvas{width:100%;aspect-ratio:1;border:2px solid var(--tinta);background:repeating-conic-gradient(#ccc 0 25%,#fff 0 50%) 0 0/16px 16px;object-fit:contain}
-.mar-buscar{width:100%;font:600 1rem var(--body);padding:10px;border:3px solid var(--tinta);margin:12px 0}
+.mar-buscar{width:100%;font:600 1rem var(--body);padding:10px;border:3px solid var(--tinta);margin:12px 0 6px}
+.mar-filtro{justify-content:space-between;align-items:center;margin:0 0 10px}#marcar-lista .arm-card{content-visibility:auto;contain-intrinsic-size:auto 200px}
 .gri-tabla{display:grid;grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr));gap:6px}
 .gri-cab{display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:4px;font:800 .78rem/1.15 var(--body);min-height:58px}
 .gri-cab.fila{align-items:center;justify-content:flex-start;text-align:left;min-height:0}
@@ -920,7 +921,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
   <section id="v-marcar" class="sub" hidden>
     <button class="link volver" type="button">← Inicio</button>
     <h2>Marcar tapas</h2>
-    <p class="bajada">Elegí una tapa y dibujá con el dedo o el mouse el contorno del elemento que se va a sacar. Ponele un nombre (“la banana”, “el sombrero”) y guardá. Cuando tengas varias, bajá <b>piezas.json</b> y subilo a la carpeta del proyecto.</p>
+    <p class="bajada">Elegí una tapa y dibujá con el dedo o el mouse el contorno del elemento que se va a sacar. Ponele un nombre (“la banana”, “el sombrero”) y guardá. Cuando tengas varias, bajá <b>piezas.json</b> y mandalo para cargarlo en el juego (entran al día siguiente).</p>
     <div class="fila"><b id="marcar-n"></b><button class="btn" type="button" id="marcar-bajar">Bajar piezas.json</button><button class="btn sec" type="button" id="marcar-copiar">Copiar</button></div>
     <div class="card mar-editor" id="marcar-editor" hidden>
       <b id="marcar-tit"></b>
@@ -931,6 +932,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
       <div class="fila"><button class="btn" type="button" id="marcar-guardar">Guardar</button><button class="btn sec" type="button" id="marcar-borrar">Borrar trazo</button><button class="btn sec" type="button" id="marcar-quitar">Quitar marca</button></div>
     </div>
     <input type="search" id="marcar-buscar" placeholder="Buscar banda o disco" class="mar-buscar">
+    <div class="fila mar-filtro"><label class="mar-chk"><input type="checkbox" id="marcar-ocultar"> Ocultar las que ya marqué</label><small id="marcar-cuantas"></small></div>
     <div class="arm-grilla" id="marcar-lista"></div>
   </section>
 
@@ -3649,7 +3651,7 @@ function armPreparar(img,cors,p){
 async function armIniciar(){
   $("armar-juego").hidden=true; $("armar-galeria").hidden=false; $("armar-estado").hidden=false; $("armar-estado").textContent="Cargando…";
   await esperarCache(); const pz=await armPiezas();
-  ARM.lista=Object.entries(pz).map(([k,p])=>{ const v=CACHE&&CACHE.disc[k], [a,t]=k.split("|"); return v&&p&&p.poly&&p.poly.length>2?{k,a,t,url:v.url,poly:p.poly,nombre:p.nombre||"la pieza",fondo:p.fondo}:null }).filter(Boolean);
+  ARM.lista=Object.entries(pz).map(([k,p])=>{ const v=CACHE&&CACHE.disc[k], [a,t]=k.split("|"); return v&&p&&p.poly&&p.poly.length>2&&!(p.desde&&hoyAR()<p.desde)?{k,a,t,url:v.url,poly:p.poly,nombre:p.nombre||"la pieza",fondo:p.fondo}:null }).filter(Boolean);
   if(ESQUEMA_31&&!TODO_ROCK){ const cat=new Set(DISCOS.filter(d=>d[1]).map(d=>d[0]+"|"+d[1])); ARM.lista=ARM.lista.filter(p=>cat.has(p.k)) }
   if(!ARM.lista.length){ $("armar-estado").textContent="Este juego todavía se está preparando. Volvé en un rato."; $("armar-grilla").innerHTML=""; $("armar-dia").innerHTML=""; return }
   $("armar-estado").hidden=true; ARM.dia=hoyAR();
@@ -3773,20 +3775,26 @@ async function marIniciar(){
   await esperarCache(); const base=await armPiezas();
   MAR.marcas={...base,...(ls.get("tapa-marcas")||{})};
   $("marcar-buscar").oninput=()=>{ MAR.filtro=norm($("marcar-buscar").value); marLista() };
+  $("marcar-ocultar").checked=!!ls.get("tapa-marcar-ocultar");
+  $("marcar-ocultar").onchange=()=>{ ls.set("tapa-marcar-ocultar",$("marcar-ocultar").checked); marLista() };
   marLista(); marResumen();
 }
+// todas las tapas del catálogo (rock nacional, de afuera y las que entran más adelante)
+const marDisco=k=>CACHE&&(CACHE.disc[k]||CACHE_FUTURO[k]);
 function marLista(){
-  const q=MAR.filtro, todos=DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]);
+  const q=MAR.filtro, vistos=new Set(), todos=[...DISCOS_TODOS,...DISCOS_FUTUROS].filter(d=>{ const k=d[0]+"|"+d[1]; if(!d[1]||vistos.has(k)||!marDisco(k)) return false; vistos.add(k); return true });
   const orden=todos.sort((a,b)=>(!!MAR.marcas[b[0]+"|"+b[1]])-(!!MAR.marcas[a[0]+"|"+a[1]])||(b[3]==="nac")-(a[3]==="nac")||(CON_BANDAS.includes(b[0]))-(CON_BANDAS.includes(a[0]))||a[0].localeCompare(b[0],"es"));
-  const vis=orden.filter(d=>!q||norm(d[0]+" "+d[1]).includes(q)).slice(0,120);
-  $("marcar-lista").innerHTML=vis.map(d=>{ const k=d[0]+"|"+d[1]; return `<button type="button" class="arm-card${MAR.marcas[k]?" hecha":""}" data-k="${esc(k)}"><img alt="" loading="lazy" src="${esc(chico200(CACHE.disc[k].url))}"><b>${esc(d[1])}</b><small>${esc(d[0])}</small></button>` }).join("");
+  const ocultar=$("marcar-ocultar").checked;
+  const vis=orden.filter(d=>(!q||norm(d[0]+" "+d[1]).includes(q))&&!(ocultar&&MAR.marcas[d[0]+"|"+d[1]]));
+  $("marcar-cuantas").textContent=`${vis.length} tapa${vis.length===1?"":"s"}${q?" con esa búsqueda":""}`;
+  $("marcar-lista").innerHTML=vis.map(d=>{ const k=d[0]+"|"+d[1]; return `<button type="button" class="arm-card${MAR.marcas[k]?" hecha":""}" data-k="${esc(k)}"><img alt="" loading="lazy" src="${esc(chico200(marDisco(k).url))}"><b>${esc(d[1])}</b><small>${esc(d[0])}</small></button>` }).join("");
   $("marcar-lista").querySelectorAll(".arm-card").forEach(b=>b.onclick=()=>marElegir(b.dataset.k));
 }
 function marResumen(){ const n=Object.keys(MAR.marcas).length; $("marcar-n").textContent=`${n} tapa${n===1?"":"s"} marcada${n===1?"":"s"}`; ls.set("tapa-marcas",MAR.marcas) }
 async function marElegir(k){
   MAR.sel=k; const m=MAR.marcas[k]; MAR.pts=m?m.poly.map(p=>p.slice()):[]; $("marcar-nombre").value=m&&m.nombre?m.nombre:""; $("marcar-fondo").checked=!(m&&m.fondo===false);
   $("marcar-editor").hidden=false; $("marcar-tit").textContent=k.replace("|"," — ");
-  const r=await armImg(CACHE.disc[k].url)||{}; MAR.img=r.im; MAR.cors=r.cors; marPintar(); marPrevia(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
+  const r=await armImg(marDisco(k).url)||{}; MAR.img=r.im; MAR.cors=r.cors; marPintar(); marPrevia(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
 }
 function marPintar(){
   const cv=$("marcar-cv"), W=cv.width=cv.height=Math.round(cv.clientWidth*(window.devicePixelRatio||1)||600), x=cv.getContext("2d");
