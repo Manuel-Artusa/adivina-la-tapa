@@ -1329,6 +1329,7 @@ const DISCOS = [
  ["Farolitos","En Esta Parte de la Tierra",2007,"nac"],["Farolitos","Las Voces del Sótano",2009,"nac"],["Farolitos","Fin Zona Urbana",2015,"nac"],
  // Bandas nuevas (la tarea busca su discografía en MusicBrainz), desde el 2026-10-30
  ["La Franela", "Después de ver", 2009, "nac", "2026-10-30"],["La Franela", "Hacer un puente", 2011, "nac", "2026-10-30"],["La Franela", "Nada es tarde", 2014, "nac", "2026-10-30"],["La Franela", "Aire", 2017, "nac", "2026-10-30"],["La Franela", "De palabras", 2020, "nac", "2026-10-30"],["La Franela", "Andamio", 2025, "nac", "2026-10-30"],
+ ["La Chancha Muda", "Ya no queda más lugar bajo la alfombra", 2013, "nac", "2026-11-04"],["La Chancha Muda", "Sinfonías libertarias", 2016, "nac", "2026-11-04"],["La Chancha Muda", "La peste del cazador", 2019, "nac", "2026-11-04"],["La Chancha Muda", "Quién autoriza?", 2023, "nac", "2026-11-04"],["La Chancha Muda", "A todos mis santos", 2026, "nac", "2026-11-04"],
  ["Jóvenes Pordioseros", "Probame", 2003, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Vicio", 2004, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Sangre", 2006, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Abstinencia", 2011, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Pánico", 2014, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Late", 2017, "nac", "2026-10-30"],
  // Discografías completas (discos de estudio según MusicBrainz), desde el 2026-10-30
  ["2 Minutos", "Valentín Alsina", 1994, "nac", "2026-10-30"],["2 Minutos", "Volvió la alegría, vieja!!!", 1995, "nac", "2026-10-30"],["2 Minutos", "Postal '97", 1997, "nac", "2026-10-30"],["2 Minutos", "Dos minutos de advertencia", 1999, "nac", "2026-10-30"],["2 Minutos", "Antorchas", 2000, "nac", "2026-10-30"],["2 Minutos", "Superocho", 2004, "nac", "2026-10-30"],["2 Minutos", "Un mundo de sensaciones", 2006, "nac", "2026-10-30"],["2 Minutos", "Vamos a la granja / Directo al infierno", 2010, "nac", "2026-10-30"],["2 Minutos", "Valentín Alzheimer", 2013, "nac", "2026-10-30"],["2 Minutos", "Amigos de lo ajeno", 2019, "nac", "2026-10-30"],["2 Minutos", "La máquina de hacer cagadas", 2024, "nac", "2026-10-30"],
@@ -3055,7 +3056,7 @@ chipsModo("orden",ordIniciar);
 
 // ===== La banda del día: adiviná la banda en 6 intentos con pistas de país, tipo, año y actividad =====
 const BAN={modo:"diario",obj:null,intentos:[],fin:false,gano:false,racha:0,dia:null,pista:null,sugAct:-1};
-const BAN_MAX=6, BAN_PUNTOS=[100,90,80,60,40,20];
+const BAN_RUEDA="2026-11-04", BAN_MAX=6, BAN_PUNTOS=[100,90,80,60,40,20];
 const BAN_REGION={AR:"lat",UY:"lat",CL:"lat",PY:"lat",BO:"lat",PE:"lat",BR:"lat",EC:"lat",CO:"lat",VE:"lat",MX:"lat",CU:"lat",
   GB:"eur",IE:"eur",FR:"eur",DE:"eur",ES:"eur",IT:"eur",SE:"eur",NO:"eur",NL:"eur",BE:"eur",PT:"eur",DK:"eur",FI:"eur",CH:"eur",AT:"eur",IS:"eur",
   US:"nam",CA:"nam",AU:"oce",NZ:"oce",JP:"asi"};
@@ -3074,8 +3075,17 @@ function banPool(){
   DISCOS.filter(d=>d[1]&&CACHE&&CACHE.disc[d[0]+"|"+d[1]]).forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
   return Object.entries(por).filter(([a,ds])=>ds.length>=3&&banDatos(a)&&banDatos(a).inicio&&banDatos(a).pais);
 }
-function banElegir(rng){
+function banElegir(rng,dia){
   const pool=banPool(); if(!pool.length) return null;
+  // desafío del día, desde el 4/11: una rueda con todas las bandas en un orden sorteado, así ninguna se repite
+  // hasta que salieron todas (antes cada día se sorteaba aparte y podía repetirse al día siguiente)
+  if(dia&&dia>=BAN_RUEDA&&!TODO_ROCK){
+    const n=Math.round((Date.parse(dia)-Date.parse(BAN_RUEDA))/864e5), largo=pool.length, base=pool.slice().sort((a,b)=>a[0].localeCompare(b[0],"es"));
+    // cada vuelta se sortea de nuevo; las que salieron al final de la vuelta anterior van al final de esta
+    const vuelta=r=>{ const o=mezR(base,semillaRng(hashStr("banda-rueda-"+r))); if(!r) return o;
+      const cola=new Set(vuelta(r-1).slice(-Math.floor(largo/3)).map(x=>x[0])); return [...o.filter(x=>!cola.has(x[0])),...o.filter(x=>cola.has(x[0]))] };
+    const [a,ds]=vuelta(Math.floor(n/largo))[n%largo]; return {a,ds,datos:banDatos(a)};
+  }
   const nac=pool.filter(([a,ds])=>ds[0][3]==="nac");
   const [a,ds]=mezR(rng()<.75&&nac.length?nac:pool,rng)[0];
   return {a,ds,datos:banDatos(a)};
@@ -3105,7 +3115,7 @@ async function banIniciar(){
   banNueva(rngDia("banda"),"diario");
 }
 function banNueva(rng,modo){
-  BAN.modo=modo; BAN.dia=diaSel(); BAN.obj=banElegir(rng); BAN.rng=rng; BAN.pista=null;
+  BAN.modo=modo; BAN.dia=diaSel(); BAN.obj=banElegir(rng,modo==="diario"?BAN.dia:null); BAN.rng=rng; BAN.pista=null;
   BAN.intentos=[]; BAN.fin=false; BAN.gano=false;
   if(modo==="diario"){ const g=ls.get(banClave())||leerDia("tapa-banda-prog"); if(g){ BAN.intentos=g.intentos||[]; BAN.fin=!!g.fin; BAN.gano=!!g.gano } }
   // pista: una tapa y un tema de la banda, siempre los mismos para ese día
@@ -5016,7 +5026,7 @@ async function placaEfemerides(dia,items){
   return c;
 }
 async function placaBandaDia(dia){
-  const rng=semillaRng(hashStr("banda-"+dia)), o=banElegir(rng); if(!o) return null;
+  const rng=semillaRng(hashStr("banda-"+dia)), o=banElegir(rng,dia); if(!o) return null;
   const d=mezR(o.ds,rng)[0], img=await contImg(CACHE.disc[d[0]+"|"+d[1]].url);
   const [c,x]=lienzo(1080,1920);
   etiqueta(x,`LA BANDA DEL DÍA #${numDiario(dia)}`,90,200,32);
