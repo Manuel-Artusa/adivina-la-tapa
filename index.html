@@ -423,6 +423,7 @@ body.mar-abierto{overflow:hidden}
 @media (max-width:440px){.aho-cab{grid-template-columns:96px 1fr}.aho-fila{gap:3px}.aho-fila button{height:42px;font-size:.9rem}}
 .pato-play{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
 .pato-ops{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pato-pistas{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}.pato-pistas div{background:var(--crema);border:3px solid var(--tinta);padding:8px 12px;font-weight:700}.pato-pistas b{color:var(--rojo)}
 .pato-ops button{display:flex;flex-direction:column;gap:4px;padding:6px;background:var(--crema);border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);cursor:pointer;text-align:left;font:700 .74rem/1.15 var(--body);color:var(--tinta)}
 .pato-ops button img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#3a352c}
 .pato-ops button small{font-weight:500;opacity:.8}
@@ -1029,8 +1030,9 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
     <button class="link volver" type="button">← Inicio</button>
     <h2>¿De qué disco es?</h2>
     <div class="chips modo-dia" data-juego="pato" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
-    <p class="bajada">Temática: Callejeros - Don Osvaldo. Escuchá el tema y tocá la tapa del disco donde está. Si errás, tenés otra oportunidad (vale la mitad).</p>
+    <p class="bajada">Temática: Callejeros - Don Osvaldo. Escuchá 10 segundos del tema y elegí su disco entre 4 tapas. Si errás, te damos el nombre del tema; si errás otra vez, el año. A la tercera, perdiste.</p>
     <div class="pato-play"><button class="btn" id="pato-play" type="button" disabled>▶ Escuchar</button><span class="aviso" id="pato-estado">Cargando…</span></div>
+    <div class="pato-pistas" id="pato-pistas"></div>
     <div class="pato-ops" id="pato-ops"></div>
     <div class="con-msg" id="pato-msg" aria-live="polite"></div>
     <div class="fila"><button class="btn" id="pato-sig" type="button" hidden>Siguiente</button></div>
@@ -2145,7 +2147,7 @@ const TOPS=[
   {id:"ahorcado",n:"Ahorcado rockero",modo:"ahorcado",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas; cada uno vale 100 menos 10 por error (la pista cuenta como error). Se promedia."},
   {id:"letra",n:"¿De qué tema es?",modo:"letra",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 3 temas. Cada uno vale 100 con la primera frase, 70 con la segunda, 40 con la tercera y 20 con la cuarta. Se promedia."},
   {id:"bingo",n:"Bingo rockero",modo:"bingo",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: los casilleros completos sobre 12, por los puntos del tiempo elegido (90 s hasta 80, 60 s hasta 90, 45 s hasta 100)."},
-  {id:"pato",n:"¿De qué disco es?",modo:"pato",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 5 temas; 20 puntos si acertás de una y 10 a la segunda."},
+  {id:"pato",n:"¿De qué disco es?",modo:"pato",hoy:true,genero:"diario",u:"pts",d:"Desafío de hoy: 5 temas; 20 puntos de una, 10 con el nombre del tema y 5 con el año."},
 ].filter(t=>(t.id!=="letra"||LETRA_ON)&&(t.id!=="bingo"||BINGO_ON)&&(t.id!=="pato"||PATO_ON));
 // Mismo orden que las tarjetas del inicio (el General queda primero)
 { const orden=[...document.querySelectorAll(".hub [data-ir]")].map(b=>b.dataset.ir), pos=t=>t.general?-1:orden.indexOf(t.id)<0?99:orden.indexOf(t.id);
@@ -3863,7 +3865,7 @@ $("marcar-bajar").onclick=()=>{ const b=new Blob([JSON.stringify(MAR.marcas,null
 $("marcar-copiar").onclick=()=>contCopiar(JSON.stringify(MAR.marcas,null,1),$("marcar-copiar"));
 
 // ===== ¿De qué disco es? (Callejeros y Don Osvaldo): suena un tema y se elige su disco entre las tapas =====
-const PATO_BANDAS=["Callejeros","Don Osvaldo"], PATO_DIA=5, PATO_SEG=15;
+const PATO_BANDAS=["Callejeros","Don Osvaldo"], PATO_DIA=5, PATO_SEG=10, PATO_PUNTOS=[20,10,5];
 const PATO={modo:"diario",j:null,ronda:0,pts:[],racha:0,rng:Math.random,cola:[],audio:null,timer:null,dia:null};
 // los discos de las dos bandas (con tapa), del más viejo al más nuevo
 // (si dos discos quedaron con el mismo disco de iTunes, como Casi Justicia Social I y II, no entran: no se sabría cuál es)
@@ -3885,7 +3887,7 @@ function patoCab(){
   if(PATO.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(PATO.ronda+1,PATO_DIA)}/${PATO_DIA}`,"Puntos",PATO.pts.reduce((a,b)=>a+b,0));
   else cabecera("Racha",PATO.racha,"Récord",ls.get("tapa-pato-rec")||0);
 }
-function patoLimpiar(){ patoParar(); $("pato-sig").hidden=true; $("pato-msg").textContent=""; $("pato-ops").innerHTML=""; $("pato-play").disabled=true; $("pato-play").textContent="▶ Escuchar"; $("pato-estado").textContent="Cargando…" }
+function patoLimpiar(){ patoParar(); $("pato-sig").hidden=true; $("pato-msg").textContent=""; $("pato-ops").innerHTML=""; $("pato-pistas").innerHTML=""; $("pato-play").disabled=true; $("pato-play").textContent="▶ Escuchar"; $("pato-estado").textContent="Cargando…" }
 async function patoIniciar(){
   modoInicial("pato"); patoLimpiar(); PATO.j=null; PATO.dia=diaSel();
   await esperarCache();
@@ -3903,13 +3905,25 @@ function patoNuevo(){
   patoLimpiar();
   if(PATO.modo==="libre"&&!PATO.cola.length) return patoIniciar();
   const x=PATO.modo==="diario"?PATO.cola[PATO.ronda]:PATO.cola.shift(); if(!x) return;
-  const j={...x,intentos:0,fin:false}; PATO.j=j;
+  const j={...x,intentos:0,fin:false,descartados:new Set()}; PATO.j=j;
   PATO.audio=new Audio(x.prev); PATO.audio.preload="auto";
   $("pato-play").disabled=false; $("pato-estado").textContent=PATO.modo==="diario"?`Tema ${PATO.ronda+1} de ${PATO_DIA}`:"¿De qué disco es este tema?";
-  $("pato-ops").innerHTML=patoDiscos().map((d,i)=>`<button type="button" data-i="${i}"><img alt="" loading="lazy" src="${esc(chico200(CACHE.disc[d[0]+"|"+d[1]].url))}"><span>${esc(d[1])}</span><small>${esc(d[0])} · ${d[2]}</small></button>`).join("");
-  const ds=patoDiscos();
-  $("pato-ops").querySelectorAll("button").forEach(b=>b.onclick=()=>patoResp(ds[+b.dataset.i],b));
-  patoCab();
+  patoOpciones(); patoCab();
+}
+const patoK=d=>d[0]+"|"+d[1];
+// 4 tapas: la correcta y 3 discos más (quedan fijas: con 3 errores se pierde)
+function patoOpciones(){
+  const j=PATO.j, todos=patoDiscos(), bien=todos.find(d=>patoK(d)===patoK(j.d))||j.d;
+  const otros=mezR(todos.filter(d=>patoK(d)!==patoK(j.d)),PATO.rng).slice(0,3);
+  j.ops=mezR([bien,...otros],PATO.rng);
+  $("pato-ops").innerHTML=j.ops.map((d,i)=>`<button type="button" data-i="${i}"><img alt="" src="${esc(chico200(CACHE.disc[patoK(d)].url))}"><span>${esc(d[1])}</span><small>${esc(d[0])}</small></button>`).join("");
+  $("pato-ops").querySelectorAll("button").forEach(b=>b.onclick=()=>patoResp(j.ops[+b.dataset.i],b));
+}
+function patoPistas(){
+  const j=PATO.j, h=[];
+  if(j.intentos>=1) h.push(`<div>Pista: el tema es <b>«${esc(j.t)}»</b></div>`);
+  if(j.intentos>=2) h.push(`<div>Pista: el disco es de <b>${j.d[2]}</b></div>`);
+  $("pato-pistas").innerHTML=h.join("");
 }
 $("pato-play").onclick=()=>{
   const a=PATO.audio; if(!a) return;
@@ -3918,12 +3932,17 @@ $("pato-play").onclick=()=>{
 };
 function patoResp(d,b){
   const j=PATO.j; if(!j||j.fin) return;
-  const ok=d[0]===j.d[0]&&d[1]===j.d[1]; j.intentos++;
-  if(!ok&&j.intentos<2){ b.classList.add("bad"); b.disabled=true; $("pato-msg").textContent="No es ese. Probá otra vez (ahora vale 10)."; return }
+  const ok=patoK(d)===patoK(j.d); j.intentos++;
+  if(!ok&&j.intentos<3){
+    j.descartados.add(patoK(d)); b.classList.add("bad"); b.disabled=true; patoPistas();
+    $("pato-msg").textContent=j.intentos===1?"No es ese. Te damos el nombre del tema (ahora vale 10).":"Tampoco. Te damos el año (ahora vale 5).";
+    return;
+  }
   j.fin=true; patoParar();
-  const pts=ok?(j.intentos===1?20:10):0;
-  $("pato-ops").querySelectorAll("button").forEach((x,i)=>{ const dd=patoDiscos()[i]; x.disabled=true; if(dd[0]===j.d[0]&&dd[1]===j.d[1]) x.classList.add("good"); else if(x===b) x.classList.add("bad") });
-  $("pato-msg").textContent=`${ok?(j.intentos===1?"¡De una!":"¡Bien!"):"Era otro."} «${j.t}» está en ${j.d[1]} (${j.d[0]}, ${j.d[2]}).`;
+  const pts=ok?PATO_PUNTOS[j.intentos-1]:0;
+  $("pato-ops").querySelectorAll("button").forEach((x,i)=>{ x.disabled=true; if(patoK(j.ops[i])===patoK(j.d)) x.classList.add("good"); else if(x===b) x.classList.add("bad") });
+  $("pato-pistas").innerHTML="";
+  $("pato-msg").textContent=`${ok?(j.intentos===1?"¡De una!":"¡Bien!"):"¡Perdiste!"} «${j.t}» está en ${j.d[1]} (${j.d[0]}, ${j.d[2]}).`;
   if(PATO.modo==="diario"){
     PATO.pts.push(pts); PATO.ronda++;
     if(PATO.ronda>=PATO_DIA){
@@ -5833,7 +5852,7 @@ const COMP_GRILLA={
   diario:()=>G&&G.log&&G.log.length?G.log.map(l=>CUADRO[l.gan]||"⬛").join(""):null,
   tema:()=>{ const j=TEMA.j; return j&&j.log&&j.log.length?j.log.map(l=>l.tipo==="bien"?"🟩":l.tipo==="salto"?"⬛":"🟥").join("")+"⬜".repeat(Math.max(0,PASOS.length-j.log.length)):null },
   letra:()=>LET.pts.length?LET.pts.map(COMP_COLOR).join(""):null,
-  pato:()=>PATO.pts.length?PATO.pts.map(p=>p===20?"🟩":p===10?"🟨":"🟥").join("")+"⬜".repeat(Math.max(0,PATO_DIA-PATO.pts.length)):null,
+  pato:()=>PATO.pts.length?PATO.pts.map(p=>p===20?"🟩":p===10?"🟨":p===5?"🟧":"🟥").join("")+"⬜".repeat(Math.max(0,PATO_DIA-PATO.pts.length)):null,
   bingo:()=>BIN.celdas&&BIN.celdas.length===12?[0,1,2].map(i=>BIN.celdas.slice(i*4,i*4+4).map(v=>v?"🟩":"⬛").join("")).join("\n"):null,
   grilla:()=>GRI.celdas&&GRI.celdas.length===9?[0,1,2].map(i=>GRI.celdas.slice(i*3,i*3+3).map(v=>v?"🟩":"⬛").join("")).join("\n"):null,
 };

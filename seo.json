@@ -174,11 +174,11 @@
   "pato": {
     "ruta": "/de-que-disco-es/",
     "titulo": "¿De qué disco es? · Callejeros y Don Osvaldo | Juegos Rock",
-    "descripcion": "Suena un tema de Callejeros o de Don Osvaldo y tenés que elegir de qué disco es entre sus tapas. Desafío diario de 5 temas y modo libre por rachas.",
+    "descripcion": "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos pistas. Desafío diario de 5 temas y modo libre por rachas.",
     "h": "¿De qué disco es?: Callejeros y Don Osvaldo",
     "texto": [
-      "Escuchá un fragmento de un tema de Callejeros o de Don Osvaldo y tocá la tapa del disco donde está: Sed, Presión, Señales, Disco Escultura, Flor de Ceibo y más.",
-      "El desafío del día son 5 temas, iguales para todos: 20 puntos si acertás de una y 10 a la segunda. En el modo libre jugás por rachas."
+      "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos el nombre del tema; si errás otra vez, el año del disco. A la tercera, perdiste.",
+      "El desafío del día son 5 temas, iguales para todos: 20 puntos de una, 10 con el nombre del tema y 5 con el año. En el modo libre jugás por rachas."
     ]
   },
   "top": {
