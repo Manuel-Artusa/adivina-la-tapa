@@ -421,15 +421,55 @@ body.mar-abierto{overflow:hidden}
 .aho-fila button.no{background:transparent;color:var(--sombra);border-color:var(--sombra);box-shadow:none}
 .aho-fila button:disabled:not(.si):not(.no){opacity:.5;cursor:default}
 @media (max-width:440px){.aho-cab{grid-template-columns:96px 1fr}.aho-fila{gap:3px}.aho-fila button{height:42px;font-size:.9rem}}
-.pato-play{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
-.pato-ops{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.pato-pistas{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}.pato-pistas div{background:var(--crema);border:3px solid var(--tinta);padding:8px 12px;font-weight:700}.pato-pistas b{color:var(--rojo)}
-.pato-ops button{display:flex;flex-direction:column;gap:4px;padding:6px;background:var(--crema);border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);cursor:pointer;text-align:left;font:700 .74rem/1.15 var(--body);color:var(--tinta)}
-.pato-ops button img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#3a352c}
-.pato-ops button small{font-weight:500;opacity:.8}
-.pato-ops button.good{background:var(--ok);color:var(--crema)}.pato-ops button.bad{background:var(--rojo);color:var(--crema);opacity:.75}
+/* ¿De qué disco es?: tocadiscos y fundas (sin cuadrados) */
+#v-pato h2{font-size:clamp(1.9rem,6vw,2.6rem)}
+.pato-toca{display:flex;align-items:center;gap:20px;margin:10px 0 20px;padding:16px 20px;border-radius:999px;background:var(--tinta);color:var(--crema);box-shadow:0 10px 24px rgba(20,18,16,.25)}
+.pato-vinilo{position:relative;flex:none;width:118px;height:118px;border-radius:50%;border:0;padding:0;background:none;cursor:pointer;color:var(--crema)}
+.pato-vinilo:disabled{opacity:.5;cursor:default}
+.pato-disco{position:absolute;inset:6px;border-radius:50%;
+  background:radial-gradient(circle,var(--papel) 0 5%,var(--rojo) 5.5% 24%,#0c0b0a 24.5% 26%,transparent 26.5%),
+  conic-gradient(from 30deg,rgba(255,255,255,.18),transparent 12%,transparent 50%,rgba(255,255,255,.12) 62%,transparent 74%),
+  repeating-radial-gradient(circle,#171513 0 2px,#262320 2.6px 3.6px);box-shadow:inset 0 0 0 3px #0c0b0a,0 6px 14px rgba(0,0,0,.5)}
+.pato-vinilo.sonando .pato-disco{animation:patoGira 1.6s linear infinite}
+.pato-anillo{position:absolute;inset:0;transform:rotate(-90deg)}
+.pato-anillo circle{fill:none;stroke-width:5}
+.pato-anillo .fondo{stroke:rgba(255,246,220,.15)}
+.pato-anillo .avance{stroke:var(--papel);stroke-linecap:round;stroke-dasharray:345;stroke-dashoffset:345}
+.pato-vinilo.sonando .avance{animation:patoAnillo 10s linear forwards}
+.pato-ico{position:absolute;inset:0;display:grid;place-items:center;font-size:1.5rem;text-shadow:0 2px 4px rgba(0,0,0,.6)}
+.pato-info{display:flex;flex-direction:column;gap:4px}
+.pato-info b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.05;color:var(--papel)}
+.pato-info small{font-size:.9rem;opacity:.85}
+@keyframes patoGira{to{transform:rotate(360deg)}}
+@keyframes patoAnillo{to{stroke-dashoffset:0}}
+.pato-pistas{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.pato-pistas div{border-radius:999px;background:var(--crema);border:2px solid var(--tinta);padding:7px 16px;font-weight:700;box-shadow:0 4px 0 rgba(20,18,16,.25);animation:patoPop .35s var(--rebote,ease-out)}
+.pato-pistas b{color:var(--rojo)}
+@keyframes patoPop{from{transform:scale(.6) rotate(-6deg);opacity:0}}
+.pato-ops{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 14px;margin-bottom:6px}
+.pato-ops button{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 12% 0 0;background:none;border:0;cursor:pointer;text-align:center;color:var(--tinta);transition:transform .2s ease}
+.pato-ops button:nth-child(4n+1){transform:rotate(-3deg)}.pato-ops button:nth-child(4n+2){transform:rotate(2deg)}
+.pato-ops button:nth-child(4n+3){transform:rotate(-1.5deg)}.pato-ops button:nth-child(4n+4){transform:rotate(3deg)}
+.pato-funda{position:relative;display:block;width:100%}
+.pato-funda img{position:relative;z-index:1;display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;background:#3a352c;box-shadow:0 8px 18px rgba(20,18,16,.35)}
+.pato-vin{position:absolute;z-index:0;top:5%;right:-8%;width:90%;aspect-ratio:1;border-radius:50%;transition:right .35s ease;
+  background:radial-gradient(circle,var(--papel) 0 5%,var(--rojo) 5.5% 22%,#0c0b0a 22.5% 24%,transparent 24.5%),repeating-radial-gradient(circle,#171513 0 2px,#262320 2.6px 3.6px)}
+.pato-nom{display:inline-block;max-width:100%;padding:5px 12px;border-radius:999px;background:var(--tinta);color:var(--papel);font:700 .76rem/1.15 var(--body)}
+.pato-ops button small{font-size:.72rem;font-weight:600;opacity:.75}
+.pato-ops button:not(:disabled):hover{transform:translateY(-5px) rotate(0)}
+.pato-ops button:not(:disabled):hover .pato-vin{right:-13%}
 .pato-ops button:disabled{cursor:default}
-@media (max-width:440px){.pato-ops{grid-template-columns:repeat(2,1fr)}}
+.pato-ops button.good{transform:scale(1.04) rotate(0)}
+.pato-ops button.good .pato-funda img{box-shadow:0 0 0 4px var(--ok),0 0 26px rgba(31,122,58,.75)}
+.pato-ops button.good .pato-vin{right:-13%;animation:patoGira 2.2s linear infinite}
+.pato-ops button.good .pato-nom{background:var(--ok);color:var(--crema)}
+.pato-ops button.bad{animation:patoNo .4s ease}
+.pato-ops button.bad .pato-funda img{filter:grayscale(1);opacity:.5}
+.pato-ops button.bad .pato-funda::after{content:"✕";position:absolute;z-index:2;inset:0;display:grid;place-items:center;font:400 3rem var(--display);color:var(--rojo);text-shadow:0 2px 0 var(--crema)}
+.pato-ops button.bad .pato-nom{background:#8a8378}
+@keyframes patoNo{20%,60%{translate:-6px 0}40%,80%{translate:6px 0}}
+@media (max-width:440px){.pato-ops{grid-template-columns:repeat(2,1fr);gap:16px 18px}.pato-toca{gap:14px;padding:12px 16px}.pato-vinilo{width:96px;height:96px}.pato-info b{font-size:1.15rem}}
+@media (prefers-reduced-motion:reduce){.pato-vinilo.sonando .pato-disco,.pato-ops button.good .pato-vin{animation:none}}
 .abre-cab{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
 .abre-cab b{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.05;display:block}
 .abre-preg{font-weight:800;font-size:1.05rem}
@@ -1031,7 +1071,10 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
     <h2>¿De qué disco es?</h2>
     <div class="chips modo-dia" data-juego="pato" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
     <p class="bajada">Temática: Callejeros - Don Osvaldo. Escuchá 10 segundos del tema y elegí su disco entre 4 tapas. Si errás, te damos el nombre del tema; si errás otra vez, el año. A la tercera, perdiste.</p>
-    <div class="pato-play"><button class="btn" id="pato-play" type="button" disabled>▶ Escuchar</button><span class="aviso" id="pato-estado">Cargando…</span></div>
+    <div class="pato-toca">
+      <button class="pato-vinilo" id="pato-play" type="button" disabled aria-label="Escuchar 10 segundos del tema"><span class="pato-disco"></span><svg class="pato-anillo" viewBox="0 0 118 118" aria-hidden="true"><circle class="fondo" cx="59" cy="59" r="55"/><circle class="avance" cx="59" cy="59" r="55"/></svg><span class="pato-ico" id="pato-ico">▶</span></button>
+      <div class="pato-info"><b id="pato-estado">Cargando…</b><small id="pato-ayuda">Tocá el disco para escuchar 10 segundos</small></div>
+    </div>
     <div class="pato-pistas" id="pato-pistas"></div>
     <div class="pato-ops" id="pato-ops"></div>
     <div class="con-msg" id="pato-msg" aria-live="polite"></div>
@@ -3888,12 +3931,12 @@ function patoTemas(){
     return out.filter(x=>cuenta[x.k]===1);
   })().catch(e=>{ patoTemasP=null; return [] }));
 }
-function patoParar(){ clearTimeout(PATO.timer); if(PATO.audio) PATO.audio.pause(); const b=$("pato-play"); if(b&&!b.disabled) b.textContent="▶ Escuchar" }
+function patoParar(){ clearTimeout(PATO.timer); if(PATO.audio) PATO.audio.pause(); const b=$("pato-play"); if(b){ b.classList.remove("sonando"); $("pato-ico").textContent="▶" } }
 function patoCab(){
   if(PATO.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(PATO.ronda+1,PATO_DIA)}/${PATO_DIA}`,"Puntos",PATO.pts.reduce((a,b)=>a+b,0));
   else cabecera("Racha",PATO.racha,"Récord",ls.get("tapa-pato-rec")||0);
 }
-function patoLimpiar(){ patoParar(); $("pato-sig").hidden=true; $("pato-msg").textContent=""; $("pato-ops").innerHTML=""; $("pato-pistas").innerHTML=""; $("pato-play").disabled=true; $("pato-play").textContent="▶ Escuchar"; $("pato-estado").textContent="Cargando…" }
+function patoLimpiar(){ patoParar(); $("pato-sig").hidden=true; $("pato-msg").textContent=""; $("pato-ops").innerHTML=""; $("pato-pistas").innerHTML=""; $("pato-play").disabled=true; $("pato-ico").textContent="▶"; $("pato-estado").textContent="Cargando…"; $("pato-ayuda").textContent="Tocá el disco para escuchar 10 segundos" }
 async function patoIniciar(){
   modoInicial("pato"); patoLimpiar(); PATO.j=null; PATO.dia=diaSel();
   await esperarCache();
@@ -3922,19 +3965,19 @@ function patoOpciones(){
   const j=PATO.j, todos=patoDiscos(), bien=todos.find(d=>patoK(d)===patoK(j.d))||j.d;
   const otros=mezR(todos.filter(d=>patoK(d)!==patoK(j.d)),PATO.rng).slice(0,3);
   j.ops=mezR([bien,...otros],PATO.rng);
-  $("pato-ops").innerHTML=j.ops.map((d,i)=>`<button type="button" data-i="${i}"><img alt="" src="${esc(chico200(CACHE.disc[patoK(d)].url))}"><span>${esc(d[1])}</span><small>${esc(d[0])}</small></button>`).join("");
+  $("pato-ops").innerHTML=j.ops.map((d,i)=>`<button type="button" data-i="${i}" aria-label="${esc(d[1]+", "+d[0])}"><span class="pato-funda"><i class="pato-vin"></i><img alt="" src="${esc(chico200(CACHE.disc[patoK(d)].url))}"></span><span class="pato-nom">${esc(d[1])}</span><small>${esc(d[0])}</small></button>`).join("");
   $("pato-ops").querySelectorAll("button").forEach(b=>b.onclick=()=>patoResp(j.ops[+b.dataset.i],b));
 }
 function patoPistas(){
   const j=PATO.j, h=[];
-  if(j.intentos>=1) h.push(`<div>Pista: el tema es <b>«${esc(j.t)}»</b></div>`);
-  if(j.intentos>=2) h.push(`<div>Pista: el disco es de <b>${j.d[2]}</b></div>`);
+  if(j.intentos>=1) h.push(`<div>🎵 El tema es <b>«${esc(j.t)}»</b></div>`);
+  if(j.intentos>=2) h.push(`<div>📅 El disco es de <b>${j.d[2]}</b></div>`);
   $("pato-pistas").innerHTML=h.join("");
 }
 $("pato-play").onclick=()=>{
   const a=PATO.audio; if(!a) return;
   if(!a.paused){ patoParar(); return }
-  a.currentTime=0; a.play().then(()=>{ $("pato-play").textContent="■ Parar"; clearTimeout(PATO.timer); PATO.timer=setTimeout(patoParar,PATO_SEG*1000) }).catch(()=>{ $("pato-estado").textContent="No se pudo reproducir. Tocá de nuevo." });
+  a.currentTime=0; a.play().then(()=>{ const b=$("pato-play"); b.classList.remove("sonando"); void b.offsetWidth; b.classList.add("sonando"); $("pato-ico").textContent="■"; clearTimeout(PATO.timer); PATO.timer=setTimeout(patoParar,PATO_SEG*1000) }).catch(()=>{ $("pato-ayuda").textContent="No se pudo reproducir. Tocá el disco de nuevo." });
 };
 function patoResp(d,b){
   const j=PATO.j; if(!j||j.fin) return;
