@@ -48,7 +48,8 @@ create policy "subir puntaje" on puntajes for insert with check (
     or (modo = 'diario' and genero = 'diario' and puntos <= 100 and puntos % 2 = 0)
     -- el resto de los desafíos del día (incluido el Tema del día) sobre 100, de a 10; la grilla hasta 120
     or (modo not in ('diario','normal') and genero = 'diario'
-        and puntos <= (case when modo = 'grilla' then 120 else 100 end) and puntos % 10 = 0)
+        and puntos <= (case when modo = 'grilla' then 120 else 100 end)
+        and puntos % (case when modo = 'pato' then 5 else 10 end) = 0)  -- ¿De qué disco es? va de a 5
   )
 );
 
