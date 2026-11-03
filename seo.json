@@ -171,6 +171,16 @@
       "El desafío del día son 3 temas, iguales para todos: cada uno vale 100 puntos con la primera frase, 70 con la segunda, 40 con la tercera y 20 con la cuarta, y se promedia. En el modo libre jugás por rachas."
     ]
   },
+  "pato": {
+    "ruta": "/de-que-disco-es/",
+    "titulo": "¿De qué disco es? · Callejeros y Don Osvaldo | Juegos Rock",
+    "descripcion": "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos pistas. Desafío diario de 5 temas y modo libre por rachas.",
+    "h": "¿De qué disco es?: Callejeros y Don Osvaldo",
+    "texto": [
+      "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos el nombre del tema; si errás otra vez, el año del disco. A la tercera, perdiste.",
+      "El desafío del día son 5 temas, iguales para todos: 20 puntos de una, 10 con el nombre del tema y 5 con el año. En el modo libre jugás por rachas."
+    ]
+  },
   "top": {
     "ruta": "/ranking/",
     "titulo": "Ranking de los desafíos del día | Juegos Rock",
