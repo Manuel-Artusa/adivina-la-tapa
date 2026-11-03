@@ -5539,7 +5539,7 @@ const SUBJUEGOS={ahorcado:"v-ahorcado",impostor:"v-imp",conexiones:"v-con",tema:
 const VISTAS=["v-juego","v-fin","v-top","v-hub","v-yo","v-cont","v-marcar","v-frases",...Object.values(SUBJUEGOS)];
 // Páginas internas (contenido para redes, marcar tapas, cargar frases): solo se abren en el navegador donde el dueño
 // entró una vez con su link secreto (?llave=...). En el código solo está la huella (SHA-256) de la llave, no la llave.
-const INTERNAS=["contenido","marcar","frases"], LLAVE_HUELLA="9dcbc9e5f3f7d97da69897d0ccd53dc39ebbd604b22e0d2a6c7509bed10d7054";
+const INTERNAS=["contenido","marcar","frases"], LLAVE_HUELLA="8d22474a469d935ee6d5bf267f934390b9a0fb11e22ef22b187beb9f89777148";
 const llaveOk=()=>{ try{ return localStorage.getItem("tapa-llave")===LLAVE_HUELLA }catch(e){ return false } };
 let llaveRevisando=null;
 async function llaveProbar(){
