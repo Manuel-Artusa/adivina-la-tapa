@@ -20,7 +20,7 @@ Solo usa la librería estándar de Python. Lo corre GitHub Actions (.github/work
 pero también se puede correr a mano.
 """
 import json, os, re, sys, time, unicodedata, urllib.parse, urllib.request, urllib.error
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 PAUSA = 3.2          # segundos entre consultas (iTunes permite ~20 por minuto)
 SALIDA = "discos.json"
@@ -373,8 +373,15 @@ def main():
         manual = json.load(open(MANUAL, encoding="utf-8"))
     except (OSError, ValueError):
         manual = {}
-    # los cargados a mano en discos_manual.json se buscan siempre (aunque antes no se hayan encontrado)
-    pendientes = [d for d in catalogo if f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados or manual.get(f"{d[0]}|{d[1]}"))]
+    # los cargados a mano en discos_manual.json se buscan siempre (aunque antes no se hayan encontrado),
+    # y también si el disco guardado es otro (se corrige un disco que había quedado mal)
+    def id_manual(k):
+        m = re.search(r"(\d{6,})(?!.*\d{6,})", str(manual.get(k) or "").split("?")[0])
+        return int(m.group(1)) if m else None
+    corregir = {k for k in claves if k in discos and id_manual(k) and id_manual(k) != discos[k].get("id")}
+    if corregir:
+        print(f"Discos a corregir con el link cargado a mano: {sorted(corregir)}", flush=True)
+    pendientes = [d for d in catalogo if (f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados or manual.get(f"{d[0]}|{d[1]}"))) or f"{d[0]}|{d[1]}" in corregir]
     pendientes.sort(key=lambda d: f"{d[0]}|{d[1]}" in probados)
     # De a tandas (--max N): con muchos discos nuevos, cada corrida busca una parte y la guarda; la tarea se vuelve a correr sola
     tope = next((int(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--max=")), 0)
@@ -415,7 +422,18 @@ def main():
             hechos += len(lote)
             print(f"Temas: {hechos}/{len(items)}", flush=True)
 
+    # un disco corregido vale desde mañana: hasta entonces la página usa el anterior ("antes"), así no cambia el desafío del día
+    hoy_ar = datetime.now(timezone(timedelta(hours=-3)))
+    manana = (hoy_ar + timedelta(days=1)).strftime("%Y-%m-%d")
+    for k, v in nuevos.items():
+        viejo = previo.get("discos", {}).get(k)
+        if viejo and viejo.get("id") != v["id"]:
+            v["desde"] = manana
+            v["antes"] = {c: x for c, x in viejo.items() if c not in ("antes", "desde")}
     discos.update(nuevos)
+    for v in discos.values():   # una vez que ya rige, no hace falta guardar el anterior
+        if v.get("desde") and v["desde"] <= hoy_ar.strftime("%Y-%m-%d"):
+            v.pop("desde", None); v.pop("antes", None)
     discos = {k: discos[k] for k in claves if k in discos}   # saca lo que ya no está en el catálogo
 
     # Fecha de salida de cada disco (para los posts de "un día como hoy"). Se busca una sola vez por disco.
