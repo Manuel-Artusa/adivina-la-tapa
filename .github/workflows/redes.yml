@@ -11,9 +11,9 @@ on:
   workflow_dispatch:
     inputs:
       turno:
-        description: "Qué publicar (novedad = anuncio de los discos nuevos; cuenta = anuncio de entrar con Google; promo = video que muestra la página, solo para descargar)"
+        description: "Qué publicar (novedad = anuncio de los discos nuevos; cuenta = anuncio de entrar con Google; pato = anuncio de ¿De qué disco es?; promo = video que muestra la página, solo para descargar)"
         type: choice
-        options: [manana, tarde, todo, aniversario, novedad, cuenta, promo]
+        options: [manana, tarde, todo, aniversario, novedad, cuenta, pato, promo]
         default: manana
       prueba:
         description: "Modo prueba: solo arma las imágenes para revisar, no publica"
