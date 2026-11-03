@@ -309,6 +309,10 @@ footer{font-size:.75rem;color:var(--sombra);text-align:center}
 .arm-stats b{font:800 1rem var(--body)}
 .arm-stats small,.arm-nota{font-size:.72rem;opacity:.75}
 .mar-editor{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+/* el editor se abre como ventana encima de la lista: al cerrarlo seguís donde estabas */
+#marcar-editor:not([hidden]){position:fixed;z-index:250;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;box-shadow:0 0 0 100vmax rgba(20,18,16,.6),6px 6px 0 var(--tinta)}
+#marcar-editor .mar-cerrar{position:sticky;top:0;align-self:flex-end;margin-bottom:-36px}
+body.mar-abierto{overflow:hidden}
 #marcar-cv{width:100%;max-width:440px;aspect-ratio:1;border:3px solid var(--tinta);touch-action:none;margin:0 auto;display:block;cursor:crosshair}
 .mar-chk{display:flex;gap:8px;align-items:center;font:600 .9rem var(--body)}
 .mar-chk input{width:20px;height:20px;accent-color:var(--rojo)}
@@ -923,7 +927,8 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
     <h2>Marcar tapas</h2>
     <p class="bajada">Elegí una tapa y dibujá con el dedo o el mouse el contorno del elemento que se va a sacar. Ponele un nombre (“la banana”, “el sombrero”) y guardá. Cuando tengas varias, bajá <b>piezas.json</b> y mandalo para cargarlo en el juego (entran al día siguiente).</p>
     <div class="fila"><b id="marcar-n"></b><button class="btn" type="button" id="marcar-bajar">Bajar piezas.json</button><button class="btn sec" type="button" id="marcar-copiar">Copiar</button></div>
-    <div class="card mar-editor" id="marcar-editor" hidden>
+    <div class="card mar-editor" id="marcar-editor" role="dialog" aria-modal="true" aria-labelledby="marcar-tit" hidden>
+      <button class="link mar-cerrar" type="button" id="marcar-cerrar" aria-label="Cerrar">✕ Cerrar</button>
       <b id="marcar-tit"></b>
       <canvas id="marcar-cv"></canvas>
       <label class="arm-tam"><span>Nombre del elemento</span><input type="text" id="marcar-nombre" placeholder="la banana" maxlength="40"></label>
@@ -3793,8 +3798,8 @@ function marLista(){
 function marResumen(){ const n=Object.keys(MAR.marcas).length; $("marcar-n").textContent=`${n} tapa${n===1?"":"s"} marcada${n===1?"":"s"}`; ls.set("tapa-marcas",MAR.marcas) }
 async function marElegir(k){
   MAR.sel=k; const m=MAR.marcas[k]; MAR.pts=m?m.poly.map(p=>p.slice()):[]; $("marcar-nombre").value=m&&m.nombre?m.nombre:""; $("marcar-fondo").checked=!(m&&m.fondo===false);
-  $("marcar-editor").hidden=false; $("marcar-tit").textContent=k.replace("|"," — ");
-  const r=await armImg(marDisco(k).url)||{}; MAR.img=r.im; MAR.cors=r.cors; marPintar(); marPrevia(); $("marcar-editor").scrollIntoView({behavior:"smooth"});
+  $("marcar-editor").hidden=false; document.body.classList.add("mar-abierto"); $("marcar-editor").scrollTop=0; $("marcar-tit").textContent=k.replace("|"," — ");
+  const r=await armImg(marDisco(k).url)||{}; MAR.img=r.im; MAR.cors=r.cors; marPintar(); marPrevia();
 }
 function marPintar(){
   const cv=$("marcar-cv"), W=cv.width=cv.height=Math.round(cv.clientWidth*(window.devicePixelRatio||1)||600), x=cv.getContext("2d");
@@ -3820,10 +3825,17 @@ function marPrevia(){
   if(pr.simple){ xp.fillStyle="#d7262e"; xp.font="bold 15px sans-serif"; xp.fillText("Esta tapa no deja separar el fondo",8,20) }
 }
 $("marcar-guardar").onclick=()=>{ if(!MAR.sel) return; if(MAR.pts.length<3){ alert("Dibujá el contorno del elemento con el dedo o el mouse."); return }
-  const r=v=>Math.round(v*1000)/1000; MAR.marcas[MAR.sel]={poly:MAR.pts.map(([x,y])=>[r(x),r(y)]),nombre:$("marcar-nombre").value.trim()||"la pieza",...($("marcar-fondo").checked?{}:{fondo:false})};
-  marResumen(); marLista(); $("marcar-editor").hidden=true };
+  const r=v=>Math.round(v*1000)/1000, antes=MAR.marcas[MAR.sel];
+  MAR.marcas[MAR.sel]={poly:MAR.pts.map(([x,y])=>[r(x),r(y)]),nombre:$("marcar-nombre").value.trim()||"la pieza",...($("marcar-fondo").checked?{}:{fondo:false}),...(antes&&antes.desde?{desde:antes.desde}:{})};
+  marResumen(); marCerrar(); marLista() };
+// cerrar el editor sin mover la lista (se queda donde estabas)
+// el editor va directo en <body>: dentro de la sección (que tiene animación) la ventana fija no se ubicaba en la pantalla
+document.body.appendChild($("marcar-editor"));
+function marCerrar(){ $("marcar-editor").hidden=true; document.body.classList.remove("mar-abierto") }
+$("marcar-cerrar").onclick=marCerrar;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("marcar-editor").hidden) marCerrar() });
 $("marcar-borrar").onclick=()=>{ MAR.pts=[]; marPintar() };
-$("marcar-quitar").onclick=()=>{ if(MAR.sel&&MAR.marcas[MAR.sel]){ delete MAR.marcas[MAR.sel]; marResumen(); marLista() } $("marcar-editor").hidden=true };
+$("marcar-quitar").onclick=()=>{ if(MAR.sel&&MAR.marcas[MAR.sel]){ delete MAR.marcas[MAR.sel]; marResumen(); marLista() } marCerrar() };
 $("marcar-bajar").onclick=()=>{ const b=new Blob([JSON.stringify(MAR.marcas,null,1)],{type:"application/json"}), a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="piezas.json"; a.click() };
 $("marcar-copiar").onclick=()=>contCopiar(JSON.stringify(MAR.marcas,null,1),$("marcar-copiar"));
 
@@ -5558,6 +5570,7 @@ async function llaveProbar(){
   return false;
 }
 function irA(v,como){
+  document.body.classList.remove("mar-abierto"); const me=$("marcar-editor"); if(me) me.hidden=true;
   if(INTERNAS.includes(v)&&!llaveOk()){
     if(new URLSearchParams(location.search).has("llave")&&!llaveRevisando){ llaveRevisando=llaveProbar().then(ok=>{ llaveRevisando=null; irA(ok?v:"inicio","inicial") }); return }
     v="inicio"; como="inicial"; // sin llave, se va al inicio (y la dirección también)
