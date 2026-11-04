@@ -1651,7 +1651,7 @@ const BINGO_ON=hoyAR()>="2026-10-28";
 // ¿De qué disco es? (Callejeros y Don Osvaldo) entra a la página y a los desafíos el 4/11 (así no cambia el total del día en curso)
 const PATO_ON=hoyAR()>="2026-11-04";
 // Completá la letra (Los Piojos) aparece cuando frases-piojos.json tiene al menos 20 frases (lo decide build.js al publicar)
-const PIOJOS_ON="__PIOJOS_ON__"==="1";
+const PIOJOS_ON="__PIOJOS_ON__"==="1"&&hoyAR()>="2026-11-05"; // con 20 frases, y desde el 5/11 (así no cambia el total de hoy)
 // Copia del catálogo tal cual está escrito (con "desde" y "hasta"): sirve para rearmar el de un día anterior
 const DISCOS_CRUDO=DISCOS.map(d=>d.slice());
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
