@@ -13,7 +13,7 @@ const PUBLIC = path.join(RAIZ, "public");
 const env = process.env;
 const hoyAR = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
 const DIA = env.DIA && /^\d{4}-\d{2}-\d{2}$/.test(env.DIA) ? env.DIA : hoyAR();
-const TURNO = ["manana", "tarde", "todo", "aniversario", "novedad", "cuenta", "pato"].includes(env.TURNO) ? env.TURNO : "manana";
+const TURNO = ["manana", "tarde", "todo", "aniversario", "novedad", "cuenta", "pato", "piojos"].includes(env.TURNO) ? env.TURNO : "manana";
 const DISCO = (env.DISCO || "").trim(); // para "aniversario": "Banda|Disco"
 const SUPA = (env.SUPA_URL || "").replace(/\/+$/, "");
 const SERVICIO = env.SUPABASE_SERVICE_KEY || "";
