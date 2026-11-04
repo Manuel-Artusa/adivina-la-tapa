@@ -52,6 +52,15 @@ try {
 } catch {}
 const letraOn = nFrases >= 10;
 base = base.replace("__LETRA_ON__", letraOn ? "1" : "0");
+// Completá la letra (Los Piojos): aparece recién con 20 frases en frases-piojos.json
+let nPiojos = 0;
+try {
+  const d = JSON.parse(fs.readFileSync("frases-piojos.json", "utf8"));
+  nPiojos = (d.temas || []).reduce((n, x) => n + (x.frases || []).filter(f => /\[[^\]]+\]/.test(f)).length, 0);
+} catch {}
+const piojosOn = nPiojos >= 20;
+base = base.replace("__PIOJOS_ON__", piojosOn ? "1" : "0");
+if (!piojosOn) seo.piojos.noindex = true;
 if (!letraOn) seo.letra.noindex = true;
 if (goat) {
   base = base.replace("<!--ANALYTICS-->",
@@ -120,7 +129,7 @@ const urls = Object.values(seo).filter(p => !p.noindex).map(p =>
 fs.writeFileSync("public/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
 fs.writeFileSync("public/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${sitio}/sitemap.xml\n`);
 
-for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json", "frases.json", "coronita.png"]) {
+for (const f of ["favicon.ico", "favicon-96.png", "favicon-192.png", "og.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "icon-maskable.png", "manifest.webmanifest", "sw.js", "discos.json", "datos.json", "piezas.json", "frases.json", "frases-piojos.json", "coronita.png"]) {
   if (f === "discos.json" && fs.existsSync(f)) {
     // Más liviano para el celular: los links de los audios de 30 s (solo los usa "Adiviná el tema") van aparte,
     // un archivo por banda en audios/<banda>.json ({id del disco: [audio de cada tema]}); la página lo pide cuando lo necesita
@@ -166,4 +175,5 @@ console.log([
   goat ? "contador de visitas activado" : "sin contador",
   fs.existsSync("discos.json") ? "con discos.json" : "sin discos.json",
   `${nFrases} temas con frases (¿De qué tema es? ${letraOn ? "activado" : "oculto hasta tener 10"})`,
+  `${nPiojos} frases de Los Piojos (Completá la letra ${piojosOn ? "activado" : "oculto hasta tener 20"})`,
 ].join(" · "));
