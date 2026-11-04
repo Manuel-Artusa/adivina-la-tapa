@@ -181,6 +181,16 @@
       "El desafío del día son 5 temas, iguales para todos: 20 puntos de una, 10 con el nombre del tema y 5 con el año. En el modo libre jugás por rachas."
     ]
   },
+  "piojos": {
+    "ruta": "/completa-la-letra/",
+    "titulo": "Completá la letra · Los Piojos | Juegos Rock",
+    "descripcion": "Una frase de un tema de Los Piojos con una palabra tapada: escribí cuál falta. Si errás, te damos pistas. Desafío diario de 5 frases y modo libre por rachas.",
+    "h": "Completá la letra: Los Piojos",
+    "texto": [
+      "Te mostramos una frase de un tema de Los Piojos con una palabra tapada y tenés que escribir cuál falta. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.",
+      "El desafío del día son 5 frases, iguales para todos: 20 puntos de una, 10 con el nombre del tema y 5 con la primera letra. En el modo libre jugás por rachas."
+    ]
+  },
   "top": {
     "ruta": "/ranking/",
     "titulo": "Ranking de los desafíos del día | Juegos Rock",
@@ -219,6 +229,14 @@
     "titulo": "Cargar frases | Juegos Rock",
     "descripcion": "Herramienta interna.",
     "h": "Cargar frases",
+    "noindex": true,
+    "texto": []
+  },
+  "cpiojos": {
+    "ruta": "/cargar-piojos/",
+    "titulo": "Cargar frases de Los Piojos | Juegos Rock",
+    "descripcion": "Herramienta interna.",
+    "h": "Cargar frases de Los Piojos",
     "noindex": true,
     "texto": []
   }
