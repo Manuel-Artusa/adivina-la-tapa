@@ -2,7 +2,8 @@
 // Siempre busca primero la versión nueva en internet; si no hay conexión, usa la guardada.
 // Las páginas y los .json se piden "sin memoria" (el navegador pregunta si cambiaron), así un juego nuevo
 // o frases nuevas se ven apenas se publican, también en la app instalada.
-const CACHE = "juegos-rock-v2";
+// v3: al activarse borra las copias guardadas de versiones anteriores (podían mostrar una página vieja)
+const CACHE = "juegos-rock-v3";
 self.addEventListener("install", e => {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(["./", "icon-192.png"]).catch(() => {})));
@@ -16,9 +17,9 @@ self.addEventListener("fetch", e => {
   let pedido;
   if (req.mode === "navigate") {
     // redirect "manual": si Render redirige (por ejemplo, a la dirección con "/" al final), lo sigue el navegador
-    pedido = fetch(req.url, { cache: "no-cache", redirect: "manual", credentials: "same-origin" });
+    pedido = fetch(req.url, { cache: "no-store", redirect: "manual", credentials: "same-origin" });
   } else if (/\.(json|html)$/.test(url.pathname)) {
-    pedido = fetch(new Request(req, { cache: "no-cache" }));
+    pedido = fetch(new Request(req, { cache: "no-store" }));
   } else {
     pedido = fetch(req);
   }
