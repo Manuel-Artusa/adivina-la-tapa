@@ -184,10 +184,10 @@
   "piojos": {
     "ruta": "/completa-la-letra/",
     "titulo": "Completá la letra · Los Piojos | Juegos Rock",
-    "descripcion": "Una frase de un tema de Los Piojos con una palabra tapada: escribí cuál falta. Si errás, te damos pistas. Desafío diario de 5 frases y modo libre por rachas.",
+    "descripcion": "Una frase de un tema de Los Piojos con una palabra tapada: elegí cuál falta entre 4. Si errás, te damos pistas. Desafío diario de 5 frases y modo libre por rachas.",
     "h": "Completá la letra: Los Piojos",
     "texto": [
-      "Te mostramos una frase de un tema de Los Piojos con una palabra tapada y tenés que escribir cuál falta. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.",
+      "Te mostramos una frase de un tema de Los Piojos con una palabra tapada y tenés que elegir cuál falta entre 4 opciones. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.",
       "El desafío del día son 5 frases, iguales para todos: 20 puntos de una, 10 con el nombre del tema y 5 con la primera letra. En el modo libre jugás por rachas."
     ]
   },

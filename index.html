@@ -426,8 +426,12 @@ body.mar-abierto{overflow:hidden}
 .pio-frase::before{content:"“";position:absolute;top:-18px;left:16px;font:400 4rem/1 var(--display);color:var(--rojo)}
 .pio-hueco{display:inline-block;min-width:4.5em;margin:0 .15em;padding:0 .3em;border-bottom:4px solid var(--papel);color:var(--papel);text-align:center}
 .pio-hueco.bien{color:#8fe3a4;border-color:#8fe3a4}.pio-hueco.mal{color:#ff8f8f;border-color:#ff8f8f}
-.pio-form{display:flex;gap:10px;margin:0 0 10px}.pio-form input{flex:1;min-width:0;font:700 1.1rem var(--body);padding:12px 18px;border:3px solid var(--tinta);border-radius:999px;background:var(--crema)}
-.pio-form .btn{border-radius:999px}
+.pio-ops{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:0 0 12px}
+.pio-ops button{padding:14px 12px;border-radius:999px;border:3px solid var(--tinta);background:var(--crema);box-shadow:0 5px 0 var(--tinta);font:800 1.05rem var(--body);color:var(--tinta);cursor:pointer;transition:transform .15s}
+.pio-ops button:not(:disabled):hover{transform:translateY(-3px)}
+.pio-ops button:disabled{cursor:default}
+.pio-ops button.good{background:var(--ok);color:var(--crema);border-color:var(--ok)}
+.pio-ops button.bad{background:#8a8378;color:var(--crema);border-color:#8a8378;text-decoration:line-through;animation:patoNo .4s ease}
 .cpi-marcar{display:flex;flex-direction:column;gap:8px}.cpi-marcar div{display:flex;flex-wrap:wrap;gap:6px}
 .cpi-marcar button{padding:5px 10px;border-radius:999px;border:2px solid var(--tinta);background:var(--crema);font:700 .95rem var(--body);cursor:pointer}
 .cpi-marcar button[aria-pressed="true"]{background:var(--rojo);color:var(--crema);border-color:var(--rojo)}
@@ -904,7 +908,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
       <button type="button" data-ir="grilla"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Grilla de 3 por 3 con casilleros completos"><rect width="240" height="110" fill="var(--papel)"/><rect x="78" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="8" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="8" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="29" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="93" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="112" y="42" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="146" y="42" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="161" y="63" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="78" y="76" width="30" height="30" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="112" y="76" width="30" height="30" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="127" y="97" font-family="var(--display)" font-size="16" fill="var(--sombra)" text-anchor="middle">+</text><rect x="146" y="76" width="30" height="30" fill="var(--papel)" stroke="var(--tinta)" stroke-width="2"/><rect x="14" y="17" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="82" y="0" width="0" height="0"/><rect x="14" y="51" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="116" y="0" width="0" height="0"/><rect x="14" y="85" width="54" height="10" fill="var(--tinta)" opacity=".75"/><rect x="150" y="0" width="0" height="0"/></svg><small>Diario · Contra reloj</small><b>Grilla rockera</b><span>9 casilleros que cruzan dos condiciones. Llenalos antes de que se termine el tiempo.</span></button>
       <button type="button" data-ir="bingo" id="hub-bingo" hidden><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Una tapa arriba y una grilla de 12 bandas, algunas completas"><rect width="240" height="110" fill="var(--papel)"/><rect x="100" y="6" width="40" height="40" fill="var(--tinta)"/><rect x="104" y="10" width="16" height="16" fill="#b5532a"/><rect x="120" y="10" width="16" height="16" fill="#3b4a6b"/><rect x="104" y="26" width="16" height="16" fill="#2f5d50"/><rect x="120" y="26" width="16" height="16" fill="#d9d2c0"/><rect x="42" y="52" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="82" y="52" width="36" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="52" width="36" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="162" y="52" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="42" y="71" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="82" y="71" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="71" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="162" y="71" width="36" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="42" y="90" width="36" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="82" y="90" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="122" y="90" width="36" height="16" fill="#1f7a3a" stroke="var(--tinta)" stroke-width="2"/><rect x="162" y="90" width="36" height="16" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Diario · Contra reloj</small><b>Bingo rockero</b><span>Aparece una tapa: tocá la banda que la grabó o salteala. Completá las 12 antes de que se termine el tiempo.</span></button>
       <button type="button" data-ir="pato" id="hub-pato" hidden><img class="hub-logo" src="/logos/hub-callejeros.png" alt="Logo de Callejeros" width="240" height="240" loading="lazy" hidden><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Un tema sonando y cuatro tapas para elegir"><rect width="240" height="110" fill="var(--papel)"/><circle cx="36" cy="55" r="22" fill="var(--rojo)" stroke="var(--tinta)" stroke-width="3"/><path d="M30 44 L48 55 L30 66 Z" fill="var(--crema)"/><rect x="74" y="14" width="36" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="116" y="14" width="36" height="36" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="158" y="14" width="36" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="14" width="30" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="74" y="60" width="36" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="116" y="60" width="36" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="158" y="60" width="36" height="36" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="200" y="60" width="30" height="36" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/></svg><small>Temática: Callejeros - Don Osvaldo</small><b>¿De qué disco es?</b><span>Suena un tema de Callejeros o de Don Osvaldo: elegí de qué disco es entre sus tapas.</span></button>
-      <button type="button" data-ir="piojos" id="hub-piojos" hidden><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Una frase con una palabra tapada"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="16" width="212" height="54" rx="27" fill="var(--tinta)"/><rect x="34" y="38" width="40" height="8" fill="var(--crema)" opacity=".85"/><rect x="82" y="30" width="56" height="20" rx="4" fill="var(--rojo)"/><rect x="146" y="38" width="62" height="8" fill="var(--crema)" opacity=".85"/><rect x="40" y="80" width="160" height="20" rx="10" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Temática: Los Piojos</small><b>Completá la letra</b><span>Una frase de un tema de Los Piojos con una palabra tapada. ¿Cuál falta?</span></button>
+      <button type="button" data-ir="piojos" id="hub-piojos" hidden><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Una frase con una palabra tapada"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="16" width="212" height="54" rx="27" fill="var(--tinta)"/><rect x="34" y="38" width="40" height="8" fill="var(--crema)" opacity=".85"/><rect x="82" y="30" width="56" height="20" rx="4" fill="var(--rojo)"/><rect x="146" y="38" width="62" height="8" fill="var(--crema)" opacity=".85"/><rect x="40" y="80" width="160" height="20" rx="10" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/></svg><small>Temática: Los Piojos</small><b>Completá la letra</b><span>Una frase de un tema de Los Piojos con una palabra tapada. Elegí cuál falta entre 4.</span></button>
       <button type="button" data-ir="banda"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tabla de intentos con casillas verdes, amarillas y grises"><rect width="240" height="110" fill="var(--papel)"/><rect x="12" y="10" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="20" width="37" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="10" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="10" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="42" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="52" width="29" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="42" width="32" height="26" fill="#e0b12e" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="42" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="42" width="32" height="26" fill="#3a352c" stroke="var(--tinta)" stroke-width="2"/><rect x="12" y="74" width="70" height="26" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><rect x="18" y="84" width="48" height="6" fill="var(--tinta)" opacity=".8"/><rect x="88" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="124" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="160" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><rect x="196" y="74" width="32" height="26" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="160" y="56" font-family="var(--mono)" font-size="12" fill="var(--tinta)" text-anchor="middle"></text></svg><small>Diario · Pistas</small><b>La banda del día</b><span>Adiviná la banda en 6 intentos. Cada intento te da pistas.</span></button>
       <button type="button" data-ir="orden"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Lista de discos para ordenar con flechas"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="8" width="212" height="27" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="28" font-family="var(--display)" font-size="15" fill="var(--crema)" text-anchor="start">1</text><rect x="42" y="12" width="19" height="19" fill="#3b4a6b"/><rect x="70" y="19" width="90" height="5" fill="var(--crema)" opacity=".85"/><text x="206" y="27" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="middle">▲▼</text><rect x="14" y="41" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="61" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">2</text><rect x="42" y="45" width="19" height="19" fill="#b5532a"/><rect x="70" y="52" width="76" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="60" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text><rect x="14" y="74" width="212" height="27" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="24" y="94" font-family="var(--display)" font-size="15" fill="var(--rojo)" text-anchor="start">3</text><rect x="42" y="78" width="19" height="19" fill="#b5532a"/><rect x="70" y="85" width="62" height="5" fill="var(--tinta)" opacity=".85"/><text x="206" y="93" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="middle">▲▼</text></svg><small>Diario · Para fans</small><b>Ordená la discografía</b><span>5 discos de una banda. Ponelos en orden de salida.</span></button>
       <button type="button" data-ir="abre"><svg class="prev" viewBox="0 0 240 110" role="img" aria-label="Tapa de un disco y lista de temas con el primero marcado"><rect width="240" height="110" fill="var(--papel)"/><rect x="14" y="12" width="84" height="84" fill="var(--tinta)"/><rect x="16.0" y="14.0" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="38.9" y="14.0" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="61.7" y="14.0" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="14.0" width="11.7" height="11.7" fill="#c9a227"/><rect x="84.6" y="14.0" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="27.4" y="25.4" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="25.4" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="50.3" y="25.4" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="61.7" y="25.4" width="11.7" height="11.7" fill="#b5532a"/><rect x="73.1" y="25.4" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="25.4" width="11.7" height="11.7" fill="#1d1b18"/><rect x="16.0" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="27.4" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="38.9" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="36.9" width="11.7" height="11.7" fill="#2f5d50"/><rect x="61.7" y="36.9" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="73.1" y="36.9" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="36.9" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="16.0" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="38.9" y="48.3" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="50.3" y="48.3" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="61.7" y="48.3" width="11.7" height="11.7" fill="#1d1b18"/><rect x="73.1" y="48.3" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="84.6" y="48.3" width="11.7" height="11.7" fill="#b5532a"/><rect x="16.0" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="27.4" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="59.7" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="50.3" y="59.7" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="59.7" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="59.7" width="11.7" height="11.7" fill="#2f5d50"/><rect x="84.6" y="59.7" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="16.0" y="71.1" width="11.7" height="11.7" fill="#b5532a"/><rect x="27.4" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="38.9" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="50.3" y="71.1" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="61.7" y="71.1" width="11.7" height="11.7" fill="#3b4a6b"/><rect x="73.1" y="71.1" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="84.6" y="71.1" width="11.7" height="11.7" fill="#2f5d50"/><rect x="16.0" y="82.6" width="11.7" height="11.7" fill="#1d1b18"/><rect x="27.4" y="82.6" width="11.7" height="11.7" fill="#d9d2c0"/><rect x="38.9" y="82.6" width="11.7" height="11.7" fill="#5b3a5e"/><rect x="50.3" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="61.7" y="82.6" width="11.7" height="11.7" fill="#8a3b2e"/><rect x="73.1" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="84.6" y="82.6" width="11.7" height="11.7" fill="#6f8fa6"/><rect x="112" y="10" width="114" height="19" fill="var(--ok)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="24" font-family="var(--mono)" font-size="11" fill="var(--crema)" text-anchor="start">1.</text><rect x="138" y="17" width="70" height="5" fill="var(--crema)" opacity=".8"/><rect x="112" y="34" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="48" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">4.</text><rect x="138" y="41" width="62" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="58" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="72" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">7.</text><rect x="138" y="65" width="54" height="5" fill="var(--tinta)" opacity=".8"/><rect x="112" y="82" width="114" height="19" fill="var(--crema)" stroke="var(--tinta)" stroke-width="2"/><text x="120" y="96" font-family="var(--mono)" font-size="11" fill="var(--tinta)" text-anchor="start">9.</text><rect x="138" y="89" width="46" height="5" fill="var(--tinta)" opacity=".8"/></svg><small>Diario · Racha</small><b>Tema número 1</b><span>Mirá el disco y elegí qué tema lo abre. El del día son 5 discos.</span></button>
@@ -1087,10 +1091,10 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
     <button class="link volver" type="button">← Inicio</button>
     <h2>Completá la letra</h2>
     <div class="chips modo-dia" data-juego="piojos" role="group" aria-label="Modo"><button type="button" data-m="diario" aria-pressed="true">Del día</button><button type="button" data-m="libre" aria-pressed="false">Libre</button></div>
-    <p class="bajada">Temática: Los Piojos. Escribí la palabra que falta. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.</p>
+    <p class="bajada">Temática: Los Piojos. Elegí la palabra que falta entre 4. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.</p>
     <div class="pio-frase" id="pio-frase" aria-live="polite">Cargando…</div>
     <div class="pato-pistas" id="pio-pistas"></div>
-    <form class="pio-form" id="pio-form" autocomplete="off"><input id="pio-in" placeholder="La palabra que falta" autocapitalize="off" spellcheck="false" maxlength="30"><button class="btn" type="submit">Probar</button></form>
+    <div class="pio-ops" id="pio-ops"></div>
     <div class="con-msg" id="pio-msg" aria-live="polite"></div>
     <div class="fila"><button class="btn" id="pio-sig" type="button" hidden>Siguiente</button></div>
   </section>
@@ -1106,6 +1110,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
       <div class="fila"><a class="btn sec" id="cpi-google" target="_blank" rel="noopener">Buscar letra ↗</a></div>
       <input class="mar-buscar" id="cpi-texto" maxlength="160" placeholder="Pegá una oración del tema" autocomplete="off" spellcheck="false">
       <div class="cpi-marcar" id="cpi-marcar"></div>
+      <label class="arm-tam"><span>Otras 3 palabras que suenen parecido o puedan ir en la canción (separadas por coma). Opcional</span><input id="cpi-opciones" maxlength="80" placeholder="infernal, animal, brutal" autocomplete="off" spellcheck="false"></label>
       <div class="fila"><button class="btn" id="cpi-guardar" type="button">Guardar</button><button class="btn sec" id="cpi-borrar" type="button">Borrar</button></div>
     </div>
     <div class="fila"><button class="btn" id="cpi-bajar" type="button">Bajar frases-piojos.json</button><button class="btn sec" id="cpi-copiar" type="button">Copiar todo</button></div>
@@ -3973,29 +3978,24 @@ const pioListas=()=>PIO_DATOS||(PIO_DATOS=fetch("/frases-piojos.json",{cache:"no
 function pioPartir(f){ const m=String(f).match(/^(.*?)\[([^\]]+)\](.*)$/); return m?{antes:m[1],palabra:m[2].trim(),despues:m[3]}:null }
 async function pioFrases(){
   const d=await pioListas(), out=[];
-  for(const x of d.temas||[]) for(const f of x.frases||[]){ const p=pioPartir(f); if(p&&p.palabra) out.push({tema:x.tema,disco:x.disco||"",...p,k:norm(x.tema)+"|"+norm(f)}) }
+  for(const x of d.temas||[]) for(const f of x.frases||[]){ const p=pioPartir(f); if(p&&p.palabra) out.push({tema:x.tema,disco:x.disco||"",opciones:(x.opciones||[]).filter(Boolean),...p,k:norm(x.tema)+"|"+norm(f)}) }
   return out;
 }
 const pioNorm=t=>norm(t).replace(/\s+/g,"");
-function pioCerca(a,b){ // acepta un error de tipeo en palabras largas
-  if(a===b) return true; if(b.length<5||Math.abs(a.length-b.length)>1) return false;
-  const m=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) m[0][j]=j;
-  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
-  return m[a.length][b.length]<=1;
-}
 function pioCab(){
   if(PIO.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(PIO.ronda+1,PIO_DIA)}/${PIO_DIA}`,"Puntos",PIO.pts.reduce((a,b)=>a+b,0));
   else cabecera("Racha",PIO.racha,"Récord",ls.get("tapa-piojos-rec")||0);
 }
-function pioLimpiar(){ $("pio-sig").hidden=true; $("pio-msg").textContent=""; $("pio-pistas").innerHTML=""; $("pio-in").value=""; $("pio-form").hidden=false }
+function pioLimpiar(){ $("pio-sig").hidden=true; $("pio-msg").textContent=""; $("pio-pistas").innerHTML=""; $("pio-ops").innerHTML="" }
 async function pioIniciar(){
   modoInicial("piojos"); pioLimpiar(); PIO.j=null; PIO.dia=diaSel(); $("pio-frase").textContent="Cargando…";
   const fs=await pioFrases();
-  if(!fs.length){ $("pio-frase").textContent="Este juego todavía se está preparando. Volvé en un rato."; $("pio-form").hidden=true; return }
+  if(!fs.length){ $("pio-frase").textContent="Este juego todavía se está preparando. Volvé en un rato."; return }
+  PIO.todas=fs;
   if(MODO.piojos==="libre"){ PIO.modo="libre"; PIO.rng=Math.random; PIO.cola=mezR(fs,Math.random); return pioNuevo() }
   PIO.modo="diario"; PIO.ronda=0; PIO.pts=[];
   const h=diaHecho("piojos");
-  if(h){ $("pio-frase").textContent="Desafío de hoy completo"; $("pio-form").hidden=true; $("pio-msg").textContent=yaJugado(h); cabecera(`Del día #${nDia()}`,"✓","Puntos",h.puntos); return }
+  if(h){ $("pio-frase").textContent="Desafío de hoy completo"; $("pio-msg").textContent=yaJugado(h); cabecera(`Del día #${nDia()}`,"✓","Puntos",h.puntos); return }
   // las 5 frases del día: iguales para todos, de temas distintos
   PIO.rng=rngDia("piojos"); const vistos=new Set();
   PIO.cola=mezR(fs.slice().sort((a,b)=>a.k.localeCompare(b.k)),PIO.rng).filter(x=>{ const t=norm(x.tema); if(vistos.has(t)) return false; vistos.add(t); return true }).slice(0,PIO_DIA);
@@ -4009,7 +4009,17 @@ function pioNuevo(){
   pioLimpiar();
   if(PIO.modo==="libre"&&!PIO.cola.length) return pioIniciar();
   const x=PIO.modo==="diario"?PIO.cola[PIO.ronda]:PIO.cola.shift(); if(!x) return;
-  PIO.j={...x,intentos:0,fin:false}; pioPintar(); pioCab(); setTimeout(()=>$("pio-in").focus(),50);
+  PIO.j={...x,intentos:0,fin:false};
+  // 4 opciones: la palabra y 3 que suenan parecido o podrían ir en la canción (las carga el dueño del sitio);
+  // si un tema no las tiene, palabras de otras frases de largo parecido
+  const bien=pioNorm(x.palabra), vistas=new Set([bien]), otras=[];
+  for(const w of x.opciones||[]){ const n=pioNorm(w); if(n&&!vistas.has(n)){ vistas.add(n); otras.push(w) } }
+  if(otras.length<3) for(const y of mezR((PIO.todas||[]).filter(y=>y.k!==x.k),PIO.rng).sort((a,b)=>Math.abs(pioNorm(a.palabra).length-bien.length)-Math.abs(pioNorm(b.palabra).length-bien.length)).slice(0,8)){
+    const n=pioNorm(y.palabra); if(!vistas.has(n)&&otras.length<3){ vistas.add(n); otras.push(y.palabra) } }
+  PIO.j.ops=mezR([x.palabra,...otras.slice(0,3)],PIO.rng);
+  pioPintar(); pioCab();
+  $("pio-ops").innerHTML=PIO.j.ops.map((w,i)=>`<button type="button" data-i="${i}">${esc(w)}</button>`).join("");
+  $("pio-ops").querySelectorAll("button").forEach(b=>b.onclick=()=>pioResp(PIO.j.ops[+b.dataset.i],b));
 }
 function pioPistas(){
   const j=PIO.j, h=[];
@@ -4017,13 +4027,13 @@ function pioPistas(){
   if(j.intentos>=2) h.push(`<div>🔤 Empieza con <b>${esc(j.palabra.trim().charAt(0).toUpperCase())}</b> (${pioNorm(j.palabra).length} letras)</div>`);
   $("pio-pistas").innerHTML=h.join("");
 }
-$("pio-form").onsubmit=e=>{
-  e.preventDefault(); const j=PIO.j; if(!j||j.fin) return;
-  const r=pioNorm($("pio-in").value); if(!r){ $("pio-in").focus(); return }
-  const ok=pioCerca(r,pioNorm(j.palabra)); j.intentos++;
-  if(!ok&&j.intentos<3){ pioPistas(); $("pio-in").value=""; $("pio-in").focus();
+function pioResp(w,b){
+  const j=PIO.j; if(!j||j.fin) return;
+  const ok=pioNorm(w)===pioNorm(j.palabra); j.intentos++;
+  if(!ok&&j.intentos<3){ b.classList.add("bad"); b.disabled=true; pioPistas();
     $("pio-msg").textContent=j.intentos===1?"No es esa. Te damos el nombre del tema (ahora vale 10).":"Tampoco. Te damos la primera letra (ahora vale 5)."; return }
-  j.fin=true; $("pio-form").hidden=true; pioPintar(ok?"bien":"mal"); $("pio-pistas").innerHTML="";
+  j.fin=true; pioPintar(ok?"bien":"mal"); $("pio-pistas").innerHTML="";
+  $("pio-ops").querySelectorAll("button").forEach((x,i)=>{ x.disabled=true; if(pioNorm(j.ops[i])===pioNorm(j.palabra)) x.classList.add("good"); else if(x===b) x.classList.add("bad") });
   const pts=ok?PIO_PUNTOS[j.intentos-1]:0;
   $("pio-msg").textContent=`${ok?(j.intentos===1?"¡De una!":"¡Bien!"):"¡Perdiste!"} Es «${j.tema}»${j.disco?` (${j.disco})`:""}.`;
   if(PIO.modo==="diario"){
@@ -4039,7 +4049,7 @@ $("pio-form").onsubmit=e=>{
   PIO.racha=ok?PIO.racha+1:0;
   if(PIO.racha>(ls.get("tapa-piojos-rec")||0)) ls.set("tapa-piojos-rec",PIO.racha);
   pioCab(); $("pio-sig").textContent="Siguiente"; $("pio-sig").hidden=false; $("pio-sig").focus();
-};
+}
 chipsModo("piojos",pioIniciar);
 $("pio-sig").onclick=pioNuevo;
 
@@ -4055,7 +4065,7 @@ async function cpiIniciar(){
   const pos=k=>{ const i=orden.indexOf(k); return i<0?999:i };
   CPI.temas=[...vistos.values()].sort((a,b)=>pos(a.k)-pos(b.k)||a.t.localeCompare(b.t,"es"));
   CPI.frases=new Map(); const d=await pioListas();
-  for(const x of [...(d.temas||[]),...(ls.get("tapa-piojos-borrador")||[])]) if(x&&x.tema&&x.frases&&x.frases.length) CPI.frases.set(norm(x.tema),{tema:x.tema,disco:x.disco||"",frases:x.frases});
+  for(const x of [...(d.temas||[]),...(ls.get("tapa-piojos-borrador")||[])]) if(x&&x.tema&&x.frases&&x.frases.length) CPI.frases.set(norm(x.tema),{tema:x.tema,disco:x.disco||"",frases:x.frases,...(x.opciones?{opciones:x.opciones}:{})});
   cpiPintar();
 }
 function cpiJson(){ return JSON.stringify({temas:[...CPI.frases.values()].sort((a,b)=>a.tema.localeCompare(b.tema,"es"))},null,1)+"\n" }
@@ -4088,6 +4098,7 @@ function cpiEditar(){
   // de "Tan solo [palabra] de tu boca" vuelve a texto y marca
   CPI.marcas=[]; $("cpi-texto").value=f?f.frases[0].replace(/[\[\]]/g,""):"";
   if(f) CPI.marcas=f.frases.slice(0,1).map(t=>{ const p=pioPartir(t), r=t.replace(/[\[\]]/g,"").replace(/\s+/g," ").trim(); return {r,i:p?(p.antes.trim()?p.antes.trim().split(/\s+/).length:0):-1} });
+  $("cpi-opciones").value=f&&f.opciones?f.opciones.join(", "):"";
   $("cpi-borrar").hidden=!f; cpiMarcar(); $("cpi-texto").focus();
 }
 $("cpi-texto").oninput=cpiMarcar;
@@ -4098,7 +4109,8 @@ $("cpi-guardar").onclick=()=>{
   if(!ms.length){ $("cpi-texto").focus(); return }
   if(ms.some(m=>m.i<0)){ alert("Tocá la palabra que se tapa."); return }
   const fs=ms.map(m=>m.r.split(" ").map((p,i)=>i===m.i?`[${p.replace(/^[¡¿"“(]+|[.,;:!?"”)]+$/g,"")}]${p.match(/[.,;:!?"”)]+$/)?.[0]||""}`:p).join(" "));
-  CPI.frases.set(x.k,{tema:x.t,disco:x.disco,frases:fs}); cpiGuardarBorrador();
+  const ops=$("cpi-opciones").value.split(",").map(t=>t.trim()).filter(Boolean).slice(0,3);
+  CPI.frases.set(x.k,{tema:x.t,disco:x.disco,frases:fs,...(ops.length?{opciones:ops}:{})}); cpiGuardarBorrador();
   CPI.sel=CPI.temas.find(y=>!CPI.frases.has(y.k))||null; cpiEditar(); cpiPintar();
 };
 $("cpi-borrar").onclick=()=>{ const x=CPI.sel; if(!x) return; CPI.frases.delete(x.k); cpiGuardarBorrador(); cpiEditar(); cpiPintar() };
