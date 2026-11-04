@@ -1,6 +1,18 @@
 {
  "temas": [
   {
+   "tema": "A Ver Cuando",
+   "disco": "Azul",
+   "frases": [
+    "Apago la [mecha] Y beso lo que amo Vos me confesabas, nena Clavando mis manos"
+   ],
+   "opciones": [
+    "vela",
+    "llama",
+    "radio"
+   ]
+  },
+  {
    "tema": "Agua",
    "disco": "Azul",
    "frases": [
@@ -37,6 +49,54 @@
    ]
   },
   {
+   "tema": "Angelito",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Harto del viejo borracho Angelito camina por la calle Un poco por [caminar] Y mucho por olvidarse"
+   ],
+   "opciones": [
+    "pasear",
+    "escapar",
+    "respirar"
+   ]
+  },
+  {
+   "tema": "Arco",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Arco, despacio tiro, en un segundo se [derrumba] de un suspiro, guachos, de pa y de mama, Julieta mía estoy colgando de la escala,"
+   ],
+   "opciones": [
+    "desarma",
+    "termina",
+    "apaga"
+   ]
+  },
+  {
+   "tema": "Ay Ay Ay",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Iban por la calle, como en procesión iban por la [niebla] y un solo tambor. Parece que el sueño no se te iba más o también parece que escuchaste tu compás."
+   ],
+   "opciones": [
+    "lluvia",
+    "sombra",
+    "plaza"
+   ]
+  },
+  {
+   "tema": "Babilonia",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Vete, bobo Vete, bobo Algo, nena Algo está pasando [Cae] Babilonia ya"
+   ],
+   "opciones": [
+    "Arde",
+    "Llora",
+    "Baila"
+   ]
+  },
+  {
    "tema": "Bicho de Ciudad",
    "disco": "Civilización",
    "frases": [
@@ -46,6 +106,18 @@
     "ilusiona",
     "engancha",
     "enamora"
+   ]
+  },
+  {
+   "tema": "Buenos Tiempos",
+   "disco": "Azul",
+   "frases": [
+    "Y no buscaste [culpables], a ver Y no escuchaste al soplón Y no dejaste de empujar, tal vez"
+   ],
+   "opciones": [
+    "excusas",
+    "respuestas",
+    "testigos"
    ]
   },
   {
@@ -109,6 +181,30 @@
    ]
   },
   {
+   "tema": "Difícil",
+   "disco": "Civilización",
+   "frases": [
+    "El heredero al trono ruso tiene [hemofilia] Rasputín aparece para curarlo un gran pez"
+   ],
+   "opciones": [
+    "tuberculosis",
+    "fiebre",
+    "epilepsia"
+   ]
+  },
+  {
+   "tema": "Don't Say Tomorrow",
+   "disco": "3er Arco",
+   "frases": [
+    "Porque puedo ver en blanco Porque puedo ver en negro No puedo ver en [colores] No es tan fácil estar cuerdo"
+   ],
+   "opciones": [
+    "sepia",
+    "relieve",
+    "pantalla"
+   ]
+  },
+  {
    "tema": "El Balneario de los Doctores Crotos",
    "disco": "Azul",
    "frases": [
@@ -130,6 +226,66 @@
     "escapándote",
     "olvidándote",
     "salvándote"
+   ]
+  },
+  {
+   "tema": "Esquina Libertad",
+   "disco": "3er Arco",
+   "frases": [
+    "Esquina Libertad Envido y truco del [tiempo] A usted le toca jugar No haga parda y corte el viento"
+   ],
+   "opciones": [
+    "diablo",
+    "barrio",
+    "destino"
+   ]
+  },
+  {
+   "tema": "Fantasma",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "y comparto tus cigarros asesinos Bailo cuando estás [bailando] entre la gente El mundo es tu mundo y solo está en tu mente Yo sé lo que pasó..."
+   ],
+   "opciones": [
+    "cantando",
+    "soñando",
+    "fumando"
+   ]
+  },
+  {
+   "tema": "Genius",
+   "disco": "Azul",
+   "frases": [
+    "No sé como zafa este lazo O si hay que cortarse en pedazos Un [mercader] compró tu vida Y la vendió en los barrios bajos"
+   ],
+   "opciones": [
+    "banquero",
+    "pirata",
+    "usurero"
+   ]
+  },
+  {
+   "tema": "Gris",
+   "disco": "3er Arco",
+   "frases": [
+    "Cuando no [alcanza] el amor que ofreces Y peleas una causa perdida El amor se transforma en herida Que no cierra, y que no deja ver"
+   ],
+   "opciones": [
+    "llega",
+    "sobra",
+    "basta"
+   ]
+  },
+  {
+   "tema": "Intro Marado",
+   "disco": "3er Arco",
+   "frases": [
+    "Dicen que escapó de un sueño, en casi, su mejor gambeta que ni los sueños [respeta], tan lleno va de coraje"
+   ],
+   "opciones": [
+    "recuerda",
+    "perdona",
+    "sospecha"
    ]
   },
   {
@@ -181,6 +337,30 @@
    ]
   },
   {
+   "tema": "Pistolas",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Un escote que termina donde empieza la caída De algún [notario] sin red No te salvó el día en que salía, discutían Y el botón tiró y ya ves"
+   ],
+   "opciones": [
+    "otario",
+    "corsario",
+    "payaso"
+   ]
+  },
+  {
+   "tema": "Que Decís",
+   "disco": "3er Arco",
+   "frases": [
+    "Gira sobre los otros brazos, salta desde algún escalón. [Brillan] al pasar sus ojazos, queda un hueco en el corazón."
+   ],
+   "opciones": [
+    "Lloran",
+    "Miran",
+    "Arden"
+   ]
+  },
+  {
    "tema": "Ruleta",
    "disco": "Verde Paisaje del Infierno",
    "frases": [
@@ -193,6 +373,18 @@
    ]
   },
   {
+   "tema": "Shup Shup",
+   "disco": "3er Arco",
+   "frases": [
+    "Ella la que le gusta el [cine] Ella habla que de su casa se va, cada tanto decís sí Te mira, sonríe, fuma y vuelve a hablar Ella tiene labios gruesos"
+   ],
+   "opciones": [
+    "vino",
+    "rock",
+    "tango"
+   ]
+  },
+  {
    "tema": "Tan Solo",
    "disco": "Chac tu chac",
    "frases": [
@@ -202,6 +394,30 @@
     "salado",
     "lejano",
     "cansado"
+   ]
+  },
+  {
+   "tema": "Taxi Boy",
+   "disco": "3er Arco",
+   "frases": [
+    "Negro Blues gran cartel, taxi boy para donde estés Podes ver, [trabajar] no es tan fácil en este lugar Y las chicas en el barrio me gritaban como canarios"
+   ],
+   "opciones": [
+    "escapar",
+    "olvidar",
+    "sobrevivir"
+   ]
+  },
+  {
+   "tema": "Te Diría",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Si dijéramos que el sol cae sin [ganas] En el cielo cuando el cielo está escapando Que la soledad es más sola en la cama Y la luna es una lágrima sin llanto"
+   ],
+   "opciones": [
+    "prisa",
+    "fuerza",
+    "miedo"
    ]
   },
   {
@@ -238,6 +454,30 @@
     "resisten",
     "cansan",
     "animan"
+   ]
+  },
+  {
+   "tema": "Y Quemás",
+   "disco": "Azul",
+   "frases": [
+    "como un borracho necesita un bar, como un preso libertad, te necesito, como un mendigo un poco de pan como un ciego [imaginar], te necesito."
+   ],
+   "opciones": [
+    "mirar",
+    "soñar",
+    "encontrar"
+   ]
+  },
+  {
+   "tema": "Yira Yira",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Aunque te quiebre la vida aunque te [muerda] un dolor no esperes nunca una mano ni una ayuda"
+   ],
+   "opciones": [
+    "pique",
+    "rompa",
+    "duela"
    ]
   }
  ]
