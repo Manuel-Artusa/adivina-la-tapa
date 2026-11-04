@@ -535,10 +535,10 @@ body.mar-abierto{overflow:hidden}
 @keyframes corona-mece{0%,100%{rotate:var(--giro)}50%{rotate:calc(var(--giro) + 6deg)}}
 .hub .coronita{top:2px;left:2px;width:58px;--giro:0deg}
 /* logo de la banda en la tarjeta de los juegos temáticos */
-.hub .hub-logo{position:absolute;z-index:2;top:6px;right:6px;width:84px;height:84px;padding:8px;border-radius:50%;background:#fff;border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);pointer-events:none;rotate:8deg;transition:rotate .25s var(--rebote,ease)}
+.hub .hub-logo{position:absolute;z-index:2;top:4px;right:4px;width:42%;max-width:150px;height:auto;aspect-ratio:1;padding:10px;border-radius:50%;background:#fff;border:3px solid var(--tinta);box-shadow:3px 3px 0 var(--tinta);pointer-events:none;rotate:6deg;transition:rotate .25s var(--rebote,ease)}
 .hub .hub-logo.sin-fondo{padding:0;background:none;border:0;box-shadow:none;filter:drop-shadow(3px 3px 0 rgba(20,18,16,.35))}
 .hub button:hover .hub-logo{rotate:-4deg}
-@media (max-width:440px){.hub .hub-logo{width:66px;height:66px;padding:6px}}
+@media (max-width:440px){.hub .hub-logo{width:44%;padding:8px}}
 .let-frases>.coronita{top:-34px;right:-10px;width:72px;--giro:0deg}
 .let-tematica{align-self:flex-start;margin:0;padding:4px 10px;background:var(--tinta);color:var(--papel);font:500 .75rem var(--mono);text-transform:uppercase;letter-spacing:.06em}
 .let-frase.vieja{background:var(--crema);color:var(--tinta);box-shadow:4px 4px 0 var(--tinta);font-size:1rem;min-height:0;padding:18px 18px 14px;animation:none}
