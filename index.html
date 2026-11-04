@@ -131,6 +131,7 @@ h1 span{color:var(--rojo)}
 .hub .prev{display:block;width:100%;height:auto;aspect-ratio:240/110;border:2px solid var(--tinta);margin-bottom:4px}
 .stats{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;text-align:right;font-variant-numeric:tabular-nums}
 .stats b{font-size:1.4rem;display:block;font-family:var(--display);font-weight:400;letter-spacing:0}
+.stats:has(span:empty):has(b:empty){visibility:hidden} /* mientras la pantalla no puso sus marcadores */
 
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);border:3px solid var(--tinta);background:var(--crema);box-shadow:4px 4px 0 var(--tinta)}
 .tabs button{font-family:var(--display);font-size:1rem;padding:10px 6px;border:0;border-right:3px solid var(--tinta);background:transparent;color:var(--tinta);cursor:pointer;min-width:0}
@@ -790,8 +791,8 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
 <div class="wrap" id="wrap">
   <header>
     <h1><button type="button" class="logo" id="logo" aria-label="Ir al inicio">Juegos<br><span>Rock</span></button></h1>
-    <div class="stats"><span id="lbl-modo">Normal</span> <b id="ronda">1/10</b></div>
-    <div class="stats"><span id="lbl-pts">Puntos</span> <b id="pts">0</b></div>
+    <div class="stats"><span id="lbl-modo"></span> <b id="ronda"></b></div>
+    <div class="stats"><span id="lbl-pts"></span> <b id="pts"></b></div>
   </header>
 
   <nav class="tabs" aria-label="Modo de juego">
@@ -1113,6 +1114,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
       <label class="arm-tam"><span>Otras 3 palabras que suenen parecido o puedan ir en la canción (separadas por coma). Opcional</span><input id="cpi-opciones" maxlength="80" placeholder="infernal, animal, brutal" autocomplete="off" spellcheck="false"></label>
       <div class="fila"><button class="btn" id="cpi-guardar" type="button">Guardar</button><button class="btn sec" id="cpi-borrar" type="button">Borrar</button></div>
     </div>
+    <p class="fra-ayuda">El archivo trae todas las frases: las que ya están en el juego (con sus opciones) y las que cargaste acá.</p>
     <div class="fila"><button class="btn" id="cpi-bajar" type="button">Bajar frases-piojos.json</button><button class="btn sec" id="cpi-copiar" type="button">Copiar todo</button></div>
   </section>
 
@@ -4066,7 +4068,18 @@ async function cpiIniciar(){
   const pos=k=>{ const i=orden.indexOf(k); return i<0?999:i };
   CPI.temas=[...vistos.values()].sort((a,b)=>pos(a.k)-pos(b.k)||a.t.localeCompare(b.t,"es"));
   CPI.frases=new Map(); const d=await pioListas();
-  for(const x of [...(d.temas||[]),...(ls.get("tapa-piojos-borrador")||[])]) if(x&&x.tema&&x.frases&&x.frases.length) CPI.frases.set(norm(x.tema),{tema:x.tema,disco:x.disco||"",frases:x.frases,...(x.opciones?{opciones:x.opciones}:{})});
+  // primero todo lo que ya está en el juego (con sus opciones); después lo del borrador de este navegador.
+  // Si el borrador tiene la misma frase, se queda la del juego (que puede traer opciones nuevas); si la palabra
+  // tapada es la misma, conserva las opciones que no se cargaron acá. Así el archivo siempre trae todo.
+  for(const x of d.temas||[]) if(x&&x.tema&&x.frases&&x.frases.length) CPI.frases.set(norm(x.tema),{tema:x.tema,disco:x.disco||"",frases:x.frases,...(x.opciones&&x.opciones.length?{opciones:x.opciones}:{})});
+  for(const x of ls.get("tapa-piojos-borrador")||[]){
+    if(!x||!x.tema||!x.frases||!x.frases.length) continue;
+    const k=norm(x.tema), srv=CPI.frases.get(k);
+    if(srv&&srv.frases[0]===x.frases[0]&&!(x.opciones&&x.opciones.length)) continue;
+    const misma=srv&&pioPartir(srv.frases[0])&&pioPartir(x.frases[0])&&norm(pioPartir(srv.frases[0]).palabra)===norm(pioPartir(x.frases[0]).palabra);
+    const ops=x.opciones&&x.opciones.length?x.opciones:(misma&&srv.opciones?srv.opciones:null);
+    CPI.frases.set(k,{tema:x.tema,disco:x.disco||(srv&&srv.disco)||"",frases:x.frases,...(ops?{opciones:ops}:{})});
+  }
   cpiPintar();
 }
 function cpiJson(){ return JSON.stringify({temas:[...CPI.frases.values()].sort((a,b)=>a.tema.localeCompare(b.tema,"es"))},null,1)+"\n" }
@@ -6023,6 +6036,7 @@ function irA(v,como){
   const tab=v==="top"?"top":v==="yo"?"yo":TODO_ROCK?"todo":"inicio";
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===tab));
   VISTAS.forEach(id=>$(id).hidden=true);
+  cabecera("","","",""); // cada pantalla pone sus marcadores (antes quedaba el "Normal 1/10" de la tapa)
   $("volver-tapa").hidden=!(v==="normal"||v==="diario");
   if(v!=="tema"&&typeof temaParar==="function") temaParar();
   if(v!=="pato"&&typeof patoParar==="function") patoParar();
