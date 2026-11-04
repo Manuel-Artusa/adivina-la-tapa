@@ -3973,7 +3973,8 @@ $("marcar-copiar").onclick=()=>contCopiar(JSON.stringify(MAR.marcas,null,1),$("m
 const PIO_DIA=5, PIO_PUNTOS=[20,10,5];
 const PIO={modo:"diario",j:null,ronda:0,pts:[],racha:0,rng:Math.random,cola:[],dia:null};
 let PIO_DATOS=null;
-const pioListas=()=>PIO_DATOS||(PIO_DATOS=fetch("/frases-piojos.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{temas:[]}).catch(()=>({temas:[]})));
+// con la hora en el pedido: así nunca llega una copia vieja guardada (en el navegador o en el servidor)
+const pioListas=()=>PIO_DATOS||(PIO_DATOS=fetch("/frases-piojos.json?v="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():{temas:[]}).catch(()=>({temas:[]})));
 // "Tan solo [palabra] de tu boca" -> {antes, palabra, despues}
 function pioPartir(f){ const m=String(f).match(/^(.*?)\[([^\]]+)\](.*)$/); return m?{antes:m[1],palabra:m[2].trim(),despues:m[3]}:null }
 async function pioFrases(){
