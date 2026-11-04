@@ -1097,14 +1097,14 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
 
   <section id="v-cpiojos" class="sub" hidden>
     <h2>Cargar frases de Los Piojos</h2>
-    <p class="bajada">Para el juego Completá la letra. Elegí un tema, tocá <b>Buscar letra</b>, pegá una frase corta (hasta 3, una por renglón) y <b>tocá la palabra que se tapa</b>. Lo que guardás queda en este navegador; cuando termines, bajá el archivo y mandalo para cargarlo en el juego.</p>
+    <p class="bajada">Para el juego Completá la letra. Elegí un tema, tocá <b>Buscar letra</b>, pegá <b>una oración</b> del tema y <b>tocá la palabra que se tapa</b>. Lo que guardás queda en este navegador; cuando termines, bajá el archivo y mandalo para cargarlo en el juego.</p>
     <div class="fra-barra"><span id="cpi-cuenta">Cargando…</span><span><label><input type="checkbox" id="cpi-faltan"> Solo los que faltan</label></span></div>
     <input class="mar-buscar" id="cpi-buscar" placeholder="Buscar tema o disco" autocomplete="off" spellcheck="false">
     <div class="fra-lista" id="cpi-lista" role="listbox" aria-label="Temas"></div>
     <div class="fra-edit" id="cpi-edit" hidden>
       <div><small id="cpi-sel-disco"></small><br><b id="cpi-sel-tema"></b></div>
       <div class="fila"><a class="btn sec" id="cpi-google" target="_blank" rel="noopener">Buscar letra ↗</a></div>
-      <textarea id="cpi-texto" maxlength="400" rows="3" placeholder="Una frase corta por renglón (hasta 3)"></textarea>
+      <input class="mar-buscar" id="cpi-texto" maxlength="160" placeholder="Pegá una oración del tema" autocomplete="off" spellcheck="false">
       <div class="cpi-marcar" id="cpi-marcar"></div>
       <div class="fila"><button class="btn" id="cpi-guardar" type="button">Guardar</button><button class="btn sec" id="cpi-borrar" type="button">Borrar</button></div>
     </div>
@@ -4061,22 +4061,23 @@ async function cpiIniciar(){
 function cpiJson(){ return JSON.stringify({temas:[...CPI.frases.values()].sort((a,b)=>a.tema.localeCompare(b.tema,"es"))},null,1)+"\n" }
 function cpiGuardarBorrador(){ ls.set("tapa-piojos-borrador",[...CPI.frases.values()]) }
 function cpiPintar(){
-  const q=norm($("cpi-buscar").value), faltan=$("cpi-faltan").checked, n=[...CPI.frases.values()].reduce((a,x)=>a+x.frases.length,0);
-  $("cpi-cuenta").textContent=`${CPI.frases.size} de ${CPI.temas.length} temas · ${n} frase${n===1?"":"s"}${n<20?` · faltan ${20-n} para que aparezca el juego`:""}`;
+  const q=norm($("cpi-buscar").value), faltan=$("cpi-faltan").checked, n=CPI.frases.size;
+  $("cpi-cuenta").textContent=`${CPI.frases.size} de ${CPI.temas.length} temas con su oración${n<20?` · faltan ${20-n} para que aparezca el juego`:""}`;
   const cont=$("cpi-lista"); cont.innerHTML="";
   CPI.temas.filter(x=>(!q||norm(x.t+" "+x.disco).includes(q))&&(!faltan||!CPI.frases.has(x.k))).forEach(x=>{
     const b=document.createElement("button"); b.type="button"; const f=CPI.frases.get(x.k);
     b.className=f?"tiene":""; b.setAttribute("aria-pressed",CPI.sel===x);
-    b.innerHTML=`<span></span><small></small><em>${f?`✓ ${f.frases.length} frase${f.frases.length===1?"":"s"}`:"falta"}</em>`;
+    b.innerHTML=`<span></span><small></small><em>${f?"✓ cargada":"falta"}</em>`;
     b.querySelector("span").textContent=x.t; b.querySelector("small").textContent=x.disco;
     b.onclick=()=>{ CPI.sel=x; cpiEditar(); cpiPintar() }; cont.appendChild(b);
   });
 }
 // cada renglón se muestra palabra por palabra: se toca la que se tapa
-const cpiRenglones=()=>$("cpi-texto").value.split("\n").map(t=>t.replace(/[\[\]]/g,"").replace(/\s+/g," ").trim()).filter(t=>t.length>=6).slice(0,3);
+// una sola oración por tema
+const cpiRenglones=()=>[$("cpi-texto").value.replace(/[\[\]]/g,"").replace(/\s+/g," ").trim()].filter(t=>t.length>=6);
 function cpiMarcar(){
   const rs=cpiRenglones(); CPI.marcas=rs.map((r,i)=>CPI.marcas[i]&&CPI.marcas[i].r===r?CPI.marcas[i]:{r,i:-1});
-  $("cpi-marcar").innerHTML=rs.map((r,ri)=>`<div><small>Frase ${ri+1}: tocá la palabra que se tapa</small>${r.split(" ").map((p,pi)=>`<button type="button" data-r="${ri}" data-p="${pi}" aria-pressed="${CPI.marcas[ri].i===pi}">${esc(p)}</button>`).join("")}</div>`).join("");
+  $("cpi-marcar").innerHTML=rs.map((r,ri)=>`<div><small>Tocá la palabra que se tapa</small>${r.split(" ").map((p,pi)=>`<button type="button" data-r="${ri}" data-p="${pi}" aria-pressed="${CPI.marcas[ri].i===pi}">${esc(p)}</button>`).join("")}</div>`).join("");
   $("cpi-marcar").querySelectorAll("button").forEach(b=>b.onclick=()=>{ CPI.marcas[+b.dataset.r].i=+b.dataset.p; cpiMarcar() });
 }
 function cpiEditar(){
@@ -4085,16 +4086,17 @@ function cpiEditar(){
   $("cpi-google").href="https://www.google.com/search?q="+encodeURIComponent(`Los Piojos ${x.t} letra`);
   const f=CPI.frases.get(x.k);
   // de "Tan solo [palabra] de tu boca" vuelve a texto y marca
-  CPI.marcas=[]; $("cpi-texto").value=f?f.frases.map(t=>t.replace(/[\[\]]/g,"")).join("\n"):"";
-  if(f) CPI.marcas=f.frases.map(t=>{ const p=pioPartir(t), r=t.replace(/[\[\]]/g,"").replace(/\s+/g," ").trim(); return {r,i:p?(p.antes.trim()?p.antes.trim().split(/\s+/).length:0):-1} });
+  CPI.marcas=[]; $("cpi-texto").value=f?f.frases[0].replace(/[\[\]]/g,""):"";
+  if(f) CPI.marcas=f.frases.slice(0,1).map(t=>{ const p=pioPartir(t), r=t.replace(/[\[\]]/g,"").replace(/\s+/g," ").trim(); return {r,i:p?(p.antes.trim()?p.antes.trim().split(/\s+/).length:0):-1} });
   $("cpi-borrar").hidden=!f; cpiMarcar(); $("cpi-texto").focus();
 }
 $("cpi-texto").oninput=cpiMarcar;
+$("cpi-texto").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); $("cpi-guardar").click() } };
 $("cpi-buscar").oninput=cpiPintar; $("cpi-faltan").onchange=cpiPintar;
 $("cpi-guardar").onclick=()=>{
   const x=CPI.sel; if(!x) return; const ms=CPI.marcas.filter(m=>m.r);
   if(!ms.length){ $("cpi-texto").focus(); return }
-  if(ms.some(m=>m.i<0)){ alert("Tocá en cada frase la palabra que se tapa."); return }
+  if(ms.some(m=>m.i<0)){ alert("Tocá la palabra que se tapa."); return }
   const fs=ms.map(m=>m.r.split(" ").map((p,i)=>i===m.i?`[${p.replace(/^[¡¿"“(]+|[.,;:!?"”)]+$/g,"")}]${p.match(/[.,;:!?"”)]+$/)?.[0]||""}`:p).join(" "));
   CPI.frases.set(x.k,{tema:x.t,disco:x.disco,frases:fs}); cpiGuardarBorrador();
   CPI.sel=CPI.temas.find(y=>!CPI.frases.has(y.k))||null; cpiEditar(); cpiPintar();
