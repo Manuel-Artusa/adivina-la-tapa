@@ -5872,6 +5872,57 @@ async function placasPato(){
   out.push(c);
   return out;
 }
+// ===== Anuncio: juego nuevo Completá la letra (turno "piojos" de Publicar en redes). Sin frases reales de las canciones =====
+async function placasPiojos(){
+  const ds=DISCOS.filter(d=>d[0]==="Los Piojos"&&d[1]&&!/ritual/i.test(d[1])&&CACHE.disc[d[0]+"|"+d[1]]).sort((a,b)=>a[2]-b[2]);
+  const imgs=await Promise.all(ds.map(d=>contImg(CACHE.disc[d[0]+"|"+d[1]].url))), logo=await contImg("/logos/hub-los-piojos.png"), out=[];
+  const burbuja=(x,X,Y,W,H)=>{ x.fillStyle=CC.tinta; x.beginPath(); x.roundRect(X,Y,W,H,60); x.fill();
+    texto(x,"“",X+30,Y+40,{s:150,c:CC.rojo,w:120});
+    // renglones tapados (sin letra real) y el hueco
+    const fila=(yy,partes)=>{ let xx=X+60; partes.forEach(([w,hueco])=>{ if(hueco){ x.fillStyle=CC.papel; x.fillRect(xx,yy+34,w,8); } else { x.fillStyle="rgba(255,246,220,.85)"; x.beginPath(); x.roundRect(xx,yy,w,30,15); x.fill() } xx+=w+22 }) };
+    fila(Y+90,[[200],[150],[260]]); fila(Y+160,[[120],[210,true],[230]]); fila(Y+230,[[280],[170]]); };
+  // 1) portada
+  let [c,x]=lienzo(1080,1350);
+  etiqueta(x,"JUEGO NUEVO EN JUEGOS ROCK",60,40,28);
+  texto(x,"COMPLETÁ LA LETRA",60,215,{s:104,c:CC.rojo,w:960,min:56});
+  texto(x,"Temática: Los Piojos",60,285,{f:FB,peso:"800",s:46,w:960});
+  burbuja(x,90,400,900,340);
+  if(logo){ x.save(); x.beginPath(); x.arc(860,420,130,0,7); x.fillStyle="#fff"; x.fill(); x.lineWidth=8; x.strokeStyle=CC.tinta; x.stroke(); x.drawImage(logo,750,310,220,220); x.restore() }
+  const ops=[["???",true],["???",false],["???",false],["???",false]];
+  ops.forEach(([t],i)=>{ const X=110+(i%2)*440, Y=820+Math.floor(i/2)*120; x.fillStyle=CC.tinta; x.beginPath(); x.roundRect(X,Y+8,420,90,45); x.fill(); x.fillStyle=CC.crema; x.beginPath(); x.roundRect(X,Y,420,90,45); x.fill(); x.lineWidth=5; x.strokeStyle=CC.tinta; x.stroke(); texto(x,"¿cuál?",X+210,Y+60,{f:FB,peso:"800",s:38,al:"center",w:380}) });
+  texto(x,"¿Qué palabra falta? Elegí entre 4",540,1150,{f:FB,peso:"800",s:44,al:"center",w:940});
+  texto(x,"Deslizá para ver cómo se juega →",540,1305,{f:FM,peso:"500",s:28,al:"center",w:960});
+  out.push(c);
+  // 2) cómo se juega
+  [c,x]=lienzo(1080,1350);
+  etiqueta(x,"CÓMO SE JUEGA",80,60,30);
+  texto(x,"Completá la letra",80,215,{s:88,w:920});
+  [["📝","Aparece una frase de un tema de Los Piojos con una palabra tapada"],["👆","Elegí la palabra que falta entre 4 opciones"],["🔎","¿Erraste? Te damos el nombre del tema, y después la primera letra. A la tercera, perdiste"]].forEach(([e,t],i)=>{
+    const Y=300+i*265;
+    x.beginPath(); x.arc(160,Y+75,75,0,7); x.fillStyle=CC.tinta; x.fill(); x.beginPath(); x.arc(152,Y+67,75,0,7); x.fillStyle=CC.rojo; x.fill();
+    x.font="70px sans-serif"; x.textAlign="center"; x.fillText(e,152,Y+92);
+    texto(x,t,270,Y+50,{f:FB,peso:"800",s:44,w:730,max:3,lh:1.15,min:26}) });
+  x.fillStyle=CC.tinta; x.beginPath(); x.roundRect(140,1130,800,110,55); x.fill();
+  texto(x,"5 frases por día · con ranking",540,1204,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:740});
+  out.push(c);
+  // 3) cierre: las tapas de sus discos
+  [c,x]=lienzo(1080,1350,CC.tinta);
+  texto(x,"¿CUÁNTO SABÉS DE LOS PIOJOS?",540,170,{s:66,c:CC.papel,al:"center",w:980,max:1,min:36});
+  const col=4, S=200, gap=36, X0=(1080-(col*S+(col-1)*gap))/2;
+  ds.slice(0,8).forEach((d,i)=>{ const cx=X0+S/2+(i%col)*(S+gap), cy=380+Math.floor(i/col)*330; tapaGirada(x,imgs[i],cx,cy,S,[-4,3,-2,4][i%4]);
+    texto(x,d[1],cx,cy+150,{f:FB,peso:"800",s:26,c:CC.crema,al:"center",w:S+30,max:2,lh:1.1,min:16}) });
+  texto(x,"¿Cuántas sacás de 5? Contanos 👇",540,1100,{f:FB,peso:"800",s:44,c:CC.papel,al:"center",w:960});
+  marca(x,540,1180,56);
+  out.push(c);
+  return out;
+}
+function textoPiojos(){
+  return `🎸 ¡Juego nuevo en Juegos Rock: Completá la letra! Temática Los Piojos.\n\n`+
+    `📝 Te mostramos una frase de un tema de Los Piojos con una palabra tapada y elegís cuál falta entre 4 opciones.\n\n`+
+    `🔎 Si errás, te damos pistas: primero el nombre del tema y después la primera letra. A la tercera, perdiste.\n\n`+
+    `🏆 5 frases por día, iguales para todos, con ranking. ¿Cuántas sacás? Contalo en los comentarios 👇\n\n`+
+    `Jugá gratis en juegosrock.com.ar (link en la bio)\n\n#lospiojos #rocknacional #rockargentino #juegosrock`;
+}
 function textoPato(){
   return `🎸 ¡Juego nuevo en Juegos Rock: ¿De qué disco es? Temática Callejeros y Don Osvaldo!\n\n`+
     `🎧 Escuchás 10 segundos de un tema y elegís de qué disco es entre 4 tapas: Sed, Presión, Rocanroles sin destino, Señales, Disco Escultura, Casi Justicia Social I y II y Flor de Ceibo.\n\n`+
@@ -5894,6 +5945,11 @@ async function redesPlan(dia,turno,disco,extra={}){
   // A mano: el anuncio de los discos nuevos
   if(turno==="novedad"){
     await intentar("novedad",async()=>{ out.push({id:"novedad-discos",tipo:"carrusel",caption:textoNovedad(),imgs:await placasNovedad()}) });
+    return {pubs:out,errores:err};
+  }
+  // A mano: el anuncio del juego nuevo Completá la letra (Los Piojos)
+  if(turno==="piojos"){
+    await intentar("piojos",async()=>{ out.push({id:"juego-piojos",tipo:"carrusel",caption:textoPiojos(),imgs:await placasPiojos()}) });
     return {pubs:out,errores:err};
   }
   // A mano: el anuncio del juego nuevo ¿De qué disco es?
