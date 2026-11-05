@@ -1109,7 +1109,7 @@ body.principal #generos,body.principal #tema-gen{display:none!important} /* en l
     <div class="fra-edit" id="cpi-edit" hidden>
       <div><small id="cpi-sel-disco"></small><br><b id="cpi-sel-tema"></b></div>
       <div class="fila"><a class="btn sec" id="cpi-google" target="_blank" rel="noopener">Buscar letra ↗</a></div>
-      <input class="mar-buscar" id="cpi-texto" maxlength="160" placeholder="Pegá una oración del tema" autocomplete="off" spellcheck="false">
+      <input class="mar-buscar" id="cpi-texto" maxlength="400" placeholder="Pegá una oración del tema" autocomplete="off" spellcheck="false">
       <div class="cpi-marcar" id="cpi-marcar"></div>
       <label class="arm-tam"><span>Otras 3 palabras que suenen parecido o puedan ir en la canción (separadas por coma). Opcional</span><input id="cpi-opciones" maxlength="80" placeholder="infernal, animal, brutal" autocomplete="off" spellcheck="false"></label>
       <div class="fila"><button class="btn" id="cpi-guardar" type="button">Guardar</button><button class="btn sec" id="cpi-borrar" type="button">Borrar</button></div>
@@ -3981,7 +3981,7 @@ const pioListas=()=>PIO_DATOS||(PIO_DATOS=fetch("/frases-piojos.json?v="+Date.no
 function pioPartir(f){ const m=String(f).match(/^(.*?)\[([^\]]+)\](.*)$/); return m?{antes:m[1],palabra:m[2].trim(),despues:m[3]}:null }
 async function pioFrases(){
   const d=await pioListas(), out=[];
-  for(const x of d.temas||[]) for(const f of x.frases||[]){ const p=pioPartir(f); if(p&&p.palabra) out.push({tema:x.tema,disco:x.disco||"",opciones:(x.opciones||[]).filter(Boolean),...p,k:norm(x.tema)+"|"+norm(f)}) }
+  for(const x of d.temas||[]) if(!(x.desde&&hoyAR()<x.desde)) for(const f of x.frases||[]){ const p=pioPartir(f); if(p&&p.palabra) out.push({tema:x.tema,disco:x.disco||"",opciones:(x.opciones||[]).filter(Boolean),...p,k:norm(x.tema)+"|"+norm(f)}) }
   return out;
 }
 const pioNorm=t=>norm(t).replace(/\s+/g,"");
@@ -4077,8 +4077,8 @@ async function cpiIniciar(){
     const k=norm(x.tema), srv=CPI.frases.get(k);
     if(srv&&srv.frases[0]===x.frases[0]&&!(x.opciones&&x.opciones.length)) continue;
     const misma=srv&&pioPartir(srv.frases[0])&&pioPartir(x.frases[0])&&norm(pioPartir(srv.frases[0]).palabra)===norm(pioPartir(x.frases[0]).palabra);
-    const ops=x.opciones&&x.opciones.length?x.opciones:(misma&&srv.opciones?srv.opciones:null);
-    CPI.frases.set(k,{tema:x.tema,disco:x.disco||(srv&&srv.disco)||"",frases:x.frases,...(ops?{opciones:ops}:{})});
+    const ops=[...(x.opciones||[]),...(misma&&srv.opciones?srv.opciones:[])].filter((o,i,a)=>o&&a.findIndex(y=>norm(y)===norm(o))===i).slice(0,3);
+    CPI.frases.set(k,{tema:x.tema,disco:x.disco||(srv&&srv.disco)||"",frases:x.frases,...(ops.length?{opciones:ops}:{}),...(srv&&srv.desde?{desde:srv.desde}:{})});
   }
   cpiPintar();
 }

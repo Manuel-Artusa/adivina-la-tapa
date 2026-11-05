@@ -1,6 +1,19 @@
 {
  "temas": [
   {
+   "tema": "A Veces",
+   "disco": "Chac tu chac",
+   "frases": [
+    "A veces, yo quiero moverte A veces, yo quiero [romperte] A veces, yo me vuelvo loco A veces, ay~ si no te toco"
+   ],
+   "opciones": [
+    "tenerte",
+    "morderte",
+    "besarte"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "A Ver Cuando",
    "disco": "Azul",
    "frases": [
@@ -35,6 +48,32 @@
     "avenida",
     "terminal"
    ]
+  },
+  {
+   "tema": "Al Desierto",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "No me mires Con [desprecio] Si algun dia yo te digo Chau, chau, chau"
+   ],
+   "opciones": [
+    "tristeza",
+    "rencor",
+    "silencio"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Amor de Perros (feat. Mimi Maura)",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "La vi pasar, tan altanera la oí cantar, a su manera tenía esa luz, en la mirada sus piernas cortaban las [lenguas] del sol"
+   ],
+   "opciones": [
+    "luces",
+    "rayos",
+    "sombras"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Ando Ganas (Llora Llora)",
@@ -73,6 +112,19 @@
    ]
   },
   {
+   "tema": "Arco II",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Dim-dom-daun; dibi-dom-daun Después de la [locura] Todos cantando, todos bailando Bajo la frescura de un árbol sin hojas"
+   ],
+   "opciones": [
+    "tormenta",
+    "fiesta",
+    "batalla"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Ay Ay Ay",
    "disco": "Ay Ay Ay",
    "frases": [
@@ -97,6 +149,19 @@
    ]
   },
   {
+   "tema": "Basta de Penas",
+   "disco": "Civilización",
+   "frases": [
+    "Cual es tu pena caminás como la reina de la colmena cual es tu pena si cortaste con [sal] tibia tus cadenas"
+   ],
+   "opciones": [
+    "agua",
+    "leche",
+    "sangre"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Bicho de Ciudad",
    "disco": "Civilización",
    "frases": [
@@ -107,6 +172,32 @@
     "engancha",
     "enamora"
    ]
+  },
+  {
+   "tema": "Blues del Traje Gris",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Y bajo mi ventana dos muchachos con [guitarras] Que cantan, y zapan, y no puedo. Y yo no puedo, no puedo estar feliz, Ni con este dinero, ni con mi traje"
+   ],
+   "opciones": [
+    "tambores",
+    "botellas",
+    "banderas"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Buenos Días Palomar",
+   "disco": "Civilización",
+   "frases": [
+    "[Árboles] desiertos y una calle azul de invierno y el motor, de un avión algo es extraño,"
+   ],
+   "opciones": [
+    "Plazas",
+    "Casas",
+    "Campos"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Buenos Tiempos",
@@ -121,16 +212,42 @@
    ]
   },
   {
+   "tema": "Cancheros",
+   "disco": "Chac tu chac",
+   "frases": [
+    "No queremos pasarle La lengua a tu papel No queremos los [restos] De tu buena fe"
+   ],
+   "opciones": [
+    "sobras",
+    "frutos",
+    "ecos"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Canción de Cuna",
    "disco": "Máquina de Sangre",
    "frases": [
-    "Debe ser que me pediste un día una canción Que fuera del corazón, ahí te va Vamos a [correr] un rato que hay tiempo nomás Hay tiempo nomás, todo el tiempo"
+    "Debe ser que me pediste un día una canción Que fuera del corazón, ahí te va Vamos a [correr] un rato que hay tiempo nomás Hay tiempo nomás, todo el"
    ],
    "opciones": [
     "jugar",
     "bailar",
     "volar"
    ]
+  },
+  {
+   "tema": "Chac Tu Chac",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Si vos querés estar libre tomás cualquier elixir ella se hace [visible] ella se hace sentir"
+   ],
+   "opciones": [
+    "sensible",
+    "posible",
+    "terrible"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Civilización",
@@ -157,10 +274,36 @@
    ]
   },
   {
+   "tema": "Cruces y Flores",
+   "disco": "Civilización",
+   "frases": [
+    "Lejos del que hiera sanos sentimientos y mucho más lejos del [sometimiento]."
+   ],
+   "opciones": [
+    "sufrimiento",
+    "aburrimiento",
+    "resentimiento"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Cruel",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Nunca te ví en ningún [aviso] nunca te ví en la televisión nunca te ví en ningún diario nunca nunca nunca escuché tu voz..."
+   ],
+   "opciones": [
+    "afiche",
+    "video",
+    "programa"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Desde Lejos No Se Ve",
    "disco": "Azul",
    "frases": [
-    "La gente, la gente, la gente Camina muy [demente], caliente, la gente Araña que no siente, caliente la tumba Parece que este baile es el que se baila acá"
+    "La gente, la gente, la gente Camina muy [demente], caliente, la gente Araña que no siente, caliente la tumba Parece que este baile es el que se baila"
    ],
    "opciones": [
     "valiente",
@@ -229,6 +372,45 @@
    ]
   },
   {
+   "tema": "El Rey del Blues",
+   "disco": "Azul",
+   "frases": [
+    "La noche venía caliente, estaba lleno el Luna Park Caminando pude verte y ya no pude [escuchar] Me miraste como esclava, yo te quise liberar Un disparo en tus"
+   ],
+   "opciones": [
+    "respirar",
+    "olvidar",
+    "cantar"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Entrando En Tu Ciudad",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "En este bosque donde los arboles son [viejos] Nadie te va a dejar mostrar tu fuego Tomando aire para poder expandirte Vas a cruzar un mar que sólo quiere"
+   ],
+   "opciones": [
+    "negros",
+    "secos",
+    "altos"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Es Sentir",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Es sentir, luces que no caen Es sentir, salir cómo se nace El infierno está rajando tu piel, puerta sin [llave] Es sentir, que es hora de agitarte"
+   ],
+   "opciones": [
+    "salida",
+    "nombre",
+    "dueño"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Esquina Libertad",
    "disco": "3er Arco",
    "frases": [
@@ -253,6 +435,45 @@
    ]
   },
   {
+   "tema": "Fijate",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Todo lo que me queda Tiene que ver con [vos] Todo lo que palpita Llega a mi corazón"
+   ],
+   "opciones": [
+    "wos",
+    "nos",
+    "Dios"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Finale",
+   "disco": "Azul",
+   "frases": [
+    "Calles, voy a [cruzar] en silencio nena escucho hay un lugar dejame que llegue ahí nada más vaciá tu vaso antes del fin."
+   ],
+   "opciones": [
+    "caminar",
+    "bailar",
+    "volver"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Fumigator",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Me das el vento y Yo te hago tan mal Yo te adoro, [cucaracha] Cuando bailas mi funk"
+   ],
+   "opciones": [
+    "muchacha",
+    "borracha",
+    "princesa"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Genius",
    "disco": "Azul",
    "frases": [
@@ -263,6 +484,32 @@
     "pirata",
     "usurero"
    ]
+  },
+  {
+   "tema": "Globalización",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Ahí va Scottie Pippen en medio de la [Puna] no te hagai problema darlin’ slippin’ en la cuna."
+   ],
+   "opciones": [
+    "pampa",
+    "ruta",
+    "lluvia"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Go Negro Go",
+   "disco": "Azul",
+   "frases": [
+    "La [mama] dijo: \"Campeón, Nunca confíes en nadie.\" Oh, negro go Go, negro go"
+   ],
+   "opciones": [
+    "vieja",
+    "nena",
+    "tía"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Gris",
@@ -277,6 +524,32 @@
    ]
   },
   {
+   "tema": "Guadalupe",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Guadalupe tiene sed, y no tiene ni un cospel, [Saborea] un zumbido constante, Ella quiere un biberón, grande como una canción, Que comience ya con el final"
+   ],
+   "opciones": [
+    "Escucha",
+    "Imagina",
+    "Respira"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Hoy es Hoy",
+   "disco": "Civilización",
+   "frases": [
+    "Hoy es hoy, nena es hoy, como si... Tu arma es tu [mente], y tu voluntad"
+   ],
+   "opciones": [
+    "fuerza",
+    "cuerpo",
+    "gente"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Intro Marado",
    "disco": "3er Arco",
    "frases": [
@@ -287,6 +560,110 @@
     "perdona",
     "sospecha"
    ]
+  },
+  {
+   "tema": "La Luna y la Cabra",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "’’Qué es lo que pasa con tu [soledad]?’’ dijo la cabra al instante ’’siempre cambiante pero siempre igual solita, hermosa y distante.’’"
+   ],
+   "opciones": [
+    "libertad",
+    "verdad",
+    "ciudad"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Labios de Seda",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "No puedo evitarlo Tengo que encontrarlos Nena te salgo a buscar Tus labios de seda en lo bajo se me [enredan] Y empañan los vidrios de mi corazón"
+   ],
+   "opciones": [
+    "pierden",
+    "escapan",
+    "pegan"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Langostas",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Miles de langostas Vuelan hacia acá Las nubes más [negras] De la tempestad."
+   ],
+   "opciones": [
+    "grises",
+    "bajas",
+    "densas"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Llevátelo",
+   "disco": "Chac tu chac",
+   "frases": [
+    "El quería venir, mi última función nunca me había visto, el era mi amigo era mi [profesor]."
+   ],
+   "opciones": [
+    "hermano",
+    "compañero",
+    "maestro"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Los Mocosos",
+   "disco": "Chac tu chac",
+   "frases": [
+    "En la tierra el ruido Y la prostitución Y las calles [mugrientas] Con mercados hambrientos"
+   ],
+   "opciones": [
+    "sangrientas",
+    "violentas",
+    "desiertas"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Luz de Marfil",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "No va a cambiar aunque el bobo se lo pida luz de marfil ya se [trepan] las hormigas."
+   ],
+   "opciones": [
+    "suben",
+    "comen",
+    "llevan"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Manise",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Bajo el puente helado del [olvido] Había queda'o varado triste mi corazón Lastimado de amores sin sentido Que no cantaban juntos ni un verso de"
+   ],
+   "opciones": [
+    "silencio",
+    "invierno",
+    "destino"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Manjar",
+   "disco": "Civilización",
+   "frases": [
+    "Esta cuerda en los tobillos y en las muñecas, ves vas a [relajarte] para que yo pueda, hacer"
+   ],
+   "opciones": [
+    "entregarte",
+    "calmarte",
+    "soltarte"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Marado",
@@ -301,6 +678,84 @@
    ]
   },
   {
+   "tema": "María y José",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Las expensas no pagó el carnicero no fió aquel cheque rebotó desde el [cable] se colgó."
+   ],
+   "opciones": [
+    "techo",
+    "puente",
+    "árbol"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Media Caña",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Guardando el tiempo en cajas viejas de tinta y [humo] torpes madejas vas devolviendo la vida en gotas"
+   ],
+   "opciones": [
+    "fuego",
+    "sangre",
+    "papel"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Merecido",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Tengo un sucio [fierro] que no puede esperar, tengo una locura que no puedo parar, pátina y perfume en la bocha tendré, pa’ cuando aparezca en Crónica T.V."
+   ],
+   "opciones": [
+    "trapo",
+    "sueño",
+    "perro"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Mi Babe",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Dulce [juego] en la habitación de pie en su sombra se deja llevar ella es mi babe con cuerda para andar"
+   ],
+   "opciones": [
+    "sueño",
+    "beso",
+    "baile"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Morella",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Mírame bien, dijo al [partir] no te sorprenda, volverme a ver mírame bien, puedo morir y una y mil veces renacer"
+   ],
+   "opciones": [
+    "llorar",
+    "volver",
+    "reír"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Motumbo",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Rompe como el [tiempo] a los hombres Rompe que esto ya no va más Rompe como el sol a la noche Rompe que no puede aguantar"
+   ],
+   "opciones": [
+    "viento",
+    "fuego",
+    "miedo"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Muévelo",
    "disco": "3er Arco",
    "frases": [
@@ -311,6 +766,19 @@
     "errante",
     "distante"
    ]
+  },
+  {
+   "tema": "Murguita",
+   "disco": "Azul",
+   "frases": [
+    "Un fulbito y cómo va [Culeados] de Córdoba No estoy mal, estoy bien Porque voy para Neuquén"
+   ],
+   "opciones": [
+    "Cuarteteros",
+    "Changos",
+    "Pibes"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Muy Despacito",
@@ -325,6 +793,32 @@
    ]
   },
   {
+   "tema": "No Parés",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Ponen carita de buenos De perfecto [salvador] Pero no van a enseñarte Lo que enseña es el amor"
+   ],
+   "opciones": [
+    "doctor",
+    "señor",
+    "ganador"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Olvídate",
+   "disco": "Azul",
+   "frases": [
+    "Olvidaste la pluma negra y roja Esa que tiene un anzuelo sin usar Olvidaste la serpiente silenciosa Esa que quiso [morderme] y la tuve que encerrar."
+   ],
+   "opciones": [
+    "besarme",
+    "tocarme",
+    "llevarme"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Pacífico",
    "disco": "Civilización",
    "frases": [
@@ -335,6 +829,19 @@
     "tranquilo",
     "perdido"
    ]
+  },
+  {
+   "tema": "Pega Pega",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Vamos que esta noche quiero verte bailar Dos sombras que bailan, parecen [hamacarse] Dos sombras que mienten, que se sienten esfumar"
+   ],
+   "opciones": [
+    "abrazarse",
+    "alejarse",
+    "buscarse"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Pistolas",
@@ -349,6 +856,19 @@
    ]
   },
   {
+   "tema": "Pollo Viejo",
+   "disco": "Civilización",
+   "frases": [
+    "Cada día más parecido A una vieja te ponés Te falta nomás la [escoba] Y levantarte a las seis"
+   ],
+   "opciones": [
+    "bata",
+    "radio",
+    "novela"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Que Decís",
    "disco": "3er Arco",
    "frases": [
@@ -359,6 +879,32 @@
     "Miran",
     "Arden"
    ]
+  },
+  {
+   "tema": "Quemado",
+   "disco": "Azul",
+   "frases": [
+    "Quién es el que gana Quién es el que pierde En que lugar estoy yo Si ganar no me [convence]."
+   ],
+   "opciones": [
+    "conforma",
+    "alcanza",
+    "sirve"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Reggae Rojo y Negro",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Me lo dijo Macho cuando hablé con él nos están bloqueando con la [información] y mucho cuidado deberás tener para no ser parte de esta gran traición"
+   ],
+   "opciones": [
+    "televisión",
+    "religión",
+    "corrupción"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Ruleta",
@@ -373,6 +919,32 @@
    ]
   },
   {
+   "tema": "Salitral",
+   "disco": "Civilización",
+   "frases": [
+    "Como si el juego fuera caminar En la cornisa sin ver E inevitable fuera jugar Ruleta rusa, en todo [tiempo] y lugar"
+   ],
+   "opciones": [
+    "momento",
+    "sentido",
+    "rincón"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "San Jauretche",
+   "disco": "Verde Paisaje del Infierno",
+   "frases": [
+    "Yo le pido a San Jauretche, que [venga] la buena leche Yo le pido a San Jauretche, que venga la buena leche"
+   ],
+   "opciones": [
+    "tenga",
+    "llegue",
+    "vuelva"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Shup Shup",
    "disco": "3er Arco",
    "frases": [
@@ -383,6 +955,58 @@
     "rock",
     "tango"
    ]
+  },
+  {
+   "tema": "Siempre Bajando",
+   "disco": "Chac tu chac",
+   "frases": [
+    "Cuatro meses cuatro viajes Con los chicos de [Neptuno] Por mas que te haya dejado mi amor Mi amor sigue siendo uno"
+   ],
+   "opciones": [
+    "Saturno",
+    "Marte",
+    "Plutón"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Solo y En Paz",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Mira que bien, se hizo de noche Humo y ardor, ningún reproche En el [cristal] dejas tu hielo Te gusta andar por mi mejor lugar"
+   ],
+   "opciones": [
+    "vaso",
+    "espejo",
+    "vidrio"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Sucio Can",
+   "disco": "Azul",
+   "frases": [
+    "Me levanté esta mañana y fui hasta el mar Lavé mi cara con la espuma y con la [sal] El ejercicio de aquel vicio matinal Y luego trepar, a mirar el"
+   ],
+   "opciones": [
+    "arena",
+    "piedra",
+    "luna"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Sudestada",
+   "disco": "Máquina de Sangre",
+   "frases": [
+    "Sudestada todo se [movió] tus colores renuevan la suerte hoy amanecer hoy es renacer sudestada desolada ausente"
+   ],
+   "opciones": [
+    "corrio",
+    "cambió",
+    "perdió"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Tan Solo",
@@ -400,7 +1024,7 @@
    "tema": "Taxi Boy",
    "disco": "3er Arco",
    "frases": [
-    "Negro Blues gran cartel, taxi boy para donde estés Podes ver, [trabajar] no es tan fácil en este lugar Y las chicas en el barrio me gritaban como canarios"
+    "Negro Blues gran cartel, taxi boy para donde estés Podes ver, [trabajar] no es tan fácil en este lugar Y las chicas en el barrio me gritaban como"
    ],
    "opciones": [
     "escapar",
@@ -412,7 +1036,7 @@
    "tema": "Te Diría",
    "disco": "Ay Ay Ay",
    "frases": [
-    "Si dijéramos que el sol cae sin [ganas] En el cielo cuando el cielo está escapando Que la soledad es más sola en la cama Y la luna es una lágrima sin llanto"
+    "Si dijéramos que el sol cae sin [ganas] En el cielo cuando el cielo está escapando Que la soledad es más sola en la cama Y la luna es una lágrima sin"
    ],
    "opciones": [
     "prisa",
@@ -433,10 +1057,62 @@
    ]
   },
   {
+   "tema": "Un Buen Día",
+   "disco": "Civilización",
+   "frases": [
+    "Una manzana podrida en el [limonero] una canción para saber lo que yo tengo un espejismo en el espejo del techo una salida buena es pasear al perro"
+   ],
+   "opciones": [
+    "manzanar",
+    "duraznero",
+    "naranjo"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Unbekannt",
+   "disco": "Civilización",
+   "frases": [
+    "Nena tus ojos azules eléctricos son Las [máquinas] de nuestro futuro Aquí ya son Dios"
+   ],
+   "opciones": [
+    "llaves",
+    "puertas",
+    "ventanas"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Uoh Pa Pa Pa",
+   "disco": "Azul",
+   "frases": [
+    "Son como tres, son como seis Hablan pavadas nomás Son como diez, son como [cien] Los que ya vimos pasar"
+   ],
+   "opciones": [
+    "mil",
+    "veinte",
+    "treinta"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
+   "tema": "Vals Inicial",
+   "disco": "Azul",
+   "frases": [
+    "Un puerto desierto La boca del día Voy sin [pensamiento] Y un perro suicida"
+   ],
+   "opciones": [
+    "equipaje",
+    "destino",
+    "sentimiento"
+   ],
+   "desde": "2026-11-06"
+  },
+  {
    "tema": "Verano del 92",
    "disco": "3er Arco",
    "frases": [
-    "Juan [Pedro] Fasola, nuestro gran amigo Qué ganas de verte tenemos todos acá Hace tanto tiempo que no te sentimos Contando aquel cuento de la buena pipa, ahí va"
+    "Juan [Pedro] Fasola, nuestro gran amigo Qué ganas de verte tenemos todos acá Hace tanto tiempo que no te sentimos Contando aquel cuento de la buena pipa, ahí"
    ],
    "opciones": [
     "Pablo",
@@ -455,6 +1131,19 @@
     "cansan",
     "animan"
    ]
+  },
+  {
+   "tema": "Ximenita",
+   "disco": "Ay Ay Ay",
+   "frases": [
+    "Pero cuando la atrapo Antes que cuente tres Ella es una [seda] Y se pega del revés"
+   ],
+   "opciones": [
+    "piedra",
+    "pluma",
+    "sombra"
+   ],
+   "desde": "2026-11-06"
   },
   {
    "tema": "Y Quemás",
