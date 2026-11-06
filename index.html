@@ -1681,12 +1681,18 @@ const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:
   "Los Twist":{pais:"AR",tipo:"banda",inicio:1982,desde:"1982-04-30",sigue:false,hasta:"2012-04-30"}}; // de Pipo Cipolatti, 1982-2012
 // Correcciones de datos de banda para la grilla (las usa cacheListo desde el 7/11)
 const BANDAS_FIX={
-  // solistas: el año en que arrancó su carrera solista (MusicBrainz trae el de nacimiento)
-  "Andrés Calamaro":{datos:{inicio:1984}}, "Charly García":{datos:{inicio:1982}}, "Fito Páez":{datos:{inicio:1984}},
-  "Gustavo Cerati":{datos:{inicio:1992}}, "León Gieco":{datos:{inicio:1973},agregar:[["De Ushuaia a La Quiaca",1985]]},
-  "Luis Alberto Spinetta":{datos:{inicio:1971},quitar:[["Los Amigo",2015],["Ya no mires atrás",2020]],agregar:[["Artaud",1973]]},
-  "Pappo":{datos:{inicio:1990},quitar:[["Blues acústico en el living",2025]]}, "Pedro Aznar":{datos:{inicio:1982}},
-  "Skay Beilinson":{datos:{inicio:2002}}, "Marilina Bertoldi":{datos:{inicio:2012}},
+  // solistas: el año en que arrancó su carrera, contando desde su primera banda (MusicBrainz trae el de nacimiento)
+  "Andrés Calamaro":{datos:{inicio:1979}},  // Raíces
+  "Charly García":{datos:{inicio:1969}},    // Sui Generis
+  "Fito Páez":{datos:{inicio:1976}},        // Staff, en Rosario
+  "Gustavo Cerati":{datos:{inicio:1982}},   // Soda Stereo
+  "León Gieco":{datos:{inicio:1969},agregar:[["De Ushuaia a La Quiaca",1985]]},
+  "Luis Alberto Spinetta":{datos:{inicio:1967},quitar:[["Los Amigo",2015],["Ya no mires atrás",2020]],agregar:[["Artaud",1973]]}, // Almendra
+  "Pappo":{datos:{inicio:1967},quitar:[["Blues acústico en el living",2025]]}, // Los Abuelos de la Nada
+  "Pedro Aznar":{datos:{inicio:1977}},      // Madre Atómica
+  "Skay Beilinson":{datos:{inicio:1976}},   // Patricio Rey
+  "Indio Solari":{datos:{inicio:1976,desde:"1976"}}, // Patricio Rey
+  "Marilina Bertoldi":{datos:{inicio:2008}}, // Connor Questa
   // reediciones, compilados, discos póstumos y simples que no son discos de estudio
   "Los Abuelos de la Nada":{quitar:[["Diana Divaga",1967],["Y amigos",2021]]},
   "Serú Girán":{quitar:[["La Grasa de las Capitales: Edición 40º Aniversario (Remasterizado 2019)",2019]]},
@@ -3384,6 +3390,23 @@ const griPrimero=b=>{ const ys=griAnios(b); return ys.length?Math.min(...ys):nul
 const griTitulos=b=>[...new Set([...b.ds.map(d=>d[1]),...(b.d.discografia||[]).map(x=>x[0])])];
 const griDisco=b=>(b.d.discografia&&b.d.discografia.length)?b.d.discografia.length:null;
 const SIN_ART=t=>norm(t).replace(/^(los|las|la|el|the) /,"");
+const griUltimo=b=>{ const ys=griAnios(b); return ys.length?Math.max(...ys):null };
+const griHueco=b=>{ const ys=griAnios(b).sort((x,y)=>x-y); let m=0; for(let i=1;i<ys.length;i++) m=Math.max(m,ys[i]-ys[i-1]); return m };
+const griFin=b=>{ const y=parseInt(b.d.hasta); return b.d.sigue||!y?null:y };
+// condiciones que se suman desde el 7/11
+const GRI_NUEVAS=[
+  {f:"inicio",t:"Arrancó en los 2010",ok:b=>b.d.inicio>=2010&&b.d.inicio<2020},
+  {f:"ultimo",t:"Su último disco es de los 2020",ok:b=>griUltimo(b)>=2020},
+  {f:"ultimo",t:"Su último disco es anterior a 2000",ok:b=>griUltimo(b)!=null&&griUltimo(b)<2000},
+  {f:"ultimo",t:"Su último disco es de los 2000 o los 2010",ok:b=>griUltimo(b)>=2000&&griUltimo(b)<2020},
+  {f:"hueco",t:"Pasó 10 años o más sin sacar un disco",ok:b=>griHueco(b)>=10},
+  {f:"doble",t:"Sacó dos discos el mismo año",ok:b=>{ const ys=b.d.discografia&&b.d.discografia.length?b.d.discografia.map(x=>x[1]):b.ds.map(d=>d[2]); return new Set(ys).size<ys.length }},
+  {f:"sigue",t:"Dejó de tocar antes del 2000",ok:b=>griFin(b)!=null&&griFin(b)<2000},
+  {f:"sigue",t:"Dejó de tocar en 2000 o después",ok:b=>griFin(b)>=2000},
+  {f:"titulo",t:"Tiene un disco cuyo título empieza con «El» o «La»",ok:b=>griTitulos(b).some(t=>/^(el|la) /.test(norm(t)))},
+  {f:"titulo",t:"Tiene un disco con «amor» o «corazón» en el título",ok:b=>griTitulos(b).some(t=>/\b(amor|amores|corazon|corazones)\b/.test(norm(t)))},
+  {f:"nombre",t:"Nombre termina con «s»",ok:b=>/s$/.test(norm(b.a))},
+];
 // Condiciones, agrupadas por familia (una grilla nunca cruza dos de la misma familia)
 const GRI_CRIT=[
   {f:"pais",t:"De Argentina",ok:b=>b.d.pais==="AR"},
@@ -3435,6 +3458,7 @@ const GRI_CRIT=[
   {f:"titulo",t:"Tiene un disco con un número en el título",ok:b=>griTitulos(b).some(t=>/\d|\b(uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|cien|mil|one|two|three|four|five)\b/.test(norm(t)))},
   {f:"juego",t:"Tiene 5 o más discos en Juegos Rock",ok:b=>b.ds.length>=5},
   {f:"homo",t:"Tiene un disco con su propio nombre",ok:b=>{ const k=SIN_ART(b.a); return (b.d.discografia||[]).some(x=>SIN_ART(x[0])===k)||b.ds.some(d=>SIN_ART(d[1])===k) }},
+  ...(hoyAR()>="2026-11-07"?GRI_NUEVAS:[]),
 ];
 const GRI_MIN=2; // respuestas posibles mínimas por casillero
 function griArmar(rng){
