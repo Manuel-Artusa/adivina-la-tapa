@@ -1679,6 +1679,28 @@ const BANDAS_MANUAL={"Indio Solari":{pais:"AR",tipo:"solista",inicio:2004,desde:
   "Peces Raros":{pais:"AR",tipo:"banda",inicio:2014,desde:"2014",sigue:true},          // La Plata, 2014
   "Farolitos":{pais:"AR",tipo:"banda",inicio:2001,desde:"2001",sigue:true},            // Rosario (barrio La República), 2001
   "Los Twist":{pais:"AR",tipo:"banda",inicio:1982,desde:"1982-04-30",sigue:false,hasta:"2012-04-30"}}; // de Pipo Cipolatti, 1982-2012
+// Correcciones de datos de banda para la grilla (las usa cacheListo desde el 7/11)
+const BANDAS_FIX={
+  // solistas: el año en que arrancó su carrera solista (MusicBrainz trae el de nacimiento)
+  "Andrés Calamaro":{datos:{inicio:1984}}, "Charly García":{datos:{inicio:1982}}, "Fito Páez":{datos:{inicio:1984}},
+  "Gustavo Cerati":{datos:{inicio:1992}}, "León Gieco":{datos:{inicio:1973},agregar:[["De Ushuaia a La Quiaca",1985]]},
+  "Luis Alberto Spinetta":{datos:{inicio:1971},quitar:[["Los Amigo",2015],["Ya no mires atrás",2020]],agregar:[["Artaud",1973]]},
+  "Pappo":{datos:{inicio:1990},quitar:[["Blues acústico en el living",2025]]}, "Pedro Aznar":{datos:{inicio:1982}},
+  "Skay Beilinson":{datos:{inicio:2002}}, "Marilina Bertoldi":{datos:{inicio:2012}},
+  // reediciones, compilados, discos póstumos y simples que no son discos de estudio
+  "Los Abuelos de la Nada":{quitar:[["Diana Divaga",1967],["Y amigos",2021]]},
+  "Serú Girán":{quitar:[["La Grasa de las Capitales: Edición 40º Aniversario (Remasterizado 2019)",2019]]},
+  "Vox Dei":{quitar:[["La Cinta Perdida",2025]]},
+  "Bersuit Vergarabat":{quitar:[["La argentinidad al palo (Lo que se es)",2004],["La argentinidad al palo (Se es)",2004],["Libertinaje 25 Años",2023]]},
+  "Patricio Rey y sus Redonditos de Ricota":{quitar:[["Lobo suelto - Cordero atado",1993]],agregar:[["Lobo suelto",1993],["Cordero atado",1993]]},
+  // años y nombres mal cargados
+  "Spinetta Jade":{anio:{"Madre en años luz":1984}},
+  "Los Piojos":{anio:{"Chac tu chac":1992},nombre:{"Civilizaciòn":"Civilización"}},
+  // discos que faltaban
+  "Los Gardelitos":{agregar:[["La calle es un espejo",2002],["Sortilegio de arrabal",2019]]},
+  "Los Ratones Paranoicos":{agregar:[["Ratones Paranoicos",1986],["Los chicos quieren rock",1988],["Furtivos",1989],["Tómalo o déjalo",1990],["Fieras lunáticas",1991],["Hecho en Memphis",1993],["Planeta paranoico",1996],["Electroshock",1999],["Los chicos quieren más",2001],["Girando",2003]]},
+  // Riff terminó con la muerte de Pappo (25/2/2005)
+  "Riff":{datos:{sigue:false,hasta:"2005-02-25"}}};
 const TODO_ROCK=ESQUEMA_31&&new URLSearchParams(location.search).has("todo");
 const PRINCIPAL_FUERA=["Los Pericos","Sig Ragga","Bandalos Chinos","Conociendo Rusia","A.N.I.M.A.L.","Arbolito","Arco Iris","Cadena Perpetua","Carajo",
   "Celeste Carballo","Cielo Razzo","Color Humano","Fabiana Cantilo","Farolitos","Invisible","Jauría","Juana la Loca","Peligrosos Gorriones","Salta La Banca","Vetamadre"];
@@ -1761,6 +1783,16 @@ const cacheListo=(async()=>{
     if(hoyAR()<"2026-11-03") ["Luis Alberto Spinetta|Téster de Violencia","Pescado Rabioso|Pescado 2","Los Piojos|Chactuchac","Las Pelotas|Todo por un Polvo","Los Twist|El Cinco en la Espalda","2 Minutos|Antorchas","Andrés Calamaro|Grabaciones encontradas, volumen uno","Andrés Calamaro|Grabaciones encontradas, volumen dos","El Cuarteto de Nos|Alberto Wolf / El Cuarteto de Nos","Fabiana Cantilo|Detectives","Intoxicados|No es sólo rock ’n’ roll","León Gieco|Infinitos del alma","León Gieco|Un León D-Mente","León Gieco|En nuestra casa","Los Auténticos Decadentes|ADN (Capítulo D)","Los Enanitos Verdes|Contra reloj","Los Pericos|Desde cero","Luis Alberto Spinetta|La la la","Luis Alberto Spinetta|Los Amigo","Manal|El león","Pappo's Blues|Volumen 2","Pappo's Blues|Volumen 4","Pappo's Blues|Triángulo","Pappo's Blues|Volumen 7","Pedro Aznar|Pedro Aznar","Pedro Aznar|Tango 4","Peligrosos Gorriones|Peligrosos Gorriones","Rata Blanca|VII","Riff|VII","Serú Girán|Seru '92","Sui Generis|Sinfonías para adolescentes","Árbol|Chapusongs"].forEach(k=>{ const v=CACHE.disc[k]; if(v){ delete CACHE.disc[k]; porId.delete(v.id) } });
     // datos de banda que faltan o están mal en MusicBrainz, cargados a mano (desde el 31/10, así no cambian los desafíos de antes)
     if(CACHE.bandas&&ESQUEMA_31) for(const [b,x] of Object.entries(BANDAS_MANUAL)) CACHE.bandas[b]=Object.assign({},CACHE.bandas[b]||{},x);
+    // revisión de la grilla (desde el 7/11, así no cambia el desafío del 6/11): solistas con el año en que arrancaron solos (no el de nacimiento),
+    // discografías sin reediciones, compilados ni discos póstumos, y discos que faltaban
+    if(CACHE.bandas&&hoyAR()>="2026-11-07") for(const [b,x] of Object.entries(BANDAS_FIX)){ const d=CACHE.bandas[b]; if(!d) continue;
+      if(x.datos) Object.assign(d,x.datos);
+      let dg=(d.discografia||[]).slice();
+      if(x.quitar) dg=dg.filter(t=>!x.quitar.some(([n,y])=>t[0]===n&&(y==null||t[1]===y)));
+      if(x.anio) dg=dg.map(t=>x.anio[t[0]]!=null?[t[0],x.anio[t[0]],...t.slice(2)]:t);
+      if(x.nombre) dg=dg.map(t=>x.nombre[t[0]]?[x.nombre[t[0]],...t.slice(1)]:t);
+      if(x.agregar) dg.push(...x.agregar);
+      d.discografia=dg.sort((a,b)=>a[1]-b[1]) }
   }catch(e){ CACHE=null }
 })();
 const esperarCache=()=>Promise.race([cacheListo,new Promise(r=>setTimeout(r,4000))]);
