@@ -3391,7 +3391,6 @@ const griTitulos=b=>[...new Set([...b.ds.map(d=>d[1]),...(b.d.discografia||[]).m
 const griDisco=b=>(b.d.discografia&&b.d.discografia.length)?b.d.discografia.length:null;
 const SIN_ART=t=>norm(t).replace(/^(los|las|la|el|the) /,"");
 const griUltimo=b=>{ const ys=griAnios(b); return ys.length?Math.max(...ys):null };
-const griHueco=b=>{ const ys=griAnios(b).sort((x,y)=>x-y); let m=0; for(let i=1;i<ys.length;i++) m=Math.max(m,ys[i]-ys[i-1]); return m };
 const griFin=b=>{ const y=parseInt(b.d.hasta); return b.d.sigue||!y?null:y };
 // condiciones que se suman desde el 7/11
 const GRI_NUEVAS=[
@@ -3399,8 +3398,6 @@ const GRI_NUEVAS=[
   {f:"ultimo",t:"Su último disco es de los 2020",ok:b=>griUltimo(b)>=2020},
   {f:"ultimo",t:"Su último disco es anterior a 2000",ok:b=>griUltimo(b)!=null&&griUltimo(b)<2000},
   {f:"ultimo",t:"Su último disco es de los 2000 o los 2010",ok:b=>griUltimo(b)>=2000&&griUltimo(b)<2020},
-  {f:"hueco",t:"Pasó 10 años o más sin sacar un disco",ok:b=>griHueco(b)>=10},
-  {f:"doble",t:"Sacó dos discos el mismo año",ok:b=>{ const ys=b.d.discografia&&b.d.discografia.length?b.d.discografia.map(x=>x[1]):b.ds.map(d=>d[2]); return new Set(ys).size<ys.length }},
   {f:"sigue",t:"Dejó de tocar antes del 2000",ok:b=>griFin(b)!=null&&griFin(b)<2000},
   {f:"sigue",t:"Dejó de tocar en 2000 o después",ok:b=>griFin(b)>=2000},
   {f:"titulo",t:"Tiene un disco cuyo título empieza con «El» o «La»",ok:b=>griTitulos(b).some(t=>/^(el|la) /.test(norm(t)))},
