@@ -1,17 +1,17 @@
 {
   "inicio": {
     "ruta": "/",
-    "titulo": "Juegos Rock · Juegos de rock nacional y desafíos diarios",
-    "descripcion": "Juegos de rock nacional gratis: adiviná la tapa del disco, el tema en 1 segundo, la banda del día, ordená discografías y más. Desafíos nuevos cada día y ranking.",
+    "titulo": "Juegos de rock nacional: trivia, tapas y temas | Juegos Rock",
+    "descripcion": "Juegos de rock nacional gratis: adiviná la tapa del disco, la canción en 1 segundo, la banda del día, la grilla rockera y más. Desafíos nuevos cada día.",
     "h": "Juegos de rock nacional, todos los días",
     "texto": [
-      "Juegos Rock es una colección de juegos gratis para fans del rock nacional y el rock en general. Cada día hay desafíos nuevos, iguales para todos: adivinar un disco por su tapa pixelada, reconocer una canción con apenas un segundo de audio, adivinar la banda del día con pistas, ordenar la discografía de una banda, armar grupos de temas que pertenecen al mismo disco y más.",
-      "Aparecen bandas como Soda Stereo, Patricio Rey y sus Redonditos de Ricota, La Renga, Divididos, Los Piojos, Charly García, Spinetta, Gustavo Cerati, Sumo, Virus, Los Fabulosos Cadillacs, La Vela Puerca, No Te Va Gustar, El Plan de la Mariposa, Sueño de Pescado y muchas más, además de clásicos internacionales."
+      "Juegos Rock es una colección de juegos gratis para fans del rock nacional y el rock en general. Cada día hay desafíos nuevos, iguales para todos: adivinar un disco por su tapa pixelada, reconocer una canción con apenas un segundo de audio, adivinar la banda del día con pistas, completar la grilla rockera, el bingo de tapas, el ahorcado con nombres de temas, ordenar discografías, completar letras y más.",
+      "Aparecen bandas como Soda Stereo, Patricio Rey y sus Redonditos de Ricota, La Renga, Divididos, Los Piojos, Callejeros, Charly García, Spinetta, Gustavo Cerati, Sumo, Virus, Los Fabulosos Cadillacs, La Vela Puerca, No Te Va Gustar, El Plan de la Mariposa, Sueño de Pescado y muchas más, además de clásicos internacionales."
     ],
     "faq": [
       [
         "¿Juegos Rock es gratis?",
-        "Sí. Todos los juegos son gratis y no hace falta registrarse: solo elegís un nombre para aparecer en el ranking."
+        "Sí. Todos los juegos son gratis y no hace falta registrarse: solo elegís un nombre para aparecer en el ranking. Si querés, podés entrar con Google para guardar tu progreso en todos tus dispositivos."
       ],
       [
         "¿Cada cuánto cambian los desafíos?",
@@ -33,8 +33,8 @@
   },
   "diario": {
     "ruta": "/tapa-del-dia/",
-    "titulo": "Tapa del día · Adiviná el disco por su tapa | Juegos Rock",
-    "descripcion": "Desafío diario de rock: 10 tapas de discos pixeladas, las mismas para todos. Adiviná cada disco con la menor cantidad de errores y compartí tu resultado.",
+    "titulo": "Tapa del día: adiviná el disco por su tapa | Juegos Rock",
+    "descripcion": "El Wordle del rock: 10 tapas de discos pixeladas, las mismas para todos. Adiviná cada disco con la menor cantidad de errores y compartí tu resultado.",
     "h": "Tapa del día: adiviná el disco por su tapa",
     "texto": [
       "Cada día hay 10 tapas de discos de rock, iguales para todos los jugadores. La tapa arranca pixelada y se aclara con cada error: cuanto antes la reconozcas, más puntos sumás: hasta 10 por tapa, 100 por día.",
@@ -43,8 +43,8 @@
   },
   "normal": {
     "ruta": "/adivina-la-tapa/",
-    "titulo": "Adiviná la tapa del disco · Trivia de rock | Juegos Rock",
-    "descripcion": "¿Reconocés el disco por su tapa? Juego libre e ilimitado con tapas de rock nacional e internacional que arrancan pixeladas y se aclaran con cada error.",
+    "titulo": "Adiviná el disco por la tapa · Trivia de rock | Juegos Rock",
+    "descripcion": "¿Reconocés el disco por su tapa? Trivia libre e ilimitada con tapas de rock nacional e internacional que arrancan pixeladas y se aclaran con cada error.",
     "h": "Adiviná la tapa del disco",
     "texto": [
       "Modo libre del juego de tapas: partidas ilimitadas de 10 discos. Elegí jugar con todo el rock, solo rock nacional o solo internacional.",
@@ -53,8 +53,8 @@
   },
   "tema": {
     "ruta": "/adivina-el-tema/",
-    "titulo": "Adiviná el tema en 1 segundo · Rock nacional | Juegos Rock",
-    "descripcion": "Escuchá 1 segundo de un tema de rock nacional y adiviná cuál es. Cada error desbloquea más audio. Un tema nuevo cada día, estilo Heardle.",
+    "titulo": "Adiviná la canción en 1 segundo: rock nacional | Juegos Rock",
+    "descripcion": "El Heardle del rock nacional: escuchá 1 segundo de un tema y adiviná la canción. Cada error desbloquea más audio. Un tema nuevo cada día y modo libre.",
     "h": "Adiviná el tema con 1 segundo de audio",
     "texto": [
       "Suena un segundo de un tema de rock: Redondos, La Renga, Divididos, Los Piojos, La Vela Puerca, Callejeros, El Plan de la Mariposa, Sueño de Pescado y más. Si no lo sacás, cada intento desbloquea más audio: 2, 4, 7, 11 y 16 segundos.",
@@ -63,8 +63,8 @@
   },
   "armar": {
     "ruta": "/arma-la-tapa/",
-    "titulo": "Armá la tapa · Poné la pieza que falta en la tapa del disco | Juegos Rock",
-    "descripcion": "A la tapa del disco le falta algo: ponelo en su lugar y con su tamaño. ¿Cuánta precisión sacás? Tapas de rock nacional.",
+    "titulo": "Armá la tapa: completá la tapa del disco | Juegos Rock",
+    "descripcion": "A la tapa del disco le falta algo: ponelo en su lugar y con su tamaño. ¿Cuánta precisión sacás? Juego de tapas de rock nacional, con desafío diario.",
     "h": "Armá la tapa: poné lo que le falta",
     "texto": [
       "A cada tapa de disco le falta un elemento. Arrastralo a su lugar y ajustá el tamaño con la regla: cuanto más exacto quede, más porcentaje de precisión sacás.",
@@ -73,8 +73,8 @@
   },
   "banda": {
     "ruta": "/la-banda-del-dia/",
-    "titulo": "La banda del día · Adiviná la banda de rock | Juegos Rock",
-    "descripcion": "Adiviná la banda de rock del día en 6 intentos. Cada intento te dice si acertaste el país, si es banda o solista, el año en que arrancó y si sigue tocando.",
+    "titulo": "La banda del día: adiviná la banda de rock | Juegos Rock",
+    "descripcion": "Adiviná la banda de rock del día en 6 intentos, estilo Wordle. Cada intento te dice si acertaste el país, si es banda o solista, el año y si sigue tocando.",
     "h": "La banda del día: adiviná la banda en 6 intentos",
     "texto": [
       "Escribí el nombre de una banda y fijate las pistas: país, banda o solista, año en que arrancó y si sigue en actividad. Verde es igual, amarillo es cerca, y las flechas te dicen si la banda correcta arrancó antes o después.",
@@ -83,8 +83,8 @@
   },
   "grilla": {
     "ruta": "/grilla-rockera/",
-    "titulo": "Grilla rockera · Trivia de bandas de rock en 3×3 | Juegos Rock",
-    "descripcion": "Completá la grilla de 3×3 con bandas de rock que cumplan dos condiciones: país, década, solista, discos y más. Una grilla nueva cada día.",
+    "titulo": "Grilla rockera: trivia de bandas de rock 3×3 | Juegos Rock",
+    "descripcion": "Completá la grilla de 3×3 con bandas de rock que cumplan dos condiciones: país, década, solista, discos y más. Contra reloj, con una grilla nueva cada día.",
     "h": "Grilla rockera: completá los 9 casilleros",
     "texto": [
       "Cada casillero cruza la condición de su fila con la de su columna, por ejemplo «De Argentina» y «Arrancó en los 80». Escribí una banda o solista que cumpla las dos.",
@@ -93,8 +93,8 @@
   },
   "bingo": {
     "ruta": "/bingo-rockero/",
-    "titulo": "Bingo rockero · Uní cada tapa con su banda | Juegos Rock",
-    "descripcion": "Aparece la tapa de un disco y tenés que tocar la banda que lo grabó entre 12. Completá el bingo contra reloj: 90, 60 o 45 segundos. Desafío diario y modo libre.",
+    "titulo": "Bingo rockero: uní cada tapa con su banda | Juegos Rock",
+    "descripcion": "Aparece la tapa de un disco y tocá la banda que lo grabó entre 12. Completá el bingo de rock contra reloj: 90, 60 o 45 segundos. Desafío diario.",
     "h": "Bingo rockero: uní cada tapa con su banda",
     "texto": [
       "Arriba aparece la tapa de un disco de rock y abajo hay una grilla con 12 bandas. Tocá la banda que lo grabó; si su casillero ya está lleno o la banda no está, salteala.",
@@ -103,7 +103,7 @@
   },
   "antes": {
     "ruta": "/antes-o-despues/",
-    "titulo": "¿Antes o después? · Años de discos de rock | Juegos Rock",
+    "titulo": "¿Antes o después? Trivia de años de discos | Juegos Rock",
     "descripcion": "¿Este disco salió antes o después que el otro? Juego de rachas con discos de rock nacional e internacional. Desafío diario de 10 comparaciones.",
     "h": "¿Antes o después?: ¿qué disco salió primero?",
     "texto": [
@@ -113,7 +113,7 @@
   },
   "orden": {
     "ruta": "/ordena-la-discografia/",
-    "titulo": "Ordená la discografía · Trivia de bandas de rock | Juegos Rock",
+    "titulo": "Ordená la discografía · Trivia de rock | Juegos Rock",
     "descripcion": "5 discos de una banda de rock: ordenalos del más viejo al más nuevo. ¿Te sabés la discografía de Soda Stereo, La Renga o los Redondos?",
     "h": "Ordená la discografía",
     "texto": [
@@ -123,8 +123,8 @@
   },
   "abre": {
     "ruta": "/tema-numero-1/",
-    "titulo": "Tema número 1 · ¿Qué canción abre el disco? | Juegos Rock",
-    "descripcion": "Mirá la tapa de un disco de rock y elegí qué canción lo abre. Desafío diario de 5 discos y modo libre por rachas.",
+    "titulo": "Tema número 1: ¿qué canción abre el disco? | Juegos Rock",
+    "descripcion": "Mirá la tapa de un disco de rock nacional y elegí qué canción lo abre. Trivia para fans, con desafío diario de 5 discos y modo libre por rachas.",
     "h": "Tema número 1: ¿qué canción abre el disco?",
     "texto": [
       "Te mostramos un disco y cuatro de sus canciones. Elegí cuál es el primer tema. Al responder ves en qué número de tema está cada una.",
@@ -133,8 +133,8 @@
   },
   "conexiones": {
     "ruta": "/conexiones/",
-    "titulo": "Conexiones de rock nacional · Armá los discos | Juegos Rock",
-    "descripcion": "16 temas de rock nacional, 4 discos. Agrupá las canciones que pertenecen al mismo disco. Niveles fácil, normal y difícil, y desafío diario.",
+    "titulo": "Conexiones de rock nacional: armá los discos | Juegos Rock",
+    "descripcion": "16 temas de rock nacional, 4 discos: agrupá las canciones que pertenecen al mismo disco. Niveles fácil, normal y difícil, y desafío diario.",
     "h": "Conexiones: agrupá los temas por disco",
     "texto": [
       "Aparecen 16 canciones de rock nacional y tenés que armar 4 grupos de 4 temas que estén en el mismo disco. Cuando acertás, se revela la tapa.",
@@ -143,7 +143,7 @@
   },
   "impostor": {
     "ruta": "/que-tema-no-esta/",
-    "titulo": "¿Qué tema no está? · Trivia de La Vela Puerca | Juegos Rock",
+    "titulo": "¿Qué tema no está? Trivia de La Vela Puerca | Juegos Rock",
     "descripcion": "Un disco de La Vela Puerca y 10 canciones: encontrá las que son de otro disco. Trivia para fans de La Vela, con desafío diario.",
     "h": "¿Qué tema no está? (La Vela Puerca)",
     "texto": [
@@ -153,8 +153,8 @@
   },
   "ahorcado": {
     "ruta": "/ahorcado-rockero/",
-    "titulo": "Ahorcado rockero · Adiviná el nombre del tema | Juegos Rock",
-    "descripcion": "El ahorcado con nombres de temas de rock nacional: adiviná el título letra por letra antes de que se complete el dibujo. Desafío diario de 3 temas y modo libre.",
+    "titulo": "Ahorcado rockero: adiviná el nombre del tema | Juegos Rock",
+    "descripcion": "El ahorcado con canciones de rock nacional: adiviná el título letra por letra antes de que se complete el dibujo. Desafío diario de 3 temas y modo libre.",
     "h": "Ahorcado rockero: adiviná el nombre del tema",
     "texto": [
       "Te decimos la banda y cuántas letras tiene el nombre del tema. Andá probando letras: con 6 errores se completa el dibujo y perdés.",
@@ -163,8 +163,8 @@
   },
   "letra": {
     "ruta": "/de-que-tema-es/",
-    "titulo": "¿De qué tema es? · Frases de los Redondos y el Indio | Juegos Rock",
-    "descripcion": "Leé una frase de una canción de Patricio Rey y sus Redonditos de Ricota o del Indio Solari y escribí de qué tema es. Si errás, te damos otra frase. Desafío diario y modo libre.",
+    "titulo": "¿De qué tema es? Letras de Redondos y el Indio | Juegos Rock",
+    "descripcion": "Leé una frase de una letra de los Redondos o del Indio Solari y adiviná de qué tema es. Si errás, te damos otra frase. Desafío diario y modo libre.",
     "h": "¿De qué tema es?: frases de los Redondos y el Indio Solari",
     "texto": [
       "Te mostramos una frase de una canción de los Redondos o del Indio Solari y tenés que escribir de qué tema es. Si errás o pasás, aparece otra frase del mismo tema, cada vez más fácil.",
@@ -173,8 +173,8 @@
   },
   "pato": {
     "ruta": "/de-que-disco-es/",
-    "titulo": "¿De qué disco es? · Callejeros y Don Osvaldo | Juegos Rock",
-    "descripcion": "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos pistas. Desafío diario de 5 temas y modo libre por rachas.",
+    "titulo": "¿De qué disco es? Callejeros y Don Osvaldo | Juegos Rock",
+    "descripcion": "Escuchá 10 segundos de un tema de Callejeros o Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos pistas. Desafío diario.",
     "h": "¿De qué disco es?: Callejeros y Don Osvaldo",
     "texto": [
       "Escuchá 10 segundos de un tema de Callejeros o de Don Osvaldo y elegí de qué disco es entre 4 tapas. Si errás, te damos el nombre del tema; si errás otra vez, el año del disco. A la tercera, perdiste.",
@@ -183,8 +183,8 @@
   },
   "piojos": {
     "ruta": "/completa-la-letra/",
-    "titulo": "Completá la letra · Los Piojos | Juegos Rock",
-    "descripcion": "Una frase de un tema de Los Piojos con una palabra tapada: elegí cuál falta entre 4. Si errás, te damos pistas. Desafío diario de 5 frases y modo libre por rachas.",
+    "titulo": "Completá la letra de Los Piojos · Trivia | Juegos Rock",
+    "descripcion": "Una frase de una canción de Los Piojos con una palabra tapada: elegí cuál falta entre 4. Si errás, te damos pistas. Desafío diario de 5 frases.",
     "h": "Completá la letra: Los Piojos",
     "texto": [
       "Te mostramos una frase de un tema de Los Piojos con una palabra tapada y tenés que elegir cuál falta entre 4 opciones. Si errás, te damos el nombre del tema; si errás otra vez, la primera letra. A la tercera, perdiste.",
@@ -193,7 +193,7 @@
   },
   "top": {
     "ruta": "/ranking/",
-    "titulo": "Ranking de los desafíos del día | Juegos Rock",
+    "titulo": "Ranking de los desafíos de rock del día | Juegos Rock",
     "descripcion": "Ranking general y por juego de los desafíos diarios de Juegos Rock. Mirá quién sacó más puntos hoy y en los últimos 7 días.",
     "h": "Ranking",
     "texto": [
