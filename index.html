@@ -5538,6 +5538,8 @@ function textoAuto(p){
 // Cada video son escenas dibujadas en un canvas (1080x1920) y exportadas como cuadros; redes/publicar.mjs los une con ffmpeg
 const VID_FPS=12;
 const VID_JUEGOS=["tapa","banda","grilla","bingo","antes","conexiones","orden","ahorcado","letra","abre","impostor","armar"];
+// desde el 12/11 los videos se graban en la página de verdad (redes/grabar.mjs): rotan los juegos que se pueden grabar
+const VID_GRABADOS=["tapa","grilla","piojos","bingo","antes","conexiones","ahorcado","abre"];
 const VID_INFO={
   tapa:["🖼️","Tapa del día","¿Qué disco es esta tapa pixelada?","tapadeldia"],
   banda:["🎸","La banda del día","¿Qué banda es con estas pistas?","labandadeldia"],
@@ -5551,6 +5553,7 @@ const VID_INFO={
   abre:["1️⃣","Tema número 1","¿Qué tema abre este disco?","temanumero1"],
   impostor:["🕵️","¿Qué tema no está?","¿Cuáles temas no son de este disco?","quetemanoesta"],
   armar:["🧩","Armá la tapa","¿De qué tapa es este pedacito?","armalatapa"],
+  piojos:["🎶","Completá la letra","¿Qué palabra falta en esta letra de Los Piojos?","completalaletra"],
 };
 // Cómo se juega: 3 pasos, lo que se explica durante la jugada de ejemplo y al mostrar la respuesta
 // franja de texto abajo (lo que pasa en la jugada)
@@ -5749,14 +5752,16 @@ async function vidCuadros(escenas){
   return frames;
 }
 // El video del día: le toca a un juego distinto cada vez (12 juegos rotando) y con datos sorteados para ese día
-async function redesVideo(dia,turnoVideo){
-  for(let k=0;k<VID_JUEGOS.length;k++){
-    const j=VID_JUEGOS[(turnoVideo+k)%VID_JUEGOS.length], rng=semillaRng(hashStr(`video-${j}-${dia}`));
-    let escenas=null; try{ escenas=await VID_ARMAR[j](rng) }catch(e){ console.error("video",j,e) }
-    if(!escenas) continue;
-    escenas=[vidPortada(j),...escenas,vidCierre(j)]; // el nombre del juego, la jugada simulada y el cierre
+async function redesVideo(dia,turnoVideo,grabar=[]){
+  // con el grabador (GitHub Actions) rotan los juegos que se graban en la página; si el grabador falla, queda la animación dibujada
+  const lista=grabar.length?VID_GRABADOS.filter(j=>grabar.includes(j)&&(j!=="piojos"||PIOJOS_ON)):VID_JUEGOS;
+  for(let k=0;k<lista.length;k++){
+    const j=lista[(turnoVideo+k)%lista.length], rng=semillaRng(hashStr(`video-${j}-${dia}`)), graba=grabar.includes(j);
+    let escenas=null; try{ if(VID_ARMAR[j]) escenas=await VID_ARMAR[j](rng) }catch(e){ console.error("video",j,e) }
+    if(!escenas&&!graba) continue;
     const [em,nom,preg,tag]=VID_INFO[j];
-    return {juego:j,frames:await vidCuadros(escenas),caption:`${em} ${nom}: ${preg} ¿Lo sacaste antes del final? Contalo en los comentarios 👇\n\nJugalo gratis, con desafío nuevo todos los días, en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} #${tag}`};
+    const frames=escenas?await vidCuadros([vidPortada(j),...escenas,vidCierre(j)]):null; // el nombre del juego, la jugada simulada y el cierre
+    return {juego:j,grabar:graba,frames,caption:`${em} ${nom}: ${preg} ¿Lo sacaste antes del final? Contalo en los comentarios 👇\n\nJugalo gratis, con desafío nuevo todos los días, en juegosrock.com.ar (link en la bio)\n\n${CONT_TAGS} #${tag}`};
   }
   return null;
 }
@@ -6078,8 +6083,8 @@ async function redesPlan(dia,turno,disco,extra={}){
     if(ds===2||ds===4||ds===6){
       // un video nuevo cada vez: le toca al juego siguiente de la rueda, con discos y bandas sorteados para ese día
       await intentar("video",async()=>{
-        const sem=Math.floor(Date.parse(dia+"T12:00:00Z")/864e5/7), v=await redesVideo(dia,sem*3+[2,4,6].indexOf(ds));
-        if(v) out.push({id:"reel",tipo:"reel",caption:v.caption,imgs:[],frames:v.frames,fps:VID_FPS,juego:v.juego});
+        const sem=Math.floor(Date.parse(dia+"T12:00:00Z")/864e5/7), v=await redesVideo(dia,sem*3+[2,4,6].indexOf(ds),extra.grabar||[]);
+        if(v) out.push({id:"reel",tipo:"reel",caption:v.caption,imgs:[],frames:v.frames,fps:VID_FPS,juego:v.juego,grabar:v.grabar});
       });
     }
   }
@@ -6088,7 +6093,7 @@ async function redesPlan(dia,turno,disco,extra={}){
 // Para la tarea de GitHub: devuelve todo listo para guardar (imágenes en JPG)
 window.redesExportar=async(dia,turno,disco,extra)=>{
   const {pubs,errores}=await redesPlan(dia||hoyAR(),turno||"todo",disco,extra);
-  return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,dato:p.dato||null,caption:p.caption,video:p.video||null,frames:p.frames||null,fps:p.fps||null,juego:p.juego||null,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
+  return {errores,pubs:pubs.map(p=>({id:p.id,tipo:p.tipo,dato:p.dato||null,caption:p.caption,video:p.video||null,frames:p.frames||null,fps:p.fps||null,juego:p.juego||null,grabar:!!p.grabar,imgs:p.imgs.map(c=>{ try{ return c.toDataURL("image/jpeg",.92) }catch(e){ return null } }).filter(Boolean)}))};
 };
 
 const RUTAS={inicio:"/",diario:"/tapa-del-dia/",normal:"/adivina-la-tapa/",tema:"/adivina-el-tema/",antes:"/antes-o-despues/",
