@@ -37,6 +37,8 @@ const ESCENOGRAFIA = () => {
   html,body{overflow:hidden!important;scroll-behavior:auto!important}
   .cam-on{transform-origin:0 0;transition:transform 1s cubic-bezier(.45,0,.2,1);will-change:transform}
   .cam-rapida{transition-duration:.55s}
+  #rec-banda{position:fixed;left:0;right:0;top:0;height:150px;z-index:99995;pointer-events:none;background:#f2c230;
+    background-image:radial-gradient(rgba(20,18,16,.13) 1px,transparent 1.3px);background-size:6px 6px;border-bottom:4px solid #141210;box-shadow:0 8px 18px rgba(20,18,16,.18);transition:height .3s}
   #rec-txt{position:fixed;left:0;right:0;top:54px;z-index:99999;display:flex;justify-content:center;pointer-events:none}
   #rec-txt b{background:#141210;color:#f2c230;font:400 27px/1.12 var(--display,sans-serif);text-transform:uppercase;padding:13px 18px 11px;max-width:84%;text-align:center;
     box-shadow:6px 6px 0 #d7262b;rotate:-1.5deg;animation:recEntra .45s cubic-bezier(.2,1.6,.4,1) both}
@@ -69,7 +71,7 @@ const ESCENOGRAFIA = () => {
   #rec-fin .url{background:#d7262b;color:#fff;font:400 28px var(--display,sans-serif);padding:12px 20px 9px;box-shadow:7px 7px 0 #141210;rotate:-2deg}
   #rec-fin.ver h1{animation:recEntra .5s cubic-bezier(.2,1.6,.4,1) both} #rec-fin.ver .url{animation:recEntra .5s .35s cubic-bezier(.2,1.6,.4,1) both}`;
   document.head.appendChild(st);
-  for (const id of ["rec-marca", "rec-txt", "rec-sticker", "rec-flash", "rec-dedo", "rec-fin"]) { const d = document.createElement("div"); d.id = id; document.body.appendChild(d) }
+  for (const id of ["rec-banda", "rec-marca", "rec-txt", "rec-sticker", "rec-flash", "rec-dedo", "rec-fin"]) { const d = document.createElement("div"); d.id = id; document.body.appendChild(d) }
   // cámara: lleva el centro de un elemento al centro de la pantalla, con zoom (sobre la sección visible, no sobre la página entera)
   const C = { sec: null, tx: 0, ty: 0, z: 1 };
   window.__cam = (sel, z = 1, alto = .5, rapida = false) => {
@@ -78,15 +80,16 @@ const ESCENOGRAFIA = () => {
     if (C.sec !== sec) { if (C.sec) { C.sec.style.transform = ""; C.sec.classList.remove("cam-on") } C.sec = sec; C.tx = C.ty = 0; C.z = 1; sec.classList.add("cam-on") }
     sec.classList.toggle("cam-rapida", !!rapida);
     const W = innerWidth, H = innerHeight, r = sec.getBoundingClientRect(), sx = r.left - C.tx, sy = r.top - C.ty;
-    if (!sel || z <= 1) { C.tx = 0; C.ty = 0; C.z = 1; sec.style.transform = "translate(0px,0px) scale(1)"; return }
+    if (!sel || z <= 1) { C.tx = 0; C.ty = 110; C.z = 1; sec.style.transform = "translate(0px,110px) scale(1)"; return }
     const el = typeof sel === "string" ? sec.querySelector(sel) || document.querySelector(sel) : sel; if (!el) return;
     const e = el.getBoundingClientRect(), cx = (e.left + e.width / 2 - r.left) / C.z, cy = (e.top + e.height / 2 - r.top) / C.z;
-    let tx = W / 2 - sx - z * cx, ty = H * alto - sy - z * cy;
+    const arriba = 160; let tx = W / 2 - sx - z * cx, ty = arriba + (H - arriba) * alto - sy - z * cy; // la franja de arriba tapa ~160 px
     tx = Math.min((z - 1) * sx, Math.max((1 - z) * (W - sx), tx)); // que la pantalla quede siempre cubierta por la página, sin bordes vacíos a los costados
     C.tx = tx; C.ty = ty; C.z = z; sec.style.transform = `translate(${tx}px,${ty}px) scale(${z})`;
   };
   document.getElementById("rec-marca").textContent = "JUEGOSROCK.COM.AR";
-  window.__txt = t => { const e = document.getElementById("rec-txt"); e.innerHTML = t ? `<b>${t}</b>` : "" };
+  window.__txt = t => { const e = document.getElementById("rec-txt"); e.innerHTML = t ? `<b>${t}</b>` : "";
+    const b = e.querySelector("b"), alto = b ? Math.max(150, Math.ceil(b.getBoundingClientRect().bottom) + 22) : 64; document.getElementById("rec-banda").style.height = alto + "px" };
   window.__sticker = (t, ok) => {
     const e = document.getElementById("rec-sticker"); e.innerHTML = `<b class="${ok ? "ok" : "mal"}">${t}</b>`;
     const f = document.getElementById("rec-flash"); f.className = ""; void f.offsetWidth; f.className = ok ? "ok" : "mal";
@@ -99,6 +102,43 @@ const SEMILLA = s => {
   let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++) { h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19 }
   let a = h >>> 0; Math.random = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 };
 };
+
+// ---------- Sonidos: efectos sintetizados acá mismo (sin música con derechos, así las redes no silencian el video) ----------
+const SR = 44100;
+const SONIDOS = (() => {
+  const env = (t, a, d) => t < a ? t / a : Math.exp(-(t - a) / d);
+  const hacer = (dur, f) => { const n = Math.round(dur * SR), x = new Float32Array(n); for (let i = 0; i < n; i++) x[i] = f(i / SR, i); return x };
+  let ruido = 12345; const rnd = () => (ruido = (ruido * 1103515245 + 12345) & 0x7fffffff) / 0x3fffffff - 1;
+  const tono = (fr, t) => Math.sin(2 * Math.PI * fr * t);
+  return {
+    // toque: un clic seco con cuerpo
+    toque: hacer(.07, t => (tono(1400, t) * .5 + rnd() * .5) * env(t, .002, .012) * .55 + tono(180, t) * env(t, .001, .02) * .5),
+    tecla: hacer(.04, t => (rnd() * .6 + tono(2600, t) * .4) * env(t, .001, .006) * .35),
+    // acierto: dos notas que suben, brillantes
+    bien: hacer(.55, t => { const a = t < .11 ? 0 : 1, fr = a ? 1318.5 : 987.8, tt = a ? t - .11 : t;
+      return (tono(fr, tt) * .6 + tono(fr * 2, tt) * .2 + tono(fr * 3, tt) * .08) * env(tt, .004, a ? .16 : .07) * .6 }),
+    // error: zumbido grave que baja
+    mal: hacer(.45, t => { const fr = 190 - t * 120, w = Math.sign(tono(fr, t)) * .5 + tono(fr * .5, t) * .5; return w * env(t, .005, .14) * .38 }),
+    // movimiento de cámara: soplido de ruido filtrado
+    whoosh: (() => { let lp = 0; return hacer(.4, t => { const k = .02 + .2 * Math.sin(Math.PI * t / .4); lp += k * (rnd() - lp); return lp * Math.sin(Math.PI * t / .4) ** 2 * .9 }) })(),
+    // texto nuevo arriba: "pop" corto
+    pop: hacer(.12, t => tono(380 + 900 * t / .12, t) * env(t, .003, .035) * .45),
+    // cierre: arpegio que sube y queda sonando
+    fin: hacer(1.6, t => { const notas = [523.3, 659.3, 784, 1046.5]; let v = 0;
+      notas.forEach((fr, i) => { const tt = t - i * .09; if (tt > 0) v += (tono(fr, tt) * .5 + tono(fr * 2, tt) * .15) * env(tt, .004, i === 3 ? .55 : .25) }); return v * .32 }),
+  };
+})();
+// Arma la pista de audio (WAV mono 16 bits) con cada efecto en su momento
+function pistaWav(eventos, dur) {
+  const n = Math.ceil((dur + .5) * SR), mix = new Float32Array(n);
+  for (const e of eventos) { const s = SONIDOS[e.n], i0 = Math.round(e.t * SR); if (!s || i0 < 0) continue;
+    for (let i = 0; i < s.length && i0 + i < n; i++) mix[i0 + i] += s[i] * (e.vol ?? 1) }
+  const buf = Buffer.alloc(44 + n * 2);
+  buf.write("RIFF", 0); buf.writeUInt32LE(36 + n * 2, 4); buf.write("WAVEfmt ", 8); buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20); buf.writeUInt16LE(1, 22);
+  buf.writeUInt32LE(SR, 24); buf.writeUInt32LE(SR * 2, 28); buf.writeUInt16LE(2, 32); buf.writeUInt16LE(16, 34); buf.write("data", 36); buf.writeUInt32LE(n * 2, 40);
+  for (let i = 0; i < n; i++) buf.writeInt16LE(Math.round(Math.max(-1, Math.min(1, Math.tanh(mix[i] * 1.1))) * 32000), 44 + i * 2);
+  return buf;
+}
 
 // ---------- Las partidas: cada juego, una jugada con aciertos y algún error ----------
 // pg = página; A = acciones (tocar, cam, txt, sticker, esperar, escribir)
@@ -248,7 +288,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
   if (!JUEGOS[juego]) return null;
   const cuadrosDir = path.join(salida, `reel-${juego}-cuadros`);
   fs.rmSync(cuadrosDir, { recursive: true, force: true }); fs.mkdirSync(cuadrosDir, { recursive: true });
-  const srv = await servir(puerto), b = await chromium.launch(), cuadros = [];
+  const srv = await servir(puerto), b = await chromium.launch(), cuadros = [], eventos = [];
   try {
     const ctx = await b.newContext({ viewport: { width: 412, height: 732 }, deviceScaleFactor: 1080 / 412, isMobile: true, hasTouch: true, reducedMotion: "no-preference" });
     await ctx.route(/supabase\.co|goatcounter|accounts\.google/, r => r.abort());
@@ -275,7 +315,9 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     });
     await cdp.send("Page.startScreencast", { format: "jpeg", quality: 90, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
 
+    const sonar = (n, vol = 1) => { if (grabando) eventos.push({ n, vol, t: Date.now() / 1000 }) };
     const A = {
+      sonar,
       async ir(v, modo) {
         await pg.evaluate(v => irA(v), v); await espera(700);
         if (modo) { const l = pg.locator(`.modo-dia[data-juego="${v}"] [data-m="${modo}"]:visible, #tapa-modo [data-m="${modo}"]:visible`).first(); if (await l.count()) { await l.click().catch(() => {}); await espera(900) } }
@@ -283,24 +325,24 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
       },
       // la grabación arranca recién con la primera pregunta en pantalla (el primer segundo tiene que enganchar)
       async grabando() { await espera(1100); grabando = true },
-      cam: async (sel, z = 1, alto = .5, rapida = false) => { await pg.evaluate(([s, z, a, r]) => window.__cam(s, z, a, r), [sel, z, alto, rapida]); await espera(rapida ? 550 : 1000) },
-      txt: t => pg.evaluate(t => window.__txt(t), t),
-      sticker: (t, ok) => pg.evaluate(([t, ok]) => window.__sticker(t, ok), [t, ok]),
+      cam: async (sel, z = 1, alto = .5, rapida = false) => { sonar("whoosh", rapida ? .35 : .6); await pg.evaluate(([s, z, a, r]) => window.__cam(s, z, a, r), [sel, z, alto, rapida]); await espera(rapida ? 550 : 1000) },
+      txt: t => { if (t) sonar("pop", .8); return pg.evaluate(t => window.__txt(t), t) },
+      sticker: (t, ok) => { sonar(ok ? "bien" : "mal"); return pg.evaluate(([t, ok]) => window.__sticker(t, ok), [t, ok]) },
       async imagenes(sel) { await pg.waitForFunction(s => [...document.querySelectorAll(`${s} img`)].every(i => !i.src || i.complete), sel, { timeout: 10000 }).catch(() => {}); await espera(300) },
       async tocar(loc, { rapido = false } = {}) {
         const bx = await loc.boundingBox().catch(() => null); if (!bx) return false;
         const x = bx.x + bx.width / 2, y = bx.y + bx.height / 2;
         await pg.evaluate(([x, y]) => { const d = document.getElementById("rec-dedo"); d.style.opacity = 1; d.style.transform = `translate(${x}px,${y}px)` }, [x, y]);
         await espera(rapido ? 380 : 650);
-        await pg.evaluate(() => { const d = document.getElementById("rec-dedo"); d.classList.remove("toca"); void d.offsetWidth; d.classList.add("toca") });
+        await pg.evaluate(() => { const d = document.getElementById("rec-dedo"); d.classList.remove("toca"); void d.offsetWidth; d.classList.add("toca") }); sonar("toque");
         await loc.click({ timeout: 3000, force: true }).catch(() => {});
         await espera(rapido ? 220 : 450); return true;
       },
-      async escribir(sel, t) { const l = pg.locator(sel); await A.tocar(l, { rapido: true }); for (const c of t) { await l.type(c); await espera(55 + Math.random() * 60) } await espera(350) },
+      async escribir(sel, t) { const l = pg.locator(sel); await A.tocar(l, { rapido: true }); for (const c of t) { sonar("tecla", .8); await l.type(c); await espera(55 + Math.random() * 60) } await espera(350) },
     };
     await JUEGOS[juego](pg, A);
     await pg.evaluate(() => { document.getElementById("rec-dedo").style.opacity = 0; window.__txt("") });
-    await pg.evaluate(() => window.__fin(`<span class="chip">JUEGOS ROCK</span><h1>¿Cuántas<br>sacás vos?</h1><p>✔ Un desafío nuevo cada día<br>✔ Ranking con todos<br>✔ Gratis, sin descargar nada</p><span class="url">juegosrock.com.ar</span>`));
+    sonar("fin"); await pg.evaluate(() => window.__fin(`<span class="chip">JUEGOS ROCK</span><h1>¿Cuántas<br>sacás vos?</h1><p>✔ Un desafío nuevo cada día<br>✔ Ranking con todos<br>✔ Gratis, sin descargar nada</p><span class="url">juegosrock.com.ar</span>`));
     await espera(3200);
     grabando = false; await cdp.send("Page.stopScreencast");
     if (cuadros.length < 20) throw new Error(`se grabaron muy pocos cuadros (${cuadros.length})`);
@@ -310,12 +352,14 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
   const lista = cuadros.map((c, i) => `file '${c.archivo}'\nduration ${Math.max(0.01, ((cuadros[i + 1] || c).t - c.t) || 0.5).toFixed(3)}`).join("\n")
     + `\nfile '${cuadros.at(-1).archivo}'\n`;
   const listaF = path.join(cuadrosDir, "cuadros.txt"); fs.writeFileSync(listaF, lista);
+  const t0 = cuadros[0].t, wav = path.join(cuadrosDir, "sonido.wav");
+  fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0));
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
   execFileSync(ffmpeg, ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listaF,
-    "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+    "-i", wav, "-af", "aformat=channel_layouts=stereo",
     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
-    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart", mp4]);
+    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", mp4]);
   fs.rmSync(cuadrosDir, { recursive: true, force: true });
-  log(`🎬 Video grabado en la página (${juego}): ${cuadros.length} cuadros, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
+  log(`🎬 Video grabado en la página (${juego}): ${cuadros.length} cuadros, ${eventos.length} sonidos, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
   return mp4;
 }
