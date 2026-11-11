@@ -7,6 +7,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { grabarReel, GRABABLES } from "./grabar.mjs";
 
 const RAIZ = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const PUBLIC = path.join(RAIZ, "public");
@@ -20,6 +21,8 @@ const SERVICIO = env.SUPABASE_SERVICE_KEY || "";
 const PRUEBA = env.PRUEBA === "true" || !SUPA || !SERVICIO;
 const IG = "https://graph.instagram.com/v25.0";
 const SALIDA = path.join(RAIZ, "redes", "salida", DIA);
+// los videos se graban en la página de verdad desde el 12/11 (antes eran animaciones dibujadas)
+const GRABAR = DIA >= "2026-11-12" && env.VIDEO_DIBUJADO !== "si";
 const resumen = [];
 const log = (...a) => { console.log(...a); resumen.push(a.join(" ")) };
 
@@ -59,10 +62,15 @@ async function armar() {
   let tapaAyer = null;
   if (SUPA && SERVICIO) { try { const g = await leerClave(`tapa:${ayer}`); if (g && g.valor) tapaAyer = JSON.parse(g.valor) } catch (e) {} }
   if (tapaAyer) log(`🗂️ Respuesta de ayer guardada: ${tapaAyer.a} — ${tapaAyer.t}`);
-  const r = await pg.evaluate(([d, t, x, e]) => window.redesExportar(d, t, x, e), [DIA, TURNO, DISCO, { tapaAyer }]);
+  const r = await pg.evaluate(([d, t, x, e]) => window.redesExportar(d, t, x, e), [DIA, TURNO, DISCO, { tapaAyer, grabar: GRABAR ? GRABABLES : [] }]);
   await b.close(); srv.close();
   fs.mkdirSync(SALIDA, { recursive: true });
   for (const p of r.pubs) {
+    // video grabado en la página de verdad (redes/grabar.mjs); si falla, queda la animación dibujada
+    if (p.tipo === "reel" && p.grabar) {
+      try { p.videoArchivo = await grabarReel({ juego: p.juego, semilla: DIA, salida: SALIDA, ffmpeg: await rutaFfmpeg(), log }); if (p.videoArchivo) delete p.frames }
+      catch (e) { log(`⚠️ No pude grabar el video de ${p.juego} en la página (${e.message.split("\n")[0]}); uso la animación dibujada`) }
+    }
     // video armado en la página: los cuadros se unen con ffmpeg (1080x1920, H.264, con pista de audio muda)
     if (p.frames && p.frames.length) {
       const dir = path.join(SALIDA, `${TURNO}-${p.id}-cuadros`);
