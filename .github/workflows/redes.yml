@@ -80,6 +80,10 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
           TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          # voz argentina de Microsoft para los videos (si no están, usa la voz libre de Piper)
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ vars.AZURE_SPEECH_REGION || secrets.AZURE_SPEECH_REGION }}
+          AZURE_VOZ: ${{ vars.AZURE_VOZ }}
         run: node redes/publicar.mjs
       - name: Guardar las imágenes para revisar
         if: always()

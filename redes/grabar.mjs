@@ -159,8 +159,26 @@ const paraLeer = t => String(t || "")
   .replace(/\b1er\b/gi, "primer").replace(/\b3er\b/gi, "tercer").replace(/…/g, "...")
   .replace(/\s+/g, " ").trim()
   .replace(/^(.)(.*)$/, (m, a, b) => /^[A-ZÁÉÍÓÚÑ¡¿! ]+$/.test(m) ? (a + b.toLowerCase()) : m); // lo que viene en mayúsculas se lee normal
-function sintetizar(frases, dir) {
-  const modelo = process.env.VOZ_MODELO; if (!modelo || !fs.existsSync(modelo) || !frases.length) return [];
+// Voz argentina de Microsoft (Azure Speech, neuronal: es-AR Elena o Tomás). Necesita AZURE_SPEECH_KEY y AZURE_SPEECH_REGION;
+// AZURE_VOZ elige la voz (por defecto es-AR-ElenaNeural; la otra es es-AR-TomasNeural). Si no están, se usa Piper.
+const xml = t => t.replace(/[<>&'"]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" })[c]);
+async function sintetizarAzure(frases, dir) {
+  const clave = process.env.AZURE_SPEECH_KEY, region = process.env.AZURE_SPEECH_REGION, voz = process.env.AZURE_VOZ || "es-AR-ElenaNeural";
+  if (!clave || !region) return null;
+  const out = [];
+  for (const [i, f] of frases.entries()) {
+    const r = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, { method: "POST",
+      headers: { "Ocp-Apim-Subscription-Key": clave, "Content-Type": "application/ssml+xml", "X-Microsoft-OutputFormat": "riff-24khz-16bit-mono-pcm", "User-Agent": "juegosrock-videos" },
+      body: `<speak version="1.0" xml:lang="es-AR"><voice name="${voz}"><prosody rate="+12%" pitch="+3%">${xml(f)}</prosody></voice></speak>` });
+    if (!r.ok) throw new Error(`Azure respondió ${r.status} ${await r.text()}`);
+    const a = path.join(dir, `voz${i}.wav`); fs.writeFileSync(a, Buffer.from(await r.arrayBuffer())); out.push(leerWav(a));
+  }
+  return out;
+}
+async function sintetizar(frases, dir, log = console.log) {
+  if (!frases.length) return [];
+  try { const a = await sintetizarAzure(frases, dir); if (a) return a } catch (e) { log(`(la voz de Microsoft falló: ${e.message.slice(0, 160)}; uso la otra voz)`) }
+  const modelo = process.env.VOZ_MODELO; if (!modelo || !fs.existsSync(modelo)) return [];
   const lista = path.join(dir, "frases.json"); fs.writeFileSync(lista, JSON.stringify(frases.map((f, i) => ({ t: f, a: path.join(dir, `voz${i}.wav`) }))));
   execFileSync("python3", ["-c", `import json,sys,wave
 from piper import PiperVoice, SynthesisConfig
@@ -413,7 +431,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     + `\nfile '${cuadros.at(-1).archivo}'\n`;
   const listaF = path.join(cuadrosDir, "cuadros.txt"); fs.writeFileSync(listaF, lista);
   const t0 = cuadros[0].t, wav = path.join(cuadrosDir, "sonido.wav");
-  let voces = []; try { const a = sintetizar(frases.map(f => f.f), cuadrosDir); voces = frases.map((f, i) => ({ t: f.t - t0, a: a[i] || new Float32Array(0) })).filter(v => v.a.length) }
+  let voces = []; try { const a = await sintetizar(frases.map(f => f.f), cuadrosDir, log); voces = frases.map((f, i) => ({ t: f.t - t0, a: a[i] || new Float32Array(0) })).filter(v => v.a.length) }
   catch (e) { log(`(sin voz: ${String(e.message).split("\n")[0]})`) }
   fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0, voces));
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
