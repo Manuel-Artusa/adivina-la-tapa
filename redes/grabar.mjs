@@ -151,10 +151,45 @@ function musica(dur) {
   for (let i = 0; i < n; i++) { const t = i / SR; m[i] *= Math.min(1, t / .4) * Math.min(1, (dur - t) / 1.2) }
   return m;
 }
+// ---------- Voz narradora (estilo TikTok): Piper, voz es_AR "daniela" (libre, sin conexión). Si no está instalada, el video sale sin voz ----------
+// VOZ_MODELO = ruta al .onnx (la tarea de GitHub lo baja). Sin esa variable, no hay voz.
+const paraLeer = t => String(t || "")
+  .replace(/juegosrock\.com\.ar/gi, "juegos rock punto com punto ar")
+  .replace(/[✔✘«»"#️⃣]/g, "").replace(/\s*·\s*/g, ", de ").replace(/\s+\+\s+/g, ", y ").replace(/\+(\d+)/g, "más $1")
+  .replace(/\b1er\b/gi, "primer").replace(/\b3er\b/gi, "tercer").replace(/…/g, "...")
+  .replace(/\s+/g, " ").trim()
+  .replace(/^(.)(.*)$/, (m, a, b) => /^[A-ZÁÉÍÓÚÑ¡¿! ]+$/.test(m) ? (a + b.toLowerCase()) : m); // lo que viene en mayúsculas se lee normal
+function sintetizar(frases, dir) {
+  const modelo = process.env.VOZ_MODELO; if (!modelo || !fs.existsSync(modelo) || !frases.length) return [];
+  const lista = path.join(dir, "frases.json"); fs.writeFileSync(lista, JSON.stringify(frases.map((f, i) => ({ t: f, a: path.join(dir, `voz${i}.wav`) }))));
+  execFileSync("python3", ["-c", `import json,sys,wave
+from piper import PiperVoice, SynthesisConfig
+v=PiperVoice.load(sys.argv[1]); c=SynthesisConfig(length_scale=0.9)
+for f in json.load(open(sys.argv[2])):
+  with wave.open(f["a"],"wb") as w: v.synthesize_wav(f["t"],w,syn_config=c)`, modelo, lista], { stdio: "pipe" });
+  return frases.map((f, i) => leerWav(path.join(dir, `voz${i}.wav`)));
+}
+// WAV 16 bits mono → Float32 a 44100 Hz
+function leerWav(f) {
+  const b = fs.readFileSync(f); let i = 12, sr = 22050, datos = null;
+  while (i < b.length - 8) { const id = b.toString("ascii", i, i + 4), n = b.readUInt32LE(i + 4);
+    if (id === "fmt ") sr = b.readUInt32LE(i + 12); if (id === "data") { datos = b.subarray(i + 8, i + 8 + n); break } i += 8 + n + (n % 2) }
+  if (!datos) return new Float32Array(0);
+  const m = datos.length / 2, k = SR / sr, out = new Float32Array(Math.floor(m * k));
+  for (let j = 0; j < out.length; j++) { const x = j / k, a = Math.floor(x), f2 = x - a, v1 = datos.readInt16LE(Math.min(m - 1, a) * 2), v2 = datos.readInt16LE(Math.min(m - 1, a + 1) * 2); out[j] = (v1 + (v2 - v1) * f2) / 32768 }
+  return out;
+}
+
 // Arma la pista de audio (WAV mono 16 bits) con cada efecto en su momento
-function pistaWav(eventos, dur) {
-  const n = Math.ceil((dur + .5) * SR), mix = new Float32Array(n), fondo = musica(dur);
-  for (let i = 0; i < fondo.length && i < n; i++) mix[i] = fondo[i] * .32; // la música va abajo de los efectos
+function pistaWav(eventos, dur, voces = []) {
+  const n = Math.ceil((dur + .5) * SR), mix = new Float32Array(n), fondo = musica(dur), habla = new Float32Array(n);
+  // la voz: cada frase en su momento; si todavía está hablando la anterior, espera (y si se atrasa mucho, se saltea)
+  let libre = 0;
+  for (const v of voces) { const s0 = Math.max(v.t, libre); if (s0 - v.t > 1.2 || !v.a.length) continue;
+    const i0 = Math.round(s0 * SR); for (let i = 0; i < v.a.length && i0 + i < n; i++) { mix[i0 + i] += v.a[i] * 1.15; habla[i0 + i] = 1 }
+    libre = s0 + v.a.length / SR + .08 }
+  // la música va abajo de los efectos y baja más mientras habla la voz (con subida y bajada suaves)
+  let g = 1; for (let i = 0; i < fondo.length && i < n; i++) { const obj = habla[i] ? .35 : 1; g += (obj - g) * (obj < g ? .002 : .0002); mix[i] += fondo[i] * .32 * g }
   for (const e of eventos) { const s = SONIDOS[e.n], i0 = Math.round(e.t * SR); if (!s || i0 < 0) continue;
     for (let i = 0; i < s.length && i0 + i < n; i++) mix[i0 + i] += s[i] * (e.vol ?? 1) }
   const buf = Buffer.alloc(44 + n * 2);
@@ -312,7 +347,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
   if (!JUEGOS[juego]) return null;
   const cuadrosDir = path.join(salida, `reel-${juego}-cuadros`);
   fs.rmSync(cuadrosDir, { recursive: true, force: true }); fs.mkdirSync(cuadrosDir, { recursive: true });
-  const srv = await servir(puerto), b = await chromium.launch(), cuadros = [], eventos = [];
+  const srv = await servir(puerto), b = await chromium.launch(), cuadros = [], eventos = [], frases = [];
   try {
     const ctx = await b.newContext({ viewport: { width: 412, height: 732 }, deviceScaleFactor: 1080 / 412, isMobile: true, hasTouch: true, reducedMotion: "no-preference" });
     await ctx.route(/supabase\.co|goatcounter|accounts\.google/, r => r.abort());
@@ -340,6 +375,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     await cdp.send("Page.startScreencast", { format: "jpeg", quality: 90, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
 
     const sonar = (n, vol = 1) => { if (grabando) eventos.push({ n, vol, t: Date.now() / 1000 }) };
+    const decir = (texto, demora = 0) => { const f = paraLeer(texto); if (grabando && f) frases.push({ f, t: Date.now() / 1000 + demora }) };
     const A = {
       sonar,
       async ir(v, modo) {
@@ -348,10 +384,10 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
         await pg.evaluate(() => scrollTo(0, 0));
       },
       // la grabación arranca recién con la primera pregunta en pantalla (el primer segundo tiene que enganchar)
-      async grabando() { await espera(1100); grabando = true },
+      async grabando() { await espera(1100); grabando = true; const t = await pg.evaluate(() => document.getElementById("rec-txt").innerText); decir(t) },
       cam: async (sel, z = 1, alto = .5, rapida = false) => { sonar("whoosh", rapida ? .35 : .6); await pg.evaluate(([s, z, a, r]) => window.__cam(s, z, a, r), [sel, z, alto, rapida]); await espera(rapida ? 550 : 1000) },
-      txt: t => { if (t) sonar("pop", .8); return pg.evaluate(t => window.__txt(t), t) },
-      sticker: (t, ok) => { sonar(ok ? "bien" : "mal"); return pg.evaluate(([t, ok]) => window.__sticker(t, ok), [t, ok]) },
+      txt: t => { if (t) { sonar("pop", .8); decir(t) } return pg.evaluate(t => window.__txt(t), t) },
+      sticker: (t, ok) => { sonar(ok ? "bien" : "mal"); decir(t, .25); return pg.evaluate(([t, ok]) => window.__sticker(t, ok), [t, ok]) },
       async imagenes(sel) { await pg.waitForFunction(s => [...document.querySelectorAll(`${s} img`)].every(i => !i.src || i.complete), sel, { timeout: 10000 }).catch(() => {}); await espera(300) },
       async tocar(loc, { rapido = false } = {}) {
         const bx = await loc.boundingBox().catch(() => null); if (!bx) return false;
@@ -366,8 +402,8 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     };
     await JUEGOS[juego](pg, A);
     await pg.evaluate(() => { document.getElementById("rec-dedo").style.opacity = 0; window.__txt("") });
-    sonar("fin"); await pg.evaluate(() => window.__fin(`<span class="chip">JUEGOS ROCK</span><h1>¿Cuántas<br>sacás vos?</h1><p>✔ Un desafío nuevo cada día<br>✔ Ranking con todos<br>✔ Gratis, sin descargar nada</p><span class="url">juegosrock.com.ar</span>`));
-    await espera(3200);
+    sonar("fin"); decir("¿Cuántas sacás vos? Jugá gratis en juegosrock.com.ar", .3); await pg.evaluate(() => window.__fin(`<span class="chip">JUEGOS ROCK</span><h1>¿Cuántas<br>sacás vos?</h1><p>✔ Un desafío nuevo cada día<br>✔ Ranking con todos<br>✔ Gratis, sin descargar nada</p><span class="url">juegosrock.com.ar</span>`));
+    await espera(4300);
     grabando = false; await cdp.send("Page.stopScreencast");
     if (cuadros.length < 20) throw new Error(`se grabaron muy pocos cuadros (${cuadros.length})`);
   } finally { await b.close(); srv.close() }
@@ -377,13 +413,15 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     + `\nfile '${cuadros.at(-1).archivo}'\n`;
   const listaF = path.join(cuadrosDir, "cuadros.txt"); fs.writeFileSync(listaF, lista);
   const t0 = cuadros[0].t, wav = path.join(cuadrosDir, "sonido.wav");
-  fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0));
+  let voces = []; try { const a = sintetizar(frases.map(f => f.f), cuadrosDir); voces = frases.map((f, i) => ({ t: f.t - t0, a: a[i] || new Float32Array(0) })).filter(v => v.a.length) }
+  catch (e) { log(`(sin voz: ${String(e.message).split("\n")[0]})`) }
+  fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0, voces));
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
   execFileSync(ffmpeg, ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listaF,
     "-i", wav, "-af", "aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "44100",
     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
     "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", mp4]);
   fs.rmSync(cuadrosDir, { recursive: true, force: true });
-  log(`🎬 Video grabado en la página (${juego}): ${cuadros.length} cuadros, ${eventos.length} sonidos, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
+  log(`🎬 Video grabado en la página (${juego}): ${cuadros.length} cuadros, ${eventos.length} sonidos, ${voces.length} frases de voz, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
   return mp4;
 }
