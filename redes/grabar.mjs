@@ -128,9 +128,33 @@ const SONIDOS = (() => {
       notas.forEach((fr, i) => { const tt = t - i * .09; if (tt > 0) v += (tono(fr, tt) * .5 + tono(fr * 2, tt) * .15) * env(tt, .004, i === 3 ? .55 : .25) }); return v * .32 }),
   };
 })();
+// Música de fondo: una base de rock hecha acá (batería, bajo y guitarra con distorsión), 128 bpm, en mi menor
+function musica(dur) {
+  const n = Math.ceil(dur * SR), m = new Float32Array(n), BPM = 128, neg = 60 / BPM, oct = neg / 2;
+  let ruido = 777; const rnd = () => (ruido = (ruido * 1103515245 + 12345) & 0x7fffffff) / 0x3fffffff - 1;
+  const poner = (t0, largo, f, vol = 1) => { const i0 = Math.round(t0 * SR); for (let i = 0; i < largo * SR && i0 + i < n; i++) m[i0 + i] += f(i / SR) * vol };
+  const bombo = t0 => poner(t0, .22, t => { const fr = 45 + 110 * Math.exp(-t / .03); return Math.sin(2 * Math.PI * fr * t) * Math.exp(-t / .12) }, .9);
+  const caja = t0 => poner(t0, .2, t => (rnd() * .8 * Math.exp(-t / .07) + Math.sin(2 * Math.PI * 190 * t) * .5 * Math.exp(-t / .04)), .5);
+  let hp = 0; const plato = (t0, v) => poner(t0, .06, t => { const r = rnd(), y = r - hp; hp = r; return y * Math.exp(-t / .018) }, v);
+  const saw = (fr, t) => 2 * ((fr * t) % 1) - 1;
+  const bajo = (t0, fr) => { let lp = 0; poner(t0, oct * .95, t => { lp += .08 * (saw(fr, t) - lp); return lp * Math.min(1, t / .005) * Math.exp(-t / .35) }, .55) };
+  const guitarra = (t0, fr, largo, v) => { let lp = 0; poner(t0, largo, t => { const x = saw(fr, t) + saw(fr * 1.4983, t) * .8 + saw(fr * 2, t) * .5;
+    lp += .18 * (Math.tanh(x * 3) - lp); return lp * Math.min(1, t / .004) * Math.exp(-t / (largo * .7)) }, v) };
+  const acordes = [82.41, 82.41, 65.41, 73.42]; // mi, mi, do, re: un compás cada uno
+  for (let c = 0; c * 4 * neg < dur; c++) {
+    const raiz = acordes[c % 4], t = c * 4 * neg;
+    for (let k = 0; k < 8; k++) { const tk = t + k * oct;
+      if (k === 0 || k === 4 || k === 5) bombo(tk); if (k === 2 || k === 6) caja(tk); plato(tk, k % 2 ? .12 : .2);
+      bajo(tk, raiz); guitarra(tk, raiz * 2, k === 0 ? oct * 3 : oct * .5, k === 0 ? .2 : .11) } // golpe abierto al empezar el compás y "chugs" apagados
+  }
+  // entra suave y se apaga al final
+  for (let i = 0; i < n; i++) { const t = i / SR; m[i] *= Math.min(1, t / .4) * Math.min(1, (dur - t) / 1.2) }
+  return m;
+}
 // Arma la pista de audio (WAV mono 16 bits) con cada efecto en su momento
 function pistaWav(eventos, dur) {
-  const n = Math.ceil((dur + .5) * SR), mix = new Float32Array(n);
+  const n = Math.ceil((dur + .5) * SR), mix = new Float32Array(n), fondo = musica(dur);
+  for (let i = 0; i < fondo.length && i < n; i++) mix[i] = fondo[i] * .32; // la música va abajo de los efectos
   for (const e of eventos) { const s = SONIDOS[e.n], i0 = Math.round(e.t * SR); if (!s || i0 < 0) continue;
     for (let i = 0; i < s.length && i0 + i < n; i++) mix[i0 + i] += s[i] * (e.vol ?? 1) }
   const buf = Buffer.alloc(44 + n * 2);
@@ -356,7 +380,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
   fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0));
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
   execFileSync(ffmpeg, ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listaF,
-    "-i", wav, "-af", "aformat=channel_layouts=stereo",
+    "-i", wav, "-af", "aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "44100",
     "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
     "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", mp4]);
   fs.rmSync(cuadrosDir, { recursive: true, force: true });
