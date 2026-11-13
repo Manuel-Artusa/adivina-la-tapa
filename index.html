@@ -3151,23 +3151,31 @@ $("antes-otra").onclick=antNuevo;
 const ORD={banda:null,items:[],fijo:[],intentos:0,fin:false,racha:0,modo:"libre"};
 const ORD_PUNTOS=[100,60,30];
 const ORD_MAX=3;
-const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"];
-// Qué banda toca. Desde el 13/11: sin Once Tiros; la del día va en rueda (no repite hasta pasar por todas)
+const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"]; // Once Tiros: fuera del desafío del día (en libre sigue)
+// Qué banda toca. Desde el 13/11 la del día va en rueda
+// (no repite hasta pasar por todas, sin Once Tiros, y arranca por las que no salieron en el último mes)
 // y en el modo libre no salen las últimas 20 que te tocaron
+function ordBandasMas(){ // solo las bandas de la página principal (no las de Todo el rock)
+  return ordBandas().slice().sort((x,y)=>x[0]<y[0]?-1:1);
+}
+const ordViejo=rng=>{ const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas(); return mezR(rng()<.75&&nac.length?nac:todas,rng)[0] };
 function ordElegir(rng,modo,dia){
-  const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas();
-  if(dia<ORD_RUEDA_DESDE) return mezR(rng()<.75&&nac.length?nac:todas,rng)[0];
-  const pool=(nac.length?nac:todas).filter(([a])=>!ORD_FUERA.includes(a)).sort((x,y)=>x[0]<y[0]?-1:1);
-  if(modo==="diario") return ordRueda(pool,dia);
-  if(modo!=="libre") return mezR(pool,rng)[0];
-  const vistas=ls.get("tapa-orden-vistas")||[], quedan=pool.filter(([a])=>!vistas.includes(a)), el=mezR(quedan.length?quedan:pool,rng)[0];
-  try{ ls.set("tapa-orden-vistas",[el[0],...vistas.filter(b=>b!==el[0])].slice(0,Math.min(20,pool.length-1))) }catch(e){}
+  if(dia<ORD_RUEDA_DESDE) return ordViejo(rng);
+  const todas=ordBandasMas();
+  if(modo==="diario") return ordRueda(todas.filter(([a])=>!ORD_FUERA.includes(a)),dia);
+  if(modo!=="libre") return mezR(todas,rng)[0];
+  const vistas=ls.get("tapa-orden-vistas")||[], quedan=todas.filter(([a])=>!vistas.includes(a)), el=mezR(quedan.length?quedan:todas,rng)[0];
+  try{ ls.set("tapa-orden-vistas",[el[0],...vistas.filter(b=>b!==el[0])].slice(0,Math.min(20,todas.length-1))) }catch(e){}
   return el;
 }
-// la rueda del día: cada vuelta es un orden sorteado de todas las bandas; cada día toma la siguiente
+// la rueda del día: cada vuelta es un orden sorteado de todas las bandas; cada día toma la siguiente.
+// En la primera vuelta van al final las que salieron en el último mes (con el sorteo de antes)
 function ordRueda(pool,dia){
   const k=Math.round((Date.parse(dia+"T12:00:00Z")-Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z"))/864e5), N=pool.length, c=Math.floor(k/N);
-  return mezR(pool,semillaRng(hashStr("orden-rueda-"+c)))[((k%N)+N)%N];
+  let orden=mezR(pool,semillaRng(hashStr("orden-rueda-"+c)));
+  if(c===0){ const recientes=new Set(); for(let i=1;i<=31;i++){ const d=new Date(Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z")-i*864e5).toISOString().slice(0,10); recientes.add(ordViejo(semillaRng(hashStr("orden-"+d)))[0]) }
+    orden=[...orden.filter(([a])=>!recientes.has(a)),...orden.filter(([a])=>recientes.has(a))] }
+  return orden[((k%N)+N)%N];
 }
 function ordBandas(){
   const por={}; DISCOS.filter(d=>d[1]&&d[2]).forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
