@@ -3151,6 +3151,32 @@ $("antes-otra").onclick=antNuevo;
 const ORD={banda:null,items:[],fijo:[],intentos:0,fin:false,racha:0,modo:"libre"};
 const ORD_PUNTOS=[100,60,30];
 const ORD_MAX=3;
+const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"]; // Once Tiros: fuera del desafío del día (en libre sigue)
+// Qué banda toca. Desde el 13/11 la del día va en rueda
+// (no repite hasta pasar por todas, sin Once Tiros, y arranca por las que no salieron en el último mes)
+// y en el modo libre no salen las últimas 20 que te tocaron
+function ordBandasMas(){ // solo las bandas de la página principal (no las de Todo el rock)
+  return ordBandas().slice().sort((x,y)=>x[0]<y[0]?-1:1);
+}
+const ordViejo=rng=>{ const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas(); return mezR(rng()<.75&&nac.length?nac:todas,rng)[0] };
+function ordElegir(rng,modo,dia){
+  if(dia<ORD_RUEDA_DESDE) return ordViejo(rng);
+  const todas=ordBandasMas();
+  if(modo==="diario") return ordRueda(todas.filter(([a])=>!ORD_FUERA.includes(a)),dia);
+  if(modo!=="libre") return mezR(todas,rng)[0];
+  const vistas=ls.get("tapa-orden-vistas")||[], quedan=todas.filter(([a])=>!vistas.includes(a)), el=mezR(quedan.length?quedan:todas,rng)[0];
+  try{ ls.set("tapa-orden-vistas",[el[0],...vistas.filter(b=>b!==el[0])].slice(0,Math.min(20,todas.length-1))) }catch(e){}
+  return el;
+}
+// la rueda del día: cada vuelta es un orden sorteado de todas las bandas; cada día toma la siguiente.
+// En la primera vuelta van al final las que salieron en el último mes (con el sorteo de antes)
+function ordRueda(pool,dia){
+  const k=Math.round((Date.parse(dia+"T12:00:00Z")-Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z"))/864e5), N=pool.length, c=Math.floor(k/N);
+  let orden=mezR(pool,semillaRng(hashStr("orden-rueda-"+c)));
+  if(c===0){ const recientes=new Set(); for(let i=1;i<=31;i++){ const d=new Date(Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z")-i*864e5).toISOString().slice(0,10); recientes.add(ordViejo(semillaRng(hashStr("orden-"+d)))[0]) }
+    orden=[...orden.filter(([a])=>!recientes.has(a)),...orden.filter(([a])=>recientes.has(a))] }
+  return orden[((k%N)+N)%N];
+}
 function ordBandas(){
   const por={}; DISCOS.filter(d=>d[1]&&d[2]).forEach(d=>(por[d[0]]=por[d[0]]||[]).push(d));
   return Object.entries(por).filter(([a,ds])=>new Set(ds.map(d=>d[2])).size>=5);
@@ -3167,8 +3193,7 @@ function ordIniciar(){
 async function ordNuevo(rng=Math.random,modo="libre"){
   ORD.modo=modo; ORD.fin=false; ORD.intentos=0; ORD.marcados=null; $("orden-otra").hidden=true; $("orden-ok").hidden=false; $("orden-msg").textContent="";
   $("orden-lista").innerHTML=""; $("orden-bajada").textContent="Cargando…";
-  const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas();
-  const [banda,ds]=mezR(rng()<.75&&nac.length?nac:todas,rng)[0];
+  const [banda,ds]=ordElegir(rng,modo,diaSel());
   const porAnio=[]; mezR(ds,rng).forEach(d=>{ if(!porAnio.some(x=>x[2]===d[2])) porAnio.push(d) });
   const cinco=porAnio.slice(0,5);
   let items=cinco.map(d=>({d,url:null}));
@@ -4894,9 +4919,8 @@ async function contTapaCon(dia){
   }finally{ G=viejoG; rnd=viejoR }
 }
 // Ordená la discografía de un día (la misma banda y el mismo orden que en el juego)
-async function contOrden(rng){
-  const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas();
-  const [banda,ds]=mezR(rng()<.75&&nac.length?nac:todas,rng)[0];
+async function contOrden(rng,dia=null){
+  const [banda,ds]=ordElegir(rng,dia?"diario":"azar",dia||hoyAR());
   const porAnio=[]; mezR(ds,rng).forEach(d=>{ if(!porAnio.some(x=>x[2]===d[2])) porAnio.push(d) });
   let items=porAnio.slice(0,5).map(d=>({d,url:null}));
   do{ items=mezR(items,rng) }while(items.every((x,i)=>i===0||items[i-1].d[2]<x.d[2]));
@@ -5384,7 +5408,7 @@ async function contArmar(){
   }catch(e){ console.error(e) }
   // 3) Carrusel: Ordená la discografía (la de ayer, así no se adelanta la del día)
   try{
-    const o=await contOrden(semillaRng(hashStr("orden-"+ayer))); if(n!==CONT_N) return;
+    const o=await contOrden(semillaRng(hashStr("orden-"+ayer)),ayer); if(n!==CONT_N) return;
     const cs=placasOrden(o);
     const pieza=contPieza(`Ordená la discografía: ${o.banda} (carrusel)`,`Post · es el desafío del ${fechaCorta(ayer)}`,cs,"ordena",ayer,
       `¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo. La respuesta está en la última foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`);
@@ -6055,7 +6079,7 @@ async function redesPlan(dia,turno,disco,extra={}){
     });
     // 3) miércoles: carrusel de Ordená la discografía (el de ayer, para no adelantar el de hoy)
     if(ds===3) await intentar("orden",async()=>{
-      const o=await contOrden(semillaRng(hashStr("orden-"+ayer)));
+      const o=await contOrden(semillaRng(hashStr("orden-"+ayer)),ayer);
       out.push({id:"orden",tipo:"carrusel",caption:`¿Te sabés la discografía de ${o.banda}? 📚 Ordená estos 5 discos del más viejo al más nuevo. La respuesta está en la segunda foto 👉\n\nTodos los días hay uno nuevo en juegosrock.com.ar\n\n${CONT_TAGS} ${hashtag(o.banda)}`,imgs:placasOrden(o)});
     });
   }
