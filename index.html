@@ -2884,6 +2884,21 @@ async function temaTodoRock(pool,bandas,rng,dia,modo){
   }
   return null;
 }
+const TEMA_PAREJO_DESDE="2026-11-14";
+async function temaParejo(ds,rng,dia,modo){
+  if(!ds.length) return null;
+  const pop=await temasConocidos(ds[0][0],dia), cand=new Map();
+  for(const d of ds){
+    try{ const r=await resolver(d,false,new Set());
+      for(const p of await pistasDe(r.id)){ const k=norm(limpiarTema(p.t)); if(!p.prev||(pop&&!pop.has(k))||cand.has(k)) continue; cand.set(k,{d,r,p}) } }catch(e){}
+  }
+  let lista=[...cand.entries()];
+  if(modo==="libre"){ const vistos=ls.get("tapa-tema-vistos")||[], banda=ds[0][0], sin=lista.filter(([k])=>!vistos.includes(banda+"|"+k)); if(sin.length) lista=sin }
+  if(!lista.length) return null;
+  const [k,x]=lista[rng()*lista.length|0];
+  if(modo==="libre") try{ const v=ls.get("tapa-tema-vistos")||[]; ls.set("tapa-tema-vistos",[x.d[0]+"|"+k,...v.filter(y=>y!==x.d[0]+"|"+k)].slice(0,30)) }catch(e){}
+  return {d:x.d,r:x.r,p:x.p,paso:0,log:[],fin:false,gano:false,modo,dia};
+}
 async function temaNuevo(){
   temaParar();
   const modo=TEMA.modo, gen=TEMA.gen, dia=modo==="diario"?diaSel():hoyAR();
@@ -2898,6 +2913,9 @@ async function temaNuevo(){
     // (antes se sorteaba entre todos los discos y las bandas con pocos discos, como La Vela Puerca, casi nunca salían)
     const pool=temaPool(), bandas=[...new Set(pool.map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
     if(TODO_ROCK){ j=await temaTodoRock(pool,bandas,rng,dia,modo); continue }
+    // desde el 14/11 (en libre, ya): se elige entre todos los temas conocidos de la banda juntos, no disco por disco
+    // (antes un disco con un solo tema conocido hacía que ese tema saliera muchísimo); en libre no se repiten los últimos 30
+    if(modo==="libre"||dia>=TEMA_PAREJO_DESDE){ j=await temaParejo(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng,dia,modo); continue }
     const x=ESQUEMA_31?await discoDe(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng):await discoDe(pool,rng); if(!x){ if(ESQUEMA_31) continue; break }
     try{
       let buenos=(await pistasDe(x.r.id)).filter(p=>p.prev);
