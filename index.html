@@ -3151,7 +3151,7 @@ $("antes-otra").onclick=antNuevo;
 const ORD={banda:null,items:[],fijo:[],intentos:0,fin:false,racha:0,modo:"libre"};
 const ORD_PUNTOS=[100,60,30];
 const ORD_MAX=3;
-const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"]; // Once Tiros: fuera del desafío del día (en libre sigue)
+const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"], ORD_CAMBIOS={"2026-11-13":"Soda Stereo"}; // Once Tiros: fuera del desafío del día (en libre sigue)
 // Qué banda toca. Desde el 13/11 la del día va en rueda
 // (no repite hasta pasar por todas, sin Once Tiros, y arranca por las que no salieron en el último mes)
 // y en el modo libre no salen las últimas 20 que te tocaron
@@ -3174,7 +3174,10 @@ function ordRueda(pool,dia){
   const k=Math.round((Date.parse(dia+"T12:00:00Z")-Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z"))/864e5), N=pool.length, c=Math.floor(k/N);
   let orden=mezR(pool,semillaRng(hashStr("orden-rueda-"+c)));
   if(c===0){ const recientes=new Set(); for(let i=1;i<=31;i++){ const d=new Date(Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z")-i*864e5).toISOString().slice(0,10); recientes.add(ordViejo(semillaRng(hashStr("orden-"+d)))[0]) }
-    orden=[...orden.filter(([a])=>!recientes.has(a)),...orden.filter(([a])=>recientes.has(a))] }
+    orden=[...orden.filter(([a])=>!recientes.has(a)),...orden.filter(([a])=>recientes.has(a))];
+    // cambios a mano: esa banda pasa a ese día (intercambia el lugar con la que tocaba, así no se repite)
+    for(const [d,banda] of Object.entries(ORD_CAMBIOS)){ const kd=Math.round((Date.parse(d+"T12:00:00Z")-Date.parse(ORD_RUEDA_DESDE+"T12:00:00Z"))/864e5), j=orden.findIndex(([a])=>a===banda);
+      if(kd>=0&&kd<N&&j>=0) [orden[kd],orden[j]]=[orden[j],orden[kd]] } }
   return orden[((k%N)+N)%N];
 }
 function ordBandas(){
