@@ -2186,12 +2186,34 @@ function cuentaJuntar(local,nube){
   }
   return out;
 }
-let cuentaTimer=null, cuentaEstado={email:null,listo:false};
-async function cuentaSubir(){
-  const t=await cuentaToken(), x=cuentaSesion(); if(!t||!x) return;
-  try{ await fetch(`${SUPA_URL}/rest/v1/cuentas`,{method:"POST",headers:{...supaHeaders,Authorization:`Bearer ${t}`,Prefer:"resolution=merge-duplicates,return=minimal"},
-    body:JSON.stringify({user_id:x.user_id,datos:cuentaDatosLocales(),actualizado:new Date().toISOString()})}) }catch(e){}
+let cuentaTimer=null, cuentaEstado={email:null,listo:false}, cuentaEnCurso=null;
+// Sincroniza en los dos sentidos: trae lo de la cuenta, lo junta con lo del dispositivo y sube el resultado.
+// (antes se subía solo lo del dispositivo y pisaba lo que había jugado el otro: el celu borraba lo de la compu y al revés)
+function cuentaSubir(){ return cuentaEnCurso||(cuentaEnCurso=cuentaSincronizar().finally(()=>{ cuentaEnCurso=null })) }
+async function cuentaSincronizar(){
+  const t=await cuentaToken(), x=cuentaSesion(); if(!t||!x||!x.user_id) return;
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/cuentas?user_id=eq.${x.user_id}&select=datos`,{headers:{...supaHeaders,Authorization:`Bearer ${t}`},cache:"no-store"});
+    if(!r.ok) return;
+    const fila=(await r.json())[0], local=cuentaDatosLocales(), junto=cuentaJuntar(local,fila&&fila.datos);
+    let cambio=false;
+    for(const [k,v] of Object.entries(junto)) if(local[k]!==v){ try{ localStorage.setItem(k,v); cambio=true }catch(e){} }
+    const nube=fila&&fila.datos||{}, hayQueSubir=Object.keys(junto).some(k=>nube[k]!==junto[k]);
+    if(hayQueSubir) await fetch(`${SUPA_URL}/rest/v1/cuentas`,{method:"POST",headers:{...supaHeaders,Authorization:`Bearer ${t}`,Prefer:"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify({user_id:x.user_id,datos:junto,actualizado:new Date().toISOString()})});
+    if(cambio) cuentaRepintar();
+  }catch(e){}
 }
+// lo que trajo la cuenta se ve en pantalla: el inicio (tildes de jugado), tus números y los botones "Del día ✓"
+function cuentaRepintar(){
+  try{ if(typeof mostrarQuien==="function") mostrarQuien(); if(vista==="inicio") hubMarcar(); if(vista==="yo") yoPintar();
+    Object.keys(MODO).forEach(j=>{ try{ pintarChipsModo(j) }catch(e){} }) }catch(e){}
+}
+// volver a la pestaña o a la app (en el celu queda abierta en segundo plano) trae lo que se jugó en el otro dispositivo
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&cuentaEstado.listo) cuentaSubir() });
+addEventListener("focus",()=>{ if(cuentaEstado.listo) cuentaSubir() });
+addEventListener("pageshow",e=>{ if(e.persisted&&cuentaEstado.listo) cuentaSubir() });
+setInterval(()=>{ if(cuentaEstado.listo&&document.visibilityState==="visible") cuentaSubir() },120000);
 function cuentaCambio(k){ if(!cuentaEstado.listo||!k||!k.startsWith("tapa-")||CUENTA_FUERA.test(k)) return; clearTimeout(cuentaTimer); cuentaTimer=setTimeout(cuentaSubir,1500) }
 // la vuelta del login trae la sesión en #access_token=...; se guarda acá antes de que irA() reescriba la dirección
 let CUENTA_HASH=location.hash;
@@ -2209,11 +2231,7 @@ async function cuentaIniciar(){
     const u=await (await fetch(`${SUPA_URL}/auth/v1/user`,{headers:{...supaHeaders,Authorization:`Bearer ${t}`}})).json();
     if(!u||!u.id) throw 0;
     cuentaGuardarSesion({...cuentaSesion(),user_id:u.id,email:u.email}); cuentaEstado.email=u.email;
-    const r=await fetch(`${SUPA_URL}/rest/v1/cuentas?user_id=eq.${u.id}&select=datos`,{headers:{...supaHeaders,Authorization:`Bearer ${t}`}});
-    const fila=r.ok?(await r.json())[0]:null, junto=cuentaJuntar(cuentaDatosLocales(),fila&&fila.datos);
-    for(const [k,v] of Object.entries(junto)) try{ localStorage.setItem(k,v) }catch(e){}
-    cuentaEstado.listo=true; await cuentaSubir();
-    if(typeof mostrarQuien==="function") mostrarQuien(); if(vista==="inicio") hubMarcar(); if(vista==="yo") yoPintar();
+    cuentaEstado.listo=true; await cuentaSubir(); cuentaRepintar();
   }catch(e){ cuentaEstado.listo=false }
   cuentaPintar();
 }
