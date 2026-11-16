@@ -175,9 +175,25 @@ async function sintetizarAzure(frases, dir) {
   }
   return out;
 }
-async function sintetizar(frases, dir, log = console.log) {
+// Voz argentina de Microsoft sin cuenta (edge-tts, la lectura en voz alta de Edge). Uso no oficial: si deja de andar, queda Piper.
+// EDGE_VOZ elige la voz (por defecto es-AR-ElenaNeural; la otra es es-AR-TomasNeural). EDGE_VOZ=no la apaga.
+function sintetizarEdge(frases, dir, ffmpeg) {
+  const voz = process.env.EDGE_VOZ || "es-AR-ElenaNeural"; if (voz === "no") return null;
+  const lista = path.join(dir, "frases-edge.json"); fs.writeFileSync(lista, JSON.stringify(frases.map((f, i) => ({ t: f, a: path.join(dir, `edge${i}.mp3`) }))));
+  execFileSync("python3", ["-c", `import asyncio,json,os,ssl,sys
+import edge_tts, edge_tts.communicate as c
+if os.environ.get("EDGE_CA"): c._SSL_CTX=ssl.create_default_context(cafile=os.environ["EDGE_CA"])
+async def main():
+  for f in json.load(open(sys.argv[2])):
+    await edge_tts.Communicate(f["t"], sys.argv[1], rate="+12%", proxy=os.environ.get("HTTPS_PROXY")).save(f["a"])
+asyncio.run(main())`, voz, lista], { stdio: "pipe", timeout: 120000 });
+  return frases.map((f, i) => { const mp3 = path.join(dir, `edge${i}.mp3`), wav = path.join(dir, `edge${i}.wav`);
+    execFileSync(ffmpeg, ["-y", "-loglevel", "error", "-i", mp3, "-ac", "1", "-ar", "24000", "-c:a", "pcm_s16le", wav]); return leerWav(wav) });
+}
+async function sintetizar(frases, dir, log = console.log, ffmpeg = "ffmpeg") {
   if (!frases.length) return [];
-  try { const a = await sintetizarAzure(frases, dir); if (a) return a } catch (e) { log(`(la voz de Microsoft falló: ${e.message.slice(0, 160)}; uso la otra voz)`) }
+  try { const a = await sintetizarAzure(frases, dir); if (a) return a } catch (e) { log(`(la voz de Microsoft con clave falló: ${e.message.slice(0, 160)}; pruebo otra)`) }
+  try { const a = sintetizarEdge(frases, dir, ffmpeg); if (a && a.every(x => x.length)) return a } catch (e) { log(`(la voz de Microsoft sin cuenta falló: ${String(e.message).split("\n")[0].slice(0, 160)}; uso Piper)`) }
   const modelo = process.env.VOZ_MODELO; if (!modelo || !fs.existsSync(modelo)) return [];
   const lista = path.join(dir, "frases.json"); fs.writeFileSync(lista, JSON.stringify(frases.map((f, i) => ({ t: f, a: path.join(dir, `voz${i}.wav`) }))));
   execFileSync("python3", ["-c", `import json,sys,wave
@@ -431,7 +447,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
     + `\nfile '${cuadros.at(-1).archivo}'\n`;
   const listaF = path.join(cuadrosDir, "cuadros.txt"); fs.writeFileSync(listaF, lista);
   const t0 = cuadros[0].t, wav = path.join(cuadrosDir, "sonido.wav");
-  let voces = []; try { const a = await sintetizar(frases.map(f => f.f), cuadrosDir, log); voces = frases.map((f, i) => ({ t: f.t - t0, a: a[i] || new Float32Array(0) })).filter(v => v.a.length) }
+  let voces = []; try { const a = await sintetizar(frases.map(f => f.f), cuadrosDir, log, ffmpeg); voces = frases.map((f, i) => ({ t: f.t - t0, a: a[i] || new Float32Array(0) })).filter(v => v.a.length) }
   catch (e) { log(`(sin voz: ${String(e.message).split("\n")[0]})`) }
   fs.writeFileSync(wav, pistaWav(eventos.map(e => ({ ...e, t: e.t - t0 })), cuadros.at(-1).t - t0, voces));
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
