@@ -43,12 +43,12 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1 ffmpeg-static@5.2.0
           npx playwright install --with-deps chromium
-      # voz narradora de los videos (Piper, voz argentina "daniela"; libre). Si falla, los videos salen sin voz
+      # voz narradora de los videos: Microsoft (edge-tts, voz argentina Elena) y, si no anda, Piper (voz argentina "daniela"). Si nada anda, salen sin voz
       - name: Voz para los videos
         if: ${{ inputs.turno != 'promo' }}
         continue-on-error: true
         run: |
-          pip install --quiet piper-tts
+          pip install --quiet piper-tts edge-tts
           mkdir -p ~/voz
           curl -sSL -o ~/voz/es_AR-daniela-high.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_AR/daniela/high/es_AR-daniela-high.onnx
           curl -sSL -o ~/voz/es_AR-daniela-high.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_AR/daniela/high/es_AR-daniela-high.onnx.json
