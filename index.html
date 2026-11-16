@@ -2820,9 +2820,19 @@ const baseDe=j=>j==="diario"?"tapa-d":j==="tema"?"tapa-tema":`tapa-${j}-dia`;
 // Estado guardado de un día: lo jugado en su fecha o, si no, lo jugado después como día anterior
 const leerDia=(base,dia=diaSel())=>ls.get(`${base}-${dia}`)||(dia!==hoyAR()?ls.get(`${base}p-${dia}`):null);
 // Puntos de un desafío en escala 0-100 (null si no se jugó). soloEnFecha: solo lo jugado ese mismo día
+// Lo que ya subiste hoy al ranking con tu jugador (desde cualquier dispositivo): si acá no está guardado, igual cuenta como jugado
+let SRV_HECHO={dia:"",m:{}};
+const srvPuntos=(j,dia=diaSel())=>dia===SRV_HECHO.dia&&SRV_HECHO.m[j]!=null?SRV_HECHO.m[j]:null;
+async function srvHechos(){
+  if(!TOP_ON||PREVIA||TODO_ROCK) return; const id=ls.get("tapa-jugador"); if(!id) return;
+  try{ const dia=hoyAR(), r=await fetch(`${SUPA_URL}/rest/v1/puntajes?select=modo,puntos&jugador=eq.${id}&dia=eq.${dia}&genero=eq.diario&limit=50`,{headers:supaHeaders,cache:"no-store"});
+    if(!r.ok) return; const m={}; for(const x of await r.json()) if(m[x.modo]==null||x.puntos>m[x.modo]) m[x.modo]=x.puntos;
+    const antes=JSON.stringify(SRV_HECHO.m); SRV_HECHO={dia,m};
+    if(JSON.stringify(m)!==antes){ if(vista==="inicio") hubMarcar(); Object.keys(MODO).forEach(j=>{ try{ pintarChipsModo(j) }catch(e){} }) } }catch(e){}
+}
 function puntos100(j,dia=diaSel(),soloEnFecha=false){
   const base=baseDe(j), x=soloEnFecha?ls.get(`${base}-${dia}`):leerDia(base,dia);
-  if(!x) return null;
+  if(!x) return srvPuntos(j,dia);
   if(j==="diario") return x.fin?Math.round((x.puntos||0)*2):null;
   if(j==="tema") return x.fin?(x.gano?TEMA_PTS[x.log.length-1]||10:0):null;
   return x.puntos;
@@ -2831,7 +2841,7 @@ const rngDia=n=>semillaRng(hashStr(n+"-"+diaSel()));
 const MODO={ahorcado:"diario",antes:"diario",orden:"diario",abre:"diario",conexiones:"diario",impostor:"diario",banda:"diario",grilla:"diario",armar:"diario",letra:"diario",bingo:"diario",pato:"diario",piojos:"diario"};
 const MODO_ELEGIDO=new Set();
 const claveDia=j=>kDia(`tapa-${j}-dia`);
-const diaHecho=j=>leerDia(`tapa-${j}-dia`);
+const diaHecho=j=>leerDia(`tapa-${j}-dia`)||(srvPuntos(j)!=null?{puntos:srvPuntos(j),detalle:`${srvPuntos(j)} puntos (lo jugaste en otro dispositivo)`,otro:true}:null);
 const diaCerrar=(j,puntos,detalle)=>{ ls.set(claveDia(j),{puntos,detalle}); contar((esPasado()?"termino-pasado-":"termino-")+j) };
 // Contador de visitas (GoatCounter): solo funciona si está configurado en Render
 function contar(evento){ try{ if(window.goatcounter&&window.goatcounter.count) window.goatcounter.count({path:evento,title:evento,event:true}) }catch(e){} }
@@ -6574,6 +6584,10 @@ new MutationObserver(ms=>{
 }).observe(document.body,{subtree:true,attributes:true,attributeOldValue:true,attributeFilter:["class","hidden"],characterData:true,childList:true});
 irA(vistaDeRuta(location.pathname),"inicial");
 cuentaIniciar(); // si entró con Google, trae y junta su progreso
+srvHechos(); // lo que ya jugaste hoy en otro dispositivo (según el ranking) se marca como jugado
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") srvHechos() });
+addEventListener("focus",()=>srvHechos());
+setInterval(()=>{ if(document.visibilityState==="visible") srvHechos() },120000);
 mostrarQuien();
 if(!ls.get("tapa-nombre")&&vista!=="contenido"&&vista!=="frases"&&vista!=="cpiojos") pedirNombre();
 </script>
