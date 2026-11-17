@@ -2912,6 +2912,16 @@ async function temaTodoRock(pool,bandas,rng,dia,modo){
   }
   return null;
 }
+// Temas del día fijados (los arma redes/fijar_temas.mjs para los próximos meses; nunca se cambia uno ya fijado)
+let TEMAS_FIJOS=null;
+async function temaFijo(dia){
+  try{ if(!TEMAS_FIJOS) TEMAS_FIJOS=await (await fetch("/tema-dia.json?v="+Date.now(),{cache:"no-store"})).json() }catch(e){ TEMAS_FIJOS={} }
+  const x=TEMAS_FIJOS[dia]; if(!x||!x.prev) return null;
+  await esperarCache();
+  const d=DISCOS.find(e=>e[0]===x.banda&&e[1]===x.disco)||[x.banda,x.disco,x.anio,x.cat||"nac"], v=CACHE&&CACHE.disc[x.banda+"|"+x.disco];
+  const r=v?{id:v.id,a:v.a,t:x.disco,y:d[2],url:v.url,cat:d[3]}:{id:x.id,a:x.banda,t:x.disco,y:x.anio,url:x.url,cat:x.cat||"nac"};
+  return {d,r,p:{t:x.tema,prev:x.prev},paso:0,log:[],fin:false,gano:false,modo:"diario",dia};
+}
 const TEMA_PAREJO_DESDE="2026-11-14", TEMA_GUARDADOS_DESDE="2026-11-18";
 async function temaParejo(ds,rng,dia,modo){
   if(!ds.length) return null;
@@ -2931,6 +2941,29 @@ async function temaParejo(ds,rng,dia,modo){
   if(modo==="libre") try{ const v=ls.get("tapa-tema-vistos")||[]; ls.set("tapa-tema-vistos",[x.d[0]+"|"+k,...v.filter(y=>y!==x.d[0]+"|"+k)].slice(0,30)) }catch(e){}
   return {d:x.d,r:x.r,p:x.p,paso:0,log:[],fin:false,gano:false,modo,dia};
 }
+// El sorteo del tema (el del día lo usa redes/fijar_temas.mjs para fijarlo de antemano en tema-dia.json)
+async function temaSortear(dia,modo,rng){
+  let j=null;
+  for(let k=0;k<(ESQUEMA_31?30:10)&&!j;k++){
+    // desde el 31/10 primero se sortea la banda y después el disco: así todas las bandas tienen la misma chance
+    // (antes se sorteaba entre todos los discos y las bandas con pocos discos, como La Vela Puerca, casi nunca salían)
+    const pool=temaPool(), bandas=[...new Set(pool.map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
+    if(TODO_ROCK){ j=await temaTodoRock(pool,bandas,rng,dia,modo); continue }
+    // desde el 14/11 (en libre, ya): se elige entre todos los temas conocidos de la banda juntos, no disco por disco
+    // (antes un disco con un solo tema conocido hacía que ese tema saliera muchísimo); en libre no se repiten los últimos 30
+    // desde el 18/11 (y en libre, ya) se sortea UNA banda (antes se sacaba un número por cada disco de la lista y quedaban mezcladas)
+    if(modo==="libre"||dia>=TEMA_GUARDADOS_DESDE){ const banda=bandas[rng()*bandas.length|0]; j=await temaParejo(pool.filter(d=>d[0]===banda),rng,dia,modo); continue }
+    if(dia>=TEMA_PAREJO_DESDE){ j=await temaParejo(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng,dia,modo); continue }
+    const x=ESQUEMA_31?await discoDe(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng):await discoDe(pool,rng); if(!x){ if(ESQUEMA_31) continue; break }
+    try{
+      let buenos=(await pistasDe(x.r.id)).filter(p=>p.prev);
+      if(ESQUEMA_31){ const pop=await temasConocidos(x.d[0],dia); if(pop) buenos=buenos.filter(p=>pop.has(norm(limpiarTema(p.t)))) }
+      if(!buenos.length) continue;
+      j={d:x.d,r:x.r,p:buenos[rng()*buenos.length|0],paso:0,log:[],fin:false,gano:false,modo,dia};
+    }catch(e){}
+  }
+  return j;
+}
 async function temaNuevo(){
   temaParar();
   const modo=TEMA.modo, gen=TEMA.gen, dia=modo==="diario"?diaSel():hoyAR();
@@ -2940,22 +2973,9 @@ async function temaNuevo(){
   const guardado=modo==="diario"?leerDia("tapa-tema",dia):null;
   const rng=modo==="diario"?semillaRng(hashStr("tema-"+dia)):Math.random;
   let j=null;
-  for(let k=0;k<(ESQUEMA_31?30:10)&&!j;k++){
-    // desde el 31/10 primero se sortea la banda y después el disco: así todas las bandas tienen la misma chance
-    // (antes se sorteaba entre todos los discos y las bandas con pocos discos, como La Vela Puerca, casi nunca salían)
-    const pool=temaPool(), bandas=[...new Set(pool.map(d=>d[0]))].sort((a,b)=>a.localeCompare(b,"es"));
-    if(TODO_ROCK){ j=await temaTodoRock(pool,bandas,rng,dia,modo); continue }
-    // desde el 14/11 (en libre, ya): se elige entre todos los temas conocidos de la banda juntos, no disco por disco
-    // (antes un disco con un solo tema conocido hacía que ese tema saliera muchísimo); en libre no se repiten los últimos 30
-    if(modo==="libre"||dia>=TEMA_PAREJO_DESDE){ j=await temaParejo(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng,dia,modo); continue }
-    const x=ESQUEMA_31?await discoDe(pool.filter(d=>d[0]===bandas[rng()*bandas.length|0]),rng):await discoDe(pool,rng); if(!x){ if(ESQUEMA_31) continue; break }
-    try{
-      let buenos=(await pistasDe(x.r.id)).filter(p=>p.prev);
-      if(ESQUEMA_31){ const pop=await temasConocidos(x.d[0],dia); if(pop) buenos=buenos.filter(p=>pop.has(norm(limpiarTema(p.t)))) }
-      if(!buenos.length) continue;
-      j={d:x.d,r:x.r,p:buenos[rng()*buenos.length|0],paso:0,log:[],fin:false,gano:false,modo,dia};
-    }catch(e){}
-  }
+  // el tema del día está fijado de antemano en tema-dia.json: igual para todos, pase lo que pase con iTunes o con discos.json
+  if(modo==="diario"&&!TODO_ROCK) j=await temaFijo(dia);
+  if(!j) j=await temaSortear(dia,modo,rng);
   if(TEMA.modo!==modo||TEMA.gen!==gen) return;
   if(!j){$("tema-estado").textContent="No pude cargar el tema. Revisá la conexión y recargá.";return}
   if(guardado){j.paso=guardado.paso;j.log=guardado.log;j.fin=guardado.fin;j.gano=guardado.gano}

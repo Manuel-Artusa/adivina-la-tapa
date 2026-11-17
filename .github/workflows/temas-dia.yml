@@ -1,0 +1,40 @@
+name: Fijar temas del día
+
+# Mantiene fijado de antemano el tema de "Adiviná el tema" para los próximos 90 días (tema-dia.json),
+# así es el mismo para todos. Nunca cambia un día ya fijado: solo agrega los que faltan.
+on:
+  schedule:
+    - cron: "17 9 * * 1"   # los lunes 6:17 de Argentina
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: temas-dia
+
+jobs:
+  fijar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Instalar Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Armar el sitio y fijar los temas que faltan
+        run: |
+          node build.js
+          node redes/fijar_temas.mjs
+      - name: Guardar tema-dia.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tema-dia.json
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git commit -m "Fijar temas del día"
+          for i in 1 2 3; do git pull --rebase origin main && git push && exit 0; sleep 10; done
+          exit 1
