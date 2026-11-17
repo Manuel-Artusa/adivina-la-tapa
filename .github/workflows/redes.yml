@@ -30,7 +30,7 @@ concurrency: redes
 
 jobs:
   publicar:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # fijo: en ubuntu-latest (26.04) Playwright no puede instalar Chromium
     timeout-minutes: 40
     # Las publicaciones automáticas arrancan cuando cargues el secreto IG_TOKEN (ver INSTAGRAM.md)
     if: ${{ github.event_name == 'workflow_dispatch' || vars.REDES_ACTIVO == 'si' }}
