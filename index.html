@@ -2912,11 +2912,15 @@ async function temaTodoRock(pool,bandas,rng,dia,modo){
   }
   return null;
 }
-const TEMA_PAREJO_DESDE="2026-11-14";
+const TEMA_PAREJO_DESDE="2026-11-14", TEMA_GUARDADOS_DESDE="2026-11-18";
 async function temaParejo(ds,rng,dia,modo){
   if(!ds.length) return null;
   const pop=await temasConocidos(ds[0][0],dia), cand=new Map();
+  // desde el 18/11 (y en libre, ya) solo los discos con la lista de temas guardada en discos.json: así no depende de que
+  // iTunes conteste (si fallaba alguna consulta, a ese jugador le tocaba otro tema del día, o no cargaba)
+  const soloGuardados=modo==="libre"||dia>=TEMA_GUARDADOS_DESDE;
   for(const d of ds){
+    const v=CACHE&&CACHE.disc[d[0]+"|"+d[1]]; if(soloGuardados&&!(v&&v.temas&&v.temas.length)) continue;
     try{ const r=await resolver(d,false,new Set());
       for(const p of await pistasDe(r.id)){ const k=norm(limpiarTema(p.t)); if(!p.prev||(pop&&!pop.has(k))||cand.has(k)) continue; cand.set(k,{d,r,p}) } }catch(e){}
   }

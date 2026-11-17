@@ -177,8 +177,16 @@ async function sintetizarAzure(frases, dir) {
 }
 // Voz argentina de Microsoft sin cuenta (edge-tts, la lectura en voz alta de Edge). Uso no oficial: si deja de andar, queda Piper.
 // EDGE_VOZ elige la voz (por defecto es-AR-ElenaNeural; la otra es es-AR-TomasNeural). EDGE_VOZ=no la apaga.
+// Un video con Elena y el siguiente con Tomás (los videos salen martes, jueves y sábado: se cuentan en ese orden)
+let VOZ_DEL_DIA = "es-AR-ElenaNeural";
+function elegirVoz(semilla) {
+  const m = String(semilla).match(/^\d{4}-\d{2}-\d{2}/); if (!m) return;
+  const dias = Math.floor(Date.parse(m[0] + "T12:00:00Z") / 864e5), ds = new Date(m[0] + "T12:00:00Z").getUTCDay();
+  const n = [2, 4, 6].includes(ds) ? Math.floor((dias + 4) / 7) * 3 + [2, 4, 6].indexOf(ds) : dias; // semanas de domingo a sábado
+  VOZ_DEL_DIA = n % 2 ? "es-AR-TomasNeural" : "es-AR-ElenaNeural";
+}
 function sintetizarEdge(frases, dir, ffmpeg) {
-  const voz = process.env.EDGE_VOZ || "es-AR-ElenaNeural"; if (voz === "no") return null;
+  const voz = process.env.EDGE_VOZ || VOZ_DEL_DIA; if (voz === "no") return null;
   const lista = path.join(dir, "frases-edge.json"); fs.writeFileSync(lista, JSON.stringify(frases.map((f, i) => ({ t: f, a: path.join(dir, `edge${i}.mp3`) }))));
   execFileSync("python3", ["-c", `import asyncio,json,os,ssl,sys
 import edge_tts, edge_tts.communicate as c
@@ -379,11 +387,12 @@ export const GRABABLES = Object.keys(JUEGOS);
 // ---------- Grabación ----------
 export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg", puerto = 8097, log = console.log }) {
   if (!JUEGOS[juego]) return null;
+  elegirVoz(semilla);
   const cuadrosDir = path.join(salida, `reel-${juego}-cuadros`);
   fs.rmSync(cuadrosDir, { recursive: true, force: true }); fs.mkdirSync(cuadrosDir, { recursive: true });
   const srv = await servir(puerto), b = await chromium.launch(), cuadros = [], eventos = [], frases = [];
   try {
-    const ctx = await b.newContext({ viewport: { width: 412, height: 732 }, deviceScaleFactor: 1080 / 412, isMobile: true, hasTouch: true, reducedMotion: "no-preference" });
+    const ctx = await b.newContext({ viewport: { width: 432, height: 768 }, deviceScaleFactor: 2.5, isMobile: true, hasTouch: true, reducedMotion: "no-preference" });
     await ctx.route(/supabase\.co|goatcounter|accounts\.google/, r => r.abort());
     if (process.env.TAPAS_FALSAS) await ctx.route(/mzstatic\.com/, r => { // pruebas sin internet: un cuadro de color por tapa
       const h = [...r.request().url()].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7), c1 = `hsl(${h % 360},60%,45%)`, c2 = `hsl(${(h >> 9) % 360},70%,70%)`;
@@ -406,7 +415,7 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
       const archivo = path.join(cuadrosDir, `c${String(cuadros.length).padStart(5, "0")}.jpg`);
       fs.writeFileSync(archivo, Buffer.from(f.data, "base64")); cuadros.push({ archivo, t: f.metadata.timestamp });
     });
-    await cdp.send("Page.startScreencast", { format: "jpeg", quality: 90, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
+    await cdp.send("Page.startScreencast", { format: "jpeg", quality: 100, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
 
     const sonar = (n, vol = 1) => { if (grabando) eventos.push({ n, vol, t: Date.now() / 1000 }) };
     const decir = (texto, demora = 0) => { const f = paraLeer(texto); if (grabando && f) frases.push({ f, t: Date.now() / 1000 + demora }) };
@@ -453,9 +462,12 @@ export async function grabarReel({ juego, semilla = "", salida, ffmpeg = "ffmpeg
   const mp4 = path.join(salida, `reel-${juego}.mp4`);
   execFileSync(ffmpeg, ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", listaF,
     "-i", wav, "-af", "aformat=channel_layouts=stereo,loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "44100",
-    "-vf", "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
-    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", mp4]);
+    "-vf", "scale=1080:1920:flags=lanczos:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0xF2C230,fps=30,format=yuv420p",
+    // Full HD vertical en máxima calidad: H.264 High 4.2, casi sin pérdida (crf 14), con tope de 20 Mbps (lo que aceptan Instagram y TikTok)
+    "-c:v", "libx264", "-preset", "slow", "-tune", "animation", "-crf", "14", "-maxrate", "20M", "-bufsize", "40M", "-profile:v", "high", "-level", "4.2",
+    "-r", "30", "-g", "60", "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
+    "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-shortest", "-movflags", "+faststart", mp4]);
   fs.rmSync(cuadrosDir, { recursive: true, force: true });
-  log(`🎬 Video grabado en la página (${juego}): ${cuadros.length} cuadros, ${eventos.length} sonidos, ${voces.length} frases de voz, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
+  log(`🎬 Video grabado en la página (${juego}, voz ${(process.env.EDGE_VOZ || VOZ_DEL_DIA).replace(/^es-AR-|Neural$/g, "")}): ${cuadros.length} cuadros, ${eventos.length} sonidos, ${voces.length} frases de voz, ${(cuadros.at(-1).t - cuadros[0].t).toFixed(1)} s → ${path.basename(mp4)}`);
   return mp4;
 }
