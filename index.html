@@ -1780,6 +1780,8 @@ const cacheListo=(async()=>{
     const j=await r.json(), porId=new Map();
     // un disco corregido (otro disco de iTunes) vale desde su fecha: antes se usa el que estaba, así no cambia el desafío de ese día
     for(const [k,v] of Object.entries(j.discos||{})) if(v.desde&&v.antes&&hoyAR()<v.desde) j.discos[k]=v.antes;
+    // un disco que entró hoy a discos.json recién vale mañana (así no cambia ningún desafío del día)
+    for(const [k,v] of Object.entries(j.discos||{})) if(v.desde&&!v.antes&&hoyAR()<v.desde) delete j.discos[k];
     for(const [k,v] of Object.entries(j.discos||{})){ porId.set(v.id,v); v.b=k.split("|")[0] }
     CACHE={disc:j.discos||{},bandas:j.bandas||null,faltan:new Set(j.faltan||[]),porId};
     // lo que todavía no entró al catálogo tampoco se usa desde discos.json
@@ -2564,11 +2566,15 @@ chipsModo("impostor",impIniciar);
 const CON_LIMITE={facil:Infinity,normal:10,dificil:5};
 const CON={dif:"normal",p:null,cargando:false};
 const temasCache=new Map();
+// Desde el 18/11 los juegos usan solo lo guardado en discos.json, nunca consultas en vivo a iTunes: si una consulta fallaba,
+// a ese jugador le tocaba otro desafío (los desafíos del día tienen que ser iguales para todos). El disco sin datos se saltea.
+const SOLO_GUARDADO=()=>!!CACHE&&hoyAR()>="2026-11-18";
 async function temasDe(id){
   if(temasCache.has(id)) return temasCache.get(id);
   await esperarCache();
   const c=temasCacheados(id);
   if(c){ const ts=c.map(x=>x[0]); temasCache.set(id,ts); return ts }
+  if(SOLO_GUARDADO()) throw new Error("sin temas guardados");
   const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
   const vistos=new Set(), temas=[];
   for(const x of r.results||[]){
@@ -2790,6 +2796,7 @@ async function pistasDe(id){
   if(c){
     const v=CACHE.porId.get(id), prevs=c.some(x=>!x[3])&&v&&v.b?((await audiosDe(v.b))[id]||[]):[];
     const ps=c.map(([t,n,disc,prev],i)=>({t,n,disc,prev:prev||prevs[i]||null})); pistasCache.set(id,ps); return ps }
+  if(SOLO_GUARDADO()) throw new Error("sin temas guardados");
   const r=await jsonp(`https://itunes.apple.com/lookup?id=${id}&entity=song&limit=200`);
   const vistos=new Set(), ps=[];
   for(const x of (r.results||[]).filter(x=>x.wrapperType==="track"&&x.trackName).sort((a,b)=>(a.discNumber||1)-(b.discNumber||1)||(a.trackNumber||0)-(b.trackNumber||0))){

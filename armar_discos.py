@@ -425,11 +425,15 @@ def main():
     # un disco corregido vale desde mañana: hasta entonces la página usa el anterior ("antes"), así no cambia el desafío del día
     hoy_ar = datetime.now(timezone(timedelta(hours=-3)))
     manana = (hoy_ar + timedelta(days=1)).strftime("%Y-%m-%d")
+    # lo mismo con un disco nuevo (no existe hasta mañana) o con uno que recién ahora tiene sus temas: los desafíos del día
+    # tienen que ser iguales para todos, aunque discos.json se actualice a mitad del día
     for k, v in nuevos.items():
         viejo = previo.get("discos", {}).get(k)
-        if viejo and viejo.get("id") != v["id"]:
+        if viejo and (viejo.get("id") != v["id"] or bool(viejo.get("temas")) != bool(v.get("temas"))):
             v["desde"] = manana
             v["antes"] = {c: x for c, x in viejo.items() if c not in ("antes", "desde")}
+        elif not viejo and previo.get("discos"):
+            v["desde"] = manana
     discos.update(nuevos)
     for v in discos.values():   # una vez que ya rige, no hace falta guardar el anterior
         if v.get("desde") and v["desde"] <= hoy_ar.strftime("%Y-%m-%d"):
