@@ -20,11 +20,15 @@ REGLA PRINCIPAL: el ÚNICO destinatario permitido de cualquier mail es manu.artu
    - Si NO hay precio en ningún lado: insertá la página 233 del diseño DAHK-_bZeyA (plantilla "NOVEDADES" sin precio) y cambiá "NOVEDADES Noviembre" por el mes actual.
    Después abrí transacción con read-design (open_transaction: true) y editá SOLO la página nueva con edit-design-v2, siguiendo el code_guide:
    - Reemplazá en el lugar (replace_text) los textos de la plantilla: códigos del producto (línea de códigos), descripción, precio formateado "$564.200" con "+ IVA", y el código rojo con el código de facturación de la lista.
-   - La plantilla de página 1 tiene la foto vacía: dejala vacía para que Manu ponga la foto real. Si usás la página 233, borrá la foto del disco de levas. No inventes fotos.
+   - La plantilla de página 1 tiene la foto vacía (la completás en el paso 4b). Si usás la página 233, borrá la foto del disco de levas. No inventes fotos ni uses imágenes generadas.
    - Logo de marca: Bosch = media MAGwnGgFWas, Engine Pro = MAGetUL_Xlo. Si la marca no es Bosch ni Engine Pro, o no se sabe, borrá el logo.
    - Validá thumbnail y layout_warnings; corregí superposiciones. La advertencia de que "WWW.LAUTARODIESEL.COM.AR" sobresale ~5px abajo viene de la plantilla original: ignorala (commit_despite_warnings: true solo para esa).
    - Hacé commit.
    No modifiques NUNCA los diseños originales DAHK-_bZeyA, DAGnQaLKmVs ni DAGjZRTBa80.
+
+4b) FOTO DEL PRODUCTO. Por cada producto buscá una foto con WebSearch usando el código principal (ej. "0460424465", "0 460 424 465") y, si no aparece, el código OEM o la descripción (ej. "504351279 bomba inyectora"). Elegí solo una foto que: sea de ESE producto exacto (mismo código), tenga buena calidad (lado mayor ≥ 800 px, nítida) y NO tenga marca de agua, logos superpuestos ni texto encima. Fotos de catálogos de fabricante o de tiendas con fondo liso son las mejores.
+   Si la conseguís: importala a Canva con upload-asset-from-url, ponela en una página temporal del diseño y exportala en PNG, bajá ese PNG y sacale el fondo con rembg (pip install "rembg[cpu]", modelo birefnet-general, procesando de a una imagen y con el lado mayor achicado a 2000 px para no quedarte sin memoria). Recortá al producto, subila con create-upload-url y colocala centrada y grande en el espacio vacío de la foto del flyer (sin tapar textos), y borrá la página temporal.
+   Si no encontrás una foto que cumpla TODO, o no podés descargarla, NO pongas ninguna: dejá el espacio vacío y en el mail a Manu poné los links de las páginas donde viste fotos del producto para que él elija.
 
 5) Etiquetá con "flyer-hecho" cada hilo procesado.
 
@@ -33,7 +37,7 @@ REGLA PRINCIPAL: el ÚNICO destinatario permitido de cualquier mail es manu.artu
    - El asunto del mail del jefe que originó cada base.
    - Fecha de la lista de precios usada.
    - Link: https://www.canva.com/d/07zNN7MDYv1UrGb
-   - "Falta: poner la foto real del producto."
+   - Para cada base: si se puso foto (y de qué página salió) o, si no, los links con fotos candidatas.
    Antes de enviar, verificá que el único destinatario sea manu.artusa@gmail.com.
 
 7) Respuesta final: el mismo resumen corto (le llega a Manu como notificación).
