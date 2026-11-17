@@ -13,8 +13,12 @@ const RAIZ = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
 const PUBLIC = path.join(RAIZ, "public");
 const env = process.env;
 const hoyAR = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Argentina/Buenos_Aires" }).format(new Date());
-const DIA = env.DIA && /^\d{4}-\d{2}-\d{2}$/.test(env.DIA) ? env.DIA : hoyAR();
 const TURNO = ["manana", "tarde", "todo", "aniversario", "novedad", "cuenta", "pato", "piojos"].includes(env.TURNO) ? env.TURNO : "manana";
+// GitHub a veces atrasa horas las tareas programadas: si la de la tarde corre pasada la medianoche (antes de las 6),
+// publica lo del día al que correspondía (antes armaba lo del día siguiente y a la tarde siguiente no salía nada)
+const horaAR = () => +new Intl.DateTimeFormat("en-US", { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", hourCycle: "h23" }).format(new Date());
+const ayerAR = () => new Date(Date.parse(hoyAR() + "T12:00:00Z") - 864e5).toISOString().slice(0, 10);
+const DIA = env.DIA && /^\d{4}-\d{2}-\d{2}$/.test(env.DIA) ? env.DIA : (TURNO === "tarde" && horaAR() < 6 ? ayerAR() : hoyAR());
 const DISCO = (env.DISCO || "").trim(); // para "aniversario": "Banda|Disco"
 const SUPA = (env.SUPA_URL || "").replace(/\/+$/, "");
 const SERVICIO = env.SUPABASE_SERVICE_KEY || "";
