@@ -381,7 +381,9 @@ def main():
     corregir = {k for k in claves if k in discos and id_manual(k) and id_manual(k) != discos[k].get("id")}
     if corregir:
         print(f"Discos a corregir con el link cargado a mano: {sorted(corregir)}", flush=True)
-    pendientes = [d for d in catalogo if (f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados or manual.get(f"{d[0]}|{d[1]}"))) or f"{d[0]}|{d[1]}" in corregir]
+    # con --reintentar también los que se encontraron pero quedaron sin lista de temas (iTunes a veces la devuelve vacía)
+    sin_temas = {k for k, v in discos.items() if not v.get("temas")} if reintentar else set()
+    pendientes = [d for d in catalogo if (f"{d[0]}|{d[1]}" not in discos and (reintentar or f"{d[0]}|{d[1]}" not in probados or manual.get(f"{d[0]}|{d[1]}"))) or f"{d[0]}|{d[1]}" in corregir or f"{d[0]}|{d[1]}" in sin_temas]
     pendientes.sort(key=lambda d: f"{d[0]}|{d[1]}" in probados)
     # De a tandas (--max N): con muchos discos nuevos, cada corrida busca una parte y la guarda; la tarea se vuelve a correr sola
     tope = next((int(a.split("=", 1)[1]) for a in sys.argv if a.startswith("--max=")), 0)

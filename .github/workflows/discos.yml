@@ -7,6 +7,10 @@ on:
         description: "Volver a buscar TODOS los discos (con más de 2000 discos puede pasar el límite de 3 horas). Si no, solo los nuevos, de a tandas."
         type: boolean
         default: false
+      reintentar:
+        description: "Volver a probar los que no se encontraron y los que quedaron sin lista de temas"
+        type: boolean
+        default: false
   schedule:
     - cron: "0 7 1 * *"   # el día 1 de cada mes: busca lo que falte y refresca los temas del Ahorcado
   push:
@@ -29,7 +33,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Buscar discos en iTunes
-        run: python armar_discos.py ${{ inputs.todo && '--todo' || '--max=400' }} ${{ github.event_name == 'schedule' && '--reintentar' || '' }}   # de a 400 por tanda; los no encontrados se reprueban solo en la corrida mensual
+        run: python armar_discos.py ${{ inputs.todo && '--todo' || '--max=400' }} ${{ (github.event_name == 'schedule' || inputs.reintentar) && '--reintentar' || '' }}   # de a 400 por tanda; los no encontrados se reprueban solo en la corrida mensual
       - name: Guardar los temas de cada banda (Ahorcado)
         if: ${{ hashFiles('quedan.txt') == '' }}   # recién en la última tanda
         run: python armar_temas.py
@@ -54,4 +58,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           echo "Quedan $(cat quedan.txt) discos: arranco otra tanda"
-          gh workflow run discos.yml --ref main
+          gh workflow run discos.yml --ref main ${{ (github.event_name == 'schedule' || inputs.reintentar) && '-f reintentar=true' || '' }}   # la tanda siguiente sigue reintentando
