@@ -10,156 +10,96 @@
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3f/24/f8/3f24f8f0-17df-8e1f-622f-6b931382cf65/26ffa454-5ee1-40a9-8e56-7152a04c786e.jpg/600x600bb.jpg"
  },
  "2026-11-19": {
-  "banda": "La 25",
-  "disco": "El origen",
-  "anio": 2013,
-  "cat": "nac",
-  "tema": "Buenos Aires",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/04/3c/e9043c2e-1323-3adf-2d32-d9040694d519/mzaf_8800369006421356947.plus.aac.p.m4a",
-  "id": 735082418,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/d9/f8/8e/d9f88ea9-e00b-60ea-d738-eba5258dedbb/888003495241.jpg/600x600bb.jpg"
- },
- "2026-11-20": {
   "banda": "La Vela Puerca",
-  "disco": "Destilar",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "La Revancha",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e2/78/44/e278446a-8253-6192-6a62-619adbdb877c/mzaf_10538476749386732527.plus.aac.p.m4a",
-  "id": 1376829221,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1e/f3/24/1ef32461-b030-0eb7-a513-a1dbb62b2dcc/192562467602.jpg/600x600bb.jpg"
- },
- "2026-11-21": {
-  "banda": "Cruzando el Charco",
-  "disco": "Lo Que Somos",
-  "anio": 2019,
-  "cat": "nac",
-  "tema": "Puede Ser",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/50/25/14/50251433-d204-343d-f355-cd2e12e095ed/mzaf_2875205330104983727.plus.aac.p.m4a",
-  "id": 1876560771,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/2f/9f/32/2f9f328d-f5a1-9170-0c26-e3e82fad7b27/8429006406333.jpg/600x600bb.jpg"
- },
- "2026-11-22": {
-  "banda": "Los Piojos",
-  "disco": "3er Arco",
-  "anio": 1996,
-  "cat": "nac",
-  "tema": "El Farolito",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/25/24/b9/2524b9be-3f85-8d37-9e90-39708e075406/mzaf_11099912204013899164.plus.aac.p.m4a",
-  "id": 1613765846,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/6b/68/58/6b6858dd-fc95-de3a-5451-91bcc9e868f9/656291132120.jpg/600x600bb.jpg"
- },
- "2026-11-23": {
-  "banda": "Divididos",
-  "disco": "Narigón del Siglo",
-  "anio": 2000,
-  "cat": "nac",
-  "tema": "Casí Estatua",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/26/19/05/26190527-5480-ad1e-c186-09ac6b70dcc9/mzaf_13844288318236934658.plus.aac.p.m4a",
-  "id": 321864763,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/28/b9/11/mzi.axqjeygc.jpg/600x600bb.jpg"
- },
- "2026-11-24": {
-  "banda": "Pappo",
-  "disco": "Buscando un amor",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "Descortes",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/48/86/96/48869621-ecff-a640-b0bb-f1152ba54c58/mzaf_7074180955309958343.plus.aac.p.m4a",
-  "id": 470520755,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/96/87/0c/96870cb4-0860-1909-1479-927e2599dade/886443245846.jpg/600x600bb.jpg"
- },
- "2026-11-25": {
-  "banda": "Divididos",
-  "disco": "Gol de Mujer",
-  "anio": 1998,
-  "cat": "nac",
-  "tema": "Nene de Antes",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/26/de/b426de37-c3e0-5951-ce18-cee1c5661a24/mzaf_5652082721589468970.plus.aac.p.m4a",
-  "id": 321837580,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/dd/8c/06/mzi.kknkjmip.jpg/600x600bb.jpg"
- },
- "2026-11-26": {
-  "banda": "Las Pelotas",
-  "disco": "Esperando el Milagro",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "Será",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a4/77/fa/a477fa91-7892-6acd-a5aa-5c3a275bb7dd/mzaf_5713615191738625361.plus.aac.p.m4a",
-  "id": 864484884,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/0f/c8/c0/0fc8c0f0-0fe6-6f2e-82fe-9254e782ecfd/888608996976.jpg/600x600bb.jpg"
- },
- "2026-11-27": {
-  "banda": "Patricio Rey y sus Redonditos de Ricota",
-  "disco": "Gulp!",
-  "anio": 1985,
-  "cat": "nac",
-  "tema": "La Bestia Pop",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/76/a8/45/76a8453b-b791-87fc-d5e2-97cdcb3f76e7/mzaf_3879579432302247248.plus.aac.p.m4a",
-  "id": 1722367046,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/7e/79/83/7e79835a-0a77-2a35-fd60-677fa41f5e4b/d617bb55-cd75-4921-b73d-f0dc84f876c0.jpg/600x600bb.jpg"
- },
- "2026-11-28": {
-  "banda": "El Plan de la Mariposa",
-  "disco": "Devorando Intensidad",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "El Riesgo",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/bf/7a/3cbf7ad4-d1ad-ca5d-9eab-e5db2f59b41a/mzaf_10071985380582951909.plus.aac.p.m4a",
-  "id": 1252212525,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music117/v4/7a/e2/a3/7ae2a3ec-5710-64e2-5f65-2dd02a934d6e/656291240726.jpg/600x600bb.jpg"
- },
- "2026-11-29": {
-  "banda": "Turf",
-  "disco": "Odisea",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "Contacto",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b2/72/e9/b272e958-3721-3cae-4214-4eb3e38593bc/mzaf_14390243988193063601.plus.aac.p.m4a",
-  "id": 1269100192,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/16/87/20/168720c7-bb47-bd54-c517-e2bb56f2d291/191773583408.jpg/600x600bb.jpg"
- },
- "2026-11-30": {
-  "banda": "Jóvenes Pordioseros",
-  "disco": "Probame",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "Cuando Me Muera",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/66/87/b8/6687b82d-936b-d4b1-7f18-c62ac1c2454e/mzaf_331039109477712356.plus.aac.p.m4a",
-  "id": 1593795443,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/27/2e/de/272ede65-0b22-477f-4426-e0fa3d3c7b9b/196292845785.jpg/600x600bb.jpg"
- },
- "2026-12-01": {
-  "banda": "La Vela Puerca",
-  "disco": "Destilar",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "MI Diablo",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/84/b8/66/84b86615-2b30-a974-1e73-ec13a2ff6fc6/mzaf_1510971707839967093.plus.aac.p.m4a",
-  "id": 1376829221,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1e/f3/24/1ef32461-b030-0eb7-a513-a1dbb62b2dcc/192562467602.jpg/600x600bb.jpg"
- },
- "2026-12-02": {
-  "banda": "Soda Stereo",
-  "disco": "Sueño Stereo",
-  "anio": 1995,
-  "cat": "nac",
-  "tema": "Zoom",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d4/ae/87/d4ae87ca-c382-1ad5-626a-c83e5fbb214f/mzaf_7840710846031844788.plus.aac.p.m4a",
-  "id": 309452426,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/60/df/5e/mzi.lahuyiyg.jpg/600x600bb.jpg"
- },
- "2026-12-03": {
-  "banda": "El Bordo",
-  "disco": "Hermanos",
+  "disco": "Érase...",
   "anio": 2014,
   "cat": "nac",
-  "tema": "Instinto",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8e/c8/78/8ec8788f-ce1b-4295-fe68-2ab68a047868/mzaf_9421612089150954896.plus.aac.p.m4a",
-  "id": 857907792,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/05/ab/a005abd9-ecdf-2006-0630-28cb70a5cd3d/888608936101.jpg/600x600bb.jpg"
+  "tema": "Habeo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/41/a1/b8/41a1b88d-e219-6da1-78e6-ba293dfb9380/mzaf_17828845931693178699.plus.aac.p.m4a",
+  "id": 943077959,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/8e/7d/8b/8e7d8b48-dc72-f6ce-6c39-8b5d4ba24254/656291230925.jpg/600x600bb.jpg"
  },
- "2026-12-04": {
+ "2026-11-20": {
+  "banda": "El Cuarteto de Nos",
+  "disco": "Cortamambo",
+  "anio": 2000,
+  "cat": "nac",
+  "tema": "Cristo Te Odia",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9e/80/78/9e807830-629b-8f3d-0c1e-7df361169de8/mzaf_10560369831922244159.plus.aac.p.m4a",
+  "id": 274724299,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/50/1d/9d/mzi.xctgtmea.tif/600x600bb.jpg"
+ },
+ "2026-11-21": {
+  "banda": "La Chancha Muda",
+  "disco": "Quién autoriza?",
+  "anio": 2023,
+  "cat": "nac",
+  "tema": "Cóndor",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/4f/4d/6a/4f4d6a1c-0779-5700-215f-12c47f2e9e3b/mzaf_12078771762294740108.plus.aac.p.m4a",
+  "id": 1711683686,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/d3/e8/f2/d3e8f2c6-e23d-9bc8-dd91-f45ba98a0d42/197190170764.jpg/600x600bb.jpg"
+ },
+ "2026-11-22": {
+  "banda": "Cruzando el Charco",
+  "disco": "A Mil",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "Viejo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4f/bf/81/4fbf8142-7317-1bcb-34e2-1215432dd99b/mzaf_14227915904482515751.plus.aac.p.m4a",
+  "id": 1876560466,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7c/91/63/7c9163ea-8b9b-215c-dabf-6e2124cb4c09/8429006338955.jpg/600x600bb.jpg"
+ },
+ "2026-11-23": {
+  "banda": "Airbag",
+  "disco": "El club de la pelea I",
+  "anio": 2025,
+  "cat": "nac",
+  "tema": "Extrañas Intenciones",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9f/89/bb/9f89bbcf-6f01-3607-7389-62ae522232f8/mzaf_10568109813708260517.plus.aac.p.m4a",
+  "id": 1816314866,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/76/5f/d0765ff3-5508-0eac-9f99-4ca9fe5d1a7b/199350763854.jpg/600x600bb.jpg"
+ },
+ "2026-11-24": {
+  "banda": "Los Gardelitos",
+  "disco": "Gardeliando",
+  "anio": 1998,
+  "cat": "nac",
+  "tema": "Gardeliando",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/40/07/d7/4007d787-49ec-fd08-0b5a-970f155ebb6e/mzaf_8238326951593770806.plus.aac.p.m4a",
+  "id": 1821281974,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/1b/0d/73/1b0d7351-153c-e7d5-9bc2-97a0974faaa9/a75db8cf-e5c9-4045-9686-a78745e36aa6.jpg/600x600bb.jpg"
+ },
+ "2026-11-25": {
+  "banda": "Soda Stereo",
+  "disco": "Nada Personal",
+  "anio": 1985,
+  "cat": "nac",
+  "tema": "Nada Personal",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/71/2b/f8712b45-1f8b-f653-a68d-0de443b48ea8/mzaf_16182475010727726340.plus.aac.p.m4a",
+  "id": 321883378,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/5d/a1/b5/5da1b53d-7b9b-72f4-09ce-3c350c446322/mzi.fagqtmbs.jpg/600x600bb.jpg"
+ },
+ "2026-11-26": {
+  "banda": "Charly García",
+  "disco": "Say No More",
+  "anio": 1996,
+  "cat": "nac",
+  "tema": "Estaba en Llamas Cuando Me Acoste",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/c3/a5/03c3a560-b979-1190-edea-1bea16b9a6c6/mzaf_16634490213046432916.plus.aac.p.m4a",
+  "id": 321707191,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/3a/1e/f0/mzi.rywodige.jpg/600x600bb.jpg"
+ },
+ "2026-11-27": {
+  "banda": "Turf",
+  "disco": "Polvo de Estrellas",
+  "anio": 2025,
+  "cat": "nac",
+  "tema": "Casanova",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b1/39/6e/b1396eec-7e14-a9d1-c4b5-1b1882701694/mzaf_14154432905785739444.plus.aac.p.m4a",
+  "id": 1825413963,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ed/3f/0a/ed3f0ac4-fa69-844c-4c52-126c566984e4/199538110685.jpg/600x600bb.jpg"
+ },
+ "2026-11-28": {
   "banda": "Charly García",
   "disco": "Parte de la Religión",
   "anio": 1987,
@@ -169,157 +109,77 @@
   "id": 321799872,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/600x600bb.jpg"
  },
- "2026-12-05": {
-  "banda": "Soda Stereo",
-  "disco": "Soda Stereo",
-  "anio": 1984,
+ "2026-11-29": {
+  "banda": "La Franela",
+  "disco": "Hacer un puente",
+  "anio": 2011,
   "cat": "nac",
-  "tema": "Trátame Suavemente",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/76/dd/43/76dd43d0-88c1-b7d1-c4dc-4eaac469c5a1/mzaf_14007184444163830110.plus.aac.p.m4a",
-  "id": 321883646,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/db/6b/a0db6b97-4463-ba87-7046-77c66da5eef5/mzi.mfnjoagm.jpg/600x600bb.jpg"
+  "tema": "Las Horas",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/48/24/45/48244559-3b68-bd67-0d43-53dad6f1219e/mzaf_9005597551444990767.plus.aac.p.m4a",
+  "id": 476066186,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dd/20/84/dd2084de-5826-f1b8-9bb9-cc258bd31669/886788228696.jpg/600x600bb.jpg"
  },
- "2026-12-06": {
-  "banda": "Babasónicos",
-  "disco": "Infame",
-  "anio": 2003,
+ "2026-11-30": {
+  "banda": "Turf",
+  "disco": "Odisea",
+  "anio": 2017,
   "cat": "nac",
-  "tema": "Putita",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c8/97/65/c8976551-63be-1285-e2c8-1380ba92a83c/mzaf_16105310598801707649.plus.aac.p.m4a",
-  "id": 403659432,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music2/v4/15/ad/ad/15adad7d-6786-dc25-7a18-c79169b3f842/dj.vcmgfipy.jpg/600x600bb.jpg"
+  "tema": "Contacto",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b2/72/e9/b272e958-3721-3cae-4214-4eb3e38593bc/mzaf_14390243988193063601.plus.aac.p.m4a",
+  "id": 1269100192,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/16/87/20/168720c7-bb47-bd54-c517-e2bb56f2d291/191773583408.jpg/600x600bb.jpg"
  },
- "2026-12-07": {
+ "2026-12-01": {
+  "banda": "Sumo",
+  "disco": "After Chabón",
+  "anio": 1987,
+  "cat": "nac",
+  "tema": "Noche de Paz",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9d/5b/3e/9d5b3e63-0c89-e18c-7786-73e1a85051ac/mzaf_10073183073047732944.plus.aac.p.m4a",
+  "id": 321567831,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4d/d5/59/4dd559b3-8059-718d-9619-4ace2ceb3d80/mzi.itpiuhoe.jpg/600x600bb.jpg"
+ },
+ "2026-12-02": {
   "banda": "La Chancha Muda",
   "disco": "A todos mis santos",
   "anio": 2026,
   "cat": "nac",
-  "tema": "He Visto",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d0/fe/bf/d0febf32-1fdd-7ac9-d789-a722ddfabce0/mzaf_16777807025400336615.plus.aac.p.m4a",
+  "tema": "Refucilo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fd/85/1c/fd851c1e-3eb7-3e5e-5ac1-4558d2328dcc/mzaf_4606247726889693766.plus.aac.p.m4a",
   "id": 1895378821,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/28/61/55/28615522-7afc-fd42-4035-2289cf363035/820233176132.jpg/600x600bb.jpg"
  },
- "2026-12-08": {
-  "banda": "Skay Beilinson",
-  "disco": "Talismán",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "El Golem de Paternal",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b4/6c/06/b46c06ed-b5c3-bd8c-36b1-4a682746bc17/mzaf_10707628369230470127.plus.aac.p.m4a",
-  "id": 1462844942,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/d1/3f/91/d13f9176-919c-8c7b-98c6-0a9b4707b857/8429006399338.jpg/600x600bb.jpg"
- },
- "2026-12-09": {
-  "banda": "El Mató a un Policía Motorizado",
-  "disco": "La otra dimensión",
-  "anio": 2019,
-  "cat": "nac",
-  "tema": "El Perro",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview123/v4/08/d0/2a/08d02a90-ed9a-0f28-8ce5-7b34971017be/mzaf_17538261733841331444.plus.aac.p.m4a",
-  "id": 1489012389,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/d5/35/38/d5353865-676c-770c-1079-00a560449cd4/194491668457.jpg/600x600bb.jpg"
- },
- "2026-12-10": {
-  "banda": "Riff",
-  "disco": "Macadam 3...2...1...0...",
-  "anio": 1981,
-  "cat": "nac",
-  "tema": "Macadam 3...2...1...0...",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3e/49/0a/3e490ae2-92d1-3a26-8461-c63f0682924a/mzaf_8055527461440735263.plus.aac.p.m4a",
-  "id": 1604207749,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2e/9d/6d/2e9d6d3e-f47c-6ccd-feee-2e7c60169539/656291194920.jpg/600x600bb.jpg"
- },
- "2026-12-11": {
-  "banda": "Sueño de Pescado",
-  "disco": "Venganza Primavera",
-  "anio": 2014,
-  "cat": "nac",
-  "tema": "Los Años Ligeros",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e5/69/e8/e569e8c3-2587-4d1a-4769-08aca8fb949f/mzaf_8152615508407264376.plus.aac.p.m4a",
-  "id": 1811694139,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8f/d3/3f/8fd33f31-f041-7d59-6438-90e1068e507a/1343.jpg/600x600bb.jpg"
- },
- "2026-12-12": {
-  "banda": "Pappo",
-  "disco": "Pappo & amigos",
-  "anio": 2000,
-  "cat": "nac",
-  "tema": "Fiesta Cervezal (feat. La Renga)",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/85/04/2c/85042ca6-6995-cca2-8449-da7dc4912f53/mzaf_294042764523789379.plus.aac.p.m4a",
-  "id": 1450459567,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/7c/76/a27c76b8-2dbd-9602-ec6e-1a3c0e5ff7ee/193483417295.jpg/600x600bb.jpg"
- },
- "2026-12-13": {
-  "banda": "Sueño de Pescado",
-  "disco": "Motor Animal",
-  "anio": 2022,
-  "cat": "nac",
-  "tema": "Mareado",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/69/67/f86967d0-ba34-3faa-c4e8-7666dcc4e3fd/mzaf_13237568833661235399.plus.aac.p.m4a",
-  "id": 1812517611,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8b/01/7c/8b017cca-03d6-1297-4021-307e08865552/2041.jpg/600x600bb.jpg"
- },
- "2026-12-14": {
-  "banda": "Soda Stereo",
-  "disco": "Nada Personal",
-  "anio": 1985,
-  "cat": "nac",
-  "tema": "Cuando Pase el Temblor",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/77/8c/b4778c1f-08ee-2da6-12af-ed83d5e5645f/mzaf_3521100673436056484.plus.aac.p.m4a",
-  "id": 321883378,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/5d/a1/b5/5da1b53d-7b9b-72f4-09ce-3c350c446322/mzi.fagqtmbs.jpg/600x600bb.jpg"
- },
- "2026-12-15": {
-  "banda": "La Franela",
-  "disco": "Aire",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "No Fila",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/60/4c/19/604c1977-10a6-4365-2964-1bbb7902df49/mzaf_6195896294014638009.plus.aac.p.m4a",
-  "id": 1250206262,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music127/v4/90/a7/68/90a768e2-c86b-1816-2472-ecb566a836ed/191773301323.jpg/600x600bb.jpg"
- },
- "2026-12-16": {
-  "banda": "El Plan de la Mariposa",
-  "disco": "Devorando Intensidad",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "Mar Argentino",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/31/ec/6b/31ec6b30-1c0d-369f-071d-0e9c83e6e409/mzaf_6988537179807600209.plus.aac.p.m4a",
-  "id": 1252212525,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music117/v4/7a/e2/a3/7ae2a3ec-5710-64e2-5f65-2dd02a934d6e/656291240726.jpg/600x600bb.jpg"
- },
- "2026-12-17": {
-  "banda": "La 25",
-  "disco": "El origen",
-  "anio": 2013,
-  "cat": "nac",
-  "tema": "Adicción",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/fa/0b/e5/fa0be51b-a2d4-bc13-54ee-9782536f42bb/mzaf_10417045522443406377.plus.aac.p.m4a",
-  "id": 735082418,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/d9/f8/8e/d9f88ea9-e00b-60ea-d738-eba5258dedbb/888003495241.jpg/600x600bb.jpg"
- },
- "2026-12-18": {
-  "banda": "La Vela Puerca",
-  "disco": "Destilar",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "La Nube",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/72/ca/b5/72cab560-cabf-d806-32fe-0cd7438b6693/mzaf_12206471999332735316.plus.aac.p.m4a",
-  "id": 1376829221,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1e/f3/24/1ef32461-b030-0eb7-a513-a1dbb62b2dcc/192562467602.jpg/600x600bb.jpg"
- },
- "2026-12-19": {
-  "banda": "Callejeros",
-  "disco": "Rocanroles sin Destino",
+ "2026-12-03": {
+  "banda": "Airbag",
+  "disco": "Airbag",
   "anio": 2004,
   "cat": "nac",
-  "tema": "Sé Que No Sé",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7a/43/4d/7a434dc2-a9ed-863c-d0e3-d79ce26c3436/mzaf_8293080382734312698.plus.aac.p.m4a",
-  "id": 1043374272,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a9/12/8e/a9128ecc-6932-836e-dfb2-632d7661210e/889845766964.jpg/600x600bb.jpg"
+  "tema": "Quiero Estar Contigo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/95/90/db/9590db16-0566-abd0-6d65-d6289b749a15/mzaf_12609728849174182651.plus.aac.p.m4a",
+  "id": 201543884,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/e7/37/84/mzi.opjtvfgr.jpg/600x600bb.jpg"
  },
- "2026-12-20": {
+ "2026-12-04": {
+  "banda": "Los Ratones Paranoicos",
+  "disco": "Los Chicos Quieren Más",
+  "anio": 2001,
+  "cat": "nac",
+  "tema": "Gárgolas",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/fa/2c/90/fa2c9085-7550-4a91-0f51-e05f7d18ed55/mzaf_961940531351607164.plus.aac.p.m4a",
+  "id": 404151055,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/7f/0d/12/7f0d1214-9397-6715-1187-564ee329a39f/885686386354.jpg/600x600bb.jpg"
+ },
+ "2026-12-05": {
+  "banda": "Las Pastillas del Abuelo",
+  "disco": "Paradojas",
+  "anio": 2015,
+  "cat": "nac",
+  "tema": "Permiso y Prometo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/94/a5/ab/94a5ab74-8464-1533-c3bf-32a729f21dbe/mzaf_13397105510107157984.plus.aac.p.m4a",
+  "id": 1804704302,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/83/c5/2f83c547-a355-20df-18ea-434a168270b9/199066127414.jpg/600x600bb.jpg"
+ },
+ "2026-12-06": {
   "banda": "El Plan de la Mariposa",
   "disco": "Devorando Intensidad",
   "anio": 2017,
@@ -329,7 +189,57 @@
   "id": 1252212525,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music117/v4/7a/e2/a3/7ae2a3ec-5710-64e2-5f65-2dd02a934d6e/656291240726.jpg/600x600bb.jpg"
  },
- "2026-12-21": {
+ "2026-12-07": {
+  "banda": "Skay Beilinson",
+  "disco": "La marca de Caín",
+  "anio": 2007,
+  "cat": "nac",
+  "tema": "Arcano XIV",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ab/fb/d4/abfbd4f5-4757-027e-a8ae-957e4d3b41db/mzaf_9833515891512055840.plus.aac.p.m4a",
+  "id": 1463034264,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/42/34/df/4234df98-ca1e-a13c-0615-7317a732db61/8429006399284.jpg/600x600bb.jpg"
+ },
+ "2026-12-08": {
+  "banda": "Callejeros",
+  "disco": "Rocanroles sin Destino",
+  "anio": 2004,
+  "cat": "nac",
+  "tema": "Rebelde Agitador y Revolucionario",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/52/b1/e6/52b1e6d5-7658-dfe1-6ad9-31b251f85f41/mzaf_1339071047251954826.plus.aac.p.m4a",
+  "id": 1043374272,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a9/12/8e/a9128ecc-6932-836e-dfb2-632d7661210e/889845766964.jpg/600x600bb.jpg"
+ },
+ "2026-12-09": {
+  "banda": "Bersuit Vergarabat",
+  "disco": "La nube rosa",
+  "anio": 2016,
+  "cat": "nac",
+  "tema": "Aquí Estamos",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b3/fb/65/b3fb6501-f077-e413-c8bd-7988b3b9919d/mzaf_17484242674854701156.plus.aac.p.m4a",
+  "id": 1079503171,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music49/v4/08/18/e1/0818e12a-9efe-5289-419c-eb99845f5a5a/886445696660.jpg/600x600bb.jpg"
+ },
+ "2026-12-10": {
+  "banda": "La 25",
+  "disco": "El origen",
+  "anio": 2013,
+  "cat": "nac",
+  "tema": "Ciudad de Dios",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/66/8c/29/668c2950-8505-8959-d333-9ebc8357c544/mzaf_1416710652446527586.plus.aac.p.m4a",
+  "id": 735082418,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/d9/f8/8e/d9f88ea9-e00b-60ea-d738-eba5258dedbb/888003495241.jpg/600x600bb.jpg"
+ },
+ "2026-12-11": {
+  "banda": "Gustavo Cerati",
+  "disco": "Fuerza Natural",
+  "anio": 2009,
+  "cat": "nac",
+  "tema": "Magia",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/27/14/b0/2714b014-c9fc-adc9-9d3e-b32151d06035/mzaf_8845082644953209062.plus.aac.p.m4a",
+  "id": 1358493163,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/62/31/0a/62310a20-6650-23d2-bd22-13e23a413335/886447012215.jpg/600x600bb.jpg"
+ },
+ "2026-12-12": {
   "banda": "Guasones",
   "disco": "Toro Rojo",
   "anio": 2005,
@@ -339,497 +249,147 @@
   "id": 267094461,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/dc/f8/5c/dcf85c8e-e3db-22a3-e912-48e92592b45b/dj.bhwsflsu.jpg/600x600bb.jpg"
  },
- "2026-12-22": {
-  "banda": "Las Pelotas",
-  "disco": "Corderos en la Noche",
-  "anio": 1991,
-  "cat": "nac",
-  "tema": "Corderos en la Noche",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/03/3e/ab/033eabbb-d905-4f90-050b-8abe2b598fd0/mzaf_15025464524656117120.plus.aac.p.m4a",
-  "id": 866065649,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/7e/27/e7/7e27e79a-50e6-fa76-fea8-c3ab0ca170ad/888608986083.jpg/600x600bb.jpg"
- },
- "2026-12-23": {
-  "banda": "Skay Beilinson",
-  "disco": "La luna hueca",
-  "anio": 2013,
-  "cat": "nac",
-  "tema": "Ya Lo Sabes",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/c0/f0/5b/c0f05b45-0fcf-4d30-70ea-191235f18428/mzaf_16091162314405495773.plus.aac.p.m4a",
-  "id": 1462846123,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/17/7c/f0/177cf0de-29f8-8ab0-a29a-2475dda845f1/8429006399253.jpg/600x600bb.jpg"
- },
- "2026-12-24": {
-  "banda": "Callejeros",
-  "disco": "Presión",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "Callejero de Boedo",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5c/8c/5e/5c8c5ee9-b18c-d1f6-f326-e223d53d7334/mzaf_17256389078191974020.plus.aac.p.m4a",
-  "id": 1043397022,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music41/v4/b6/d5/d7/b6d5d74f-7c07-0c6f-eab1-d0371e6e7fd4/mzm.ndajtwiq.jpg/600x600bb.jpg"
- },
- "2026-12-25": {
-  "banda": "Los Ratones Paranoicos",
-  "disco": "Planeta Paranoico",
-  "anio": 1996,
-  "cat": "nac",
-  "tema": "Colocado Voy",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/d9/f0/15/d9f015a2-a42e-8960-a761-d739ab163a70/mzaf_852417953657065598.plus.aac.p.m4a",
-  "id": 470840943,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/ca/fc/35/mzi.txnyhsau.jpg/600x600bb.jpg"
- },
- "2026-12-26": {
-  "banda": "La Chancha Muda",
-  "disco": "A todos mis santos",
-  "anio": 2026,
-  "cat": "nac",
-  "tema": "A Todos Mis Santos",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ca/88/8b/ca888b7e-a264-0509-a0d0-9687ce5a5f8e/mzaf_14837720664497195129.plus.aac.p.m4a",
-  "id": 1895378821,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/28/61/55/28615522-7afc-fd42-4035-2289cf363035/820233176132.jpg/600x600bb.jpg"
- },
- "2026-12-27": {
-  "banda": "Gustavo Cerati",
-  "disco": "Amor Amarillo",
-  "anio": 1993,
-  "cat": "nac",
-  "tema": "Amor Amarillo",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/66/a9/50/66a9502d-92b3-ea56-1cdf-b627d56adba2/mzaf_13649768549142793082.plus.aac.p.m4a",
-  "id": 325221745,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/de/4b/65/de4b659f-cf95-04c5-6d01-a39a40ff094c/743211739122.jpg/600x600bb.jpg"
- },
- "2026-12-28": {
-  "banda": "Patricio Rey y sus Redonditos de Ricota",
-  "disco": "La Mosca y la Sopa",
-  "anio": 1991,
-  "cat": "nac",
-  "tema": "Toxi-Taxi",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/43/fa/f2/43faf24c-8595-dfe0-9030-5aab7f1acacb/mzaf_727677685536427166.plus.aac.p.m4a",
-  "id": 1722348395,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/3b/fb/c2/3bfbc203-2fba-6e67-0926-5e9a8ef93ec3/b8c91b2b-6432-4491-9ce6-ce594f403640.jpg/600x600bb.jpg"
- },
- "2026-12-29": {
-  "banda": "La 25",
-  "disco": "Entre cuervos y chacales",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "De Paso Nomás",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/9d/93/d4/9d93d479-76d9-49ea-8f71-334651a3f054/mzaf_5859244610510111371.plus.aac.p.m4a",
-  "id": 1374419102,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/bb/61/fa/bb61fad7-21fa-f6fe-74f4-ac0d11b10a72/192562330265.jpg/600x600bb.jpg"
- },
- "2026-12-30": {
-  "banda": "El Plan de la Mariposa",
-  "disco": "Estado de Enlace",
-  "anio": 2020,
-  "cat": "nac",
-  "tema": "Oro de Abeja",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/27/41/c9/2741c93d-be07-ae76-577e-37a4427e5432/mzaf_10619581820931712053.plus.aac.p.m4a",
-  "id": 1536086956,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/30/9e/e2/309ee2cf-af30-fc85-c3a7-87c441224f85/8445162238083.jpg/600x600bb.jpg"
- },
- "2026-12-31": {
-  "banda": "Riff",
-  "disco": "Ruedas de Metal",
-  "anio": 1981,
-  "cat": "nac",
-  "tema": "No Detenga Su Motor",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/9a/fb/f6/9afbf6da-bd77-2e6e-9802-14572680292b/mzaf_985345936672800035.plus.aac.p.m4a",
-  "id": 1604270777,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/b2/56/7e/b2567e54-1777-6956-ff39-c40c9927fc23/656291194821.jpg/600x600bb.jpg"
- },
- "2027-01-01": {
-  "banda": "Las Pastillas del Abuelo",
-  "disco": "Paradojas",
-  "anio": 2015,
-  "cat": "nac",
-  "tema": "La Creatividad",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/3f/2b/153f2b95-d576-613a-2568-54164256916b/mzaf_7915452643670596337.plus.aac.p.m4a",
-  "id": 1804704302,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/83/c5/2f83c547-a355-20df-18ea-434a168270b9/199066127414.jpg/600x600bb.jpg"
- },
- "2027-01-02": {
-  "banda": "Cruzando el Charco",
-  "disco": "A Mil",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "Sobra la Esquina",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/29/2d/fc/292dfc51-c80d-bfa1-444c-49a6fb45fd5c/mzaf_10392584268773042622.plus.aac.p.m4a",
-  "id": 1876560466,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7c/91/63/7c9163ea-8b9b-215c-dabf-6e2124cb4c09/8429006338955.jpg/600x600bb.jpg"
- },
- "2027-01-03": {
-  "banda": "Soda Stereo",
-  "disco": "Signos",
-  "anio": 1986,
-  "cat": "nac",
-  "tema": "Signos",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7e/7b/ff/7e7bffe1-544a-b1c9-1f1f-33fe80c5accb/mzaf_12016720987884945416.plus.aac.p.m4a",
-  "id": 321882453,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/05/e3/65/05e365e6-c318-e16d-0a27-1d896ba231f2/mzi.hvktyhmz.jpg/600x600bb.jpg"
- },
- "2027-01-04": {
-  "banda": "Intoxicados",
-  "disco": "Otro día en el planeta Tierra",
-  "anio": 2005,
-  "cat": "nac",
-  "tema": "Transan",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/f0/d5/99f0d5a6-6744-ed05-b359-a398e2992401/mzaf_8800168074338048272.plus.aac.p.m4a",
-  "id": 404307552,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4f/f5/ba/4ff5bac8-f0ce-81b6-798a-5d4429834466/885686386316.jpg/600x600bb.jpg"
- },
- "2027-01-05": {
-  "banda": "No Te Va Gustar",
-  "disco": "Este fuerte viento que sopla",
-  "anio": 2002,
-  "cat": "nac",
-  "tema": "Clara",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/29/61/29/29612987-afc3-5a49-8c18-ad4954c2781d/mzaf_71611935312934456.plus.aac.p.m4a",
-  "id": 258874321,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/65/7a/ce/657ace62-a402-f033-c2ce-8bc6ac619095/dj.yctbdgod.jpg/600x600bb.jpg"
- },
- "2027-01-06": {
-  "banda": "Airbag",
-  "disco": "Al parecer todo ha sido una trampa",
-  "anio": 2021,
-  "cat": "nac",
-  "tema": "Pensamientos",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b4/fe/0a/b4fe0a80-16df-4fea-e037-24b09bb870e6/mzaf_2455271253953803167.plus.aac.p.m4a",
-  "id": 1586878468,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8e/6e/25/8e6e25ed-012a-0daf-1530-7fa3b21abe63/196292457209.jpg/600x600bb.jpg"
- },
- "2027-01-07": {
-  "banda": "El Plan de la Mariposa",
-  "disco": "Estado de Enlace",
-  "anio": 2020,
-  "cat": "nac",
-  "tema": "Revoluciones Caseras",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/61/42/7d/61427d55-5093-fb28-3bf3-cbb1a88a4fbc/mzaf_5195412606720643705.plus.aac.p.m4a",
-  "id": 1536086956,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/30/9e/e2/309ee2cf-af30-fc85-c3a7-87c441224f85/8445162238083.jpg/600x600bb.jpg"
- },
- "2027-01-08": {
-  "banda": "Divididos",
-  "disco": "Vengo del Placard de Otro",
-  "anio": 2002,
-  "cat": "nac",
-  "tema": "Guanuqueando",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/e8/07/74/e80774fc-d238-b429-faa0-42678e2ed397/mzaf_15023204405442448037.plus.aac.p.m4a",
-  "id": 321807724,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/35/ed/8f/mzi.pdgknxrs.jpg/600x600bb.jpg"
- },
- "2027-01-09": {
-  "banda": "Skay Beilinson",
-  "disco": "Talismán",
-  "anio": 2003,
-  "cat": "nac",
-  "tema": "Abalorios",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/20/69/6f/20696f61-9c7e-4f11-2ed6-1fe96db224cd/mzaf_15041635809719962484.plus.aac.p.m4a",
-  "id": 1462844942,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/d1/3f/91/d13f9176-919c-8c7b-98c6-0a9b4707b857/8429006399338.jpg/600x600bb.jpg"
- },
- "2027-01-10": {
-  "banda": "Pappo",
-  "disco": "Pappo & amigos",
-  "anio": 2000,
-  "cat": "nac",
-  "tema": "Abelardo el Pollo (feat. Pappo's Blues)",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/73/56/cc/7356cc0d-5886-89de-2e9f-ccd77d7fb22a/mzaf_11857980208061661689.plus.aac.p.m4a",
-  "id": 1450459567,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/7c/76/a27c76b8-2dbd-9602-ec6e-1a3c0e5ff7ee/193483417295.jpg/600x600bb.jpg"
- },
- "2027-01-11": {
-  "banda": "Las Pelotas",
-  "disco": "Corderos en la Noche",
-  "anio": 1991,
-  "cat": "nac",
-  "tema": "Bombachitas Rosas",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/1a/8a/51/1a8a51fd-b162-a1a4-17a7-d5a6d32e950d/mzaf_7082000344215870824.plus.aac.p.m4a",
-  "id": 866065649,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/7e/27/e7/7e27e79a-50e6-fa76-fea8-c3ab0ca170ad/888608986083.jpg/600x600bb.jpg"
- },
- "2027-01-12": {
-  "banda": "Cruzando el Charco",
-  "disco": "Perdonar",
-  "anio": 2012,
-  "cat": "nac",
-  "tema": "Frente Al Río",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/35/42/02/35420282-ba87-24ab-8033-7d0c84245bd5/mzaf_9762270130577905624.plus.aac.p.m4a",
-  "id": 1038929840,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/91/e9/76/91e9765e-15ab-984e-5ac9-0564fe960f9c/859713814691_cover.jpg/600x600bb.jpg"
- },
- "2027-01-13": {
-  "banda": "El Plan de la Mariposa",
-  "disco": "Devorando Intensidad",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "La Vida Cura",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/4d/d0/12/4dd01215-0a39-c945-b973-5b2e71dfa12e/mzaf_15099220134553796001.plus.aac.p.m4a",
-  "id": 1252212525,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music117/v4/7a/e2/a3/7ae2a3ec-5710-64e2-5f65-2dd02a934d6e/656291240726.jpg/600x600bb.jpg"
- },
- "2027-01-14": {
-  "banda": "Los Piojos",
-  "disco": "3er Arco",
-  "anio": 1996,
-  "cat": "nac",
-  "tema": "Taxi Boy",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/94/4b/f5/944bf5fa-7650-4151-8159-82d5b72e61ac/mzaf_7494714440998966305.plus.aac.p.m4a",
-  "id": 1613765846,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/6b/68/58/6b6858dd-fc95-de3a-5451-91bcc9e868f9/656291132120.jpg/600x600bb.jpg"
- },
- "2027-01-15": {
-  "banda": "Gustavo Cerati",
-  "disco": "Bocanada",
-  "anio": 1999,
-  "cat": "nac",
-  "tema": "Río Babel",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/4e/ea/ae4eea23-2664-2bbc-4373-21b748707943/mzaf_9174167189901841632.plus.aac.p.m4a",
-  "id": 304792998,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/23/e8/92/23e892a3-6194-2a6a-93aa-fa9010566824/mzi.aqelopve.jpg/600x600bb.jpg"
- },
- "2027-01-16": {
-  "banda": "Jóvenes Pordioseros",
-  "disco": "Pánico",
-  "anio": 2014,
-  "cat": "nac",
-  "tema": "Eterno (feat. Facundo Soto)",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/02/08/65/020865a7-9d9a-fdfe-0977-b613a3f349eb/mzaf_13233403433253390243.plus.aac.p.m4a",
-  "id": 925028131,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/f2/2b/18/f22b18e7-b762-7c99-cd8f-0ba3d2c1729b/888831938958.jpg/600x600bb.jpg"
- },
- "2027-01-17": {
-  "banda": "Viejas Locas",
-  "disco": "Viejas Locas",
-  "anio": 1995,
-  "cat": "nac",
-  "tema": "Eva",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d8/37/15/d8371572-f2ea-5374-8829-9c1f9e31b071/mzaf_9140793381282054689.plus.aac.p.m4a",
-  "id": 1443774541,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/3c/07/41/3c074199-b318-2e14-25ec-b36d7f985b34/00602498229491.rgb.jpg/600x600bb.jpg"
- },
- "2027-01-18": {
-  "banda": "El Mató a un Policía Motorizado",
-  "disco": "Unas vacaciones raras",
-  "anio": 2021,
-  "cat": "nac",
-  "tema": "Rey del Terror",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/b7/f0/19/b7f01957-2273-3723-ceb2-c5303180a2a6/mzaf_15503764530891336823.plus.aac.p.m4a",
-  "id": 1584260312,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dc/90/48/dc90488c-61fe-3fb1-c423-22bc3ba71e0b/196292350166.jpg/600x600bb.jpg"
- },
- "2027-01-19": {
-  "banda": "Soda Stereo",
-  "disco": "Soda Stereo",
-  "anio": 1984,
-  "cat": "nac",
-  "tema": "Un Misil en Mi Placard",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e4/4f/38/e44f382b-6a93-f743-7765-c6f7615a3dbe/mzaf_2446762383280594994.plus.aac.p.m4a",
-  "id": 321883646,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a0/db/6b/a0db6b97-4463-ba87-7046-77c66da5eef5/mzi.mfnjoagm.jpg/600x600bb.jpg"
- },
- "2027-01-20": {
+ "2026-12-13": {
   "banda": "Jóvenes Pordioseros",
   "disco": "Vicio",
   "anio": 2004,
   "cat": "nac",
-  "tema": "Nunca Me Enseñaste",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3f/ce/27/3fce2772-ebc2-09f2-30b1-14d49da55208/mzaf_7526385057811357435.plus.aac.p.m4a",
+  "tema": "No Me Trates Asi",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/65/1a/81/651a81f7-9ec6-f39a-b19f-c24cd7979b80/mzaf_16558664490812465429.plus.aac.p.m4a",
   "id": 201544068,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/87/ee/12/mzi.eyoqxevz.jpg/600x600bb.jpg"
  },
- "2027-01-21": {
-  "banda": "Callejeros",
-  "disco": "Rocanroles sin Destino",
+ "2026-12-14": {
+  "banda": "Guasones",
+  "disco": "Hasta el Final",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "Canción para un Amigo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1b/29/c8/1b29c8c3-a872-a5b8-f547-e3c99e534a61/mzaf_2609870539311203589.plus.aac.p.m4a",
+  "id": 1219790582,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/6c/a2/bb/6ca2bbbb-d2af-a179-98ec-2583245781c2/191018961848.jpg/600x600bb.jpg"
+ },
+ "2026-12-15": {
+  "banda": "Turf",
+  "disco": "Para Mí, Para Vos",
   "anio": 2004,
   "cat": "nac",
-  "tema": "Canciones y Almas",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/29/5b/e6/295be670-49ab-086f-f24d-635cccf79ce5/mzaf_10599551025709838865.plus.aac.p.m4a",
-  "id": 1043374272,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a9/12/8e/a9128ecc-6932-836e-dfb2-632d7661210e/889845766964.jpg/600x600bb.jpg"
+  "tema": "Magia Blanca",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3e/e9/ba/3ee9baa9-de7e-648b-48f8-fd1df58c06e6/mzaf_7326953761985351194.plus.aac.p.m4a",
+  "id": 267097385,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/1a/40/d1/1a40d167-ec16-f3cc-6515-c8d73e943c86/829410937078.jpg/600x600bb.jpg"
  },
- "2027-01-22": {
-  "banda": "Bersuit Vergarabat",
-  "disco": "La revuelta",
-  "anio": 2012,
-  "cat": "nac",
-  "tema": "La Revuelta",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/43/43/95/434395cf-0446-8bfb-11cf-d80dcc8decdf/mzaf_10048463373411956829.plus.aac.p.m4a",
-  "id": 503422550,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/bf/7c/12/mzi.clixbwgb.jpg/600x600bb.jpg"
- },
- "2027-01-23": {
-  "banda": "Los Piojos",
-  "disco": "Verde Paisaje del Infierno",
-  "anio": 2000,
-  "cat": "nac",
-  "tema": "Vine Hasta Aquí",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8a/11/f9/8a11f994-91b0-32f2-82b0-b97ca7675f96/mzaf_17228798938538448195.plus.aac.p.m4a",
-  "id": 6784808484,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6f/fa/cb/6ffacb7d-ca81-010a-a7d0-714f39cb70f8/5c984f98-ab92-4c3f-9ddc-548b3a9ec973.jpg/600x600bb.jpg"
- },
- "2027-01-24": {
-  "banda": "Divididos",
-  "disco": "Narigón del Siglo",
-  "anio": 2000,
-  "cat": "nac",
-  "tema": "Como un Cuento",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/19/46/87/194687bd-ba05-e2e1-09f6-43b5dc70168f/mzaf_17793883528445066095.plus.aac.p.m4a",
-  "id": 321864763,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/28/b9/11/mzi.axqjeygc.jpg/600x600bb.jpg"
- },
- "2027-01-25": {
-  "banda": "No Te Va Gustar",
-  "disco": "Este fuerte viento que sopla",
+ "2026-12-16": {
+  "banda": "Gustavo Cerati",
+  "disco": "Siempre es Hoy",
   "anio": 2002,
   "cat": "nac",
-  "tema": "Como Brillaba Tu Alma",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c2/82/b1/c282b1aa-531c-c99f-af17-78bcc443b7b3/mzaf_4871729013133216373.plus.aac.p.m4a",
-  "id": 258874321,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/65/7a/ce/657ace62-a402-f033-c2ce-8bc6ac619095/dj.yctbdgod.jpg/600x600bb.jpg"
+  "tema": "Fantasma",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ff/dc/8a/ffdc8a3d-5094-5d2a-cf22-10ff5044f228/mzaf_3539907554086304179.plus.aac.p.m4a",
+  "id": 304753321,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music111/v4/fe/33/74/fe33740d-b68f-4787-6184-5c7690a9e909/828765714723.jpg/600x600bb.jpg"
  },
- "2027-01-26": {
-  "banda": "Las Pastillas del Abuelo",
-  "disco": "Las pastillas del abuelo",
-  "anio": 2006,
+ "2026-12-17": {
+  "banda": "Airbag",
+  "disco": "Al parecer todo ha sido una trampa",
+  "anio": 2021,
   "cat": "nac",
-  "tema": "Otra Vuelta de Tuerca",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5a/7b/74/5a7b7438-6b74-797a-41a3-78a63e8c5b7b/mzaf_15725676221554864476.plus.aac.p.m4a",
-  "id": 1804699673,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bd/f7/a5/bdf7a56a-fa57-dd4d-1dbe-8a90f61b1d4a/199066167649.jpg/600x600bb.jpg"
+  "tema": "Va a Ser Difícil Olvidar",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5f/8c/3d/5f8c3d40-05dc-f751-c999-cb25dffa63bf/mzaf_9019226745453289378.plus.aac.p.m4a",
+  "id": 1586878468,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8e/6e/25/8e6e25ed-012a-0daf-1530-7fa3b21abe63/196292457209.jpg/600x600bb.jpg"
  },
- "2027-01-27": {
-  "banda": "No Te Va Gustar",
-  "disco": "El calor del pleno invierno",
-  "anio": 2012,
+ "2026-12-18": {
+  "banda": "Riff",
+  "disco": "Ruedas de Metal",
+  "anio": 1981,
   "cat": "nac",
-  "tema": "A las Nueve",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/29/aa/27/29aa2789-53f6-dbfb-ae20-5205a61bc2ef/mzaf_8674979302047624292.plus.aac.p.m4a",
-  "id": 1442408685,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/0b/a8/0e/0ba80e73-fb89-b946-783f-eac59b411b09/018736893711_cover.jpg/600x600bb.jpg"
+  "tema": "Ruedas de Metal",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/3c/8a/f1/3c8af10e-e522-2c94-2e76-6c59454bb501/mzaf_11132379118705015139.plus.aac.p.m4a",
+  "id": 1604270777,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/b2/56/7e/b2567e54-1777-6956-ff39-c40c9927fc23/656291194821.jpg/600x600bb.jpg"
  },
- "2027-01-28": {
-  "banda": "El Mató a un Policía Motorizado",
-  "disco": "La Síntesis O'Konor",
-  "anio": 2017,
+ "2026-12-19": {
+  "banda": "Los Ratones Paranoicos",
+  "disco": "Fieras Lunáticas",
+  "anio": 1991,
   "cat": "nac",
-  "tema": "Fuego",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d0/ea/b3/d0eab30e-edd5-af46-72d4-f3a5c3a65777/mzaf_13264550621824532389.plus.aac.p.m4a",
-  "id": 1235995492,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d2/e5/31/d2e531af-bf71-ec0d-6ca8-5161b0299e57/886446520643.jpg/600x600bb.jpg"
+  "tema": "Rock de la Calle",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/c0/ab/8bc0ab29-d8d0-84d1-e1d8-e6cdccc802c4/mzaf_998138411806153763.plus.aac.p.m4a",
+  "id": 431059711,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/ff/f8/78/mzi.qjdbrltp.jpg/600x600bb.jpg"
  },
- "2027-01-29": {
-  "banda": "Indio Solari",
-  "disco": "El Ruiseñor, el Amor y la Muerte",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "El Tío Alberto en el Día de la Bicicleta",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/08/53/550853c1-1f05-4040-4ba0-b8543effd220/mzaf_4645056225269967180.plus.aac.p.m4a",
-  "id": 1722315771,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/41/64/60/41646005-a6ad-7fe8-48a3-5287421ff9a5/1bde2fbf-0f56-41ca-88ea-391830bd463e.jpg/600x600bb.jpg"
- },
- "2027-01-30": {
+ "2026-12-20": {
   "banda": "Intoxicados",
-  "disco": "No es sólo rock ’n’ roll",
-  "anio": 2003,
+  "disco": "Otro día en el planeta Tierra",
+  "anio": 2005,
   "cat": "nac",
-  "tema": "Esta Saliendo el Sol",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/73/d5/57/73d557d3-a5f6-4f25-74ef-1ba06f3a19c4/mzaf_2884534456148914789.plus.aac.p.m4a",
-  "id": 1443425137,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/96/6e/c5/966ec5ac-54e5-adb3-3a53-3792e53517e1/00602498079089.rgb.jpg/600x600bb.jpg"
+  "tema": "Necesito",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1d/09/e4/1d09e4ca-6715-a601-4e0d-37cd02394fbe/mzaf_7086726720070343228.plus.aac.p.m4a",
+  "id": 404307552,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4f/f5/ba/4ff5bac8-f0ce-81b6-798a-5d4429834466/885686386316.jpg/600x600bb.jpg"
  },
- "2027-01-31": {
-  "banda": "Indio Solari",
-  "disco": "El Perfume de la Tempestad",
-  "anio": 2010,
-  "cat": "nac",
-  "tema": "Todos a los Botes!",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/28/47/82/2847827f-6189-7337-dbfd-bd4d48dca5a7/mzaf_17822326932334170044.plus.aac.p.m4a",
-  "id": 1722314826,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/f9/2e/48/f92e4810-b84f-5aeb-54e5-7feedc62ba2c/5f8dfc63-6537-46fa-8472-b61a31296870.jpg/600x600bb.jpg"
- },
- "2027-02-01": {
-  "banda": "Cruzando el Charco",
-  "disco": "A Mil",
-  "anio": 2017,
-  "cat": "nac",
-  "tema": "Balas de Magia",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/5e/67/d75e67ac-63ba-0c0e-41a3-43d39b721635/mzaf_6152007640942472195.plus.aac.p.m4a",
-  "id": 1876560466,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7c/91/63/7c9163ea-8b9b-215c-dabf-6e2124cb4c09/8429006338955.jpg/600x600bb.jpg"
- },
- "2027-02-02": {
-  "banda": "Indio Solari",
-  "disco": "El Ruiseñor, el Amor y la Muerte",
-  "anio": 2018,
-  "cat": "nac",
-  "tema": "La Oscuridad",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d0/4c/f8/d04cf8d5-46cf-8f38-bedf-22c3ae6c5a43/mzaf_15206924955525159808.plus.aac.p.m4a",
-  "id": 1722315771,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/41/64/60/41646005-a6ad-7fe8-48a3-5287421ff9a5/1bde2fbf-0f56-41ca-88ea-391830bd463e.jpg/600x600bb.jpg"
- },
- "2027-02-03": {
-  "banda": "Turf",
-  "disco": "Turfshow",
-  "anio": 2001,
-  "cat": "nac",
-  "tema": "Yo No Me Quiero Casar, y Ud?",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/fa/a0/4b/faa04b12-c206-45af-e64e-ae52a89d1955/mzaf_17681735420262826793.plus.aac.p.m4a",
-  "id": 267094479,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8d/2e/7e/8d2e7eee-181a-7351-4574-48e63c0a76ee/829410937474.jpg/600x600bb.jpg"
- },
- "2027-02-04": {
-  "banda": "Bersuit Vergarabat",
-  "disco": "El baile interior",
-  "anio": 2014,
-  "cat": "nac",
-  "tema": "Tilcara en Carnaval",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/b6/67/b0b66769-0cad-c17c-1cc8-b654c6f690e9/mzaf_13297513382983562894.plus.aac.p.m4a",
-  "id": 828856934,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/05/82/88/05828866-e9b5-f15c-dac9-2f332ebf57d6/886444466691.jpg/600x600bb.jpg"
- },
- "2027-02-05": {
-  "banda": "El Cuarteto de Nos",
-  "disco": "Habla Tu Espejo",
-  "anio": 2014,
-  "cat": "nac",
-  "tema": "No Llora",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/94/23/70/942370ce-93b8-aede-e434-c23a457cc104/mzaf_6292794836639629282.plus.aac.p.m4a",
-  "id": 913342118,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f2/ee/b2/f2eeb2ec-1a06-f98a-9749-e8ed97475868/825646211937.jpg/600x600bb.jpg"
- },
- "2027-02-06": {
-  "banda": "Babasónicos",
-  "disco": "Dopádromo",
+ "2026-12-21": {
+  "banda": "Patricio Rey y sus Redonditos de Ricota",
+  "disco": "Luzbelito",
   "anio": 1996,
   "cat": "nac",
-  "tema": "Víva Satana",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f8/8f/51/f88f51c7-e93a-27f4-7653-89a9ec96f259/mzaf_18260105709587892567.plus.aac.p.m4a",
-  "id": 321723741,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/9e/f3/76/mzi.jxbxfraf.jpg/600x600bb.jpg"
+  "tema": "Juguetes Perdidos",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f9/92/30/f9923092-a8da-f6d8-c1c0-7e3ca0b99c7a/mzaf_16722027224655636921.plus.aac.p.m4a",
+  "id": 1722376358,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/06/fa/f3/06faf3af-cb4a-5efe-2d2b-f4876d52386b/b51bc03a-b9da-4f37-b111-54930f1ffb78.jpg/600x600bb.jpg"
  },
- "2027-02-07": {
-  "banda": "Sueño de Pescado",
-  "disco": "Siglo Pánico",
-  "anio": 2016,
+ "2026-12-22": {
+  "banda": "Los Gardelitos",
+  "disco": "Sortilegio de Arrabal",
+  "anio": 2019,
   "cat": "nac",
-  "tema": "Todo Se Va",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c6/bb/96/c6bb9616-2de3-c2f5-a0ce-9c68d177fd7c/mzaf_11584568303346245162.plus.aac.p.m4a",
-  "id": 1811692618,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/54/b7/91/54b79101-b706-bedc-4d58-3595728ba8eb/1333.jpg/600x600bb.jpg"
+  "tema": "Mezclas Raras",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/46/3a/55/463a55ad-e4ac-d4c3-fd92-a1517e035370/mzaf_13208767305912631695.plus.aac.p.m4a",
+  "id": 1723775061,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/94/c9/3c/94c93c7c-5727-5045-a9af-7f7b8619e0ef/e3e43db3-cc26-4d4a-9f6a-b28ff80aff21.jpg/600x600bb.jpg"
  },
- "2027-02-08": {
-  "banda": "Callejeros",
-  "disco": "Señales",
-  "anio": 2006,
+ "2026-12-23": {
+  "banda": "La Franela",
+  "disco": "Nada es tarde",
+  "anio": 2014,
   "cat": "nac",
-  "tema": "Señales",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/83/74/9f/83749faa-b9e9-2199-c8e5-0c84cca7b001/mzaf_7613252262173137928.plus.aac.p.m4a",
-  "id": 1043408290,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2b/76/de/2b76dea9-eb07-166d-212e-6c6e506e2768/889845766988.jpg/600x600bb.jpg"
+  "tema": "Loco Bien",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3e/94/c8/3e94c8cf-18a3-1c94-cbee-d05077090649/mzaf_2858919351275261663.plus.aac.p.m4a",
+  "id": 858920056,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/00/c2/64/00c264d5-919c-1b86-bbd3-5e3327ee678f/888608931267.jpg/600x600bb.jpg"
  },
- "2027-02-09": {
+ "2026-12-24": {
+  "banda": "Patricio Rey y sus Redonditos de Ricota",
+  "disco": "Luzbelito",
+  "anio": 1996,
+  "cat": "nac",
+  "tema": "Me Matan Limón!",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/aa/03/52/aa035238-a30e-f2d4-dce5-ccb77ea21016/mzaf_17349080095777885857.plus.aac.p.m4a",
+  "id": 1722376358,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/06/fa/f3/06faf3af-cb4a-5efe-2d2b-f4876d52386b/b51bc03a-b9da-4f37-b111-54930f1ffb78.jpg/600x600bb.jpg"
+ },
+ "2026-12-25": {
+  "banda": "El Mató a un Policía Motorizado",
+  "disco": "Unas vacaciones raras",
+  "anio": 2021,
+  "cat": "nac",
+  "tema": "La Otra Ciudad",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/b1/50/4bb1501f-8611-b467-8c38-3d6b94a6e08a/mzaf_9398343137305703247.plus.aac.p.m4a",
+  "id": 1584260312,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/dc/90/48/dc90488c-61fe-3fb1-c423-22bc3ba71e0b/196292350166.jpg/600x600bb.jpg"
+ },
+ "2026-12-26": {
+  "banda": "Babasónicos",
+  "disco": "Anoche",
+  "anio": 2005,
+  "cat": "nac",
+  "tema": "El Colmo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/61/ee/c9/61eec94b-dc9f-b63e-8ae1-b428c0eef3a0/mzaf_13667670507300486186.plus.aac.p.m4a",
+  "id": 1443459458,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/65/dc/26/65dc263a-e940-88c0-6d05-f5f75bb48abe/00602498856888.rgb.jpg/600x600bb.jpg"
+ },
+ "2026-12-27": {
   "banda": "La Renga",
   "disco": "Despedazado por Mil Partes",
   "anio": 1996,
@@ -839,27 +399,277 @@
   "id": 1442549689,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/30/ee/9a/30ee9a8b-1f4f-14db-5cab-df728334ced5/00602557113365.rgb.jpg/600x600bb.jpg"
  },
- "2027-02-10": {
-  "banda": "Intoxicados",
-  "disco": "Otro día en el planeta Tierra",
-  "anio": 2005,
+ "2026-12-28": {
+  "banda": "Patricio Rey y sus Redonditos de Ricota",
+  "disco": "Lobo Suelto, Cordero Atado",
+  "anio": 1993,
   "cat": "nac",
-  "tema": "Una señal",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5f/f9/6f/5ff96fb8-44de-96a5-ab79-d42d94f7d698/mzaf_1574871272787798426.plus.aac.p.m4a",
-  "id": 404307552,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4f/f5/ba/4ff5bac8-f0ce-81b6-798a-5d4429834466/885686386316.jpg/600x600bb.jpg"
+  "tema": "La Hija del Fletero",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/18/37/bb/1837bb0a-a1e3-35f1-d2fc-566317416d60/mzaf_15649799197655925307.plus.aac.p.m4a",
+  "id": 1722371220,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/7c/67/b8/7c67b850-f4f0-daef-46ed-9db15060cdc1/bc1afefa-6356-4d7d-acad-2ac28fb77114.jpg/600x600bb.jpg"
  },
- "2027-02-11": {
+ "2026-12-29": {
+  "banda": "El Mató a un Policía Motorizado",
+  "disco": "La Síntesis O'Konor",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "El Tesoro",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f7/7e/3b/f77e3b27-500e-3f34-1f7f-6abe11909d56/mzaf_1508869524090250458.plus.aac.p.m4a",
+  "id": 1235995492,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/d2/e5/31/d2e531af-bf71-ec0d-6ca8-5161b0299e57/886446520643.jpg/600x600bb.jpg"
+ },
+ "2026-12-30": {
+  "banda": "Callejeros",
+  "disco": "Rocanroles sin Destino",
+  "anio": 2004,
+  "cat": "nac",
+  "tema": "Distinto",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/d2/ca/0dd2ca5e-64c6-77c9-d547-8eb82642ac72/mzaf_11990330745480416187.plus.aac.p.m4a",
+  "id": 1043374272,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music6/v4/a9/12/8e/a9128ecc-6932-836e-dfb2-632d7661210e/889845766964.jpg/600x600bb.jpg"
+ },
+ "2026-12-31": {
+  "banda": "El Bordo",
+  "disco": "El refugio",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "Todo y Más",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d5/51/3e/d5513e5c-e575-7155-e163-9c1529ffccb5/mzaf_5460496388574567215.plus.aac.p.m4a",
+  "id": 1210918521,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/e3/19/a2e319c7-ba0a-0c22-6e75-41956ced72e7/191018905163.jpg/600x600bb.jpg"
+ },
+ "2027-01-01": {
+  "banda": "Ciro y los Persas",
+  "disco": "Espejos",
+  "anio": 2010,
+  "cat": "nac",
+  "tema": "Antes y Después",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d6/f9/9a/d6f99ac4-a7d9-8962-6c9c-4bd1007708a4/mzaf_16902849794715413580.plus.aac.p.m4a",
+  "id": 6784652880,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/dc/1e/50/dc1e5087-0f71-9127-3711-673643afb461/a6011d4f-78ca-4cd2-86e5-618c80b51f7f.jpg/600x600bb.jpg"
+ },
+ "2027-01-02": {
+  "banda": "Divididos",
+  "disco": "Vengo del Placard de Otro",
+  "anio": 2002,
+  "cat": "nac",
+  "tema": "Víllancico del Horror",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/68/1d/c6/681dc631-0e70-5203-8f21-58c99faa9e4e/mzaf_1666133482852039994.plus.aac.p.m4a",
+  "id": 321807724,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/35/ed/8f/mzi.pdgknxrs.jpg/600x600bb.jpg"
+ },
+ "2027-01-03": {
+  "banda": "Don Osvaldo",
+  "disco": "Casi Justicia Social II",
+  "anio": 2019,
+  "cat": "nac",
+  "tema": "Barrilete",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/43/42/c6/4342c67d-ba63-05be-da22-167f495b0593/mzaf_7089461362956951035.plus.aac.p.m4a",
+  "id": 1574220660,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/98/36/ef/9836ef00-4e17-658f-a72e-2de788b0b51d/650414579564.jpg/600x600bb.jpg"
+ },
+ "2027-01-04": {
+  "banda": "El Mató a un Policía Motorizado",
+  "disco": "La Dinastía Scorpio",
+  "anio": 2012,
+  "cat": "nac",
+  "tema": "Chica de Oro",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/17/32/14/173214cc-614c-b952-c034-cf3ae4afabdb/mzaf_9979774585219472830.plus.aac.p.m4a",
+  "id": 897086055,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/a6/52/b6/a652b6f6-603c-0b73-3b4d-157b8fe06359/886444690355.jpg/600x600bb.jpg"
+ },
+ "2027-01-05": {
   "banda": "Airbag",
-  "disco": "Al parecer todo ha sido una trampa",
-  "anio": 2021,
+  "disco": "Vorágine",
+  "anio": 2011,
   "cat": "nac",
-  "tema": "Cuchillos Guantanamera",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2a/d6/49/2ad6499c-4011-0e4d-65a4-62cba223d0b4/mzaf_1282715469420854690.plus.aac.p.m4a",
-  "id": 1586878468,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/8e/6e/25/8e6e25ed-012a-0daf-1530-7fa3b21abe63/196292457209.jpg/600x600bb.jpg"
+  "tema": "Bajos Instintos",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f5/8e/7f/f58e7f47-8901-9888-59c2-87f3c9209440/mzaf_17096143767566334734.plus.aac.p.m4a",
+  "id": 1755458319,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f6/66/7c/f6667c73-23f0-964a-4651-7ebc7ae411ab/198588596364.jpg/600x600bb.jpg"
  },
- "2027-02-12": {
+ "2027-01-06": {
+  "banda": "Pappo's Blues",
+  "disco": "Volumen 7",
+  "anio": 1978,
+  "cat": "nac",
+  "tema": "El Viejo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d2/c9/59/d2c95929-1db1-be0c-0029-2397f17cedf8/mzaf_15991342771791850782.plus.aac.p.m4a",
+  "id": 1713834909,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/35/57/72/355772f1-bdda-fd05-430f-f00d70df1a00/274f7f00-95ff-4701-bf24-887d9532ac74.jpg/600x600bb.jpg"
+ },
+ "2027-01-07": {
+  "banda": "Turf",
+  "disco": "Turfshow",
+  "anio": 2001,
+  "cat": "nac",
+  "tema": "Cuatro Personalidades",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ee/07/99/ee079937-c912-f393-1ff6-fcecaafc2f10/mzaf_704686217023494334.plus.aac.p.m4a",
+  "id": 267094479,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8d/2e/7e/8d2e7eee-181a-7351-4574-48e63c0a76ee/829410937474.jpg/600x600bb.jpg"
+ },
+ "2027-01-08": {
+  "banda": "Cruzando el Charco",
+  "disco": "A Mil",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "Zurda de Cristal",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/dc/63/d6/dc63d66f-2ead-aeba-3a78-ec27626f1314/mzaf_18067045085330386441.plus.aac.p.m4a",
+  "id": 1876560466,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7c/91/63/7c9163ea-8b9b-215c-dabf-6e2124cb4c09/8429006338955.jpg/600x600bb.jpg"
+ },
+ "2027-01-09": {
+  "banda": "Airbag",
+  "disco": "Mentira la verdad",
+  "anio": 2016,
+  "cat": "nac",
+  "tema": "Colombiana",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/77/9d/10779de0-3124-dba3-4ad3-acb66e178092/mzaf_8064766342768019966.plus.aac.p.m4a",
+  "id": 1755610177,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/46/cd/cb/46cdcb67-52fe-1ca0-176b-c1d9ae5a9d65/198588595886.jpg/600x600bb.jpg"
+ },
+ "2027-01-10": {
+  "banda": "Gustavo Cerati",
+  "disco": "Siempre es Hoy",
+  "anio": 2002,
+  "cat": "nac",
+  "tema": "Vívo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/38/9a/52/389a52ce-8b27-0a17-f846-1de09a02ce15/mzaf_8436410186468063928.plus.aac.p.m4a",
+  "id": 304753321,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music111/v4/fe/33/74/fe33740d-b68f-4787-6184-5c7690a9e909/828765714723.jpg/600x600bb.jpg"
+ },
+ "2027-01-11": {
+  "banda": "Pappo",
+  "disco": "Pappo & amigos",
+  "anio": 2000,
+  "cat": "nac",
+  "tema": "Fiesta Cervezal (feat. La Renga)",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/85/04/2c/85042ca6-6995-cca2-8449-da7dc4912f53/mzaf_294042764523789379.plus.aac.p.m4a",
+  "id": 1450459567,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/7c/76/a27c76b8-2dbd-9602-ec6e-1a3c0e5ff7ee/193483417295.jpg/600x600bb.jpg"
+ },
+ "2027-01-12": {
+  "banda": "La Chancha Muda",
+  "disco": "Ya no queda más lugar bajo la alfombra",
+  "anio": 2013,
+  "cat": "nac",
+  "tema": "Lo Incierto",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/39/30/eb/3930ebdd-a2e5-26de-3bb0-adc769a5f990/mzaf_15802719923701165103.plus.aac.p.m4a",
+  "id": 1476435549,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/94/8d/8c/948d8c5d-dc14-5d70-e382-a53217aae47e/4960.jpg/600x600bb.jpg"
+ },
+ "2027-01-13": {
+  "banda": "Pappo's Blues",
+  "disco": "Pappo's Blues Volumen 3",
+  "anio": 1973,
+  "cat": "nac",
+  "tema": "El Sur de la Ciudad",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/52/3a/a4/523aa473-5fad-d2a7-2910-05ae7d797d24/mzaf_17402221593227087890.plus.aac.p.m4a",
+  "id": 1713616695,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f5/47/3a/f5473a4c-a81b-32f2-6b26-e05ca7b86243/ae3ce715-f6d9-4328-ab4b-422e9cfd26fd.jpg/600x600bb.jpg"
+ },
+ "2027-01-14": {
+  "banda": "Charly García",
+  "disco": "Parte de la Religión",
+  "anio": 1987,
+  "cat": "nac",
+  "tema": "No Voy en Tren",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c3/58/56/c3585612-382d-341d-bd17-d0cffa5eeae3/mzaf_11205874416379345823.plus.aac.p.m4a",
+  "id": 321799872,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c8/50/23/c85023c0-d7e7-7462-2574-a7efe528f7da/mzi.uuvufkwr.jpg/600x600bb.jpg"
+ },
+ "2027-01-15": {
+  "banda": "No Te Va Gustar",
+  "disco": "Por Lo Menos Hoy",
+  "anio": 2012,
+  "cat": "nac",
+  "tema": "Memorias del Olvido",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/74/04/76/740476ab-c724-f223-d380-9c6fc2db421f/mzaf_12366516438847142228.plus.aac.p.m4a",
+  "id": 1442399276,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e4/9a/c9/e49ac9c1-5a9b-cb67-a5a0-5594feae15ad/018736893674_cover.jpg/600x600bb.jpg"
+ },
+ "2027-01-16": {
+  "banda": "La Chancha Muda",
+  "disco": "Sinfonías libertarias",
+  "anio": 2016,
+  "cat": "nac",
+  "tema": "Tus Aires",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e4/01/6e/e4016ece-1206-6bee-d2d4-b5bfb9d3d74c/mzaf_13080483108180574321.plus.aac.p.m4a",
+  "id": 1783551022,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/22/5a/23/225a23f1-2cdc-c35b-76ac-8374997cca72/199066162590.jpg/600x600bb.jpg"
+ },
+ "2027-01-17": {
+  "banda": "El Plan de la Mariposa",
+  "disco": "Devorando Intensidad",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "El Riesgo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/bf/7a/3cbf7ad4-d1ad-ca5d-9eab-e5db2f59b41a/mzaf_10071985380582951909.plus.aac.p.m4a",
+  "id": 1252212525,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music117/v4/7a/e2/a3/7ae2a3ec-5710-64e2-5f65-2dd02a934d6e/656291240726.jpg/600x600bb.jpg"
+ },
+ "2027-01-18": {
+  "banda": "La Franela",
+  "disco": "Aire",
+  "anio": 2017,
+  "cat": "nac",
+  "tema": "No Fila",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/60/4c/19/604c1977-10a6-4365-2964-1bbb7902df49/mzaf_6195896294014638009.plus.aac.p.m4a",
+  "id": 1250206262,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music127/v4/90/a7/68/90a768e2-c86b-1816-2472-ecb566a836ed/191773301323.jpg/600x600bb.jpg"
+ },
+ "2027-01-19": {
+  "banda": "Bersuit Vergarabat",
+  "disco": "El baile interior",
+  "anio": 2014,
+  "cat": "nac",
+  "tema": "Me Voy",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f9/59/75/f95975ab-9e55-e472-f43f-13ebf110843d/mzaf_1319021006044781343.plus.aac.p.m4a",
+  "id": 828856934,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/05/82/88/05828866-e9b5-f15c-dac9-2f332ebf57d6/886444466691.jpg/600x600bb.jpg"
+ },
+ "2027-01-20": {
+  "banda": "Sumo",
+  "disco": "After Chabón",
+  "anio": 1987,
+  "cat": "nac",
+  "tema": "Mañana en el Abasto",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/60/bd/18/60bd18bc-65e8-b5d6-31ac-8b877045bab6/mzaf_16957329675078771107.plus.aac.p.m4a",
+  "id": 321567831,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/4d/d5/59/4dd559b3-8059-718d-9619-4ace2ceb3d80/mzi.itpiuhoe.jpg/600x600bb.jpg"
+ },
+ "2027-01-21": {
+  "banda": "Los Ratones Paranoicos",
+  "disco": "Girando",
+  "anio": 2003,
+  "cat": "nac",
+  "tema": "Conexión",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/42/36/26/42362668-3258-c849-3c7d-121a7197c571/mzaf_2272631626672818374.plus.aac.p.m4a",
+  "id": 280518104,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/fc/15/7b/fc157b76-2139-7ac4-6b00-fdaafd3e3fc0/dj.vwachaqm.jpg/600x600bb.jpg"
+ },
+ "2027-01-22": {
+  "banda": "Pappo's Blues",
+  "disco": "Volumen 7",
+  "anio": 1978,
+  "cat": "nac",
+  "tema": "Hansen",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b7/15/7a/b7157aa7-0ada-9396-ca90-b58b70a7046b/mzaf_2861479490725037668.plus.aac.p.m4a",
+  "id": 1713834909,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/35/57/72/355772f1-bdda-fd05-430f-f00d70df1a00/274f7f00-95ff-4701-bf24-887d9532ac74.jpg/600x600bb.jpg"
+ },
+ "2027-01-23": {
+  "banda": "El Plan de la Mariposa",
+  "disco": "Correntada",
+  "anio": 2024,
+  "cat": "nac",
+  "tema": "Fuego de Febrero",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/62/5d/d2/625dd2c6-35f6-4fdd-bd66-3b49c4f9822f/mzaf_3082544243187571416.plus.aac.p.m4a",
+  "id": 1749969589,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9e/fc/d2/9efcd23a-a7fc-f8ce-1b55-7f65fff3ecde/8447053150177.jpg/600x600bb.jpg"
+ },
+ "2027-01-24": {
   "banda": "Guasones",
   "disco": "Esclavo",
   "anio": 2008,
@@ -869,7 +679,137 @@
   "id": 298252420,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/d0/1e/63/d01e638f-547a-4b2d-e3fa-8957df76f5e2/884385077693.jpg/600x600bb.jpg"
  },
- "2027-02-13": {
+ "2027-01-25": {
+  "banda": "Patricio Rey y sus Redonditos de Ricota",
+  "disco": "Oktubre",
+  "anio": 1986,
+  "cat": "nac",
+  "tema": "Semen-Up",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8c/5f/d2/8c5fd266-4abc-daba-64d5-a3e662243861/mzaf_5948129185060159133.plus.aac.p.m4a",
+  "id": 1722345908,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/c0/52/21/c0522174-a3c2-2a4f-ae2d-fbacd13e8a94/2307f421-5360-4bfa-84b4-077f94259eab.jpg/600x600bb.jpg"
+ },
+ "2027-01-26": {
+  "banda": "El Cuarteto de Nos",
+  "disco": "Raro",
+  "anio": 2006,
+  "cat": "nac",
+  "tema": "Ya No Sé Que Hacer Conmigo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/01/54/c1/0154c182-4b3a-4c97-171c-2689f8714d81/mzaf_15285229281434362961.plus.aac.p.m4a",
+  "id": 1573662612,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/cc/ac/fa/ccacfabe-5ba1-a997-f5f6-7cf5bcc674d8/8445162449762.jpg/600x600bb.jpg"
+ },
+ "2027-01-27": {
+  "banda": "Turf",
+  "disco": "Turfshow",
+  "anio": 2001,
+  "cat": "nac",
+  "tema": "La Emocion",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d8/7e/a3/d87ea328-0019-7d79-ee88-33ff016c295c/mzaf_4710224764697008198.plus.aac.p.m4a",
+  "id": 267094479,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8d/2e/7e/8d2e7eee-181a-7351-4574-48e63c0a76ee/829410937474.jpg/600x600bb.jpg"
+ },
+ "2027-01-28": {
+  "banda": "Ciro y los Persas",
+  "disco": "Guerras (Un viaje en el tiempo)",
+  "anio": 2020,
+  "cat": "nac",
+  "tema": "El Farolito",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/dd/55/bf/dd55bfdb-5f0f-621b-8d91-3247403443aa/mzaf_5224092577642356352.plus.aac.p.m4a",
+  "id": 6784285471,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a0/dd/9e/a0dd9eb6-d157-198d-5233-de8492ab02d9/0b61e328-5a79-4259-9848-87400af2aa8b.jpg/600x600bb.jpg"
+ },
+ "2027-01-29": {
+  "banda": "Las Pelotas",
+  "disco": "Despierta",
+  "anio": 2009,
+  "cat": "nac",
+  "tema": "Destellos",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/2e/0d/96/2e0d96fc-2dec-33eb-c6f7-2bc44d33a985/mzaf_1571070319239196546.plus.aac.p.m4a",
+  "id": 404303881,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/63/08/46/63084692-cfd6-be68-84f9-bb49705a1c7e/dj.jiqizivg.jpg/600x600bb.jpg"
+ },
+ "2027-01-30": {
+  "banda": "Pappo's Blues",
+  "disco": "Pappo's Blues Volumen 3",
+  "anio": 1973,
+  "cat": "nac",
+  "tema": "Pájaro Metálico",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/57/eb/5157ebca-a87c-1a28-fd2b-a7a8ea0b6c70/mzaf_10989105873045905878.plus.aac.p.m4a",
+  "id": 1713616695,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f5/47/3a/f5473a4c-a81b-32f2-6b26-e05ca7b86243/ae3ce715-f6d9-4328-ab4b-422e9cfd26fd.jpg/600x600bb.jpg"
+ },
+ "2027-01-31": {
+  "banda": "Divididos",
+  "disco": "Narigón del Siglo",
+  "anio": 2000,
+  "cat": "nac",
+  "tema": "La Ñapi de Mamá",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/86/6f/16/866f1665-aa95-de4f-8c04-dad9b3d459fd/mzaf_3087011758893840169.plus.aac.p.m4a",
+  "id": 321864763,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/28/b9/11/mzi.axqjeygc.jpg/600x600bb.jpg"
+ },
+ "2027-02-01": {
+  "banda": "Las Pelotas",
+  "disco": "Despierta",
+  "anio": 2009,
+  "cat": "nac",
+  "tema": "Que estés sonriendo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f1/c1/fe/f1c1fe7a-0828-364c-7e7b-298f08a04d06/mzaf_14151965844933036284.plus.aac.p.m4a",
+  "id": 404303881,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/63/08/46/63084692-cfd6-be68-84f9-bb49705a1c7e/dj.jiqizivg.jpg/600x600bb.jpg"
+ },
+ "2027-02-02": {
+  "banda": "Sueño de Pescado",
+  "disco": "Venganza Primavera",
+  "anio": 2014,
+  "cat": "nac",
+  "tema": "Ladran Sancho",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/01/93/5a/01935aa9-15dc-d78f-0380-6ee0c7d473cf/mzaf_12485436065291143488.plus.aac.p.m4a",
+  "id": 1811694139,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8f/d3/3f/8fd33f31-f041-7d59-6438-90e1068e507a/1343.jpg/600x600bb.jpg"
+ },
+ "2027-02-03": {
+  "banda": "Los Ratones Paranoicos",
+  "disco": "Furtivos",
+  "anio": 1989,
+  "cat": "nac",
+  "tema": "Encerrado",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/31/63/2e/31632e42-16b4-5740-94c9-378454127c20/mzaf_16144295415652591906.plus.aac.p.m4a",
+  "id": 430563389,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/9a/88/04/mzi.bvjponms.jpg/600x600bb.jpg"
+ },
+ "2027-02-04": {
+  "banda": "Soda Stereo",
+  "disco": "Canción Animal",
+  "anio": 1990,
+  "cat": "nac",
+  "tema": "Té para Tres",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/95/4d/15954d88-b806-fd6d-4c89-db7c7a9558e5/mzaf_3372461885015874106.plus.aac.p.m4a",
+  "id": 321882757,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/60/18/68/601868f7-68ba-9416-af42-b26b2f68035f/mzi.qyqtvoxs.jpg/600x600bb.jpg"
+ },
+ "2027-02-05": {
+  "banda": "Sumo",
+  "disco": "Llegando los Monos",
+  "anio": 1986,
+  "cat": "nac",
+  "tema": "El Ojo Blindado",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/db/c1/44/dbc144b6-a331-6c43-e4b7-702bfbc26e3e/mzaf_9535056890031257423.plus.aac.p.m4a",
+  "id": 321858252,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/8a/f3/b0/mzi.dsuwrspf.jpg/600x600bb.jpg"
+ },
+ "2027-02-06": {
+  "banda": "Don Osvaldo",
+  "disco": "Casi Justicia Social II",
+  "anio": 2019,
+  "cat": "nac",
+  "tema": "Al Revés",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/28/e8/75/28e8759e-5c2a-606a-c5ef-aa667b41ceb1/mzaf_7746759657440916449.plus.aac.p.m4a",
+  "id": 1574220660,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/98/36/ef/9836ef00-4e17-658f-a72e-2de788b0b51d/650414579564.jpg/600x600bb.jpg"
+ },
+ "2027-02-07": {
   "banda": "Los Gardelitos",
   "disco": "En Tierra de Sueños, Parte 2",
   "anio": 2004,
@@ -879,34 +819,94 @@
   "id": 1722969978,
   "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/7c/0a/3f/7c0a3fc7-8722-1e55-61aa-14ee664daa09/28ec84fd-d241-4278-99ca-336e50738d64.jpg/600x600bb.jpg"
  },
- "2027-02-14": {
-  "banda": "Viejas Locas",
-  "disco": "Contra la pared",
-  "anio": 2011,
+ "2027-02-08": {
+  "banda": "El Bordo",
+  "disco": "El refugio",
+  "anio": 2017,
   "cat": "nac",
-  "tema": "Roca & Giro",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d1/5e/68/d15e68ed-65be-bc45-74c9-3a3e4954d134/mzaf_3595683004656480619.plus.aac.p.m4a",
-  "id": 483782453,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/0f/f2/49/0ff24954-ebed-3ac3-555a-bb0f2fd8601f/dj.vvwwwljy.jpg/600x600bb.jpg"
+  "tema": "El Traje",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/7f/bc/ad/7fbcadf6-ad93-c6fa-49ee-e613c1cc9454/mzaf_16920046192406066603.plus.aac.p.m4a",
+  "id": 1210918521,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/a2/e3/19/a2e319c7-ba0a-0c22-6e75-41956ced72e7/191018905163.jpg/600x600bb.jpg"
+ },
+ "2027-02-09": {
+  "banda": "La Vela Puerca",
+  "disco": "El Impulso",
+  "anio": 2007,
+  "cat": "nac",
+  "tema": "Para No Verme Más",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/82/33/98823361-c0c7-6881-a0bd-36f8e536609a/mzaf_11454458761947928692.plus.aac.p.m4a",
+  "id": 1443763229,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/96/45/fa/9645fab0-07fd-3be5-c05f-322b3ca418e5/00602517269484.rgb.jpg/600x600bb.jpg"
+ },
+ "2027-02-10": {
+  "banda": "Airbag",
+  "disco": "Airbag",
+  "anio": 2004,
+  "cat": "nac",
+  "tema": "Solo Aqui",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/da/54/95/da5495d5-b2af-16f6-e464-79c400e92342/mzaf_17038206194709088724.plus.aac.p.m4a",
+  "id": 201543884,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/e7/37/84/mzi.opjtvfgr.jpg/600x600bb.jpg"
+ },
+ "2027-02-11": {
+  "banda": "Don Osvaldo",
+  "disco": "Casi Justicia Social",
+  "anio": 2015,
+  "cat": "nac",
+  "tema": "Vaso sin fondo",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d9/95/da/d995da28-a8d7-a80b-fd78-a4ef7fcad8dc/mzaf_11904891405482885946.plus.aac.p.m4a",
+  "id": 1574378064,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/5a/b1/88/5ab1886e-736c-8314-4736-e1c6af571a23/650414314516.jpg/600x600bb.jpg"
+ },
+ "2027-02-12": {
+  "banda": "Indio Solari",
+  "disco": "Porco Rex",
+  "anio": 2007,
+  "cat": "nac",
+  "tema": "Porco Rex",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/e9/f4/52/e9f452ae-e245-283a-0731-426e9c46ffef/mzaf_2890357086314659680.plus.aac.p.m4a",
+  "id": 1722315450,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/13/86/c7/1386c7e0-3ab2-c1ac-ac52-e95e102a75a3/5b33df81-dd31-4590-9ce9-975e5cb74726.jpg/600x600bb.jpg"
+ },
+ "2027-02-13": {
+  "banda": "Pappo",
+  "disco": "Pappo & amigos",
+  "anio": 2000,
+  "cat": "nac",
+  "tema": "Siempre Es Lo Mismo Nena (feat. Pappo's Blues)",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d9/63/16/d96316c7-2b67-c61a-f0bb-660486a568d0/mzaf_15644820087038404664.plus.aac.p.m4a",
+  "id": 1450459567,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/a2/7c/76/a27c76b8-2dbd-9602-ec6e-1a3c0e5ff7ee/193483417295.jpg/600x600bb.jpg"
+ },
+ "2027-02-14": {
+  "banda": "Jóvenes Pordioseros",
+  "disco": "Pánico",
+  "anio": 2014,
+  "cat": "nac",
+  "tema": "Ella Es Mi Sombra",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/44/b8/25/44b82554-d0ac-4569-493c-d8a05e8727d4/mzaf_8427470304977241906.plus.aac.p.m4a",
+  "id": 925028131,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/f2/2b/18/f22b18e7-b762-7c99-cd8f-0ba3d2c1729b/888831938958.jpg/600x600bb.jpg"
  },
  "2027-02-15": {
-  "banda": "Ciro y los Persas",
-  "disco": "27",
-  "anio": 2012,
+  "banda": "Los Piojos",
+  "disco": "Ay Ay Ay",
+  "anio": 1994,
   "cat": "nac",
-  "tema": "Astros",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3b/a1/a8/3ba1a8c1-2d82-f3fd-26e6-ce942b737cea/mzaf_6777920773266461066.plus.aac.p.m4a",
-  "id": 6784339089,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b3/ca/08/b3ca0809-525b-6793-230f-cd6b1fddc789/40ff77bd-f482-4bce-b4d9-dfbb0a2166b3.jpg/600x600bb.jpg"
+  "tema": "Muy Despacito",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/0a/05/16/0a0516ec-9553-8084-d0e9-a784a287b18e/mzaf_5805386392640387114.plus.aac.p.m4a",
+  "id": 1603833834,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/a4/42/89/a44289a0-e904-3661-d83d-9fef35779888/656291126129.jpg/600x600bb.jpg"
  },
  "2027-02-16": {
-  "banda": "Los Ratones Paranoicos",
-  "disco": "Electroshock",
-  "anio": 1999,
+  "banda": "La 25",
+  "disco": "Así es el rock and roll",
+  "anio": 2002,
   "cat": "nac",
-  "tema": "Poca Vída",
-  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/7e/1b/25/7e1b2599-5057-b3f4-79e7-5125d6371b9f/mzaf_15063385641962595078.plus.aac.p.m4a",
-  "id": 401827193,
-  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/72/97/32/mzi.nllhvhhk.jpg/600x600bb.jpg"
+  "tema": "Mil Canciones",
+  "prev": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/bd/cd/c1/bdcdc178-b5bc-578f-73ec-0ddf4fca0d59/mzaf_12428883494036375677.plus.aac.p.m4a",
+  "id": 415821010,
+  "url": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/d4/ea/82/d4ea8269-c239-5d42-21c0-893d638146d9/885686474167.jpg/600x600bb.jpg"
  }
 }
