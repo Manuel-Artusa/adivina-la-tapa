@@ -15,7 +15,7 @@ on:
     - cron: "0 7 1 * *"   # el día 1 de cada mes: busca lo que falte y refresca los temas del Ahorcado
   push:
     branches: [main]
-    paths: ["armar_discos.py", "armar_temas.py", "index.html", "discos_manual.json"]   # si cambia el catálogo, el script o un link a mano, busca lo nuevo
+    paths: ["discos_manual.json"]   # solo si se carga un link a mano (antes también con cada cambio de index.html: gastaba muchos minutos)
 
 permissions:
   contents: write
@@ -69,10 +69,12 @@ jobs:
             sleep 10
           done
           exit 1
+      # Otra tanda solo si quedan discos NUEVOS por buscar. Al reintentar los que ya no estaban, no se encadena:
+      # esos casi nunca aparecen y cada tanda volvía a dejarlos pendientes (el 17/11 quedó en bucle y gastó los minutos del mes)
       - name: Si quedan discos por buscar, otra tanda
-        if: ${{ hashFiles('quedan.txt') != '' }}
+        if: ${{ hashFiles('quedan.txt') != '' && github.event_name != 'schedule' && !inputs.reintentar }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           echo "Quedan $(cat quedan.txt) discos: arranco otra tanda"
-          gh workflow run discos.yml --ref main ${{ (github.event_name == 'schedule' || inputs.reintentar) && '-f reintentar=true' || '' }}   # la tanda siguiente sigue reintentando
+          gh workflow run discos.yml --ref main
