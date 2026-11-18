@@ -1458,6 +1458,7 @@ const DISCOS = [
  // Bandas nuevas (la tarea busca su discografía en MusicBrainz), desde el 2026-10-30
  ["La Franela", "Después de ver", 2009, "nac", "2026-10-30"],["La Franela", "Hacer un puente", 2011, "nac", "2026-10-30"],["La Franela", "Nada es tarde", 2014, "nac", "2026-10-30"],["La Franela", "Aire", 2017, "nac", "2026-10-30"],["La Franela", "De palabras", 2020, "nac", "2026-10-30"],["La Franela", "Andamio", 2025, "nac", "2026-10-30"],
  ["La Chancha Muda", "Ya no queda más lugar bajo la alfombra", 2013, "nac", "2026-11-04"],["La Chancha Muda", "Sinfonías libertarias", 2016, "nac", "2026-11-04"],["La Chancha Muda", "La peste del cazador", 2019, "nac", "2026-11-04"],["La Chancha Muda", "Quién autoriza?", 2023, "nac", "2026-11-04"],["La Chancha Muda", "A todos mis santos", 2026, "nac", "2026-11-04"],
+ ["Cruzando el Charco", "Perdonar", 2012, "nac", "2026-11-19"],["Cruzando el Charco", "Desde Adentro", 2014, "nac", "2026-11-19"],["Cruzando el Charco", "A Mil", 2017, "nac", "2026-11-19"],["Cruzando el Charco", "Lo Que Somos", 2019, "nac", "2026-11-19"],["Cruzando el Charco", "Cicatrices", 2022, "nac", "2026-11-19"],["Cruzando el Charco", "Esencia", 2024, "nac", "2026-11-19"],["Cruzando el Charco", "Desactivar el Drama", 2026, "nac", "2026-11-19"],
  ["Jóvenes Pordioseros", "Probame", 2003, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Vicio", 2004, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Sangre", 2006, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Abstinencia", 2011, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Pánico", 2014, "nac", "2026-10-30"],["Jóvenes Pordioseros", "Late", 2017, "nac", "2026-10-30"],
  // Discografías completas (discos de estudio según MusicBrainz), desde el 2026-10-30
  ["2 Minutos", "Valentín Alsina", 1994, "nac", "2026-10-30"],["2 Minutos", "Volvió la alegría, vieja!!!", 1995, "nac", "2026-10-30"],["2 Minutos", "Postal '97", 1997, "nac", "2026-10-30"],["2 Minutos", "Dos minutos de advertencia", 1999, "nac", "2026-10-30"],["2 Minutos", "Antorchas", 2000, "nac", "2026-10-30"],["2 Minutos", "Superocho", 2004, "nac", "2026-10-30"],["2 Minutos", "Un mundo de sensaciones", 2006, "nac", "2026-10-30"],["2 Minutos", "Vamos a la granja / Directo al infierno", 2010, "nac", "2026-10-30"],["2 Minutos", "Valentín Alzheimer", 2013, "nac", "2026-10-30"],["2 Minutos", "Amigos de lo ajeno", 2019, "nac", "2026-10-30"],["2 Minutos", "La máquina de hacer cagadas", 2024, "nac", "2026-10-30"],
@@ -1661,6 +1662,10 @@ const PATO_ON=hoyAR()>="2026-11-04";
 const PIOJOS_ON="__PIOJOS_ON__"==="1"&&hoyAR()>="2026-11-05"; // con 20 frases, y desde el 5/11 (así no cambia el total de hoy)
 // Copia del catálogo tal cual está escrito (con "desde" y "hasta"): sirve para rearmar el de un día anterior
 const DISCOS_CRUDO=DISCOS.map(d=>d.slice());
+// desde cuándo está cada banda en el catálogo (su primer disco que vale): las ruedas sin repetir (banda del día, ordená)
+// solo usan las bandas que ya estaban cuando arrancaron, así una banda nueva no las reordena (y no se repiten)
+const BANDA_DESDE={}; DISCOS_CRUDO.forEach(d=>{ const f=d[4]||""; if(!(d[0] in BANDA_DESDE)||f<BANDA_DESDE[d[0]]) BANDA_DESDE[d[0]]=f });
+const yaEstaba=(banda,desde)=>(BANDA_DESDE[banda]||"")<=desde;
 // Saca del catálogo los discos que todavía no entraron (o que ya salieron); ver "desde" y "hasta" en DISCOS
 const CATALOGO_FUTURO=new Set(), BANDAS_FUTURAS=new Set(), DISCOS_FUTUROS=[], CACHE_FUTURO={}, DISCOGRAFIAS_30_10=new Set();
 { const hoy=hoyAR(), bandas=new Set(DISCOS.map(d=>d[0]));
@@ -2592,7 +2597,7 @@ const CON_BANDAS=sinFuturas(["Soda Stereo","Gustavo Cerati","Charly García","Se
   "Patricio Rey y sus Redonditos de Ricota","Indio Solari","Sumo","Divididos","Virus","Los Abuelos de la Nada","Fito Páez","Andrés Calamaro",
   "Los Rodríguez","Los Fabulosos Cadillacs","Los Piojos","La Renga","Babasónicos","Bersuit Vergarabat","Callejeros","Don Osvaldo","Guasones","Catupecu Machu",
   "Attaque 77","Rata Blanca","Los Enanitos Verdes","Los Auténticos Decadentes","Los Pericos","Viejas Locas","Las Pastillas del Abuelo",
-  "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa"]);
+  "Ciro y los Persas","No Te Va Gustar","La Vela Puerca","El Cuarteto de Nos","El Plan de la Mariposa","Cruzando el Charco"]);
 function conCandidatos(rng){
   const mez=a=>mezR(a,rng);
   const base=DISCOS.filter(d=>d[1]&&(d[3]==="nac"||TODO_ROCK)&&CON_BANDAS.includes(d[0])); // Conexiones: solo rock nacional y uruguayo (en Todo el rock, todas)
@@ -2881,7 +2886,7 @@ if(TODO_ROCK){ TEMA.modo="libre"; const g=ls.get("tapa-tema-gen"); if(["todos","
 const TEMA_BANDAS=sinFuturas(["Patricio Rey y sus Redonditos de Ricota","Indio Solari","Skay Beilinson","Sumo","Divididos","Las Pelotas",
   "La Renga","Los Piojos","Callejeros","Don Osvaldo","Guasones","Viejas Locas","Las Pastillas del Abuelo","Ciro y los Persas","La Vela Puerca",
   "No Te Va Gustar","El Plan de la Mariposa","Sueño de Pescado","Farolitos","Bersuit Vergarabat","Catupecu Machu",
-  "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues"]);
+  "El Cuarteto de Nos","Los Ratones Paranoicos","Rata Blanca","Hermética","V8","Riff","Pappo's Blues","Cruzando el Charco"]);
 // en Todo el rock se elige: todas las bandas, solo rock nacional/uruguayo o solo internacional
 const temaPool=()=>DISCOS.filter(d=>d[1]&&TEMA_BANDAS.includes(d[0])&&(!TODO_ROCK||TEMA.gen==="todos"||d[3]===TEMA.gen));
 const numTema=dia=>numDiario(dia);
@@ -3235,11 +3240,11 @@ const ORD_RUEDA_DESDE="2026-11-13", ORD_FUERA=["Once Tiros"], ORD_CAMBIOS={"2026
 function ordBandasMas(){ // solo las bandas de la página principal (no las de Todo el rock)
   return ordBandas().slice().sort((x,y)=>x[0]<y[0]?-1:1);
 }
-const ordViejo=rng=>{ const nac=ordBandas().filter(([a])=>CON_BANDAS.includes(a)), todas=ordBandas(); return mezR(rng()<.75&&nac.length?nac:todas,rng)[0] };
+const ordViejo=rng=>{ const todas=ordBandas().filter(([a])=>yaEstaba(a,ORD_RUEDA_DESDE)), nac=todas.filter(([a])=>CON_BANDAS.includes(a)); return mezR(rng()<.75&&nac.length?nac:todas,rng)[0] };
 function ordElegir(rng,modo,dia){
   if(dia<ORD_RUEDA_DESDE) return ordViejo(rng);
   const todas=ordBandasMas();
-  if(modo==="diario") return ordRueda(todas.filter(([a])=>!ORD_FUERA.includes(a)),dia);
+  if(modo==="diario") return ordRueda(todas.filter(([a])=>!ORD_FUERA.includes(a)&&yaEstaba(a,ORD_RUEDA_DESDE)),dia);
   if(modo!=="libre") return mezR(todas,rng)[0];
   const vistas=ls.get("tapa-orden-vistas")||[], quedan=todas.filter(([a])=>!vistas.includes(a)), el=mezR(quedan.length?quedan:todas,rng)[0];
   try{ ls.set("tapa-orden-vistas",[el[0],...vistas.filter(b=>b!==el[0])].slice(0,Math.min(20,todas.length-1))) }catch(e){}
@@ -3355,7 +3360,8 @@ function banPool(){
   return Object.entries(por).filter(([a,ds])=>ds.length>=3&&banDatos(a)&&banDatos(a).inicio&&banDatos(a).pais);
 }
 function banElegir(rng,dia){
-  const pool=banPool(); if(!pool.length) return null;
+  const pool0=banPool(); if(!pool0.length) return null;
+  const pool=dia&&dia>=BAN_RUEDA&&!TODO_ROCK?pool0.filter(([a])=>yaEstaba(a,BAN_RUEDA)):pool0;
   // desafío del día, desde el 4/11: una rueda con todas las bandas en un orden sorteado, así ninguna se repite
   // hasta que salieron todas (antes cada día se sorteaba aparte y podía repetirse al día siguiente)
   if(dia&&dia>=BAN_RUEDA&&!TODO_ROCK){
