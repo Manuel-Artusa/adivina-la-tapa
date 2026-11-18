@@ -30,9 +30,11 @@ REGLA PRINCIPAL: el ÚNICO destinatario permitido de cualquier mail es manu.artu
    Si la conseguís: importala a Canva con upload-asset-from-url, ponela en una página temporal del diseño y exportala en PNG, bajá ese PNG y sacale el fondo con rembg (pip install "rembg[cpu]", modelo birefnet-general, procesando de a una imagen y con el lado mayor achicado a 2000 px para no quedarte sin memoria). Recortá al producto, subila con create-upload-url y colocala centrada y grande en el espacio vacío de la foto del flyer (sin tapar textos), y borrá la página temporal.
    Si no encontrás una foto que cumpla TODO, o no podés descargarla, NO pongas ninguna: dejá el espacio vacío y en el mail a Manu poné los links de las páginas donde viste fotos del producto para que él elija.
 
+4c) OTRAS TAREAS (no flyer). Si el mail pide completar datos (stock, ubicaciones, precios, una lista para llenar), armá un Google Sheets con Google Drive create_file (subí un CSV con contentMimeType text/csv, se convierte solo): una fila por producto con las columnas del mail, más Ubicación y Precio de la última lista de precios, y una columna vacía "(COMPLETAR)" con lo que piden. Título: "<asunto del mail> (DD-MM)". Poné el link en el mail a Manu. No le mandes nada al jefe.
+
 5) Etiquetá con "flyer-hecho" cada hilo procesado.
 
-6) MAIL A MANU (solo si armaste al menos una base nueva): mandá UN mail NUEVO con send_message, Para: manu.artusa@gmail.com y nadie más. Asunto: "Bases de flyer listas para revisar - DD/MM". Cuerpo:
+6) MAIL A MANU (solo si armaste al menos una base nueva o una planilla): mandá UN mail NUEVO con send_message, Para: manu.artusa@gmail.com y nadie más. Asunto: "Bases de flyer listas para revisar - DD/MM". Cuerpo:
    - Por cada base: número de página en "Bases flyers desde mails", producto, códigos, precio, código de facturación, ubicación y stock según la lista, y cualquier diferencia de precio o dato faltante.
    - El asunto del mail del jefe que originó cada base.
    - Fecha de la lista de precios usada.
