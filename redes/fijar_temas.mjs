@@ -16,6 +16,8 @@ const masDias = (d, n) => new Date(Date.parse(d + "T12:00:00Z") + n * 864e5).toI
 
 const fijos = fs.existsSync(ARCHIVO) ? JSON.parse(fs.readFileSync(ARCHIVO, "utf8")) : {};
 const desde = process.env.DESDE || masDias(hoyAR(), 1); // hoy no se toca: ya hay gente que lo jugó
+// REHACER=1 vuelve a sortear los días desde DESDE (solo días que todavía no se jugaron: nunca hoy ni antes)
+if (process.env.REHACER === "1") { if (desde <= hoyAR()) throw new Error("REHACER solo para días que todavía no llegaron"); for (const d of Object.keys(fijos)) if (d >= desde) delete fijos[d] }
 const faltan = []; for (let i = 0; i < DIAS; i++) { const d = masDias(desde, i); if (!fijos[d]) faltan.push(d) }
 if (!faltan.length) { console.log("Todos los días ya estaban fijados"); process.exit(0) }
 
@@ -24,9 +26,13 @@ const srv = await new Promise(ok => { const s = http.createServer((req, res) => 
   let f = path.join(PUBLIC, p); if (!f.startsWith(PUBLIC) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) f = path.join(PUBLIC, "index.html");
   res.writeHead(200, { "Content-Type": TIPOS[path.extname(f)] || "application/octet-stream" }); fs.createReadStream(f).pipe(res);
 }).listen(8096, () => ok(s)) });
-const b = await chromium.launch(), pg = await b.newPage();
+const b = await chromium.launch(), ctx = await b.newContext();
+// PREVIA=AAAA-MM-DD: arma como se va a ver la página ese día (por ejemplo, con una banda que entra mañana). Necesita LLAVE_HUELLA.
+if (process.env.PREVIA) await ctx.addInitScript(h => { try { localStorage.setItem("tapa-llave", h) } catch (e) {} }, process.env.LLAVE_HUELLA || "");
+const pg = await ctx.newPage();
 await pg.route(/supabase|goatcounter|itunes\.apple\.com/, r => r.abort()); // solo con lo guardado: lo mismo que verá cualquiera
-await pg.goto("http://localhost:8096/"); await pg.waitForTimeout(3000);
+await pg.goto("http://localhost:8096/" + (process.env.PREVIA ? "?previa=" + process.env.PREVIA : ""));
+if (process.env.PREVIA && await pg.evaluate(() => hoyAR()) !== process.env.PREVIA) throw new Error("no se pudo armar la vista previa"); await pg.waitForTimeout(3000);
 let n = 0;
 // un tema no se repite en 180 días ni la banda dos días seguidos: si toca, se vuelve a sortear (con otra semilla)
 const clave = x => x.banda + "|" + x.tema.toLowerCase();
