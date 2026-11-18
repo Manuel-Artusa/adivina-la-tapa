@@ -36,15 +36,18 @@ if (process.env.PREVIA && await pg.evaluate(() => hoyAR()) !== process.env.PREVI
 let n = 0;
 // un tema no se repite en 180 días ni la banda dos días seguidos: si toca, se vuelve a sortear (con otra semilla)
 const clave = x => x.banda + "|" + x.tema.toLowerCase();
+// EXCLUIR: archivo JSON con [[banda, tema], ...] que no tienen que salir
+const EXCLUIR = new Set(process.env.EXCLUIR && fs.existsSync(process.env.EXCLUIR) ? JSON.parse(fs.readFileSync(process.env.EXCLUIR, "utf8")).map(([b, t]) => b + "|" + t.toLowerCase()) : []);
 const cerca = (dia, f) => Object.entries(fijos).some(([d, x]) => Math.abs(Date.parse(d) - Date.parse(dia)) <= f.dias * 864e5 && f.ok(x));
 for (const dia of faltan) {
   let x = null;
-  for (let intento = 0; intento < 12; intento++) {
+  for (let intento = 0; intento < 30; intento++) {
     const y = await pg.evaluate(async ([dia, semilla]) => {
       const j = await temaSortear(dia, "diario", semillaRng(hashStr(semilla)));
       return j && j.p && j.p.prev ? { banda: j.d[0], disco: j.d[1], anio: j.d[2], cat: j.d[3], tema: j.p.t, prev: j.p.prev, id: j.r.id, url: j.r.url } : null;
-    }, [dia, intento ? `tema-${dia}-${intento}` : `tema-${dia}`]);
+    }, [dia, (intento ? `tema-${dia}-${intento}` : `tema-${dia}`) + (process.env.SAL || "")]);
     if (!y) continue; x = x || y;
+    if (EXCLUIR.has(clave(y))) continue; // temas que no tienen que salir (por ejemplo, porque ya se vieron)
     if (cerca(dia, { dias: 180, ok: z => clave(z) === clave(y) }) || cerca(dia, { dias: 1, ok: z => z.banda === y.banda })) continue;
     x = y; break;
   }
