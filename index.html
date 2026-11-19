@@ -2403,6 +2403,9 @@ async function topAuto(modo,genero,puntos,el){
 const IMP_BANDA="La Vela Puerca", IMP_TOTAL=10;
 const IMP={discos:null,cargando:null,ronda:null,ultimo:null,racha:0,jugadas:0,aciertos:0};
 const mez=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+// Títulos que iTunes trae mal (y que se confunden con otro tema): se muestran bien. La comparación no cambia (no mira signos)
+const TITULOS_BIEN={"skay beilinson|bye bye":"Bye! Bye!"};
+const tituloBien=(banda,t)=>TITULOS_BIEN[norm(banda)+"|"+norm(t)]||t;
 const limpiarTema=t=>String(t)
   .replace(/\s*[\(\[][^\)\]]*(vivo|live|remaster|versi[oó]n|version|demo|bonus|ac[uú]stic|edit|mix)[^\)\]]*[\)\]]/gi,"")
   .replace(/\s+-\s+(en vivo|live|remaster|demo|versi[oó]n).*$/i,"").trim();
@@ -3000,7 +3003,7 @@ async function temaNuevo(){
 // Sugerencias propias (la lista del navegador se ve mal en el celular)
 async function temaSugerencias(j){
   const lista=new Map();
-  const agregar=(ps,banda)=>ps.forEach(p=>{const k=norm(p.t)+"|"+norm(banda); if(!lista.has(k)) lista.set(k,{t:p.t,b:banda,k:norm(p.t),kb:norm(banda)})});
+  const agregar=(ps,banda)=>ps.forEach(p=>{const k=norm(p.t)+"|"+norm(banda); if(!lista.has(k)) lista.set(k,{t:tituloBien(banda,p.t),b:banda,k:norm(p.t),kb:norm(banda)})});
   try{agregar(await pistasDe(j.r.id),j.d[0])}catch(e){}
   await esperarCache();
   // con discos.json se pueden sugerir todos los temas del juego sin consultar a iTunes
@@ -3083,8 +3086,11 @@ function temaIntento(txt,salto){
   const j=TEMA.j; if(!j||j.fin) return;
   if(salto){ j.log.push({tipo:"salto"}) }
   else{
-    const nombre=txt.split(" — ")[0].trim(); if(!nombre) return;
-    if(norm(nombre)===norm(j.p.t)){ j.log.push({tipo:"bien",txt:nombre}); j.gano=true; j.fin=true }
+    const [nombre0,banda]=txt.split(" — ").map(x=>(x||"").trim()), nombre=nombre0; if(!nombre) return;
+    // desde el 20/11, si el tema se eligió de las sugerencias (viene con " — banda"), la banda también tiene que coincidir:
+    // hay temas con el mismo nombre en dos bandas (Bye Bye de Babasónicos y Bye! Bye! de Skay)
+    const bandaOk=!banda||hoyAR()<"2026-11-20"||norm(banda)===norm(j.d[0]);
+    if(norm(nombre)===norm(j.p.t)&&bandaOk){ j.log.push({tipo:"bien",txt:nombre}); j.gano=true; j.fin=true }
     else j.log.push({tipo:"mal",txt:nombre});
   }
   $("tema-in").value="";
@@ -3106,7 +3112,7 @@ function temaFin(){
     ${j.modo==="diario"?`<div class="aviso">Mañana hay otro. Mientras tanto probá el modo Libre.</div>`:""}`;
   f.querySelector("img").src=chico200(j.r.url);
   f.querySelector("small").textContent=j.gano?"¡Bien!":"Era…";
-  f.querySelector("b").textContent=j.p.t;
+  f.querySelector("b").textContent=tituloBien(j.d[0],j.p.t);
   f.querySelector("span").textContent=`${j.d[0]} · ${j.d[1]} (${j.d[2]})`;
   f.querySelector(".sub-res").textContent=j.gano?`Lo sacaste en ${j.log.length} intento${j.log.length===1?"":"s"}.`:"Esta vez no salió.";
   if(j.modo==="diario"&&j.dia===hoyAR()&&!ls.get("tapa-tema-top-"+j.dia)){ ls.set("tapa-tema-top-"+j.dia,1); contar("termino-tema"); topAuto("tema","diario",j.gano?TEMA_PTS[j.log.length-1]||10:0,f.querySelector(".sub-res")) }
