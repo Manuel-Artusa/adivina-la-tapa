@@ -2994,7 +2994,7 @@ async function temaNuevo(){
   if(TEMA.modo!==modo||TEMA.gen!==gen) return;
   if(!j){$("tema-estado").textContent="No pude cargar el tema. Revisá la conexión y recargá.";return}
   if(guardado){j.paso=guardado.paso;j.log=guardado.log;j.fin=guardado.fin;j.gano=guardado.gano}
-  TEMA.j=j; TEMA.audio=new Audio(j.p.prev); TEMA.audio.preload="auto";
+  TEMA.j=j; if(TEMA.audio) audioQuitar(TEMA.audio); TEMA.audio=audioCandado(new Audio(j.p.prev)); TEMA.audio.preload="auto";
   temaPintar(); temaSugerencias(j);
   if(j.fin) temaFin();
 }
@@ -3065,13 +3065,25 @@ function temaPintar(){
   cabecera(TEMA.modo==="diario"?"Tema del día":"Libre",TEMA.modo==="diario"?"#"+numTema(j.dia):"∞","Racha",ls.get("tapa-tema-racha")||0);
 }
 
-function temaParar(){ clearInterval(TEMA.timer); if(TEMA.audio){TEMA.audio.pause()} $("tema-lleno").style.width="0" }
+// los controles del celu (volumen, pantalla bloqueada, auriculares) pueden darle play al audio por fuera del juego:
+// solo suena cuando lo pide el botón del juego y nunca pasa del límite
+function audioCandado(a){
+  a._ok=false; a._lim=0;
+  a.addEventListener("play",()=>{ if(!a._ok) a.pause() });
+  a.addEventListener("timeupdate",()=>{ if(!a._ok||a.currentTime>=a._lim){ a._ok=false; a.pause() } });
+  a.addEventListener("ended",()=>{ a._ok=false });
+  try{ const ms=navigator.mediaSession; if(ms){ ms.metadata=new MediaMetadata({title:"Juegos Rock"});
+    for(const x of ["play","pause","seekto","seekforward","seekbackward","previoustrack","nexttrack"]) try{ ms.setActionHandler(x,()=>{}) }catch(e){} } }catch(e){}
+  return a }
+function audioDar(a,lim){ a._ok=true; a._lim=lim; return a.play() }
+function audioQuitar(a){ if(a){ a._ok=false; a.pause() } }
+function temaParar(){ clearInterval(TEMA.timer); audioQuitar(TEMA.audio); $("tema-lleno").style.width="0" }
 function temaPlay(){
   const j=TEMA.j, a=TEMA.audio; if(!j||!a) return;
   temaParar();
   const lim=j.fin?30:PASOS[Math.min(j.paso,PASOS.length-1)];
   a.currentTime=0;
-  a.play().then(()=>{
+  audioDar(a,lim).then(()=>{
     TEMA.timer=setInterval(()=>{
       const t=a.currentTime;
       $("tema-lleno").style.width=Math.min(100,t/(j.fin?30:16)*100)+"%";
@@ -4319,7 +4331,7 @@ function patoTemas(){
     return out.filter(x=>cuenta[x.k]===1);
   })().catch(e=>{ patoTemasP=null; return [] }));
 }
-function patoParar(){ clearTimeout(PATO.timer); if(PATO.audio) PATO.audio.pause(); const b=$("pato-play"); if(b){ b.classList.remove("sonando"); $("pato-ico").textContent="▶" } }
+function patoParar(){ clearTimeout(PATO.timer); audioQuitar(PATO.audio); const b=$("pato-play"); if(b){ b.classList.remove("sonando"); $("pato-ico").textContent="▶" } }
 function patoCab(){
   if(PATO.modo==="diario") cabecera(`Del día #${nDia()}`,`${Math.min(PATO.ronda+1,PATO_DIA)}/${PATO_DIA}`,"Puntos",PATO.pts.reduce((a,b)=>a+b,0));
   else cabecera("Racha",PATO.racha,"Récord",ls.get("tapa-pato-rec")||0);
@@ -4343,7 +4355,7 @@ function patoNuevo(){
   if(PATO.modo==="libre"&&!PATO.cola.length) return patoIniciar();
   const x=PATO.modo==="diario"?PATO.cola[PATO.ronda]:PATO.cola.shift(); if(!x) return;
   const j={...x,intentos:0,fin:false,descartados:new Set()}; PATO.j=j;
-  PATO.audio=new Audio(x.prev); PATO.audio.preload="auto";
+  if(PATO.audio) audioQuitar(PATO.audio); PATO.audio=audioCandado(new Audio(x.prev)); PATO.audio.preload="auto";
   $("pato-play").disabled=false; $("pato-estado").textContent=PATO.modo==="diario"?`Tema ${PATO.ronda+1} de ${PATO_DIA}`:"¿De qué disco es este tema?";
   patoOpciones(); patoCab();
 }
@@ -4365,7 +4377,7 @@ function patoPistas(){
 $("pato-play").onclick=()=>{
   const a=PATO.audio; if(!a) return;
   if(!a.paused){ patoParar(); return }
-  a.currentTime=0; a.play().then(()=>{ const b=$("pato-play"); b.classList.remove("sonando"); void b.offsetWidth; b.classList.add("sonando"); $("pato-ico").textContent="■"; clearTimeout(PATO.timer); PATO.timer=setTimeout(patoParar,PATO_SEG*1000) }).catch(()=>{ $("pato-ayuda").textContent="No se pudo reproducir. Tocá el disco de nuevo." });
+  a.currentTime=0; audioDar(a,PATO_SEG+.3).then(()=>{ const b=$("pato-play"); b.classList.remove("sonando"); void b.offsetWidth; b.classList.add("sonando"); $("pato-ico").textContent="■"; clearTimeout(PATO.timer); PATO.timer=setTimeout(patoParar,PATO_SEG*1000) }).catch(()=>{ $("pato-ayuda").textContent="No se pudo reproducir. Tocá el disco de nuevo." });
 };
 function patoResp(d,b){
   const j=PATO.j; if(!j||j.fin) return;
